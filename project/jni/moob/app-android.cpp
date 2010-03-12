@@ -1,11 +1,9 @@
 #include "app-android.h"
-#include <android/log.h>
 #include <GLES/gl.h>
+#include "def.h"
+#include "utils.h"
 
-#define  LOG_TAG    "libmoob"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
+zip* APKArchive;
 
 //int to fixed point
 #define iX(x) (x<<16)
@@ -19,6 +17,15 @@ int square[12] = {
     fX(0.5), fX(0.5), 0
 };
 
+int texCoords[8] = {
+    0, 0,
+    fX(1), 0,
+    0, fX(1),
+    fX(1), fX(1)
+};
+
+GLuint texture;
+
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
     LOGI("GL %s = %s\n", name, v);
@@ -30,16 +37,44 @@ static void checkGlError(const char* op) {
     }
 }
 
+static void loadAPK (const char* apkPath) {
+  LOGI("Loading APK %s", apkPath);
+  APKArchive = zip_open(apkPath, 0, NULL);
+  if (APKArchive == NULL) {
+    LOGE("Error loading APK");
+    return;
+  }
+
+  //Just for debug, print APK contents
+  int numFiles = zip_get_num_files(APKArchive);
+  for (int i=0; i<numFiles; i++) {
+    const char* name = zip_get_name(APKArchive, i, 0);
+    if (name == NULL) {
+      LOGE("Error reading zip file name at index %i : %s", zip_strerror(APKArchive));
+      return;
+    }
+    LOGI("File %i : %s\n", i, name);
+  }
+}
+
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
-  (JNIEnv *, jclass) {
+  (JNIEnv * env, jclass cls, jstring apkPath) {
+  const char* str;
+  jboolean isCopy;
+  str = env->GetStringUTFChars(apkPath, &isCopy);
+  loadAPK(str);
+
+  int width, height;
+  texture = loadTextureFromPNG("assets/sprites/tank1.png", width, height);
+
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
   printGLString("Renderer", GL_RENDERER);
   printGLString("Extensions", GL_EXTENSIONS);
 
   glEnableClientState(GL_VERTEX_ARRAY);
-  //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  //glEnable(GL_TEXTURE_2D);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnable(GL_TEXTURE_2D);
   glClearColor(1,0,0,0);
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
@@ -72,9 +107,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   glLoadIdentity();
 
   glPushMatrix();
-  glTranslatef(pos, 0, 0);
+  glTranslatef(pos, 5, 0);
   glScalef(5,5,0);
   glVertexPointer(3, GL_FIXED, 0, square);
+  glTexCoordPointer(2, GL_FIXED, 0, texCoords);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glPopMatrix();
 }
