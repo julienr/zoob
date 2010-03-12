@@ -31,6 +31,14 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   (JNIEnv *, jclass);
 
+/*
+ * Class:     net_fhtagn_moob_MoobGLSurface
+ * Method:    nativePause
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

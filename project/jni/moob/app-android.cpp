@@ -18,10 +18,10 @@ int square[12] = {
 };
 
 int texCoords[8] = {
-    0, 0,
-    fX(1), 0,
     0, fX(1),
-    fX(1), fX(1)
+    fX(1), fX(1),
+    0,0,
+    fX(1),0
 };
 
 GLuint texture;
@@ -65,7 +65,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   loadAPK(str);
 
   int width, height;
-  texture = loadTextureFromPNG("assets/sprites/tank1.png", width, height);
+  texture = loadTextureFromPNG("assets/sprites/texture.png", width, height);
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
@@ -74,6 +74,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnable(GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
   glClearColor(1,0,0,0);
   glColor4f(1,1,1,1);
@@ -113,5 +115,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   glTexCoordPointer(2, GL_FIXED, 0, texCoords);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glPopMatrix();
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
+  (JNIEnv *, jclass) {
+  LOGE("Pause");
 }
 
