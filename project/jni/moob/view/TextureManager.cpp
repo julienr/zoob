@@ -1,12 +1,55 @@
-#include <GLES/gl.h>
-extern "C" {
-#include <png.h>
+#include "TextureManager.h"
+#include <string.h>
+
+#define TEXTURE_LOAD_ERROR 0
+GLuint loadTextureFromPNG(const char* filename, int* width, int* height);
+
+TextureManager* TextureManager::instance = NULL;
+
+TextureManager::TextureManager() :
+  cache(NULL) {
 }
+
+TextureManager* TextureManager::getInstance () {
+  if (instance == NULL)
+    instance = new TextureManager();
+  return instance;
+}
+
+GLuint TextureManager::get (const char* filename) {
+  _TextureRecord* r = NULL;
+  HASH_FIND_STR(cache, filename, r);
+  if (r == NULL) { //not found
+    GLuint id = _load(filename);
+    if (id == TEXTURE_LOAD_ERROR) {
+      LOGE("Error loading texture : %s", filename);
+      //FIXME: return blank texture
+      return NULL;
+    } else
+      return id;
+  } else {
+    return r->glTexID;
+  }
+}
+
+GLuint TextureManager::_load (const char* filename) {
+  _TextureRecord* r = new _TextureRecord();
+  r->filename = strdup(filename);
+
+  GLuint texID = loadTextureFromPNG(filename, &r->width, &r->height);
+  if (texID != TEXTURE_LOAD_ERROR) {
+    r->glTexID = texID;
+    HASH_ADD_KEYPTR(hh, cache, r->filename, strlen(r->filename), r);
+    return r->glTexID;
+  } else
+    return TEXTURE_LOAD_ERROR;
+}
+
+
 #include <stdio.h>
 #include "def.h"
 #include <zip.h>
-
-#define TEXTURE_LOAD_ERROR 0
+#include <png.h>
 
 //Taken from http://en.wikibooks.org/wiki/OpenGL_Programming/Intermediate/Textures
 /** loadTexture
@@ -26,7 +69,7 @@ void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 
-GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
+GLuint loadTextureFromPNG(const char* filename, int* width, int* height) {
   file = zip_fopen(APKArchive, filename, 0);
   if (!file) {
     LOGE("Error opening %s from APK", filename);
@@ -101,8 +144,8 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
       NULL, NULL, NULL);
 
   //update width and height based on png info
-  width = twidth;
-  height = theight;
+  *width = twidth;
+  *height = theight;
 
   // Update the png info struct.
   png_read_update_info(png_ptr, info_ptr);
@@ -111,7 +154,7 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
   int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
   // Allocate the image_data as a big block, to be given to opengl
-  png_byte *image_data = new png_byte[rowbytes * height];
+  png_byte *image_data = new png_byte[rowbytes * (*height)];
   if (!image_data) {
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -121,7 +164,7 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
   }
 
   //row_pointers is for pointing to image_data for reading the png with libpng
-  png_bytep *row_pointers = new png_bytep[height];
+  png_bytep *row_pointers = new png_bytep[(*height)];
   if (!row_pointers) {
     //clean up memory and close stuff
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -131,8 +174,8 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
     return TEXTURE_LOAD_ERROR;
   }
   // set the individual row_pointers to point at the correct offsets of image_data
-  for (int i = 0; i < height; ++i)
-    row_pointers[height - 1 - i] = image_data + i * rowbytes;
+  for (int i = 0; i < (*height); ++i)
+    row_pointers[(*height) - 1 - i] = image_data + i * rowbytes;
 
   //read the png into image_data through row_pointers
   png_read_image(png_ptr, row_pointers);
@@ -141,7 +184,7 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
   GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (*width), (*height), 0, GL_RGBA,
       GL_UNSIGNED_BYTE, (GLvoid*) image_data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -153,3 +196,4 @@ GLuint loadTextureFromPNG(const char* filename, int &width, int &height) {
 
   return texture;
 }
+

@@ -1,7 +1,7 @@
 #include "app-android.h"
 #include <GLES/gl.h>
 #include "def.h"
-#include "utils.h"
+#include "view/TextureManager.h"
 
 zip* APKArchive;
 
@@ -64,8 +64,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   str = env->GetStringUTFChars(apkPath, &isCopy);
   loadAPK(str);
 
-  int width, height;
-  texture = loadTextureFromPNG("assets/sprites/texture.png", width, height);
+  //texture = loadTextureFromPNG("assets/sprites/texture.png", width, height);
+  texture = TextureManager::getInstance()->get("assets/sprites/texture.png");
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
