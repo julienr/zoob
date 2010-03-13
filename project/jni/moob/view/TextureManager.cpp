@@ -16,23 +16,22 @@ TextureManager* TextureManager::getInstance () {
   return instance;
 }
 
-GLuint TextureManager::get (const char* filename) {
+GLuint TextureManager::get (const char* filename, int* width, int* height) {
   _TextureRecord* r = NULL;
   HASH_FIND_STR(cache, filename, r);
   if (r == NULL) { //not found
-    GLuint id = _load(filename);
-    if (id == TEXTURE_LOAD_ERROR) {
+    r = _load(filename);
+    if (r == NULL)
       LOGE("Error loading texture : %s", filename);
-      //FIXME: return blank texture
-      return NULL;
-    } else
-      return id;
-  } else {
-    return r->glTexID;
   }
+  if (width != NULL)
+    *width = r->width;
+  if (height != NULL)
+    *height = r->height;
+  return r->glTexID;
 }
 
-GLuint TextureManager::_load (const char* filename) {
+TextureManager::_TextureRecord* TextureManager::_load (const char* filename) {
   _TextureRecord* r = new _TextureRecord();
   r->filename = strdup(filename);
 
@@ -40,9 +39,9 @@ GLuint TextureManager::_load (const char* filename) {
   if (texID != TEXTURE_LOAD_ERROR) {
     r->glTexID = texID;
     HASH_ADD_KEYPTR(hh, cache, r->filename, strlen(r->filename), r);
-    return r->glTexID;
+    return r;
   } else
-    return TEXTURE_LOAD_ERROR;
+    return NULL;
 }
 
 

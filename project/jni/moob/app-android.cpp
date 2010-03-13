@@ -3,13 +3,10 @@
 #include "def.h"
 #include "view/TextureManager.h"
 #include "logic/Entity.h"
+#include "view/TankView.h"
+#include "logic/Tank.h"
 
 zip* APKArchive;
-
-//int to fixed point
-#define iX(x) (x<<16)
-//float ti fixed point
-#define fX(x) ((int)(x * (1  << 16)))
 
 int square[12] = {
     fX(-0.5), fX(-0.5), 0,
@@ -58,6 +55,9 @@ static void loadAPK (const char* apkPath) {
   }
 }
 
+Tank tank;
+TankView* tankView;
+
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   (JNIEnv * env, jclass cls, jstring apkPath) {
   const char* str;
@@ -82,6 +82,9 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
+
+  tank.setPosition(Vector2(2,2));
+  tankView = new TankView(tank);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
@@ -116,6 +119,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   glTexCoordPointer(2, GL_FIXED, 0, texCoords);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glPopMatrix();
+
+  tankView->draw();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause

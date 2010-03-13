@@ -15,7 +15,7 @@ class Moveable : public Viewable {
       position(0,0), rotation(0), positionCallbacks(NULL) {
     }
 
-    virtual ~Moveable ();
+    virtual ~Moveable () {}
 
     void registerPositionChangedListener(const PositionChangeListener& l) {
       LL_PREPEND(positionCallbacks, new _PosCallback(l));

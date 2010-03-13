@@ -1,4 +1,4 @@
-LOCAL_PATH := $(call my-dir)
+	LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
@@ -14,8 +14,11 @@ LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
 LOCAL_SRC_FILES := \
     app-android.cpp \
+    logic/BoundingBox.cpp \
+    logic/Viewable.cpp \
     view/TextureManager.cpp \
-    logic/BoundingBox.cpp
+    view/Sprite.cpp \
+    view/Square.cpp
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
