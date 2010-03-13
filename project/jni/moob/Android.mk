@@ -14,7 +14,8 @@ LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
 LOCAL_SRC_FILES := \
     app-android.cpp \
-    view/TextureManager.cpp
+    view/TextureManager.cpp \
+    logic/BoundingBox.cpp
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 

@@ -2,6 +2,7 @@
 #include <GLES/gl.h>
 #include "def.h"
 #include "view/TextureManager.h"
+#include "logic/Entity.h"
 
 zip* APKArchive;
 
