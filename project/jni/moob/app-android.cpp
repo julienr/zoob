@@ -9,6 +9,7 @@
 #include "view/LevelView.h"
 #include "view/GameView.h"
 #include "logic/Game.h"
+#include "view/GLW.h"
 
 zip* APKArchive;
 
@@ -124,16 +125,17 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
     pos = 0;
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
+  GLW::translate(1, 1, 0);
 
-  glPushMatrix();
+  /*glPushMatrix();
   glTranslatef(pos, 5, 0);
   glScalef(5,5,0);
   glVertexPointer(3, GL_FIXED, 0, square);
   glTexCoordPointer(2, GL_FIXED, 0, texCoords);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glPopMatrix();
+  glPopMatrix();*/
 
-  tankView->draw();
+  //tankView->draw();
   gameView->draw();
 }
 
