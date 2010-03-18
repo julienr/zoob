@@ -13,22 +13,6 @@
 
 zip* APKArchive;
 
-int square[12] = {
-    fX(-0.5), fX(-0.5), 0,
-    fX(0.5), fX(-0.5), 0,
-    fX(-0.5), fX(0.5), 0,
-    fX(0.5), fX(0.5), 0
-};
-
-int texCoords[8] = {
-    0, fX(1),
-    fX(1), fX(1),
-    0,0,
-    fX(1),0
-};
-
-GLuint texture;
-
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
     LOGI("GL %s = %s\n", name, v);
@@ -65,9 +49,6 @@ Level* lvl;
 Game* game;
 GameView* gameView;
 
-Tank tank;
-TankView* tankView;
-
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   (JNIEnv * env, jclass cls, jstring apkPath) {
   const char* str;
@@ -78,9 +59,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   lvl = loadLevel1();
   game = new Game(lvl);
   gameView = new GameView(*game);
-
-  //texture = loadTextureFromPNG("assets/sprites/texture.png", width, height);
-  texture = TextureManager::getInstance()->get("assets/sprites/texture.png");
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
@@ -96,9 +74,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
-
-  tank.setPosition(Vector2(2,2));
-  tankView = new TankView(tank);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
@@ -127,15 +102,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   glLoadIdentity();
   GLW::translate(1, 1, 0);
 
-  /*glPushMatrix();
-  glTranslatef(pos, 5, 0);
-  glScalef(5,5,0);
-  glVertexPointer(3, GL_FIXED, 0, square);
-  glTexCoordPointer(2, GL_FIXED, 0, texCoords);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glPopMatrix();*/
-
-  //tankView->draw();
   gameView->draw();
 }
 
