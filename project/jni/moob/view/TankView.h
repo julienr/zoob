@@ -15,6 +15,10 @@ class TankView {
       turretSprite.draw(tank);
     }
 
+    Vector2 getCenter () {
+      return baseSprite.getCenter(tank);
+    }
+
   private:
     const Tank& tank;
     Sprite baseSprite;

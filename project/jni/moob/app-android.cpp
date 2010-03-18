@@ -5,6 +5,10 @@
 #include "logic/Entity.h"
 #include "view/TankView.h"
 #include "logic/Tank.h"
+#include "logic/Level.h"
+#include "view/LevelView.h"
+#include "view/GameView.h"
+#include "logic/Game.h"
 
 zip* APKArchive;
 
@@ -55,6 +59,11 @@ static void loadAPK (const char* apkPath) {
   }
 }
 
+#include "levels/LevelsData.h"
+Level* lvl;
+Game* game;
+GameView* gameView;
+
 Tank tank;
 TankView* tankView;
 
@@ -64,6 +73,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   jboolean isCopy;
   str = env->GetStringUTFChars(apkPath, &isCopy);
   loadAPK(str);
+
+  lvl = loadLevel1();
+  game = new Game(lvl);
+  gameView = new GameView(*game);
 
   //texture = loadTextureFromPNG("assets/sprites/texture.png", width, height);
   texture = TextureManager::getInstance()->get("assets/sprites/texture.png");
@@ -121,6 +134,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   glPopMatrix();
 
   tankView->draw();
+  gameView->draw();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause

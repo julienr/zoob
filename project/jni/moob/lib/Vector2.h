@@ -5,6 +5,9 @@
 #include "Math.h"
 
 struct Vector2 {
+  static const Vector2 X_AXIS;
+  static const Vector2 Y_AXIS;
+
   float x, y;
 
   Vector2 () :

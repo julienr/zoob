@@ -8,7 +8,7 @@
 class Entity: public Moveable {
   public:
     Entity() :
-      collided(false), bbox(1.0f, 1.0f, *this) {
+      Moveable(), collided(false), bbox(1.0f, 1.0f, *this) {
     }
 
     virtual ~Entity () {}

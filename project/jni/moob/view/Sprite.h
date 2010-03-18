@@ -13,6 +13,10 @@ class Sprite {
     void draw (const Viewable& viewable, float rotation=0) const;
     void draw (const Vector2& pos, const Vector2& size, float rotation=0) const;
 
+    Vector2 getCenter (const Viewable& viewable) {
+      return Vector2(viewable.getPosition().x+viewable.getWidth()/2.0f,
+                      viewable.getPosition().y+viewable.getHeight()/2.0f);
+    }
   private:
     GLuint textureID;
 };
