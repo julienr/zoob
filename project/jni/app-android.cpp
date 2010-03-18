@@ -110,3 +110,23 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
   LOGE("Pause");
 }
 
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  LOGE("Down : (%f,%f)", x, y);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventMove
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  LOGE("Move : (%f,%f)", x, y);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventUp
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  LOGE("Up : (%f,%f)", x, y);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventOther
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  LOGE("Other : (%f,%f)", x, y);
+}
+

@@ -51,6 +51,10 @@ class MoobGLSurface extends GLSurfaceView {
 	MoobRenderer mRenderer;
 
 	private static native void nativePause();
+	private static native void touchEventDown (float x, float y);
+	private static native void touchEventMove (float x, float y);
+	private static native void touchEventUp (float x, float y);
+	private static native void touchEventOther (float x, float y);
 	
 	public MoobGLSurface(Context context) {
 		super(context);
@@ -59,8 +63,22 @@ class MoobGLSurface extends GLSurfaceView {
 	}
 
 	public boolean onTouchEvent(final MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			nativePause();
+		final float x = event.getX();
+		final float y = event.getY();
+
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				touchEventDown(x,y); 
+				break;
+			case MotionEvent.ACTION_MOVE:
+				touchEventMove(x,y);
+				break;
+			case MotionEvent.ACTION_UP:
+				touchEventUp(x,y);
+				break;
+			default:
+				touchEventOther(x,y);
+				break;
 		}
 		return true;
 	}

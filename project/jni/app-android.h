@@ -39,6 +39,20 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
   (JNIEnv *, jclass);
 
+/*
+ * Class:     net_fhtagn_moob_MoobGLSurface
+ * Method:    event callbacks
+ * Signature: (FF)V
+ */
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventMove
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventUp
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventOther
+  (JNIEnv *, jclass, jfloat, jfloat);
+
 #ifdef __cplusplus
 }
 #endif
