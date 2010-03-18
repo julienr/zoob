@@ -18,6 +18,5 @@ void GameView::draw () {
     //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
     float angle = acos(dir*Vector2::X_AXIS) * Vector2::X_AXIS.relativeOrientation(dir);
     arrowEnd.draw(touchPoint, cursorSize, angle);
-
   }
 }

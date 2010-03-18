@@ -6,8 +6,10 @@ void Game::update () {
   //Do nothing if lastTime is in the future
   //This allows the game start (and unpause) to delay
   //the start of the physics by 100ms or whatever
-  if (lastTime > now)
+  if (lastTime > now) {
+    LOGE("lastTime(%i) > now(%i)", lastTime, now);
     return;
+  }
 
   double elapsedS = (now-lastTime)/1000.0;
   lastTime = now;

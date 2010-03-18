@@ -5,6 +5,10 @@ int Square::verts[12] = {
     fX(0.5), fX(-0.5), 0,
     fX(-0.5), fX(0.5), 0,
     fX(0.5), fX(0.5), 0
+    /*0,0,0,
+    fX(1.0), 0,0,
+    0,fX(1.0),0,
+    fX(1.0),fX(1.0),0*/
 };
 
 int Square::texCoords[8] = {

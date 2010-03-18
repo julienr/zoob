@@ -35,7 +35,11 @@ class Game {
       return cursor;
     }
 
-    Level const* getLevel () const {
+    void setCursorPosition (const Vector2& pos) {
+      cursor.setPosition(pos);
+    }
+
+    const Level* getLevel () const {
       return level;
     }
 
@@ -45,7 +49,7 @@ class Game {
 
     //When moving the tank, use this to set the position of where the user touched to move the tank
     //pos is SUPPOSED to be in Game coords
-    void setTankMoveTouchePoint (const Vector2& pos) {
+    void setTankMoveTouchPoint (const Vector2& pos) {
       tankMoveEnd.set(pos);
     }
 

@@ -8,7 +8,7 @@ void Sprite::draw (const Viewable& viewable, float rotation) const {
   glBindTexture(GL_TEXTURE_2D, textureID);
   glPushMatrix();
   GLW::scale(viewable.getWidth(), viewable.getHeight(), 0);
-  GLW::translate(p.x, p.y, 0);
+  GLW::translate(viewable.getPosition().x, viewable.getPosition().y, 0);
   GLW::rotate(RAD_TO_DEG(rotation), 0, 0, 1);
   Square::draw(true);
   glPopMatrix();

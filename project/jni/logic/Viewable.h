@@ -18,6 +18,10 @@ class Viewable {
       const float h = getHeight();
       return Vector2(p.x + w / 2.0f, p.y + h / 2.0f);
     }
+
+    Vector2 getSize () const {
+      return Vector2(getWidth(), getHeight());
+    }
 };
 
 #endif /* VIEWABLE_H_ */

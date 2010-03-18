@@ -76,6 +76,17 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   glDisable(GL_CULL_FACE);
 }
 
+/** OpenGL ES doesn't necessarily support retrieving current projection/viewport matrix
+ * => We do it by hand cause we now we're in 2d, so that's pretty easy
+ * To convert x (screen coords) to game coords, simply do x*xScreenToGame
+ */
+float xScreenToGame;
+float yScreenToGame;
+
+//0.5 is because sprites are square centered on their position
+#define XSG(x) (x*xScreenToGame-0.5)
+#define YSG(x) (x*xScreenToGame-0.5)
+
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
   (JNIEnv *, jclass, jint w, jint h) {
   LOGI("nativeResize (%i,%i)", w, h);
@@ -86,22 +97,26 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
   glMatrixMode(GL_PROJECTION);
   const float ratio=w/(float)h;
   glLoadIdentity();
-  glOrthof(0, 15, 15/ratio, 0, -1, 1);
+  const float gameAreaW = 15;
+  const float gameAreaH = 15/ratio;
+  glOrthof(0, gameAreaW, gameAreaH, 0, -1, 1);
+
+  xScreenToGame = gameAreaW/w;
+  yScreenToGame = gameAreaH/h;
+
   checkGlError("glViewport");
   glMatrixMode(GL_MODELVIEW);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   (JNIEnv *, jclass) {
-
-  static float pos = 0;
-  pos += 0.1f;
-  if (pos > 15)
-    pos = 0;
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
-  GLW::translate(1, 1, 0);
 
+  //artificial translation so we see everything (since sprites are renderer on -0.5,0.5
+  GLW::translate(0.5f, 0.5f, 0);
+
+  game->update();
   gameView->draw();
 }
 
@@ -112,21 +127,27 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  LOGE("Down : (%f,%f)", x, y);
+  const Vector2 p(XSG(x), YSG(y));
+  if (gameView->getTankView().inside(p))
+    game->startMovingTank(p);
+  else
+    game->setCursorPosition(p);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventMove
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  LOGE("Move : (%f,%f)", x, y);
+  const Vector2 p(XSG(x), YSG(y));
+  if (game->isMovingTank())
+    game->setTankMoveTouchPoint(p);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventUp
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  LOGE("Up : (%f,%f)", x, y);
+  game->stopMovingTank();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventOther
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  LOGE("Other : (%f,%f)", x, y);
+  game->stopMovingTank();
 }
 

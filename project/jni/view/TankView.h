@@ -19,6 +19,9 @@ class TankView {
       return baseSprite.getCenter(tank);
     }
 
+    bool inside (const Vector2& p) const {
+      return baseSprite.inside(tank, p);
+    }
   private:
     const Tank& tank;
     Sprite baseSprite;

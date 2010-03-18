@@ -16,6 +16,10 @@ class GameView {
        arrowEnd("assets/sprites/arrow_end.png"){
     }
 
+    const TankView& getTankView () const {
+      return tankView;
+    }
+
     void draw();
   private:
     const Game& game;
