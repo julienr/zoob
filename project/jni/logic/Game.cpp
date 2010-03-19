@@ -14,8 +14,7 @@ void Game::update () {
   double elapsedS = (now-lastTime)/1000.0;
   lastTime = now;
 
-  //FIXME:
-  //colManager.unmarkCollided();
+  colManager.unmarkCollided();
 
   //Tank movement
   if (movingTank) {
@@ -28,7 +27,14 @@ void Game::update () {
     tank.setRotation(angle);
 
     const Vector2 moveEnd = dir*TANK_MOVE_SPEED*elapsedS;
-    //FIXME: Collision detection
+
+    //Collision detection
+    CollisionResult r;
+
+    if (colManager.trace(&tank, moveEnd, r)) {
+      r.collidedEntity->collided = true;
+      tank.collided  =true;
+    }
     tank.translate(moveEnd);
   }
 }

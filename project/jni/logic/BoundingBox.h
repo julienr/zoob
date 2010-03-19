@@ -8,7 +8,7 @@ class Entity;
 //Oriented bounding box (automatically orient itself by using Entity's rotation
 class BoundingBox {
 public:
-  BoundingBox (float w, float h, const Entity& e) :
+  BoundingBox (float w, float h, Entity* e) :
     width(w), height(h), entity(e) {
   }
 
@@ -26,7 +26,7 @@ public:
   }
 private:
   float width, height;
-  const Entity& entity;
+  Entity* entity;
 };
 
 #endif /* BOUDINGBOX_H_ */

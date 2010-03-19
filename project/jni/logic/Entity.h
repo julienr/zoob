@@ -8,7 +8,7 @@
 class Entity: public Moveable {
   public:
     Entity() :
-      Moveable(), collided(false), bbox(1.0f, 1.0f, *this) {
+      Moveable(), collided(false), bbox(1.0f, 1.0f, this) {
     }
 
     virtual ~Entity () {}
@@ -25,6 +25,7 @@ class Entity: public Moveable {
       return bbox.getHeight();
     }
 
+    //FIXME: only for debug
     bool collided;
   private:
     BoundingBox bbox;

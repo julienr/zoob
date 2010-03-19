@@ -5,6 +5,8 @@
 
 #define RAD_TO_DEG(x) (x*180.0f/M_PI)
 
+#define MOOB_INF 10E6
+
 #define EPSILON 10E-5
 struct Math {
   static bool epsilonEq (float x, float y) {

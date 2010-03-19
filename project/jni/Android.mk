@@ -8,7 +8,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../libzip/jni/ $(LOCAL_PATH)/../../../li
 #LOCAL_STATIC_LIBRARIES := libzip libpng
 
 #-Wno-psabi to remove warning about GCC 4.4 va_list warning
-LOCAL_CFLAGS := -ggdb -DANDROID_NDK -Wno-psabi
+LOCAL_CFLAGS := -DANDROID_NDK -Wno-psabi
 
 LOCAL_DEFAULT_CPP_EXTENSION := cpp 
 
@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := \
     app-android.cpp \
     lib/Vector2.cpp \
     logic/BoundingBox.cpp \
+    logic/CollisionManager.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \

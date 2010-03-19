@@ -21,6 +21,8 @@ class GameView {
     }
 
     void draw();
+
+    void debugDraw();
   private:
     const Game& game;
     TankView tankView;

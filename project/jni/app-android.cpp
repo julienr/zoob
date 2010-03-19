@@ -118,6 +118,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
 
   game->update();
   gameView->draw();
+  gameView->debugDraw();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause

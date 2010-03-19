@@ -57,6 +57,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * The sort macro is O(n log(n)) for all types of single/double/circular lists.
  */
 
+/**
+ * WARNING: When using with c++, don't directly do DL_APPEND(list, new Item());
+ * Since this is based on macro, new Item() will get replaced in the macro expansion..
+ * do
+ * item = new Item(); DL_APPEND(list, item);
+ */
+
 /******************************************************************************
  * The sort macro is an adaptation of Simon Tatham's O(n log(n)) mergesort    *
  * Unwieldy variable names used here to avoid shadowing passed-in variables.  *

@@ -1,4 +1,6 @@
 #include "GameView.h"
+#include "view/GLW.h"
+#include "view/Square.h"
 
 void GameView::draw () {
   levelView.draw();
@@ -19,4 +21,23 @@ void GameView::draw () {
     float angle = acos(dir*Vector2::X_AXIS) * Vector2::X_AXIS.relativeOrientation(dir);
     arrowEnd.draw(touchPoint, cursorSize, angle);
   }
+}
+
+void drawColEntity (Entity* e) {
+  if (e->collided)
+    glColor4f(1,0,0,1);
+  else
+    glColor4f(0,1,0,1);
+  glPushMatrix();
+  GLW::translate(e->getPosition().x, e->getPosition().y, 0);
+  GLW::scale(e->getBBox().getWidth(), e->getBBox().getHeight(), 1);
+  Square::drawLine();
+  glPopMatrix();
+  glColor4f(1,1,1,1);
+}
+
+void GameView::debugDraw () {
+  glDisable(GL_TEXTURE_2D);
+  game.getColManager().foreachEntity(drawColEntity);
+  glEnable(GL_TEXTURE_2D);
 }

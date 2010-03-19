@@ -4,6 +4,7 @@
 #include <android/log.h>
 #include <zip.h>
 #include <GLES/gl.h>
+#include <assert.h>
 
 extern zip* APKArchive;
 

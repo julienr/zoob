@@ -8,9 +8,7 @@ class Square {
     static void create ();
 
     static void draw (bool enableTexture);
-  private:
-    static int verts[12];
-    static int texCoords[8];
+    static void drawLine ();
 };
 
 
