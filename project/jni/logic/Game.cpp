@@ -7,7 +7,7 @@ void Game::update () {
   //This allows the game start (and unpause) to delay
   //the start of the physics by 100ms or whatever
   if (lastTime > now) {
-    LOGE("lastTime(%i) > now(%i)", lastTime, now);
+    LOGE("lastTime(%li) > now(%li)", lastTime, now);
     return;
   }
 

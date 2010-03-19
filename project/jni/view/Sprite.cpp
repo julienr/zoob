@@ -3,7 +3,6 @@
 #include "Square.h"
 
 void Sprite::draw (const Viewable& viewable, float rotation) const {
-  const Vector2& p = viewable.getPosition();
   //FIXME: do something if textureID = NO_TEXTURE
   glBindTexture(GL_TEXTURE_2D, textureID);
   glPushMatrix();

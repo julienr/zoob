@@ -31,8 +31,8 @@ class Level {
     }
 
     ~Level () {
-      for (int x=0; x<width; x++) {
-        for (int y=0; y<height; y++)
+      for (unsigned x=0; x<width; x++) {
+        for (unsigned y=0; y<height; y++)
           delete board[x][y];
         delete[] board[x];
       }

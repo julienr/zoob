@@ -25,10 +25,10 @@ class LevelView {
       return Utils::inside(Vector2(0,0), extents.x, extents.y, p);
     }
   private:
+    const Level* level;
     const Sprite emptySprite;
     const Sprite wallSprite;
     const Sprite spawnSprite;
-    const Level* level;
 };
 
 #endif /* LEVELVIEW_H_ */
