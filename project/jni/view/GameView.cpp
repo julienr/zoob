@@ -48,7 +48,22 @@ void drawColEntity (Entity* e) {
 }
 
 void GameView::debugDraw () {
+  const Tank& tank = game.getPlayerTank();
   glDisable(GL_TEXTURE_2D);
   game.getColManager().foreachEntity(drawColEntity);
+  //Draw collision normal
+  //if (tank.collided) {
+    int verts[6] = {
+        fX(tank.lastColNormal.x), fX(tank.lastColNormal.y), 0,
+        0, 0, 0
+    };
+    glPushMatrix();
+    GLW::translate(tank.lastColPoint.x, tank.lastColPoint.y, 0);
+    glLineWidth(5.0f);
+    glVertexPointer(3, GL_FIXED, 0, verts);
+    glDrawArrays(GL_LINES, 0, 2);
+    glPopMatrix();
+    glLineWidth(1.0f);
+  //}
   glEnable(GL_TEXTURE_2D);
 }

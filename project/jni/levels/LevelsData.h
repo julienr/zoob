@@ -4,5 +4,6 @@
 #include "logic/Level.h"
 
 Level* loadLevel1();
+Level* loadColTest();
 
 #endif /* LEVELSDATA_H_ */

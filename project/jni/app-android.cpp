@@ -57,6 +57,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   loadAPK(str);
 
   lvl = loadLevel1();
+  //lvl = loadColTest();
   game = new Game(lvl);
   gameView = new GameView(*game);
 

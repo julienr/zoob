@@ -11,7 +11,7 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b) {
   for (unsigned y=0; y<height; y++) {
     for (unsigned x=0; x<width; x++) {
       //b is row-major, board is col-major
-      board[x][y] = new Tile(x,y,b[x*w+y]);
+      board[x][y] = new Tile(x,y,b[y*w+x]);
     }
   }
 }

@@ -66,6 +66,10 @@ struct Vector2 {
   Vector2 operator - (const Vector2& o) const {
     return Vector2(x-o.x, y-o.y);
   }
+
+  Vector2 operator - () const {
+    return Vector2(-x,-y);
+  }
 };
 
 #endif /* VECTOR2_H_ */

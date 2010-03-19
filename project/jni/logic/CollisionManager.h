@@ -11,6 +11,7 @@ struct CollisionResult {
   float tFirst, tLast;
   Vector2 normal;
   Entity* collidedEntity;
+  Vector2 colPoint;
 };
 
 class CollisionManager {
@@ -39,9 +40,10 @@ class CollisionManager {
     }
 
     //Perform a trace and put the result in "result"
+    //move is move vector relative to mover
     //returns false if no collision occurs
     //if false is returned, the content of result is undetermined
-    bool trace (Entity* mover, const Vector2& end, CollisionResult& result);
+    bool trace (Entity* mover, const Vector2& move, CollisionResult& result);
 
   private:
     //FIXME: use grid to store entities
