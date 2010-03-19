@@ -28,10 +28,21 @@ void drawColEntity (Entity* e) {
     glColor4f(1,0,0,1);
   else
     glColor4f(0,1,0,1);
+
+  int verts[12];
+  Vector2 corners[4];
+  e->getBBox().getCorners(corners);
+  for (int i=0; i<4; i++) {
+    verts[3*i] = fX(corners[i].x);
+    verts[3*i+1] = fX(corners[i].y);
+    verts[3*i+2] = 0;
+    //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
+  }
+
+
   glPushMatrix();
-  GLW::translate(e->getPosition().x, e->getPosition().y, 0);
-  GLW::scale(e->getBBox().getWidth(), e->getBBox().getHeight(), 1);
-  Square::drawLine();
+  glVertexPointer(3, GL_FIXED, 0, verts);
+  glDrawArrays(GL_LINE_LOOP, 0, 4);
   glPopMatrix();
   glColor4f(1,1,1,1);
 }

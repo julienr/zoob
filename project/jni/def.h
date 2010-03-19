@@ -15,7 +15,7 @@ extern zip* APKArchive;
 
 //int to fixed point
 #define iX(x) (x<<16)
-//float ti fixed point
+//float to fixed point
 #define fX(x) ((int)(x * (1  << 16)))
 
 #endif /* DEF_H_ */

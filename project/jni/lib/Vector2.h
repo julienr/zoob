@@ -16,6 +16,9 @@ struct Vector2 {
   Vector2 (float x, float y) :
     x(x), y(y) {}
 
+  Vector2 (const Vector2& other) :
+    x(other.x), y(other.y) {}
+
   void normalize () {
     const float l = length();
     x /= l;
@@ -39,7 +42,7 @@ struct Vector2 {
     return x*other.x + y*other.y;
   }
 
-  bool operator = (const Vector2& other) const {
+  bool operator == (const Vector2& other) const {
     return Math::epsilonEq(x, other.x) &&
             Math::epsilonEq(y, other.y);
   }
@@ -56,11 +59,11 @@ struct Vector2 {
     return Vector2(x/c, y/c);
   }
 
-  Vector2 operator + (Vector2 o) const {
+  Vector2 operator + (const Vector2& o) const {
     return Vector2(x+o.x, y+o.y);
   }
 
-  Vector2 operator - (Vector2 o) const {
+  Vector2 operator - (const Vector2& o) const {
     return Vector2(x-o.x, y-o.y);
   }
 };
