@@ -2,12 +2,12 @@
 #include "lib/Math.h"
 
 void Game::update () {
-  long now = Utils::getCurrentTimeMillis();
+  uint64_t now = Utils::getCurrentTimeMillis();
   //Do nothing if lastTime is in the future
   //This allows the game start (and unpause) to delay
   //the start of the physics by 100ms or whatever
   if (lastTime > now) {
-    LOGE("lastTime(%li) > now(%li)", lastTime, now);
+    LOGE("lastTime(%lu) > now(%lu)", (unsigned long)lastTime, (unsigned long)now);
     return;
   }
 

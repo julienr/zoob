@@ -12,7 +12,7 @@ struct Utils {
             (p.y > boxPos.y && p.y < boxPos.y+height);
   }
 
-  static long getCurrentTimeMillis () {
+  static uint64_t getCurrentTimeMillis () {
     timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_sec*1000 + tv.tv_usec/1000;

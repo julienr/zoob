@@ -83,7 +83,7 @@ class Game {
     bool movingTank;
     Vector2 tankMoveEnd;
 
-    long lastTime;
+    uint64_t lastTime;
 };
 
 #endif /* GAME_H_ */
