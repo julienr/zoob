@@ -24,7 +24,8 @@ void Game::update () {
     //Calculate base rotation (to face movement direction)
     //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
     const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
-    slideRotate(&tank, angle);
+    if (!Math::epsilonEq(tank.getRotation(), angle))
+      slideRotate(&tank, angle);
     //tank.setRotation(angle);
 
     const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
@@ -54,6 +55,12 @@ Vector2 clipVelocity (const Vector2& in, const Vector2& normal, float overbounce
 }
 
 void Game::slideRotate (Entity* e, float rotation) {
+  Vector2 backoff;
+  Entity* touchedEntity;
+  if (colManager.rotationOverlap(e, rotation, &backoff, &touchedEntity)) {
+    LOGE("slideRotate : backoff (%f,%f)", backoff.x, backoff.y);
+    e->translate(-backoff);
+  }
   e->setRotation(rotation);
 }
 
