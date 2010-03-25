@@ -16,6 +16,7 @@ class Game {
     Game (Level* level) :
       level(level),movingTank(false) {
       level->addToColManager(colManager);
+      tank.setPosition(level->getStartPosition());
       colManager.addEntity(&tank);
     }
 
@@ -75,6 +76,8 @@ class Game {
 
     void update();
   private:
+    void slideMove (Entity* e, Vector2 velocity, float eTime);
+
     CollisionManager colManager;
     Tank tank;
     Cursor cursor;

@@ -1,12 +1,15 @@
 #include "LevelsData.h"
 
-eTileType coltest[3*2] = {
+eTileType coltest[3*5] = {
     E,E,E,
-    E,E,W
+    E,E,W,
+    E,E,W,
+    E,E,W,
+    E,W,W
 };
 
 Level* loadColTest() {
-  return new Level(3,2,&coltest[0]);
+  return new Level(3,5,&coltest[0]);
 }
 
 eTileType lvl1[7*8] = {

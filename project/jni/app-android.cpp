@@ -56,8 +56,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   str = env->GetStringUTFChars(apkPath, &isCopy);
   loadAPK(str);
 
-  lvl = loadLevel1();
-  //lvl = loadColTest();
+  //lvl = loadLevel1();
+  lvl = loadColTest();
   game = new Game(lvl);
   gameView = new GameView(*game);
 
@@ -119,7 +119,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
 
   game->update();
   gameView->draw();
-  //gameView->debugDraw();
+  gameView->debugDraw();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause

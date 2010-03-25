@@ -53,6 +53,18 @@ class Level {
 
     void addToColManager (CollisionManager& colManager);
 
+    Vector2 getStartPosition () {
+      //FIXME: return random start position and check if there already is someone ?
+      for (unsigned x=0; x<width; x++) {
+        for (unsigned y=0; y<height; y++) {
+          if (board[x][y]->getContentType() == S)
+            return Vector2(x,y);
+        }
+      }
+      LOGE("getStartPosition : couldn't find a starting position");
+      return Vector2(0,0);
+    }
+
   private:
     void _initBoard (unsigned w, unsigned h, eTileType* board);
     unsigned width;

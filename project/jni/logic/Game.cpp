@@ -38,6 +38,33 @@ void Game::update () {
       tank.lastColPoint = r.colPoint;
       //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
     }
-    tank.translate(move);
+    slideMove(&tank, dir*TANK_MOVE_SPEED/4, elapsedS);
+    //tank.translate(move);
   }
+}
+
+Vector2 clipVelocity (const Vector2& in, const Vector2& normal, float overbounce=1.01f) {
+  float backoff = in*normal;
+  if (backoff < 0)
+    backoff *= overbounce;
+  else
+    backoff /= overbounce;
+  return in-(normal*backoff);
+}
+
+#define MAX_BOUNCES 4
+void Game::slideMove (Entity* e, Vector2 vel, float eTime) {
+  Vector2 move = vel*eTime;
+  CollisionResult r;
+  unsigned bounces = 0;
+  for (; colManager.trace(e, move, r) && (bounces < MAX_BOUNCES); bounces++) {
+    const Vector2 newPos = e->getPosition()+move;
+    float backAmount = (r.colPoint - newPos)*r.normal;
+    Vector2 backoff = backAmount*r.normal;
+    /*LOGE("collision : normal(%f,%f), backoff(%f,%f), backAmount : %f", r.normal.x, r.normal.y, backoff.x, backoff.y, backAmount);
+    LOGE("move (%f,%f)", move.x, move.y);*/
+    move += backoff*1.1;
+    //LOGE("move after backoff (%f,%f)", move.x, move.y);
+  }
+  e->translate(move);
 }

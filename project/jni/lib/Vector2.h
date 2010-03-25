@@ -25,6 +25,11 @@ struct Vector2 {
     y /= l;
   }
 
+  Vector2 getNormalized () const {
+    const float l = length();
+    return Vector2(x/l, y/l);
+  }
+
   void set (float x, float y) {
     this->x = x;
     this->y = y;
@@ -55,12 +60,20 @@ struct Vector2 {
     return Vector2(x*c, y*c);
   }
 
+  inline
+  friend Vector2 operator * (float c, const Vector2& v);
+
   Vector2 operator / (float c) const {
     return Vector2(x/c, y/c);
   }
 
   Vector2 operator + (const Vector2& o) const {
     return Vector2(x+o.x, y+o.y);
+  }
+
+  void operator += (const Vector2& o) {
+    x += o.x;
+    y += o.y;
   }
 
   Vector2 operator - (const Vector2& o) const {
@@ -71,5 +84,9 @@ struct Vector2 {
     return Vector2(-x,-y);
   }
 };
+
+Vector2 operator * (float c, const Vector2& v) {
+  return v*c;
+}
 
 #endif /* VECTOR2_H_ */

@@ -12,10 +12,15 @@
     }
 
 
+/**
+ * Fill r with the result of collision
+ * Returns true on collision
+ * If the boxes are overlapping, NO normal is set in r
+ * If they aren't, a normal is set
+ */
 bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, const Vector2& move, CollisionResult& r) {
   r.tFirst = 0.0f;
   r.tLast = MOOB_INF;
-  const float tMax = 1.0f;
   const Vector2 vel = move;
 
   Vector2 axis[4];
@@ -41,11 +46,11 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
 
     //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
 
+    //0 is still
     if (max1 < min0) { //1 is on lhs of 0
       //LOGE("1 on lhs of 0");
       if (speed <= 0) return false;
       float T = (min0-max1)/speed;
-      if (T > tMax) return false;
       if (T > r.tFirst) {
         r.tFirst = T;
         r.normal = -axis[i];
@@ -57,7 +62,6 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
       //LOGE("1 on rhs of 0");
       if (speed >= 0) return false;
       float T = (max0-min1)/speed;
-      if (T > tMax) return false;
       if (T > r.tFirst){
         r.tFirst = T;
         r.normal = axis[i];
@@ -71,21 +75,21 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
         float T = (max0-min1)/speed;
         if (T < r.tLast) {
           r.tLast = T;
-          r.normal = -axis[i];
+          //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
         }
         if (r.tFirst > r.tLast) return false;
       } else { //speed < 0
         float T = (min0-max1)/speed;
         if (T < r.tLast) {
           r.tLast = T;
-          r.normal = axis[i];
+          //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
         }
         if (r.tFirst > r.tLast) return false;
       }
     }
     //LOGE("COLLISION");
   }
-  return true;
+  return (r.tFirst <= 1.0f);
 }
 
 bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult& result) {
