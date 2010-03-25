@@ -76,7 +76,10 @@ class Game {
 
     void update();
   private:
-    void slideMove (Entity* e, Vector2 velocity, float eTime);
+    //translate the given entity of <move>, sliding against collider
+    void slideMove (Entity* e, Vector2 move);
+    //rotate the given entity of <rotation>, sliding against colliders
+    void slideRotate (Entity* e, float rotation);
 
     CollisionManager colManager;
     Tank tank;

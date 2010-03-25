@@ -24,7 +24,8 @@ void Game::update () {
     //Calculate base rotation (to face movement direction)
     //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
     const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
-    tank.setRotation(angle);
+    slideRotate(&tank, angle);
+    //tank.setRotation(angle);
 
     const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
 
@@ -38,7 +39,7 @@ void Game::update () {
       tank.lastColPoint = r.colPoint;
       //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
     }
-    slideMove(&tank, dir*TANK_MOVE_SPEED/4, elapsedS);
+    slideMove(&tank, move);
     //tank.translate(move);
   }
 }
@@ -52,9 +53,12 @@ Vector2 clipVelocity (const Vector2& in, const Vector2& normal, float overbounce
   return in-(normal*backoff);
 }
 
+void Game::slideRotate (Entity* e, float rotation) {
+  e->setRotation(rotation);
+}
+
 #define MAX_BOUNCES 4
-void Game::slideMove (Entity* e, Vector2 vel, float eTime) {
-  Vector2 move = vel*eTime;
+void Game::slideMove (Entity* e, Vector2 move) {
   CollisionResult r;
   unsigned bounces = 0;
   for (; colManager.trace(e, move, r) && (bounces < MAX_BOUNCES); bounces++) {

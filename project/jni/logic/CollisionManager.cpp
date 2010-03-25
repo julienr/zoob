@@ -1,6 +1,56 @@
 #include "CollisionManager.h"
 #include "lib/Math.h"
 
+/**
+ * Good resource : N collision detection tutorial
+ * http://physics.hardwire.cz/mirror/html/n_tutor_a/N%20Tutorials%20-%20Collision%20Detection%20and%20Response.html
+ */
+
+bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult& r) {
+  //0 is still
+  if (max1 < min0) { //1 is on lhs of 0
+    //LOGE("1 on lhs of 0");
+    if (speed <= 0) return false;
+    float T = (min0-max1)/speed;
+    if (T > r.tFirst) {
+      r.tFirst = T;
+      r.normal = -axis;
+    }
+    T = (max0-min1)/speed;
+    if (T < r.tLast) r.tLast = T;
+    if (r.tFirst > r.tLast) return false;
+  } else if (max0 < min1) { //1 is on rhs of 0
+    //LOGE("1 on rhs of 0");
+    if (speed >= 0) return false;
+    float T = (max0-min1)/speed;
+    if (T > r.tFirst){
+      r.tFirst = T;
+      r.normal = axis;
+    }
+    T = (min0-max1)/speed;
+    if (T < r.tLast) r.tLast = T;
+    if (r.tFirst > r.tLast) return false;
+  } else { //boxes overlapping
+    //LOGE("overlap");
+    if (speed >= 0) {
+      float T = (max0-min1)/speed;
+      if (T < r.tLast) {
+        r.tLast = T;
+        //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
+      }
+      if (r.tFirst > r.tLast) return false;
+    } else { //speed < 0
+      float T = (min0-max1)/speed;
+      if (T < r.tLast) {
+        r.tLast = T;
+        //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
+      }
+      if (r.tFirst > r.tLast) return false;
+    }
+  }
+  return true;
+}
+
 #define FILL_PROJ_MIN_MAX(min,max,rect) float min = axis[i]*rect[0]; \
     float max = axis[i]*rect[0]; \
     for(short j=1;j<4;j++) { \
@@ -46,47 +96,9 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
 
     //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
 
-    //0 is still
-    if (max1 < min0) { //1 is on lhs of 0
-      //LOGE("1 on lhs of 0");
-      if (speed <= 0) return false;
-      float T = (min0-max1)/speed;
-      if (T > r.tFirst) {
-        r.tFirst = T;
-        r.normal = -axis[i];
-      }
-      T = (max0-min1)/speed;
-      if (T < r.tLast) r.tLast = T;
-      if (r.tFirst > r.tLast) return false;
-    } else if (max0 < min1) { //1 is on rhs of 0
-      //LOGE("1 on rhs of 0");
-      if (speed >= 0) return false;
-      float T = (max0-min1)/speed;
-      if (T > r.tFirst){
-        r.tFirst = T;
-        r.normal = axis[i];
-      }
-      T = (min0-max1)/speed;
-      if (T < r.tLast) r.tLast = T;
-      if (r.tFirst > r.tLast) return false;
-    } else { //boxes overlapping
-      //LOGE("overlap");
-      if (speed >= 0) {
-        float T = (max0-min1)/speed;
-        if (T < r.tLast) {
-          r.tLast = T;
-          //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
-        }
-        if (r.tFirst > r.tLast) return false;
-      } else { //speed < 0
-        float T = (min0-max1)/speed;
-        if (T < r.tLast) {
-          r.tLast = T;
-          //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
-        }
-        if (r.tFirst > r.tLast) return false;
-      }
-    }
+    if (!collideOnAxis(axis[i], min0, max0, min1, max1, speed, r))
+      return false;
+
     //LOGE("COLLISION");
   }
   return (r.tFirst <= 1.0f);
