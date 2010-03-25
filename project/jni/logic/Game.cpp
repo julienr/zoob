@@ -32,7 +32,7 @@ void Game::update () {
     //Collision detection
     CollisionResult r;
 
-    if (colManager.trace(&tank, move, r)) {
+    if (colManager.trace(&tank, move, &r)) {
       r.collidedEntity->collided = true;
       tank.collided  = true;
       tank.lastColNormal = r.normal;
@@ -61,7 +61,7 @@ void Game::slideRotate (Entity* e, float rotation) {
 void Game::slideMove (Entity* e, Vector2 move) {
   CollisionResult r;
   unsigned bounces = 0;
-  for (; colManager.trace(e, move, r) && (bounces < MAX_BOUNCES); bounces++) {
+  for (; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;

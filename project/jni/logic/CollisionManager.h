@@ -5,6 +5,7 @@
 #include "logic/Entity.h"
 #include "containers/utlist.h"
 #include "def.h"
+#include "BoundingCircle.h"
 
 
 struct CollisionResult {
@@ -43,7 +44,9 @@ class CollisionManager {
     //move is move vector relative to mover
     //returns false if no collision occurs
     //if false is returned, the content of result is undetermined
-    bool trace (Entity* mover, const Vector2& move, CollisionResult& result);
+    bool trace (Entity* mover, const Vector2& move, CollisionResult* result);
+
+    bool overlap (const BoundingCircle& circle, Vector2* colPoint);
 
   private:
     //FIXME: use grid to store entities

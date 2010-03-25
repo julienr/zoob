@@ -6,46 +6,46 @@
  * http://physics.hardwire.cz/mirror/html/n_tutor_a/N%20Tutorials%20-%20Collision%20Detection%20and%20Response.html
  */
 
-bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult& r) {
+bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult* r) {
   //0 is still
   if (max1 < min0) { //1 is on lhs of 0
     //LOGE("1 on lhs of 0");
     if (speed <= 0) return false;
     float T = (min0-max1)/speed;
-    if (T > r.tFirst) {
-      r.tFirst = T;
-      r.normal = -axis;
+    if (T > r->tFirst) {
+      r->tFirst = T;
+      r->normal = -axis;
     }
     T = (max0-min1)/speed;
-    if (T < r.tLast) r.tLast = T;
-    if (r.tFirst > r.tLast) return false;
+    if (T < r->tLast) r->tLast = T;
+    if (r->tFirst > r->tLast) return false;
   } else if (max0 < min1) { //1 is on rhs of 0
     //LOGE("1 on rhs of 0");
     if (speed >= 0) return false;
     float T = (max0-min1)/speed;
-    if (T > r.tFirst){
-      r.tFirst = T;
-      r.normal = axis;
+    if (T > r->tFirst){
+      r->tFirst = T;
+      r->normal = axis;
     }
     T = (min0-max1)/speed;
-    if (T < r.tLast) r.tLast = T;
-    if (r.tFirst > r.tLast) return false;
+    if (T < r->tLast) r->tLast = T;
+    if (r->tFirst > r->tLast) return false;
   } else { //boxes overlapping
     //LOGE("overlap");
     if (speed >= 0) {
       float T = (max0-min1)/speed;
-      if (T < r.tLast) {
-        r.tLast = T;
+      if (T < r->tLast) {
+        r->tLast = T;
         //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
       }
-      if (r.tFirst > r.tLast) return false;
+      if (r->tFirst > r->tLast) return false;
     } else { //speed < 0
       float T = (min0-max1)/speed;
-      if (T < r.tLast) {
-        r.tLast = T;
+      if (T < r->tLast) {
+        r->tLast = T;
         //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
       }
-      if (r.tFirst > r.tLast) return false;
+      if (r->tFirst > r->tLast) return false;
     }
   }
   return true;
@@ -68,9 +68,9 @@ bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
  * If the boxes are overlapping, NO normal is set in r
  * If they aren't, a normal is set
  */
-bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, const Vector2& move, CollisionResult& r) {
-  r.tFirst = 0.0f;
-  r.tLast = MOOB_INF;
+bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, const Vector2& move, CollisionResult* r) {
+  r->tFirst = 0.0f;
+  r->tLast = MOOB_INF;
   const Vector2 vel = move;
 
   Vector2 axis[4];
@@ -101,20 +101,21 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
 
     //LOGE("COLLISION");
   }
-  return (r.tFirst <= 1.0f);
+  return (r->tFirst <= 1.0f);
 }
 
-bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult& result) {
+bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult* result) {
   if (MovingOBBAgainstOBB(still->getBBox(), mover->getBBox(), move, result)) {
-    result.collidedEntity = still;
+    result->collidedEntity = still;
     return true;
   } else
     return false;
 }
 
-bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult& result) {
+
+bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
   CollisionResult r;
-  result.tFirst = MOOB_INF;
+  result->tFirst = MOOB_INF;
   bool collided = false;
 
   EntityNode *n;
@@ -122,10 +123,10 @@ bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResul
     if (n->entity == mover)
       continue;
 
-    if (collide(n->entity, mover, move, r)
-        && r.tFirst < result.tFirst) {
-      result = r;
-      result.colPoint = mover->getPosition()+move*r.tFirst;
+    if (collide(n->entity, mover, move, &r)
+        && r.tFirst < result->tFirst) {
+      (*result) = r;
+      result->colPoint = mover->getPosition()+move*r.tFirst;
       collided = true;
     }
   }

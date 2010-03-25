@@ -29,7 +29,7 @@ class Moveable : public Viewable {
       position.set(position.x + v.x, position.y + v.y);
     }
 
-    Vector2 getPosition () const {
+    const Vector2& getPosition () const {
       return position;
     }
   private:

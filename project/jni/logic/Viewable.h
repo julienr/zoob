@@ -10,7 +10,7 @@ class Viewable {
     //width/height in game coords
     virtual float getWidth() const = 0;
     virtual float getHeight() const = 0;
-    virtual Vector2 getPosition() const = 0;
+    virtual const Vector2& getPosition() const = 0;
 
     Vector2 getCenter() const {
       const Vector2 p = getPosition();
