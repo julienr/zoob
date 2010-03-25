@@ -45,16 +45,9 @@ void Game::update () {
   }
 }
 
-Vector2 clipVelocity (const Vector2& in, const Vector2& normal, float overbounce=1.01f) {
-  float backoff = in*normal;
-  if (backoff < 0)
-    backoff *= overbounce;
-  else
-    backoff /= overbounce;
-  return in-(normal*backoff);
-}
-
 void Game::slideRotate (Entity* e, float rotation) {
+  //FIXME: check that we don't go in another entity ? (should use the same BOUNCING method as below
+  //FIXME: simply use circles for tanks and aabb for game elements ?
   Vector2 backoff;
   Entity* touchedEntity;
   if (colManager.rotationOverlap(e, rotation, &backoff, &touchedEntity)) {
