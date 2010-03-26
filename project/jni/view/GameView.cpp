@@ -29,26 +29,39 @@ void drawColEntity (Entity* e) {
   else
     glColor4f(0,1,0,1);
 
-  int verts[12];
-  Vector2 corners[4];
-  const Vector2 hW = Vector2(e->getBVolume()->getWidth()/2.0f,0);
-  const Vector2 hH = Vector2(0,e->getBVolume()->getHeight()/2.0f);
-  const Vector2& p = e->getPosition();
-  corners[0] = p + hW + hH;
-  corners[1] = p + hW - hH;
-  corners[2] = p - hW - hH;
-  corners[3] = p - hW + hH;
-  for (int i=0; i<4; i++) {
-    verts[3*i] = fX(corners[i].x);
-    verts[3*i+1] = fX(corners[i].y);
-    verts[3*i+2] = 0;
-    //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
-  }
+  if (e->getBVolume()->getType() == TYPE_AABBOX) {
+    const AABBox* box = static_cast<const AABBox*>(e->getBVolume());
+    int verts[12];
+    Vector2 corners[4];
+    box->getCorners(corners);
+    for (int i=0; i<4; i++) {
+      verts[3*i] = fX(corners[i].x);
+      verts[3*i+1] = fX(corners[i].y);
+      verts[3*i+2] = 0;
+      //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
+    }
+    glPushMatrix();
+    glVertexPointer(3, GL_FIXED, 0, verts);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+    glPopMatrix();
+  } else { //BCircle
+    const BCircle* circle = static_cast<const BCircle*>(e->getBVolume());
+    const unsigned numVerts = 10;
+    int verts[numVerts*3];
 
-  glPushMatrix();
-  glVertexPointer(3, GL_FIXED, 0, verts);
-  glDrawArrays(GL_LINE_LOOP, 0, 4);
-  glPopMatrix();
+    for (unsigned i=0; i<numVerts; i++) {
+      const float angle = i*2*M_PI/(float)numVerts;
+      const Vector2 v(circle->getRadius()*cosf(angle), circle->getRadius()*sinf(angle));
+      verts[3*i] = fX(v.x);
+      verts[3*i+1] = fX(v.y);
+      verts[3*i+2] = 0;
+    }
+    glPushMatrix();
+    GLW::translate(circle->getPosition().x, circle->getPosition().y, 0);
+    glVertexPointer(3, GL_FIXED, 0, verts);
+    glDrawArrays(GL_LINE_LOOP, 0, numVerts);
+    glPopMatrix();
+  }
   glColor4f(1,1,1,1);
 }
 
