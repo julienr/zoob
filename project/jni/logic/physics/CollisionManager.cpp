@@ -121,26 +121,54 @@ bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const 
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
-  //FIXME : We have only 3 axis to check because we use Voronoi region to detect which box vertice is closest to the circle
+  //We have only 2 or 3 axis to check because we use Voronoi region to detect which box vertice is closest to the circle
   /**
-   *           |    |
+   *   --- > x
+   *   |    1  |  2 |  3
+   *   |  .....------.....
+   *   y       |    |
+   *        4  |    | 5
    *      .....------.....
-   *           |    |
-   *           |    |
-   *      .....------.....
-   *           |    |
+   *        6  | 7  | 8
+   *
+   *  If we are in region 1,3,6 or 8, we have to check (additionnaly to the box axis), the axis going from
+   *  circle center to the nearest vertex. If we are in region 2,4,5,7, we just have to check 2 axis (the boxe's one)
    */
   Vector2 corners[4];
   still->getCorners(corners);
 
-  Vector2 axis[6];
+  //Determine voronoi regions
+  const Vector2& c = moving->getPosition();
+  Vector2* vertex = NULL;
+  if (c.y < corners[0].y) { //region 1,2 or 3
+    if (c.x < corners[0].x) //1
+      vertex = &corners[0];
+    else if (c.x < corners[1].x) // 2
+      vertex = NULL;
+    else //3
+      vertex = &corners[1];
+  } else if (c.y < corners[3].y) { //region 4 or 5
+    vertex = NULL;
+  } else { //region 6,7 or 8
+    if (c.x < corners[3].x) // 6
+      vertex = &corners[3];
+    else if (c.x < corners[2].x) //7
+      vertex = NULL;
+    else //8
+      vertex = &corners[2];
+  }
+
+  const unsigned numAxis = (vertex==NULL)?2:3;
+
+  Vector2 axis[numAxis];
   axis[0] = Vector2(1,0);
   axis[1] = Vector2(0,1);
-  for (int i=2; i<6; i++)
-    axis[i] = (corners[i-2]-moving->getPosition()).getNormalized();
+  if (vertex != NULL) {
+    axis[2] = (*vertex - c).getNormalized();
+  }
 
   //SAT
-  for (int i=0; i<4; i++) {
+  for (unsigned i=0; i<numAxis; i++) {
     const float speed = axis[i]*move;
 
     //Projected min/max on axis for both boxes
