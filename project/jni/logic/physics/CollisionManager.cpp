@@ -78,34 +78,29 @@ bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
         max = tmp; \
     }
 
-
 /**
  * Fill r with the result of collision
  * Returns true on collision
  * If the boxes are overlapping, NO normal is set in r
  * If they aren't, a normal is set
  */
-bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, const Vector2& move, CollisionResult* r) {
+bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
-  const Vector2 vel = move;
 
-  Vector2 axis[4];
-  //FIXME: simplify if 2 AABB
-  axis[0] = still.getXAxis();
-  axis[1] = still.getYAxis();
-  axis[2] = moving.getXAxis();
-  axis[3] = moving.getYAxis();
+  Vector2 axis[2];
+  axis[0] = Vector2(1,0);
+  axis[1] = Vector2(0,1);
 
   Vector2 corners[2][4];
-  still.getCorners(corners[0]);
-  moving.getCorners(corners[1]);
+  still->getCorners(corners[0]);
+  moving->getCorners(corners[1]);
 
   //LOGE("MovingOBBAgainstOBB");
 
   //SAT
   for (int i=0; i<4; i++) {
-    const float speed = axis[i]*vel;
+    const float speed = axis[i]*move;
 
     //Projected min/max on axis for both boxes
     FILL_PROJ_MIN_MAX(min0,max0,corners[0])
@@ -121,66 +116,65 @@ bool MovingOBBAgainstOBB (const BoundingBox& still, const BoundingBox& moving, c
   return (r->tFirst <= 1.0f);
 }
 
-bool StaticCircleAgainstOBB (const BoundingCircle& circle, const BoundingBox& obb, Vector2* backoff) {
-  backoff->set(MOOB_INF, MOOB_INF);
-  //FIXME: use voronoi regions to only check 3 axis (see N tutorials)
-  //We have to check the box axes and the axes going from circle center to each box corner
-  Vector2 axis[6];
-  axis[0] = obb.getXAxis();
-  axis[1] = obb.getYAxis();
 
+bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
+  r->tFirst = 0.0f;
+  r->tLast = MOOB_INF;
+
+  //FIXME : We have only 3 axis to check because we use Voronoi region to detect which box vertice is closest to the circle
+  /**
+   *           |    |
+   *      .....------.....
+   *           |    |
+   *           |    |
+   *      .....------.....
+   *           |    |
+   */
   Vector2 corners[4];
-  obb.getCorners(corners);
+  still->getCorners(corners);
+
+  Vector2 axis[6];
+  axis[0] = Vector2(1,0);
+  axis[1] = Vector2(0,1);
   for (int i=2; i<6; i++)
-    axis[i] = (corners[i-2] - circle.getPosition()).getNormalized();
+    axis[i] = (corners[i-2]-moving->getPosition()).getNormalized();
 
-  for (int i=0; i<6; i++) {
-    //obb min/max
-    FILL_PROJ_MIN_MAX(min0,max0,corners);
-    //circle min/max on this axis, this is always position-radius, position+radius
-    const float min1 = (circle.getPosition() - axis[i]*circle.getRadius())*axis[i];
-    const float max1 = (circle.getPosition() + axis[i]*circle.getRadius())*axis[i];
+  //SAT
+  for (int i=0; i<4; i++) {
+    const float speed = axis[i]*move;
 
-    if (!overlapOnAxis(axis[i], min0, max0, min1, max1, backoff))
+    //Projected min/max on axis for both boxes
+    FILL_PROJ_MIN_MAX(min0,max0,corners)
+    //For circle, min/max is always position +- radius
+    const float min1 = (moving->getPosition()*axis[i])-moving->getRadius();
+    const float max1 = (moving->getPosition()*axis[i])+moving->getRadius();
+
+    //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
+
+    if (!collideOnAxis(axis[i], min0, max0, min1, max1, speed, r))
       return false;
+
+    //LOGE("COLLISION");
   }
-  return true;
+  return (r->tFirst <= 1.0f);
 }
 
 bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult* result) {
-  if (MovingOBBAgainstOBB(still->getBBox(), mover->getBBox(), move, result)) {
-    result->collidedEntity = still;
-    return true;
-  } else
-    return false;
-}
-
-bool CollisionManager::rotationOverlap (Entity* mover, float angle, Vector2* backoff, Entity** touchedEntity) {
-  backoff->set(MOOB_INF, MOOB_INF);
-  bool collided = false;
-  //We actually don't care about the angle, we just create a bounding circle (so we assume 2pi rotation)
-  const BoundingBox& bbox = mover->getBBox();
-  const float hW = bbox.getWidth()*0.5f;
-  const float hH = bbox.getHeight()*0.5f;
-  const float circleRadius = sqrt(hW*hW + hH*hH);
-  BoundingCircle circle(circleRadius, mover);
-
-  EntityNode *n;
-  DL_FOREACH(entities, n) {
-    if (n->entity == mover)
-      continue;
-
-    Vector2 tmp;
-    if (StaticCircleAgainstOBB(circle, n->entity->getBBox(), &tmp)) {
-      *touchedEntity = n->entity;
-      if (tmp.length() < backoff->length())
-        *backoff = tmp;
-      collided = true;
+  const BoundingVolume* v1 = still->getBVolume();
+  const BoundingVolume* v2 = mover->getBVolume();
+  if (v1->getType() == TYPE_AABBOX) {
+    if (v2->getType() == TYPE_CIRCLE)
+      return MovingCircleAgainstAABB(static_cast<const AABBox*>(v1), static_cast<const BCircle*>(v2), move, result);
+    else {
+      LOGE("Unsupported collision detection type : moving aabbox against aabbox");
+      assert(false);
     }
+  } else if (v1->getType() == TYPE_CIRCLE) {
+    LOGE("Unsupported collision detection type : still circle");
+    assert(false);
   }
-  return collided;
+  return false;
 }
-
 
 bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
   CollisionResult r;
@@ -195,6 +189,7 @@ bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResul
     if (collide(n->entity, mover, move, &r)
         && r.tFirst < result->tFirst) {
       (*result) = r;
+      result->collidedEntity = n->entity;
       result->colPoint = mover->getPosition()+move*r.tFirst;
       collided = true;
     }

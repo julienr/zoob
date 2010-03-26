@@ -15,8 +15,6 @@ LOCAL_DEFAULT_CPP_EXTENSION := cpp
 LOCAL_SRC_FILES := \
     app-android.cpp \
     lib/Vector2.cpp \
-    logic/BoundingBox.cpp \
-    logic/CollisionManager.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
@@ -25,7 +23,9 @@ LOCAL_SRC_FILES := \
     view/Sprite.cpp \
     view/Square.cpp \
     view/LevelView.cpp \
-    view/GameView.cpp
+    view/GameView.cpp \
+    logic/physics/AABBox.cpp \
+    logic/physics/CollisionManager.cpp 
 
 LIBPNG_PATH := /home/silver/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/silver/programs/android-ndk-r3/out/apps/libzip/armeabi

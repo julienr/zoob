@@ -31,14 +31,19 @@ void drawColEntity (Entity* e) {
 
   int verts[12];
   Vector2 corners[4];
-  e->getBBox().getCorners(corners);
+  const Vector2 hW = Vector2(e->getBVolume()->getWidth()/2.0f,0);
+  const Vector2 hH = Vector2(0,e->getBVolume()->getHeight()/2.0f);
+  const Vector2& p = e->getPosition();
+  corners[0] = p + hW + hH;
+  corners[1] = p + hW - hH;
+  corners[2] = p - hW - hH;
+  corners[3] = p - hW + hH;
   for (int i=0; i<4; i++) {
     verts[3*i] = fX(corners[i].x);
     verts[3*i+1] = fX(corners[i].y);
     verts[3*i+2] = 0;
     //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
   }
-
 
   glPushMatrix();
   glVertexPointer(3, GL_FIXED, 0, verts);

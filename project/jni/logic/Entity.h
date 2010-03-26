@@ -1,34 +1,36 @@
 #ifndef ENTITY_H_
 #define ENTITY_H_
 
-#include "BoundingBox.h"
+#include "physics/BoundingVolume.h"
 #include "Moveable.h"
 #include "Viewable.h"
 
 class Entity: public Moveable {
   public:
-    Entity() :
-      Moveable(), collided(false), bbox(1.0f, 1.0f, this) {
+    Entity(const BoundingVolume* v) :
+      Moveable(), collided(false), bvolume(v) {
     }
 
-    virtual ~Entity () {}
+    virtual ~Entity () {
+      delete bvolume;
+    }
 
-    const BoundingBox& getBBox() const {
-      return bbox;
+    const BoundingVolume* getBVolume() const {
+      return bvolume;
     }
 
     float getWidth() const {
-      return bbox.getWidth();
+      return bvolume->getWidth();
     }
 
     float getHeight() const {
-      return bbox.getHeight();
+      return bvolume->getHeight();
     }
 
     //FIXME: only for debug
     bool collided;
   private:
-    BoundingBox bbox;
+    const BoundingVolume* bvolume;
 };
 
 #endif /* ENTITY_H_ */

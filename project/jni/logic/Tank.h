@@ -2,10 +2,11 @@
 #define TANK_H_
 
 #include "Entity.h"
+#include "physics/BCircle.h"
 
 class Tank: public Entity {
   public:
-    Tank () : Entity () {}
+    Tank () : Entity (new BCircle(0.5f, this)) {}
     //FIXME: only for debug draw
     Vector2 lastColNormal;
     Vector2 lastColPoint;

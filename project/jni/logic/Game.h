@@ -6,7 +6,7 @@
 #include "logic/Cursor.h"
 #include "logic/Level.h"
 #include "levels/LevelsData.h"
-#include "logic/CollisionManager.h"
+#include "logic/physics/CollisionManager.h"
 #include "lib/Utils.h"
 
 #define TANK_MOVE_SPEED 1.0f

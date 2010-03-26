@@ -3,7 +3,8 @@
 
 #include "def.h"
 #include "Entity.h"
-#include "CollisionManager.h"
+#include "physics/CollisionManager.h"
+#include "physics/AABBox.h"
 
 enum eTileType {E, W, S}; //Empty, Wall, Spawn
 
@@ -11,7 +12,7 @@ enum eTileType {E, W, S}; //Empty, Wall, Spawn
 class Tile: public Entity {
   public:
     Tile(int x, int y, eTileType type) :
-      Entity(), type(type) {
+      Entity(new AABBox(1.0f,1.0f,this)), type(type) {
       setPosition(Vector2(x, y));
     }
 
