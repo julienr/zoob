@@ -12,7 +12,7 @@ class TankView {
 
     void draw () {
       baseSprite.draw(tank, tank.getRotation());
-      turretSprite.draw(tank);
+      //turretSprite.draw(tank);
     }
 
     Vector2 getCenter () {
