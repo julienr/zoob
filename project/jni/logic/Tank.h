@@ -6,7 +6,7 @@
 
 class Tank: public Entity {
   public:
-    Tank () : Entity (new BCircle(0.5f, this)) {}
+    Tank () : Entity (new BCircle(0.4f, this)) {}
     //FIXME: only for debug draw
     Vector2 lastColNormal;
     Vector2 lastColPoint;

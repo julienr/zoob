@@ -12,6 +12,20 @@ Level* loadColTest() {
   return new Level(3,5,&coltest[0]);
 }
 
+eTileType empty[7*7] = {
+    E,E,E,E,E,E,E,
+    E,S,E,E,E,E,E,
+    E,E,E,E,E,E,E,
+    E,E,E,E,E,E,E,
+    E,E,E,E,E,E,E,
+    E,E,E,E,E,E,E,
+    E,E,E,E,E,E,E
+};
+
+Level* loadEmpty() {
+  return new Level(7,7,&empty[0]);
+}
+
 eTileType lvl1[7*8] = {
     W, W, W, W, W, W, W,
     W, E, E, E, E, E, W,

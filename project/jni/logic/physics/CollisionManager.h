@@ -7,19 +7,13 @@
 #include "def.h"
 #include "BCircle.h"
 #include "AABBox.h"
-
-
-struct CollisionResult {
-  float tFirst, tLast;
-  Vector2 normal;
-  Entity* collidedEntity;
-  Vector2 colPoint;
-};
+#include "Grid.h"
+#include "CollisionResult.h"
 
 class CollisionManager {
   public:
-    CollisionManager ()
-      : entities(NULL) {}
+    CollisionManager (int width, int height, float cellSize)
+      : entities(NULL), grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 
     void addEntity (Entity* e) {
       assert(e);
@@ -32,6 +26,7 @@ class CollisionManager {
       DL_FOREACH(entities, n) {
         n->entity->collided = false;
       }
+      grid.clearTouched();
     }
 
     void foreachEntity (void (*callback) (Entity*)) const {
@@ -39,6 +34,10 @@ class CollisionManager {
       DL_FOREACH(entities, n) {
         callback(n->entity);
       }
+    }
+
+    const Grid& getGrid () const {
+      return grid;
     }
 
     //Perform a trace and put the result in "result"
@@ -59,6 +58,7 @@ class CollisionManager {
 
     EntityNode* entities;
 
+    Grid grid;
 };
 
 #endif /* COLLISIONMANAGER_H_ */

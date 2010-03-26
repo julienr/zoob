@@ -20,4 +20,7 @@ extern zip* APKArchive;
 //float to fixed point
 #define fX(x) ((int)(x * (1  << 16)))
 
+//logical tile size
+#define TILE_SIZE 1.0
+
 #endif /* DEF_H_ */

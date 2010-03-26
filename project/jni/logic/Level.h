@@ -12,7 +12,7 @@ enum eTileType {E, W, S}; //Empty, Wall, Spawn
 class Tile: public Entity {
   public:
     Tile(int x, int y, eTileType type) :
-      Entity(new AABBox(1.0f,1.0f,this)), type(type) {
+      Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)), type(type) {
       setPosition(Vector2(x, y));
     }
 

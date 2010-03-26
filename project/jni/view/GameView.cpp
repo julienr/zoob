@@ -1,6 +1,7 @@
 #include "GameView.h"
 #include "view/GLW.h"
 #include "view/Square.h"
+#include "logic/physics/Grid.h"
 
 void GameView::draw () {
   levelView.draw();
@@ -65,6 +66,21 @@ void drawColEntity (Entity* e) {
   glColor4f(1,1,1,1);
 }
 
+void drawGrid (const Grid& g) {
+  const float cs = g.getCellSize();
+  for (unsigned x=0; x<g.getWidth(); x++) {
+    for (unsigned y=0; y<g.getHeight(); y++) {
+      const bool swapC = x%2==y%2;
+      glColor4f(swapC?1:0,0,!swapC?1:0,g.touched(x,y)?1.0f:0.2f);
+      glPushMatrix();
+      GLW::translate(x*cs, y*cs, 0);
+      Square::draw(false);
+      glPopMatrix();
+    }
+  }
+  glColor4f(1,1,1,1);
+}
+
 void GameView::debugDraw () {
   const Tank& tank = game.getPlayerTank();
   glDisable(GL_TEXTURE_2D);
@@ -83,5 +99,6 @@ void GameView::debugDraw () {
     glPopMatrix();
     glLineWidth(1.0f);
   //}
+  drawGrid(game.getColManager().getGrid());
   glEnable(GL_TEXTURE_2D);
 }

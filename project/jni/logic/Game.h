@@ -14,7 +14,7 @@
 class Game {
   public:
     Game (Level* level) :
-      level(level),movingTank(false) {
+      colManager(level->getWidth(), level->getHeight(), 1.0f), level(level),movingTank(false) {
       level->addToColManager(colManager);
       tank.setPosition(level->getStartPosition());
       colManager.addEntity(&tank);

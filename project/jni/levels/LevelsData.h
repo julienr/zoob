@@ -5,5 +5,6 @@
 
 Level* loadLevel1();
 Level* loadColTest();
+Level* loadEmpty();
 
 #endif /* LEVELSDATA_H_ */

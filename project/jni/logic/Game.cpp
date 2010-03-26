@@ -21,6 +21,9 @@ void Game::update () {
     Vector2 dir = tankMoveEnd - tank.getPosition();
     dir.normalize();
 
+    CollisionResult tmpR;
+    colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
+
     //Calculate base rotation (to face movement direction)
     //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
     const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
