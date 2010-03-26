@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "lib/Math.h"
+#include "CollisionManager.h"
 
 unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
   if (Math::epsilonEq(move.x, 0) && Math::epsilonEq(move.y, 0))
@@ -18,7 +19,6 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
     LOGE("(%i,%i) outside grid", x, y);
     return 0;
   }
-
 
   const int stepX = Math::signum(move.x);
   const int stepY = Math::signum(move.y);
@@ -59,7 +59,11 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
     else if (!inside(x,y))
       break;
 
-    touchedCells[count++] = &grid[x][y];
+    touchedCells[count++] = grid[x][y];
+    //We got into a solid cell, no need to go further => Fixme: sure ?
+    /*if (grid[x][y]->solid)
+      return count;*/
+
     //LOGE("loop (x,y) : (%i,%i), (endX, endY) : (%i,%i)", x, y, endX, endY);
     if (tMaxX < tMaxY) {
       //LOGE("Moving on x");
@@ -73,37 +77,101 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   }
   //We'll of course touch the end cell (if it's in the boundary), so add it
   if (inside(endX,endY))
-    touchedCells[count++] = &grid[endX][endY];
-  //LOGE("count : %i", count);
+    touchedCells[count++] = grid[endX][endY];
   return count;
 }
 
+bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* result) const {
+  ASSERT(circle->getRadius()*2 < cellSize);
+  ASSERT(move.length() < cellSize);
+  //Calculate starting position covered cells
+  // Since the circle diameter is < cellSize, this is simply the cells that contains the extreme points
+  // of the circle on the axis
+  unsigned numTouched = 0;
+  touchCells(circle, circle->getPosition(), &numTouched);
+  touchCells(circle, circle->getPosition()+move, &numTouched);
+
+  CollisionResult r;
+  result->tFirst = MOOB_INF;
+  bool collided = false;
+
+
+  for (unsigned i=0; i<numTouched; i++) {
+    touchedCells[i]->touched = true;
+
+    if (touchedCells[i]->solid && CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(touchedCells[i]->getBVolume()), circle, move, &r)
+         && r.tFirst < result->tFirst) {
+      (*result) = r;
+      result->collidedEntity = touchedCells[i];
+      result->colPoint = circle->getPosition()+move*r.tFirst;
+      collided = true;
+    }
+  }
+  return collided;
+}
+
+#define ADD_CELL_IF(x,y,cond) \
+  if ((cond) && inside((x), (y))) { \
+    touchedCells[(*count)++] = grid[(x)][(y)]; \
+  }
+
+void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const {
+  ASSERT(circle->getRadius()*2 < cellSize);
+  const float r = circle->getRadius();
+  const int c[2] = {getCellX(position), getCellY(position)};
+  //Calculate our position relative to the cell top-left corner
+  const Vector2 tlPos = position - (Vector2(c[0], c[1])*cellSize + origin);
+  //LOGE("tlPos (%f,%f)", tlPos.x, tlPos.y);
+  //Now, if distance to one border is < r, we have to add this cell to the touched list
+  touchedCells[(*count)++] = grid[c[0]][c[1]];
+  ADD_CELL_IF(c[0]-1, c[1], tlPos.x < r) //left cell
+  ADD_CELL_IF(c[0]+1, c[1], (cellSize-tlPos.x) < r) //right cell
+  ADD_CELL_IF(c[0], c[1]-1, tlPos.y < r) //top cell
+  ADD_CELL_IF(c[0], c[1]+1, (cellSize-tlPos.y) < r) //bottom cell
+  ADD_CELL_IF(c[0]-1, c[1]-1, (tlPos.x < r) && (tlPos.y < r)) //top-left
+  ADD_CELL_IF(c[0]-1, c[1]+1, (tlPos.x < r) && (cellSize-tlPos.y < r)) //bottom-left
+  ADD_CELL_IF(c[0]+1, c[1]-1, (cellSize-tlPos.x < r) && (tlPos.y < r)) //top-right
+  ADD_CELL_IF(c[0]+1, c[1]+1, (cellSize-tlPos.x < r) && (cellSize-tlPos.y < r)) //bottom-right
+}
+/*
 bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const {
   ASSERT(circle->getRadius()*2 < cellSize);
-  /** We are tracing through the grid with a circle
-   * We ENFORCE the circle's diameter to be less than cellSize, so we can simplify the collision
-   * detections.
-   * With these hypothesis, we can say that all the cells potentially touched by our circle during the trace
-   * can be found by using two rays that represent the "extremities" of the circle on an axis perpendicular to the
-   * trace direction.
-   */
+  // We are tracing through the grid with a circle
+  // We ENFORCE the circle's diameter to be less than cellSize, so we can simplify the collision
+  // detections.
+  // With these hypothesis, we can say that all the cells potentially touched by our circle during the trace
+  // can be found by using two rays that represent the "extremities" of the circle on an axis perpendicular to the
+  // trace direction.
   Vector2 perpAxis(move.y, -move.x);
   perpAxis.normalize();
   //the two points from which our rays will start
-  const Vector2 topPoint = circle->getPosition() + perpAxis*circle->getRadius();
-  const Vector2 botPoint = circle->getPosition() - perpAxis*circle->getRadius();
-  /*LOGE("position (%f,%f)", circle->getPosition().x, circle->getPosition().y);
-  LOGE("topPoint (%f,%f)", topPoint.x, topPoint.y);
-  LOGE("botPoint (%f,%f)", botPoint.x, botPoint.y);*/
+  const Vector2& cPos = circle->getPosition();
+  Vector2 points[2];
+  points[0] = cPos + perpAxis*circle->getRadius();
+  points[1] = cPos - perpAxis*circle->getRadius();
 
-  unsigned numTouched = findTouchedCells(topPoint, move);
-  for (unsigned i=0; i<numTouched; i++)
-    touchedCells[i]->touched = true;
+  int minDist = MOOB_INF;
 
-  numTouched = findTouchedCells(botPoint, move);
-    for (unsigned i=0; i<numTouched; i++)
-      touchedCells[i]->touched = true;
+  const float moveLength = (cPos+move).length();
 
-  return false;
+  for (int i=0; i<2; i++) {
+    unsigned numTouched = findTouchedCells(points[0], move);
+    for (unsigned j=0; j<numTouched; j++) {
+      touchedCells[j]->touched = true;
+      if (touchedCells[j]->solid) {
+        const Vector2 col = gridToWorld(touchedCells[j]->x,touchedCells[j]->y) - move*circle->getRadius();
+        const float dist = (col-cPos).length();
+        if (dist < minDist) {
+          minDist = dist;
+          result->colPoint = col;
+          result->tFirst = moveLength/(col - cPos).length();
+          result->tLast = MOOB_INF;
+          result->normal = -move;
+        }
+      }
+    }
+  }
+
+  return (minDist < MOOB_INF);
 }
-
+*/

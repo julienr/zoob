@@ -56,8 +56,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   str = env->GetStringUTFChars(apkPath, &isCopy);
   loadAPK(str);
 
-  lvl = loadEmpty();
-  //lvl = loadLevel1();
+  //lvl = loadEmpty();
+  lvl = loadLevel1();
   //lvl = loadColTest();
   game = new Game(lvl);
   gameView = new GameView(*game);
@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   glEnable(GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
-  glClearColor(0,0,0,0);
+  glClearColor(0,0,1,1);
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);

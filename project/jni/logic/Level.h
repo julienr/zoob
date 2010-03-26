@@ -8,21 +8,6 @@
 
 enum eTileType {E, W, S}; //Empty, Wall, Spawn
 
-/* Level tile */
-class Tile: public Entity {
-  public:
-    Tile(int x, int y, eTileType type) :
-      Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)), type(type) {
-      setPosition(Vector2(x, y));
-    }
-
-    eTileType getContentType() const {
-      return type;
-    }
-  private:
-    eTileType type;
-};
-
 class Level {
   public:
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
@@ -32,11 +17,8 @@ class Level {
     }
 
     ~Level () {
-      for (unsigned x=0; x<width; x++) {
-        for (unsigned y=0; y<height; y++)
-          delete board[x][y];
+      for (unsigned x=0; x<width; x++)
         delete[] board[x];
-      }
       delete[] board;
     }
 
@@ -48,7 +30,7 @@ class Level {
       return width;
     }
 
-    const Tile* getTile (unsigned x, unsigned y) const {
+    eTileType getTile (unsigned x, unsigned y) const {
       return board[x][y];
     }
 
@@ -58,7 +40,7 @@ class Level {
       //FIXME: return random start position and check if there already is someone ?
       for (unsigned x=0; x<width; x++) {
         for (unsigned y=0; y<height; y++) {
-          if (board[x][y]->getContentType() == S)
+          if (board[x][y] == S)
             return Vector2(x,y);
         }
       }
@@ -70,7 +52,7 @@ class Level {
     void _initBoard (unsigned w, unsigned h, eTileType* board);
     unsigned width;
     unsigned height;
-    Tile*** board;
+    eTileType** board;
 };
 
 #endif /* LEVEL_H_ */

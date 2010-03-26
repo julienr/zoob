@@ -117,7 +117,7 @@ bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vec
 }
 
 
-bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
+bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -192,7 +192,7 @@ bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult
   const BoundingVolume* v2 = mover->getBVolume();
   if (v1->getType() == TYPE_AABBOX) {
     if (v2->getType() == TYPE_CIRCLE)
-      return MovingCircleAgainstAABB(static_cast<const AABBox*>(v1), static_cast<const BCircle*>(v2), move, result);
+      return CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(v1), static_cast<const BCircle*>(v2), move, result);
     else {
       LOGE("Unsupported collision detection type : moving aabbox against aabbox");
       assert(false);
@@ -205,7 +205,8 @@ bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult
 }
 
 bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
-  CollisionResult r;
+  return grid.trace(static_cast<const BCircle*>(mover->getBVolume()), move, result);
+  /*CollisionResult r;
   result->tFirst = MOOB_INF;
   bool collided = false;
 
@@ -223,5 +224,5 @@ bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResul
     }
   }
 
-  return collided;
+  return collided;*/
 }

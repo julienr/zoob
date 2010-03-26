@@ -4,10 +4,19 @@
 #include "def.h"
 #include "BCircle.h"
 #include "CollisionResult.h"
+#include "logic/Entity.h"
+#include "AABBox.h"
 
-struct GridCell {
-  GridCell () : touched(false) {}
+
+struct GridCell : public Entity {
+  GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
+    Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)),
+    x(x),y(y),touched(false), solid(false) {
+    this->setPosition(worldPos);
+  }
+  unsigned x, y;
   bool touched;
+  bool solid;
 };
 
 class Grid {
@@ -16,9 +25,14 @@ class Grid {
     //Origin is the origin of the coordinate systems wolrd objects to be placed in the grid are in
     Grid (const Vector2& origin, unsigned width, unsigned height, float cellSize) :
       origin(origin), width(width), height(height), cellSize(cellSize) {
-      grid = new GridCell*[width];
-      for (unsigned x=0; x<width; x++)
-        grid[x] = new GridCell[height];
+      grid = new GridCell**[width];
+      for (unsigned x=0; x<width; x++) {
+        grid[x] = new GridCell*[height];
+        for (unsigned y=0; y<height; y++) {
+          //We add tile_size/2 because aabbox position is centered
+          grid[x][y] = new GridCell(gridToWorld(x,y)+Vector2(TILE_SIZE/2, TILE_SIZE/2), x,y);
+        }
+      }
       const unsigned diagLength = ceilf(sqrtf(width*width+height*height));
       //FIXME: do we really need *2  ? I think for a ray, max number is diagLength
       LOGE("Max number of touched cells : %u", diagLength*2);
@@ -26,22 +40,30 @@ class Grid {
     }
 
     ~Grid () {
-      for (unsigned x=0; x<width; x++)
+      for (unsigned x=0; x<width; x++) {
+        for (unsigned y=0; y<height; y++)
+          delete grid[x][y];
           delete [] grid[x];
+      }
       delete [] grid;
       delete [] touchedCells;
+    }
+
+    void setSolid (int x, int y, bool solid) {
+      ASSERT(inside(x,y));
+      grid[x][y]->solid = true;
     }
 
     void clearTouched () {
       for (unsigned x=0; x<width; x++)
         for (unsigned y=0; y<height; y++)
-          grid[x][y].touched = false;
+          grid[x][y]->touched = false;
     }
 
     bool touched (unsigned x, unsigned y) const {
       if (!inside(x,y))
         return false;
-      return grid[x][y].touched;
+      return grid[x][y]->touched;
     }
 
     bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const;
@@ -79,12 +101,27 @@ class Grid {
       return cellSize;
     }
 
+    Vector2 gridToWorld (int x, int y) const {
+      return Vector2(x*cellSize + origin.x, y*cellSize + origin.y);
+    }
+
   private:
-    GridCell** grid;
+    GridCell*** grid;
     const Vector2 origin;
     const unsigned width;
     const unsigned height;
     const float cellSize;
+
+    GridCell* getCell (const Vector2& p) const {
+      int x = getCellX(p);
+      int y = getCellY(p);
+      if (x == -1 || y == -1)
+        return NULL;
+      return grid[x][y];
+    }
+
+    //Adds the cells touched by c @ position to touchedCells, using count as counter
+    void touchCells (const BCircle* c, const Vector2& position, unsigned* count) const;
 
     //This is a temporary array used to retrieve data from touchedCells.
     //We know that at most, a ray cast through our grid will touch sqrt(width^2+height^2)*2, so

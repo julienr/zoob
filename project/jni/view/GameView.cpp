@@ -71,7 +71,7 @@ void drawGrid (const Grid& g) {
   for (unsigned x=0; x<g.getWidth(); x++) {
     for (unsigned y=0; y<g.getHeight(); y++) {
       const bool swapC = x%2==y%2;
-      glColor4f(swapC?1:0,0,!swapC?1:0,g.touched(x,y)?1.0f:0.2f);
+      glColor4f(swapC?1:0,0,!swapC?1:0,g.touched(x,y)?0.7f:0.2f);
       glPushMatrix();
       GLW::translate(x*cs, y*cs, 0);
       Square::draw(false);

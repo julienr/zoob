@@ -12,6 +12,8 @@
 
 class CollisionManager {
   public:
+    static bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
+
     CollisionManager (int width, int height, float cellSize)
       : entities(NULL), grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 
@@ -19,6 +21,10 @@ class CollisionManager {
       assert(e);
       EntityNode* n = new EntityNode(e);
       DL_APPEND(entities, n);
+    }
+
+    void setGridCellSolid (int x, int y, bool solid) {
+      grid.setSolid(x,y,solid);
     }
 
     void unmarkCollided () {

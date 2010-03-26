@@ -22,7 +22,7 @@ void Game::update () {
     dir.normalize();
 
     CollisionResult tmpR;
-    colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
+    //colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
 
     //Calculate base rotation (to face movement direction)
     //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
@@ -39,7 +39,7 @@ void Game::update () {
       tank.collided  = true;
       tank.lastColNormal = r.normal;
       tank.lastColPoint = r.colPoint;
-      LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
+      //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
     }
     slideMove(&tank, move);
     //tank.translate(move);
