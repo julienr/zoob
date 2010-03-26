@@ -87,16 +87,22 @@ bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* r
    * can be found by using two rays that represent the "extremities" of the circle on an axis perpendicular to the
    * trace direction.
    */
-  Vector2 perpAxis(move.y, move.x);
+  Vector2 perpAxis(move.y, -move.x);
   perpAxis.normalize();
   //the two points from which our rays will start
-  /*const Vector2 topPoint = circle->getPosition() + perpAxis*circle->getRadius();
+  const Vector2 topPoint = circle->getPosition() + perpAxis*circle->getRadius();
   const Vector2 botPoint = circle->getPosition() - perpAxis*circle->getRadius();
-  LOGE("topPoint (%f,%f)", topPoint.x, topPoint.y);*/
+  /*LOGE("position (%f,%f)", circle->getPosition().x, circle->getPosition().y);
+  LOGE("topPoint (%f,%f)", topPoint.x, topPoint.y);
+  LOGE("botPoint (%f,%f)", botPoint.x, botPoint.y);*/
 
-  unsigned numTouched = findTouchedCells(circle->getPosition(), move);
+  unsigned numTouched = findTouchedCells(topPoint, move);
   for (unsigned i=0; i<numTouched; i++)
     touchedCells[i]->touched = true;
+
+  numTouched = findTouchedCells(botPoint, move);
+    for (unsigned i=0; i<numTouched; i++)
+      touchedCells[i]->touched = true;
 
   return false;
 }
