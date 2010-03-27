@@ -115,7 +115,36 @@ bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vec
   }
   return (r->tFirst <= 1.0f);
 }
+bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
+  r->tFirst = 0.0f;
+  r->tLast = MOOB_INF;
 
+  LOGE("CircleAgainstCircle still (%f,%f,r=%f) against moving (%f,%f,r=%f) with move (%f,%f)", still->getPosition().x, still->getPosition().y,
+      still->getRadius(), moving->getPosition().x, moving->getPosition().y, moving->getRadius(), move.x, move.y);
+  const Vector2 centerToCenter = still->getPosition() - moving->getPosition();
+
+  //distance between circles
+  const float dist = centerToCenter.length() - still->getRadius() - moving->getRadius();
+  //Project move on centerToCenter and
+  const float moveC = move*centerToCenter;
+
+  if (dist <= 0) {
+    //overlap
+    r->tFirst = 0.0f;
+    r->tLast = (dist+still->getRadius())/moveC;
+    return true;
+  } else {
+    //no overlap
+    if (moveC > dist) {
+      //collision
+      r->normal = -move.getNormalized();
+      r->tFirst = dist/moveC;
+      r->tLast = (dist+still->getRadius())/moveC;
+      return true;
+    } else
+      return false;
+  }
+}
 
 bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
   r->tFirst = 0.0f;

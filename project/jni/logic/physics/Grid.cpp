@@ -19,8 +19,10 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   //Add to new
   numTouched = 0;
   touchCells(bcircle, end, &numTouched);
-  for (unsigned i=0; i<numTouched; i++)
-    touchedCells[i]->entities.append(e);
+  for (unsigned i=0; i<numTouched; i++) {
+    if (!touchedCells[i]->solid)
+      touchedCells[i]->entities.append(e);
+  }
 }
 
 unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
@@ -115,17 +117,45 @@ bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* re
   CollisionResult r;
   result->tFirst = MOOB_INF;
   bool collided = false;
-
-
   for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->touched = true;
 
-    if (touchedCells[i]->solid && CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(touchedCells[i]->getBVolume()), circle, move, &r)
-         && r.tFirst < result->tFirst) {
-      (*result) = r;
-      result->collidedEntity = touchedCells[i];
-      result->colPoint = circle->getPosition()+move*r.tFirst;
-      collided = true;
+    //Touched cell is solid, check collision against its aabb
+    if (touchedCells[i]->solid) {
+      if (CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(touchedCells[i]->getBVolume()), circle, move, &r)
+           && r.tFirst < result->tFirst) {
+        (*result) = r;
+        result->collidedEntity = touchedCells[i];
+        result->colPoint = circle->getPosition()+move*r.tFirst;
+        collided = true;
+      }
+    } else {
+      //Check collision against touchedCells entities list
+      for (List<Entity*>::Iterator iter = touchedCells[i]->entities.iterator(); iter.hasNext(); iter++) {
+        Entity* otherEnt = *iter;
+        const BoundingVolume* bvol = otherEnt->getBVolume();
+        //FIXME: shouldn't we check entities ?
+        if (bvol == circle)
+          continue;
+
+        bool col = false;
+        switch (bvol->getType()) {
+          case TYPE_AABBOX:
+            col = CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(bvol), circle, move, &r);
+            break;
+          case TYPE_CIRCLE:
+            col = CollisionManager::MovingCircleAgainstCircle(static_cast<const BCircle*>(bvol), circle, move, &r);
+            break;
+          default:
+            LOGE("Unhandled type  : %i", bvol->getType());
+        }
+        if (col && (r.tFirst < result->tFirst)) {
+          (*result) = r;
+          result->collidedEntity = otherEnt;
+          result->colPoint = circle->getPosition()+move*r.tFirst;
+          collided = true;
+        }
+      }
     }
   }
   return collided;
