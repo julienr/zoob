@@ -2,6 +2,27 @@
 #include "lib/Math.h"
 #include "CollisionManager.h"
 
+void Grid::moveEntity (Entity* e, const Vector2& move) {
+  ASSERT(e->getBVolume()->getType() == TYPE_CIRCLE);
+  const BCircle* bcircle = static_cast<const BCircle *>(e->getBVolume());
+  const Vector2& p = e->getPosition();
+  const Vector2& end = p+move;
+
+  //Remove from old cells
+  unsigned numTouched = 0;
+  touchCells(bcircle, p, &numTouched);
+  size_t numRemoved = 0;
+  for (unsigned i=0; i<numTouched; i++)
+    numRemoved += touchedCells[i]->entities.remove(e);
+  //LOGE("numTouched : %i, numRemoved : %i", numTouched, numRemoved);
+
+  //Add to new
+  numTouched = 0;
+  touchCells(bcircle, end, &numTouched);
+  for (unsigned i=0; i<numTouched; i++)
+    touchedCells[i]->entities.append(e);
+}
+
 unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
   if (Math::epsilonEq(move.x, 0) && Math::epsilonEq(move.y, 0))
     return false;

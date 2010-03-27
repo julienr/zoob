@@ -6,6 +6,7 @@
 #include "CollisionResult.h"
 #include "logic/Entity.h"
 #include "AABBox.h"
+#include "containers/list.h"
 
 struct GridCell : public Entity {
   GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
@@ -16,6 +17,7 @@ struct GridCell : public Entity {
   unsigned x, y;
   bool touched;
   bool solid;
+  List<Entity*> entities;
 };
 
 class Grid {
@@ -52,6 +54,17 @@ class Grid {
       ASSERT(inside(x,y));
       grid[x][y]->solid = true;
     }
+
+    void addEntity (Entity* e) {
+      const Vector2& p = e->getPosition();
+      const int x = getCellX(p);
+      const int y = getCellY(p);
+      if (x == -1 || y == -1)
+        LOGE("Entity outside bounds : (%f,%f)", p.x, p.y);
+      grid[x][y]->entities.append(e);
+    }
+
+    void moveEntity (Entity* e, const Vector2& move);
 
     void clearTouched () {
       for (unsigned x=0; x<width; x++)
@@ -119,8 +132,8 @@ class Grid {
       return grid[x][y];
     }
 
-    //Adds the cells touched by c @ position to touchedCells, using count as counter
-    void touchCells (const BCircle* c, const Vector2& position, unsigned* count) const;
+    //Adds the cells touched by circle at position to touchedCells, using count as counter
+    void touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const;
 
     //This is a temporary array used to retrieve data from touchedCells.
     //We know that at most, a ray cast through our grid will touch sqrt(width^2+height^2)*2, so

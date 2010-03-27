@@ -46,6 +46,12 @@ class CollisionManager {
       return grid;
     }
 
+    //Calls e->translate and modify the entities
+    void translate (Entity* e, const Vector2& move) {
+      e->translate(move);
+      grid.moveEntity(e, move);
+    }
+
     //Perform a trace and put the result in "result"
     //move is move vector relative to mover
     //returns false if no collision occurs

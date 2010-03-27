@@ -59,5 +59,5 @@ void Game::slideMove (Entity* e, Vector2 move) {
     move += backoff*1.1;
     //LOGE("move after backoff (%f,%f)", move.x, move.y);
   }
-  e->translate(move);
+  colManager.translate(e, move);
 }

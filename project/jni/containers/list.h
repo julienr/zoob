@@ -66,6 +66,36 @@ class List {
       delete del;
     }
 
+    //Remove all elements == d, returns num removed
+    size_t remove (const T& d) {
+      size_t count = 0;
+      if (!head)
+        return 0;
+
+      //Start at head->next because deleting head is a special case
+      _Element* tmp;
+      for (tmp = head->next; tmp;) {
+        _Element* next = tmp->next;
+        if (tmp->data == d) {
+          if (tmp->prev)
+            tmp->prev->next = tmp->next;
+          if (tmp->next)
+            tmp->next->prev = tmp->prev;
+          delete tmp;
+          count++;
+        }
+        tmp = next;
+      }
+
+      if (head->data == d) {
+        head = head->next;
+        delete head;
+        count++;
+      }
+
+      return count;
+    }
+
     Iterator iterator () {
       return Iterator(head);
     }
