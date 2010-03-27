@@ -7,7 +7,6 @@
 #include "logic/Entity.h"
 #include "AABBox.h"
 
-
 struct GridCell : public Entity {
   GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
     Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)),
