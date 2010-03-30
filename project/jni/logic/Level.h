@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "physics/CollisionManager.h"
 #include "physics/AABBox.h"
+#include "containers/vector.h"
 
 enum eTileType {E, W, S}; //Empty, Wall, Spawn
 
@@ -12,7 +13,7 @@ class Level {
   public:
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
     //and array subscripting is done our way then
-    Level (unsigned w, unsigned h, eTileType* board) {
+    Level (unsigned w, unsigned h, eTileType* board) : startPositions(5) {
       _initBoard(w,h,board);
     }
 
@@ -36,16 +37,12 @@ class Level {
 
     void addToColManager (CollisionManager& colManager);
 
-    Vector2 getStartPosition () {
-      //FIXME: return random start position and check if there already is someone ?
-      for (unsigned x=0; x<width; x++) {
-        for (unsigned y=0; y<height; y++) {
-          if (board[x][y] == S)
-            return Vector2(x,y);
-        }
-      }
-      LOGE("getStartPosition : couldn't find a starting position");
-      return Vector2(0,0);
+    size_t getNumStartPositions () const {
+      return startPositions.length();
+    }
+
+    Vector2 getStartPosition (size_t i) const {
+      return startPositions[i];
     }
 
   private:
@@ -53,6 +50,7 @@ class Level {
     unsigned width;
     unsigned height;
     eTileType** board;
+    vector<Vector2> startPositions;
 };
 
 #endif /* LEVEL_H_ */

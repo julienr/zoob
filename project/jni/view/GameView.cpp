@@ -3,9 +3,28 @@
 #include "view/Square.h"
 #include "logic/physics/Grid.h"
 
+GameView::GameView (const Game& g)
+  : game(g),
+    tankView(g.getPlayerTank()),
+    cursorView(g.getCursor()),
+    levelView(g.getLevel()),
+    arrowEnd("assets/sprites/arrow_end.png"),
+    enemiesView(5) {
+  const vector<Tank*> enemies = g.getEnemies();
+  for (size_t i=0; i<enemies.length(); i++)
+    enemiesView.add(new TankView(*(enemies[i])));
+}
+
+GameView::~GameView () {
+  for (size_t i=0; i<enemiesView.length(); i++)
+    delete enemiesView[i];
+}
+
 void GameView::draw () {
   levelView.draw();
   tankView.draw();
+  for (size_t i=0; i<enemiesView.length(); i++)
+    enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
   cursorView.draw();
 

@@ -131,7 +131,7 @@ bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* re
       }
     } else {
       //Check collision against touchedCells entities list
-      for (List<Entity*>::Iterator iter = touchedCells[i]->entities.iterator(); iter.hasNext(); iter++) {
+      for (list<Entity*>::iterator iter = touchedCells[i]->entities.begin(); iter.hasNext(); iter++) {
         Entity* otherEnt = *iter;
         const BoundingVolume* bvol = otherEnt->getBVolume();
         //FIXME: shouldn't we check entities ?
@@ -159,6 +159,17 @@ bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* re
     }
   }
   return collided;
+}
+
+void Grid::addEntity (Entity* e) {
+  const BoundingVolume* bvol = e->getBVolume();
+  ASSERT(bvol->getType() == TYPE_CIRCLE);
+  unsigned numTouched = 0;
+  touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
+  if (numTouched == 0)
+    LOGE("addEntity : numTouched = 0");
+  for (unsigned i=0; i<numTouched; i++)
+    touchedCells[i]->entities.append(e);
 }
 
 #define ADD_CELL_IF(x,y,cond) \

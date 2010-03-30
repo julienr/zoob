@@ -8,17 +8,14 @@
 #include "levels/LevelsData.h"
 #include "logic/physics/CollisionManager.h"
 #include "lib/Utils.h"
+#include "containers/vector.h"
 
 #define TANK_MOVE_SPEED 1.0f
 
 class Game {
   public:
-    Game (Level* level) :
-      colManager(level->getWidth(), level->getHeight(), 1.0f), level(level),movingTank(false) {
-      level->addToColManager(colManager);
-      tank.setPosition(level->getStartPosition());
-      colManager.addEntity(&tank);
-    }
+    Game (Level* level);
+    ~Game ();
 
     void start () {
       lastTime = Utils::getCurrentTimeMillis();
@@ -30,6 +27,10 @@ class Game {
 
     const Tank& getPlayerTank () const {
       return tank;
+    }
+
+    const vector<Tank*>& getEnemies () const {
+      return enemies;
     }
 
     const Cursor& getCursor () const {
@@ -83,6 +84,7 @@ class Game {
 
     CollisionManager colManager;
     Tank tank;
+    vector<Tank*> enemies;
     Cursor cursor;
     Level* level;
 

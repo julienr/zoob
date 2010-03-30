@@ -6,8 +6,8 @@
 //Double linked list
 //This is a wrapper around utlist.h
 template <class T>
-class List {
-  friend class Iterator;
+class list {
+  friend class iterator;
   private:
     /** Private element structure */
     struct _Element {
@@ -17,10 +17,10 @@ class List {
     };
   public:
     /** Simple iterator */
-    class Iterator {
-      friend class List;
+    class iterator {
+      friend class list;
       public:
-        Iterator (_Element* head)
+        iterator (_Element* head)
           : current(head){}
 
         const T& operator * () const {
@@ -38,8 +38,8 @@ class List {
         _Element* current;
     };
   public:
-    List () : head(NULL) {}
-    ~List() {
+    list () : head(NULL) {}
+    ~list() {
       for (_Element* e=head; e; ) {
         _Element* next = e->next;
         delete e;
@@ -60,7 +60,7 @@ class List {
     /** Remove element "pointer" by the iterator
      * Will _automatically_ advance the iterator to its next element
      */
-    void remove (const Iterator& i) {
+    void remove (const iterator& i) {
       _Element* del = i.current;
       DL_DELETE(head, del);
       delete del;
@@ -96,8 +96,8 @@ class List {
       return count;
     }
 
-    Iterator iterator () {
-      return Iterator(head);
+    iterator begin () {
+      return iterator(head);
     }
   private:
     _Element* head;

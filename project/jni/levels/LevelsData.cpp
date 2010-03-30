@@ -1,9 +1,9 @@
 #include "LevelsData.h"
 
 eTileType coltest[3*5] = {
-    E,E,E,
+    S,E,E,
     E,E,W,
-    E,E,W,
+    S,E,W,
     E,E,W,
     E,W,W
 };
@@ -16,7 +16,7 @@ eTileType empty[7*7] = {
     E,E,E,E,E,E,E,
     E,S,E,E,E,E,E,
     E,E,E,E,E,E,E,
-    E,E,E,E,E,E,E,
+    E,E,E,E,S,E,E,
     E,E,E,E,E,E,E,
     E,E,E,E,E,E,E,
     E,E,E,E,E,E,E
@@ -29,7 +29,7 @@ Level* loadEmpty() {
 eTileType lvl1[7*8] = {
     W, W, W, W, W, W, W,
     W, E, E, E, E, E, W,
-    W, S, E, W, E, E, W,
+    W, S, E, S, E, E, W,
     W, E, E, E, W, E, W,
     W, E, E, E, W, E, W,
     W, W, W, E, W, E, W,

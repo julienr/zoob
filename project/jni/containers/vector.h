@@ -7,15 +7,15 @@
 #define ASSERT(x) assert(x)
 
 template <class T>
-class Vector {
+class vector {
   public:
-    Vector (size_t initialCapacity)
+    vector (size_t initialCapacity)
       : used(0), capacity(initialCapacity), capacityIncr(initialCapacity) {
       data = (T*)malloc(sizeof(T)*capacity);
       ASSERT(data);
     }
 
-    ~Vector () {
+    ~vector () {
       free(data);
     }
 
@@ -28,11 +28,11 @@ class Vector {
       data[used++] = elem;
     }
 
-    size_t length () {
+    size_t length () const {
       return used;
     }
 
-    const T& get (size_t i) {
+    const T& operator [] (size_t i) const {
       ASSERT(i < used);
       return data[i];
     }

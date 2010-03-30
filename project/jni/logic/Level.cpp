@@ -12,6 +12,8 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b) {
     for (unsigned x=0; x<width; x++) {
       //b is row-major, board is col-major
       board[x][y] = b[y*w+x];
+      if (board[x][y] == S)
+        startPositions.add(Vector2(x,y));
     }
   }
 }

@@ -17,7 +17,7 @@ struct GridCell : public Entity {
   unsigned x, y;
   bool touched;
   bool solid;
-  List<Entity*> entities;
+  list<Entity*> entities;
 };
 
 class Grid {
@@ -55,14 +55,7 @@ class Grid {
       grid[x][y]->solid = true;
     }
 
-    void addEntity (Entity* e) {
-      const Vector2& p = e->getPosition();
-      const int x = getCellX(p);
-      const int y = getCellY(p);
-      if (x == -1 || y == -1)
-        LOGE("Entity outside bounds : (%f,%f)", p.x, p.y);
-      grid[x][y]->entities.append(e);
-    }
+    void addEntity (Entity* e);
 
     void moveEntity (Entity* e, const Vector2& move);
 

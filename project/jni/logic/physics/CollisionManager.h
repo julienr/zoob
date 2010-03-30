@@ -21,6 +21,7 @@ class CollisionManager {
       assert(e);
       EntityNode* n = new EntityNode(e);
       DL_APPEND(entities, n);
+      grid.addEntity(e);
     }
 
     void setGridCellSolid (int x, int y, bool solid) {

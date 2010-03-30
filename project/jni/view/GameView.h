@@ -5,16 +5,12 @@
 #include "view/CursorView.h"
 #include "view/LevelView.h"
 #include "logic/Game.h"
+#include "containers/vector.h"
 
 class GameView {
   public:
-    GameView (const Game& g)
-      :game(g),
-       tankView(g.getPlayerTank()),
-       cursorView(g.getCursor()),
-       levelView(g.getLevel()),
-       arrowEnd("assets/sprites/arrow_end.png"){
-    }
+    GameView (const Game& g);
+    ~GameView ();
 
     const TankView& getTankView () const {
       return tankView;
@@ -29,6 +25,7 @@ class GameView {
     CursorView cursorView;
     LevelView levelView;
     Sprite arrowEnd;
+    vector<TankView*> enemiesView;
 };
 
 #endif /* GAMEVIEW_H_ */

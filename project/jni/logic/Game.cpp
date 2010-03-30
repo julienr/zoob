@@ -1,6 +1,24 @@
 #include "Game.h"
 #include "lib/Math.h"
 
+Game::Game (Level* level)
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level),movingTank(false) {
+  level->addToColManager(colManager);
+  tank.setPosition(level->getStartPosition(0));
+  for (size_t i=1; i<level->getNumStartPositions(); i++) {
+    Tank* t = new Tank();
+    t->setPosition(level->getStartPosition(i));
+    enemies.add(t);
+    colManager.addEntity(t);
+  }
+  colManager.addEntity(&tank);
+}
+
+Game::~Game () {
+  for (size_t i=0; i<enemies.length(); i++)
+    delete enemies[i];
+}
+
 void Game::update () {
   uint64_t now = Utils::getCurrentTimeMillis();
   //Do nothing if lastTime is in the future
