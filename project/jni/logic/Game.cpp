@@ -53,6 +53,8 @@ void Game::update () {
     CollisionResult r;
 
     if (colManager.trace(&tank, move, &r)) {
+      /*if (r.collidedEntity == NULL)
+        LOGE("r.collidedEntity is NULL");*/
       r.collidedEntity->collided = true;
       tank.collided  = true;
       tank.lastColNormal = r.normal;

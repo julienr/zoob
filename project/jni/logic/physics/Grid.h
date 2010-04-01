@@ -71,7 +71,7 @@ class Grid {
       return grid[x][y]->touched;
     }
 
-    bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const;
+    bool trace (const Entity* mover, const Vector2& move, CollisionResult* result) const;
 
     unsigned getWidth () const {
       return width;

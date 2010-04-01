@@ -119,14 +119,15 @@ bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still, const BC
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
-  LOGE("CircleAgainstCircle still (%f,%f,r=%f) against moving (%f,%f,r=%f) with move (%f,%f)", still->getPosition().x, still->getPosition().y,
-      still->getRadius(), moving->getPosition().x, moving->getPosition().y, moving->getRadius(), move.x, move.y);
+  //LOGE("CircleAgainstCircle still (%f,%f,r=%f) against moving (%f,%f,r=%f) with move (%f,%f)", still->getPosition().x, still->getPosition().y,
+  //    still->getRadius(), moving->getPosition().x, moving->getPosition().y, moving->getRadius(), move.x, move.y);
   const Vector2 centerToCenter = still->getPosition() - moving->getPosition();
 
   //distance between circles
   const float dist = centerToCenter.length() - still->getRadius() - moving->getRadius();
   //Project move on centerToCenter and
-  const float moveC = move*centerToCenter;
+  const float moveC = move*(centerToCenter.getNormalized());
+  //LOGE("dist : %f, moveC : %f", dist, moveC);
 
   if (dist <= 0) {
     //overlap
@@ -137,7 +138,8 @@ bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still, const BC
     //no overlap
     if (moveC > dist) {
       //collision
-      r->normal = -move.getNormalized();
+      //r->normal = -move.getNormalized();
+      r->normal = -centerToCenter.getNormalized();
       r->tFirst = dist/moveC;
       r->tLast = (dist+still->getRadius())/moveC;
       return true;
@@ -234,7 +236,7 @@ bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult
 }
 
 bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
-  return grid.trace(static_cast<const BCircle*>(mover->getBVolume()), move, result);
+  return grid.trace(mover, move, result);
   /*CollisionResult r;
   result->tFirst = MOOB_INF;
   bool collided = false;

@@ -104,7 +104,9 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   return count;
 }
 
-bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* result) const {
+bool Grid::trace(const Entity* mover, const Vector2& move, CollisionResult* result) const {
+  ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
+  const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
   ASSERT(circle->getRadius()*2 < cellSize);
   ASSERT(move.length() < cellSize);
   //Calculate starting position covered cells
@@ -133,10 +135,9 @@ bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* re
       //Check collision against touchedCells entities list
       for (list<Entity*>::iterator iter = touchedCells[i]->entities.begin(); iter.hasNext(); iter++) {
         Entity* otherEnt = *iter;
-        const BoundingVolume* bvol = otherEnt->getBVolume();
-        //FIXME: shouldn't we check entities ?
-        if (bvol == circle)
+        if (otherEnt == mover)
           continue;
+        const BoundingVolume* bvol = otherEnt->getBVolume();
 
         bool col = false;
         switch (bvol->getType()) {
@@ -158,6 +159,9 @@ bool Grid::trace(const BCircle* circle, const Vector2& move, CollisionResult* re
       }
     }
   }
+  /*if (collided) {
+    LOGE("Collision, tFirst : %f", r.tFirst);
+  }*/
   return collided;
 }
 
