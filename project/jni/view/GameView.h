@@ -25,6 +25,7 @@ class GameView {
     CursorView cursorView;
     LevelView levelView;
     Sprite arrowEnd;
+    Sprite rocket;
     vector<TankView*> enemiesView;
 };
 

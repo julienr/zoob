@@ -9,6 +9,7 @@ GameView::GameView (const Game& g)
     cursorView(g.getCursor()),
     levelView(g.getLevel()),
     arrowEnd("assets/sprites/arrow_end.png"),
+    rocket("assets/sprites/rocket.png"),
     enemiesView(5) {
   const vector<Tank*> enemies = g.getEnemies();
   for (size_t i=0; i<enemies.length(); i++)
@@ -27,6 +28,10 @@ void GameView::draw () {
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
   cursorView.draw();
+
+  for (list<Rocket*>::iterator i = game.getRockets(); i.hasNext(); i++) {
+    rocket.draw(**i);
+  }
 
   if (game.isMovingTank()) {
     const Vector2 touchPoint = game.getTankMoveTouchPoint();

@@ -131,26 +131,25 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   const Vector2 p(XSG(x), YSG(y));
-  if (gameView->getTankView().inside(p))
-    game->startMovingTank(p);
+  if (gameView->getTankView().touchInside(p))
+    game->startMoving(MOVING_TANK, p);
   else
-    game->setCursorPosition(p);
+    game->startMoving(MOVING_CURSOR, p);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventMove
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   const Vector2 p(XSG(x), YSG(y));
-  if (game->isMovingTank())
-    game->setTankMoveTouchPoint(p);
+  game->setMoveTouchPoint(p);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventUp
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  game->stopMovingTank();
+  game->stopMoving();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventOther
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  game->stopMovingTank();
+  game->stopMoving();
 }
 

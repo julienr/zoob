@@ -96,7 +96,7 @@ class list {
       return count;
     }
 
-    iterator begin () {
+    iterator begin () const {
       return iterator(head);
     }
   private:

@@ -3,6 +3,7 @@
 
 #include "def.h"
 #include "logic/Tank.h"
+#include "logic/Rocket.h"
 #include "logic/Cursor.h"
 #include "logic/Level.h"
 #include "levels/LevelsData.h"
@@ -11,6 +12,13 @@
 #include "containers/vector.h"
 
 #define TANK_MOVE_SPEED 1.0f
+#define ROCKET_MOVE_SPEED 0.5f
+
+enum eMoveState {
+  MOVING_NONE=0,
+  MOVING_TANK,
+  MOVING_CURSOR
+};
 
 class Game {
   public:
@@ -51,28 +59,24 @@ class Game {
 
     //When moving the tank, use this to set the position of where the user touched to move the tank
     //pos is SUPPOSED to be in Game coords
-    void setTankMoveTouchPoint (const Vector2& pos) {
-      tankMoveEnd.set(pos);
-    }
+    void setMoveTouchPoint (const Vector2& pos);
 
     const Vector2& getTankMoveTouchPoint () const {
-      if (!movingTank)
+      if (movingState != MOVING_TANK)
         LOGE("getTankMovePosition called when not moving tank");
       return tankMoveEnd;
     }
 
-    /** Switch tank moving state on/off */
-    void startMovingTank (const Vector2& touchPosition) {
-      movingTank = true;
-      tankMoveEnd.set(touchPosition);
-    }
+    void startMoving (eMoveState what, const Vector2& touchPosition);
 
-    void stopMovingTank () {
-      movingTank = false;
-    }
+    void stopMoving();
 
     bool isMovingTank () const {
-      return movingTank;
+      return movingState == MOVING_TANK;
+    }
+
+    const list<Rocket*>::iterator getRockets () const {
+      return rockets.begin();
     }
 
     void update();
@@ -85,10 +89,11 @@ class Game {
     CollisionManager colManager;
     Tank tank;
     vector<Tank*> enemies;
+    list<Rocket*> rockets;
     Cursor cursor;
     Level* level;
 
-    bool movingTank;
+    eMoveState movingState;
     Vector2 tankMoveEnd;
 
     uint64_t lastTime;

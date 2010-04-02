@@ -2,7 +2,7 @@
 #include "lib/Math.h"
 
 Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level),movingTank(false) {
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level),movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition(0));
   for (size_t i=1; i<level->getNumStartPositions(); i++) {
@@ -34,8 +34,14 @@ void Game::update () {
 
   colManager.unmarkCollided();
 
+  //Rockets
+  for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); i++) {
+    Rocket* r = *i;
+    r->translate(r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
+  }
+
   //Tank movement
-  if (movingTank) {
+  if (movingState == MOVING_TANK) {
     Vector2 dir = tankMoveEnd - tank.getPosition();
     dir.normalize();
 
@@ -64,6 +70,43 @@ void Game::update () {
     slideMove(&tank, move);
     //tank.translate(move);
   }
+}
+
+void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
+  movingState = what;
+  switch(movingState) {
+    case MOVING_TANK:
+      tankMoveEnd.set(touchPosition);
+      break;
+    case MOVING_CURSOR:
+      cursor.setPosition(touchPosition);
+      break;
+    default:
+      break;
+  }
+}
+
+void Game::setMoveTouchPoint (const Vector2& pos) {
+  switch (movingState) {
+    case MOVING_TANK:
+      tankMoveEnd = pos;
+      break;
+    case MOVING_CURSOR:
+      cursor.setPosition(pos);
+      break;
+    default:
+      break;
+  }
+}
+
+void Game::stopMoving () {
+  if (movingState == MOVING_CURSOR) {
+    //Fire up rocket
+    Vector2 dir = cursor.getPosition()-tank.getPosition();
+    dir.normalize();
+    rockets.append(tank.fireRocket(dir));
+  }
+  movingState = MOVING_NONE;
 }
 
 #define MAX_BOUNCES 4

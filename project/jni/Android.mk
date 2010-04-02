@@ -18,6 +18,7 @@ LOCAL_SRC_FILES := \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
+    logic/Tank.cpp \
     levels/LevelsData.cpp \
     view/TextureManager.cpp \
     view/Sprite.cpp \
