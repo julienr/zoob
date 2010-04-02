@@ -83,8 +83,9 @@ class Game {
   private:
     //translate the given entity of <move>, sliding against collider
     void slideMove (Entity* e, Vector2 move);
-    //rotate the given entity of <rotation>, sliding against colliders
-    void slideRotate (Entity* e, float rotation);
+    //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)
+    void bounceMove (Rocket* r, Vector2 move);
+
 
     CollisionManager colManager;
     Tank tank;

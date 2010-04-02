@@ -58,12 +58,16 @@ class list {
     }
 
     /** Remove element "pointer" by the iterator
-     * Will _automatically_ advance the iterator to its next element
+     * _Automatically_ advances iterator to next element
      */
-    void remove (const iterator& i) {
+    void remove (iterator& i) {
       _Element* del = i.current;
-      DL_DELETE(head, del);
-      delete del;
+      if (del != NULL) {
+        _Element* next = del->next;
+        DL_DELETE(head, del);
+        delete del;
+        i.current = next;
+      }
     }
 
     //Remove all elements == d, returns num removed

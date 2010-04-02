@@ -35,9 +35,18 @@ void Game::update () {
   colManager.unmarkCollided();
 
   //Rockets
-  for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); i++) {
+  for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
-    r->translate(r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
+    //LOGE("numBounces : %u", r->getNumBounces());
+    if (r->getNumBounces() > 3) {
+      /*LOGE("Removing rocket with more than 3 bounces");
+      rockets.remove(i);*/
+      bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
+      i++;
+    } else {
+      bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
+      i++;
+    }
   }
 
   //Tank movement
@@ -107,6 +116,20 @@ void Game::stopMoving () {
     rockets.append(tank.fireRocket(dir));
   }
   movingState = MOVING_NONE;
+}
+
+void Game::bounceMove (Rocket* rocket, Vector2 move) {
+  CollisionResult r;
+  if (colManager.trace(rocket, move, &r)) {
+    //FIXME: notify touched entity
+    rocket->addBounce();
+    const Vector2 newPos = rocket->getPosition() + move;
+    float backAmount = (r.colPoint-newPos)*r.normal;
+    Vector2 backoff = 2.0f*backAmount*r.normal;
+    move += backoff;
+    rocket->setDir(move);
+  }
+  colManager.translate(rocket, move);
 }
 
 #define MAX_BOUNCES 4

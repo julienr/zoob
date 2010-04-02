@@ -22,5 +22,7 @@ extern zip* APKArchive;
 
 //logical tile size
 #define TILE_SIZE 1.0
+#define TANK_BCIRCLE_R 0.4f
+#define ROCKET_BCIRCLE_R 0.2f
 
 #endif /* DEF_H_ */
