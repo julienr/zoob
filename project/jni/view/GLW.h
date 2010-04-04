@@ -12,7 +12,7 @@ struct GLW {
 
     static void rotate (float a, float x, float y, float z) {
 #ifdef PLATFORM_SDL
-      glRotatef(x,x,y,z);
+      glRotatef(a,x,y,z);
 #else
       glRotatex (fX(a), fX(x), fX(y), fX(z));
 #endif
