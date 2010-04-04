@@ -14,7 +14,15 @@ struct GridCell : public Entity {
     x(x),y(y),touched(false), solid(false) {
     this->setPosition(worldPos);
   }
-  unsigned x, y;
+
+  eEntityType getType () const {
+    return ENTITY_WALL;
+  }
+
+  void explode () {}
+
+  const unsigned x;
+  const unsigned y;
   bool touched;
   bool solid;
   list<Entity*> entities;

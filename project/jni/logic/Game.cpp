@@ -39,9 +39,10 @@ void Game::update () {
   //Rockets
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
-    //LOGE("numBounces : %u", r->getNumBounces());
-    if (r->getNumBounces() > 3) {
-      LOGE("Removing rocket with more than 3 bounces");
+    if (!r->hasExploded() && (r->getNumBounces() > 3))
+      r->explode();
+    //Might have exploded because of num bounces OR because of collision
+    if (r->hasExploded()) {
       colManager.removeEntity(*i);
       delete (*i);
       i = rockets.remove(i);
@@ -67,17 +68,15 @@ void Game::update () {
     const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
 
     //Collision detection
-    CollisionResult r;
+    /*CollisionResult r;
 
     if (colManager.trace(&tank, move, &r)) {
-      /*if (r.collidedEntity == NULL)
-        LOGE("r.collidedEntity is NULL");*/
       r.collidedEntity->collided = true;
       tank.collided  = true;
       tank.lastColNormal = r.normal;
       tank.lastColPoint = r.colPoint;
       //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
-    }
+    }*/
     slideMove(&tank, move);
     //tank.translate(move);
   }
@@ -120,10 +119,25 @@ void Game::stopMoving () {
   movingState = MOVING_NONE;
 }
 
+void Game::touch (Entity* e1, Entity* e2) {
+  const eEntityType t1 = e1->getType();
+  const eEntityType t2 = e2->getType();
+  //tank-wall and tank-tank
+  if ((t1 == ENTITY_TANK || t1 == ENTITY_WALL) &&
+      (t2 == ENTITY_TANK || t2 == ENTITY_WALL))
+    return;
+  //rocket-wall
+  if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
+      (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
+    return;
+  e1->explode();
+  e2->explode();
+}
+
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
-    //FIXME: notify touched entity
+    touch(rocket, r.collidedEntity);
     //FIXME: should bounce with 45° degree to our velocity
     rocket->addBounce();
     const Vector2 newPos = rocket->getPosition() + move;
@@ -140,6 +154,7 @@ void Game::slideMove (Entity* e, Vector2 move) {
   CollisionResult r;
   unsigned bounces = 0;
   for (; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
+    touch(e, r.collidedEntity);
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;

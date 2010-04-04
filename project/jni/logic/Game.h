@@ -79,6 +79,8 @@ class Game {
       return rockets.begin();
     }
 
+    void touch (Entity* e1, Entity* e2);
+
     void update();
   private:
     //translate the given entity of <move>, sliding against collider

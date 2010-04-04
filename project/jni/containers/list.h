@@ -1,6 +1,7 @@
 #ifndef LIST_H_
 #define LIST_H_
 
+#include <stdlib.h>
 #include "utlist.h"
 
 //Double linked list
@@ -66,6 +67,15 @@ class list {
         delete e;
         e = next;
       }
+    }
+
+    void clear () {
+      for (_Element* e=head; e; ) {
+         _Element* next = e->next;
+         DL_DELETE(head, e);
+         delete e;
+         e = next;
+       }
     }
 
     void prepend (T d) {

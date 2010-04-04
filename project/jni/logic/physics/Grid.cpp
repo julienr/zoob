@@ -19,18 +19,16 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   const Vector2& end = p+move;
 
   //Remove from old cells
-  unsigned numTouched = 0;
-  touchCells(bcircle, p, &numTouched);
-  size_t numRemoved = 0;
-  for (unsigned i=0; i<numTouched; i++)
-    numRemoved += touchedCells[i]->entities.remove(e);
-  //LOGE("numTouched : %i, numRemoved : %i", numTouched, numRemoved);
+  for (list<GridCell*>::iterator i = e->touchedCells.begin(); i.hasNext(); i++)
+    (*i)->entities.remove(e);
+  e->touchedCells.clear();
 
   //Add to new
-  numTouched = 0;
+  unsigned numTouched = 0;
   touchCells(bcircle, end, &numTouched);
   for (unsigned i=0; i<numTouched; i++) {
     if (!touchedCells[i]->solid) {
+      e->touchedCells.append(touchedCells[i]);
       touchedCells[i]->entities.append(e);
     }
   }
@@ -148,6 +146,9 @@ bool Grid::trace(const Entity* mover, const Vector2& move, CollisionResult* resu
         Entity* otherEnt = *iter;
         if (otherEnt == mover)
           continue;
+        if (!otherEnt->isSolid())
+          continue;
+
         const BoundingVolume* bvol = otherEnt->getBVolume();
 
         bool col = false;
@@ -183,19 +184,17 @@ void Grid::addEntity (Entity* e) {
   touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
   if (numTouched == 0)
     LOGE("addEntity : numTouched = 0");
-  for (unsigned i=0; i<numTouched; i++)
+  e->touchedCells.clear();
+  for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->entities.append(e);
+    e->touchedCells.append(touchedCells[i]);
+  }
 }
 
 void Grid::removeEntity (Entity* e) {
-  const BoundingVolume* bvol = e->getBVolume();
-  ASSERT(bvol->getType() == TYPE_CIRCLE);
-  unsigned numTouched = 0;
-  touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
-  if (numTouched == 0)
-    LOGE("removeEntity : numTouched = 0");
-  for (unsigned i=0; i<numTouched; i++)
-    touchedCells[i]->entities.remove(e);
+  for (list<GridCell*>::iterator i = e->touchedCells.begin(); i.hasNext(); i++)
+    (*i)->entities.remove(e);
+  e->touchedCells.clear();
 }
 
 #define ADD_CELL_IF(x,y,cond) \
