@@ -97,28 +97,14 @@ class list {
       if (!head)
         return 0;
 
-      //Start at head->next because deleting head is a special case
-      _Element* tmp;
-      for (tmp = head->next; tmp;) {
-        _Element* next = tmp->next;
-        if (tmp->data == d) {
-          if (tmp->prev)
-            tmp->prev->next = tmp->next;
-          if (tmp->next)
-            tmp->next->prev = tmp->prev;
-          delete tmp;
-          count++;
+      for (_Element* e=head; e; ) {
+        _Element* next = e->next;
+        if (e->data == d) {
+          DL_DELETE(head, e);
+          delete e;
         }
-        tmp = next;
+        e = next;
       }
-
-      if (head->data == d) {
-        _Element* next = head->next;
-        delete head;
-        head = next;
-        count++;
-      }
-
       return count;
     }
 

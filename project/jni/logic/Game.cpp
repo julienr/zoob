@@ -12,6 +12,8 @@ Game::Game (Level* level)
     colManager.addEntity(t);
   }
   colManager.addEntity(&tank);
+
+  lastTime = Utils::getCurrentTimeMillis();
 }
 
 Game::~Game () {
