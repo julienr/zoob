@@ -1,0 +1,16 @@
+import glob
+import os
+dirs = ['containers','levels','lib','logic','logic/physics','view']
+files = [glob.glob(dir+'/*.cpp') for dir in dirs]
+
+cflags = '-ggdb -Wall -DPLATFORM_SDL'
+ldflags = '-lm -lSDL -lGL -lpng -lzip'
+
+env = Environment(ENV = {'PATH': os.environ['PATH']},
+                  CPPPATH=['.'],
+                  CXX='g++',
+                  CXXFLAGS=cflags,
+                  LINKFLAGS=ldflags)
+
+env.Program(target='./app', source=['app-sdl.cpp','app.cpp']+files)
+

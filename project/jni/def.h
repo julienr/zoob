@@ -1,9 +1,7 @@
 #ifndef DEF_H_
 #define DEF_H_
 
-#include <android/log.h>
 #include <zip.h>
-#include <GLES/gl.h>
 #include <assert.h>
 
 extern zip* APKArchive;
@@ -14,18 +12,34 @@ extern zip* APKArchive;
 #define LOG_TAG    __FILE__ ":" STRINGIFY(__LINE__)
 
 
-#ifdef PLATFORM_SDL
-#define LOGI(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
-#define LOGE(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
-#else
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#ifdef PLATFORM_SDL //SDL standalone build
+  #include <GL/gl.h>
+  #define LOGI(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
+  #define LOGE(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
+#else //Android build
+  #include <android/log.h>
+  #include <GLES/gl.h>
+  #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+  #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #endif
 
-//int to fixed point
-#define iX(x) (x<<16)
-//float to fixed point
-#define fX(x) ((int)(x * (1  << 16)))
+//BEGIN opengl-related defs
+//Since the desktop version of opengl doesn't support fixed-point,
+#ifdef PLATFORM_SDL
+  #define MGL_DATATYPE float
+  #define MGL_TYPE GL_FLOAT
+  #define iX(x) (x)
+  #define fX(x) (x)
+#else
+  #define MGL_DATATYPE int
+  #define MGL_TYPE GL_FIXED
+  //int to fixed point
+  #define iX(x) (x<<16)
+  //float to fixed point
+  #define fX(x) ((int)(x * (1  << 16)))
+#endif
+
+//END
 
 //logical tile size
 #define TILE_SIZE 1.0

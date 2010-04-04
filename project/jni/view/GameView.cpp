@@ -56,7 +56,7 @@ void drawColEntity (Entity* e) {
 
   if (e->getBVolume()->getType() == TYPE_AABBOX) {
     const AABBox* box = static_cast<const AABBox*>(e->getBVolume());
-    int verts[12];
+    MGL_DATATYPE verts[12];
     Vector2 corners[4];
     box->getCorners(corners);
     for (int i=0; i<4; i++) {
@@ -66,13 +66,13 @@ void drawColEntity (Entity* e) {
       //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
     }
     glPushMatrix();
-    glVertexPointer(3, GL_FIXED, 0, verts);
+    glVertexPointer(3, MGL_TYPE, 0, verts);
     glDrawArrays(GL_LINE_LOOP, 0, 4);
     glPopMatrix();
   } else { //BCircle
     const BCircle* circle = static_cast<const BCircle*>(e->getBVolume());
     const unsigned numVerts = 10;
-    int verts[numVerts*3];
+    MGL_DATATYPE verts[numVerts*3];
 
     for (unsigned i=0; i<numVerts; i++) {
       const float angle = i*2*M_PI/(float)numVerts;
@@ -83,7 +83,7 @@ void drawColEntity (Entity* e) {
     }
     glPushMatrix();
     GLW::translate(circle->getPosition().x, circle->getPosition().y, 0);
-    glVertexPointer(3, GL_FIXED, 0, verts);
+    glVertexPointer(3, MGL_TYPE, 0, verts);
     glDrawArrays(GL_LINE_LOOP, 0, numVerts);
     glPopMatrix();
   }
@@ -111,14 +111,14 @@ void GameView::debugDraw () {
   game.getColManager().foreachEntity(drawColEntity);
   //Draw collision normal
   //if (tank.collided) {
-    int verts[6] = {
+    MGL_DATATYPE verts[6] = {
         fX(tank.lastColNormal.x), fX(tank.lastColNormal.y), 0,
         0, 0, 0
     };
     glPushMatrix();
     GLW::translate(tank.lastColPoint.x, tank.lastColPoint.y, 0);
     glLineWidth(5.0f);
-    glVertexPointer(3, GL_FIXED, 0, verts);
+    glVertexPointer(3, MGL_TYPE, 0, verts);
     glDrawArrays(GL_LINES, 0, 2);
     glPopMatrix();
     glLineWidth(1.0f);

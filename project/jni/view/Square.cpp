@@ -1,6 +1,6 @@
 #include "Square.h"
 
-int verts[12] = {
+MGL_DATATYPE verts[12] = {
     fX(-0.5), fX(-0.5), 0,
     fX(0.5), fX(-0.5), 0,
     fX(-0.5), fX(0.5), 0,
@@ -11,7 +11,7 @@ int verts[12] = {
     fX(1.0),fX(1.0),0*/
 };
 
-int texCoords[8] = {
+MGL_DATATYPE texCoords[8] = {
     0, fX(1),
     fX(1), fX(1),
     0,0,
@@ -28,13 +28,13 @@ void Square::create () {
 }
 
 void Square::draw (bool enableTexture) {
-  glVertexPointer(3, GL_FIXED, 0, verts);
+  glVertexPointer(3, MGL_TYPE, 0, verts);
   if (enableTexture)
-    glTexCoordPointer(2, GL_FIXED, 0, texCoords);
+    glTexCoordPointer(2, MGL_TYPE, 0, texCoords);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void Square::drawLine () {
-  glVertexPointer(3, GL_FIXED, 0, verts);
+  glVertexPointer(3, MGL_TYPE, 0, verts);
   glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_BYTE, lineIndices);
 }

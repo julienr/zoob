@@ -1,4 +1,3 @@
-#include <GLES/gl.h>
 #include "def.h"
 #include "view/TextureManager.h"
 #include "logic/Entity.h"
@@ -96,7 +95,7 @@ void nativeResize (int w, int h) {
   glLoadIdentity();
   const float gameAreaW = 15;
   const float gameAreaH = 15/ratio;
-  glOrthof(0, gameAreaW, gameAreaH, 0, -1, 1);
+  GLW::ortho(0, gameAreaW, gameAreaH, 0, -1, 1);
 
   xScreenToGame = gameAreaW/w;
   yScreenToGame = gameAreaH/h;

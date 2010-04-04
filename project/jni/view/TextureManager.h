@@ -2,7 +2,6 @@
 #define TEXTUREMANAGER_H_
 
 #include "def.h"
-#include <GLES/gl.h>
 #include "containers/uthash.h"
 
 #define TEXTURE_BLANK 0
