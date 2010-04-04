@@ -11,7 +11,7 @@ class list {
   private:
     /** Private element structure */
     struct _Element {
-      _Element(const T& d) : data(d), next(NULL), prev(NULL) {}
+      _Element(T d) : data(d), next(NULL), prev(NULL) {}
       T data;
       _Element *next, *prev;
     };
@@ -23,11 +23,32 @@ class list {
         iterator (_Element* head)
           : current(head){}
 
-        const T& operator * () const {
+        T operator * () {
           return current->data;
         }
 
         void operator ++ (int) { //postfix ++
+          current = current->next;
+        }
+
+        bool hasNext () const {
+          return (current != NULL);
+        }
+      private:
+        _Element* current;
+    };
+
+    class const_iterator {
+      friend class list;
+      public:
+        const_iterator (_Element* head)
+          : current(head) {}
+
+        const T& operator * () {
+          return current->data;
+        }
+
+        void operator ++ (int) {
           current = current->next;
         }
 
@@ -47,31 +68,31 @@ class list {
       }
     }
 
-    void prepend (const T& d) {
+    void prepend (T d) {
       _Element* add = new _Element(d);
       DL_PREPEND(head, add);
     }
 
-    void append (const T& d) {
+    void append (T d) {
       _Element* add = new _Element(d);
       DL_APPEND(head, add);
     }
 
-    /** Remove element "pointer" by the iterator
-     * _Automatically_ advances iterator to next element
+    /** Remove element "pointer" by the iterator i
+     * Invalidates i
+     * Returns an iterator to i's next element
      */
-    void remove (iterator& i) {
+    iterator remove (iterator& i) {
       _Element* del = i.current;
-      if (del != NULL) {
-        _Element* next = del->next;
-        DL_DELETE(head, del);
-        delete del;
-        i.current = next;
-      }
+      ASSERT(del != NULL);
+      _Element* next = del->next;
+      DL_DELETE(head, del);
+      delete del;
+      return iterator(next);
     }
 
     //Remove all elements == d, returns num removed
-    size_t remove (const T& d) {
+    size_t remove (T d) {
       size_t count = 0;
       if (!head)
         return 0;
@@ -92,16 +113,21 @@ class list {
       }
 
       if (head->data == d) {
-        head = head->next;
+        _Element* next = head->next;
         delete head;
+        head = next;
         count++;
       }
 
       return count;
     }
 
-    iterator begin () const {
+    iterator begin () {
       return iterator(head);
+    }
+
+    const_iterator begin () const {
+      return const_iterator(head);
     }
   private:
     _Element* head;

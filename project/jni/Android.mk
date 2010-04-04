@@ -13,6 +13,7 @@ LOCAL_CFLAGS := -Wall -DANDROID_NDK -Wno-psabi
 LOCAL_DEFAULT_CPP_EXTENSION := cpp 
 
 LOCAL_SRC_FILES := \
+		app.cpp \
     app-android.cpp \
     lib/Vector2.cpp \
     logic/Viewable.cpp \

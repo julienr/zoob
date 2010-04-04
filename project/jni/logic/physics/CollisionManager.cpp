@@ -218,42 +218,6 @@ bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCirc
   return (r->tFirst <= 1.0f);
 }
 
-bool collide (Entity* still, Entity* mover, const Vector2& move, CollisionResult* result) {
-  const BoundingVolume* v1 = still->getBVolume();
-  const BoundingVolume* v2 = mover->getBVolume();
-  if (v1->getType() == TYPE_AABBOX) {
-    if (v2->getType() == TYPE_CIRCLE)
-      return CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(v1), static_cast<const BCircle*>(v2), move, result);
-    else {
-      LOGE("Unsupported collision detection type : moving aabbox against aabbox");
-      assert(false);
-    }
-  } else if (v1->getType() == TYPE_CIRCLE) {
-    LOGE("Unsupported collision detection type : still circle");
-    assert(false);
-  }
-  return false;
-}
-
 bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
   return grid.trace(mover, move, result);
-  /*CollisionResult r;
-  result->tFirst = MOOB_INF;
-  bool collided = false;
-
-  EntityNode *n;
-  DL_FOREACH(entities, n) {
-    if (n->entity == mover)
-      continue;
-
-    if (collide(n->entity, mover, move, &r)
-        && r.tFirst < result->tFirst) {
-      (*result) = r;
-      result->collidedEntity = n->entity;
-      result->colPoint = mover->getPosition()+move*r.tFirst;
-      collided = true;
-    }
-  }
-
-  return collided;*/
 }

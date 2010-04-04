@@ -29,7 +29,7 @@ void GameView::draw () {
   //FIXME: colManager.debugDraw()
   cursorView.draw();
 
-  for (list<Rocket*>::iterator i = game.getRockets(); i.hasNext(); i++) {
+  for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     rocket.draw(**i);
   }
 

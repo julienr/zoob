@@ -7,7 +7,7 @@
 
 int main (int argc, char** argv) {
   printf("--Vector\n");
-  Vector<int> v(2);
+  vector<int> v(2);
   v.add(1);
   v.add(2);
   v.add(3);
@@ -15,25 +15,27 @@ int main (int argc, char** argv) {
   v.add(5);
 
   for (int i=0; i<v.length(); i++)
-    printf("%i\n", v.get(i));
+    printf("%i\n", v[i]);
 
   printf("--List\n");
-  List<int> l;
+  list<int> l;
   l.prepend(1);
   l.prepend(2);
   l.prepend(3);
   l.prepend(4);
 
-  for (List<int>::Iterator i=l.iterator(); i.hasNext(); i++) {
+  for (list<int>::iterator i=l.begin(); i.hasNext(); i++) {
     printf("%i\n", *i);
   }
 
-  List<int>::Iterator three = l.iterator();
-  three++;
-  printf("Removing : %i\n", *three);
+  list<int>::iterator three = l.begin();
+  printf("removing %i\n", *three);
+  three = l.remove(three);
+  printf("removing : %i\n", *three);
   l.remove(three);
   l.prepend(5);
-  for (List<int>::Iterator i=l.iterator(); i.hasNext(); i++) {
+  l.append(3);
+  for (list<int>::iterator i=l.begin(); i.hasNext(); i++) {
     printf("%i\n", *i);
   }
   return 0;

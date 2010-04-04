@@ -41,6 +41,7 @@ void Game::update () {
     if (r->getNumBounces() > 3) {
       /*LOGE("Removing rocket with more than 3 bounces");
       rockets.remove(i);*/
+      //FIXME:Remove from colManager as well
       bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
       i++;
     } else {
@@ -122,6 +123,7 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
     //FIXME: notify touched entity
+    //FIXME: should bounce with 45° degree to our velocity
     rocket->addBounce();
     const Vector2 newPos = rocket->getPosition() + move;
     float backAmount = (r.colPoint-newPos)*r.normal;
@@ -140,8 +142,8 @@ void Game::slideMove (Entity* e, Vector2 move) {
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;
-    /*LOGE("collision : normal(%f,%f), backoff(%f,%f), backAmount : %f", r.normal.x, r.normal.y, backoff.x, backoff.y, backAmount);
-    LOGE("move (%f,%f)", move.x, move.y);*/
+    //LOGE("collision : normal(%f,%f), backoff(%f,%f), backAmount : %f", r.normal.x, r.normal.y, backoff.x, backoff.y, backAmount);
+    //LOGE("move (%f,%f)", move.x, move.y);
     move += backoff*1.1;
     //LOGE("move after backoff (%f,%f)", move.x, move.y);
   }

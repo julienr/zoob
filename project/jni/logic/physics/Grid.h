@@ -59,11 +59,7 @@ class Grid {
 
     void moveEntity (Entity* e, const Vector2& move);
 
-    void clearTouched () {
-      for (unsigned x=0; x<width; x++)
-        for (unsigned y=0; y<height; y++)
-          grid[x][y]->touched = false;
-    }
+    void clearTouched ();
 
     bool touched (unsigned x, unsigned y) const {
       if (!inside(x,y))

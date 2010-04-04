@@ -75,7 +75,7 @@ class Game {
       return movingState == MOVING_TANK;
     }
 
-    const list<Rocket*>::iterator getRockets () const {
+    const list<Rocket*>::const_iterator getRockets () const {
       return rockets.begin();
     }
 

@@ -12,8 +12,15 @@ extern zip* APKArchive;
 
 #define STRINGIFY(x) #x
 #define LOG_TAG    __FILE__ ":" STRINGIFY(__LINE__)
+
+
+#ifdef PLATFORM_SDL
+#define LOGI(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
+#define LOGE(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
+#else
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#endif
 
 //int to fixed point
 #define iX(x) (x<<16)

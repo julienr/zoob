@@ -2,6 +2,16 @@
 #include "lib/Math.h"
 #include "CollisionManager.h"
 
+void Grid::clearTouched () {
+  for (unsigned x=0; x<width; x++) {
+    for (unsigned y=0; y<height; y++) {
+      grid[x][y]->touched = false;
+      for (list<Entity*>::iterator e=grid[x][y]->entities.begin(); e.hasNext(); e++)
+        (*e)->collided = false;
+    }
+  }
+}
+
 void Grid::moveEntity (Entity* e, const Vector2& move) {
   ASSERT(e->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* bcircle = static_cast<const BCircle *>(e->getBVolume());
@@ -20,8 +30,9 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   numTouched = 0;
   touchCells(bcircle, end, &numTouched);
   for (unsigned i=0; i<numTouched; i++) {
-    if (!touchedCells[i]->solid)
+    if (!touchedCells[i]->solid) {
       touchedCells[i]->entities.append(e);
+    }
   }
 }
 
