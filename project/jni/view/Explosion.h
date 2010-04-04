@@ -4,9 +4,10 @@
 #include "def.h"
 #include "lib/Vector2.h"
 #include "TextureManager.h"
+#include "Sprite.h"
 
 //Explosion life in seconds
-#define EXPLOSION_LIFE 1.0f
+#define EXPLOSION_LIFE 0.5f
 
 #define START_SIZE 0.5f
 #define END_SIZE 3.0f
@@ -19,10 +20,7 @@ class Explosion {
       mainSprite("assets/sprites/boom.png"),
       position(position) {}
 
-    void draw () {
-      const float size = START_SIZE + SIZE_INCR*(EXPLOSION_LIFE-timeLeft);
-      mainSprite.draw(position, Vector2(size, size));
-    }
+    void draw ();
 
     void think (float elapsed) {
       timeLeft -= elapsed;
