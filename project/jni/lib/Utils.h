@@ -12,7 +12,6 @@ struct Utils {
             (p.y > boxPos.y && p.y < boxPos.y+height);
   }
 
-  //FIXME: this is milliseconds since epoch ? shouldn't we return a double or check until when we can go ?
   static uint64_t getCurrentTimeMillis () {
     timeval tv;
     gettimeofday(&tv, NULL);

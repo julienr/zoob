@@ -6,6 +6,7 @@
 #include "view/LevelView.h"
 #include "logic/Game.h"
 #include "containers/vector.h"
+#include "Explosion.h"
 
 class GameView {
   public:
@@ -27,6 +28,7 @@ class GameView {
     Sprite arrowEnd;
     Sprite rocket;
     vector<TankView*> enemiesView;
+    list<Explosion*> explosions;
 };
 
 #endif /* GAMEVIEW_H_ */

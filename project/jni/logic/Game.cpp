@@ -2,7 +2,7 @@
 #include "lib/Math.h"
 
 Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level),movingState(MOVING_NONE) {
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition(0));
   for (size_t i=1; i<level->getNumStartPositions(); i++) {
@@ -31,7 +31,9 @@ void Game::update () {
     return;
   }
 
-  double elapsedS = (now-lastTime)/1000.0;
+  explosions.clear();
+
+  elapsedS = (now-lastTime)/1000.0;
   lastTime = now;
 
   colManager.unmarkCollided();
@@ -119,7 +121,7 @@ void Game::stopMoving () {
   movingState = MOVING_NONE;
 }
 
-void Game::touch (Entity* e1, Entity* e2) {
+void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   const eEntityType t1 = e1->getType();
   const eEntityType t2 = e2->getType();
   //tank-wall and tank-tank
@@ -132,12 +134,14 @@ void Game::touch (Entity* e1, Entity* e2) {
     return;
   e1->explode();
   e2->explode();
+
+  explosions.append(colPoint);
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
-    touch(rocket, r.collidedEntity);
+    touch(rocket, r.collidedEntity, r.colPoint);
     //FIXME: should bounce with 45° degree to our velocity
     rocket->addBounce();
     const Vector2 newPos = rocket->getPosition() + move;
@@ -154,7 +158,7 @@ void Game::slideMove (Entity* e, Vector2 move) {
   CollisionResult r;
   unsigned bounces = 0;
   for (; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
-    touch(e, r.collidedEntity);
+    touch(e, r.collidedEntity, r.colPoint);
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;

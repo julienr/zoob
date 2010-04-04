@@ -79,7 +79,17 @@ class Game {
       return rockets.begin();
     }
 
-    void touch (Entity* e1, Entity* e2);
+    //Returns an iterator over the explosions location that happened
+    //since last frame
+    const list<Vector2>::const_iterator getExplosions () const {
+      return explosions.begin();
+    }
+
+    double getLastFrameElapsed () const {
+      return elapsedS;
+    }
+
+    void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
     void update();
   private:
@@ -93,8 +103,12 @@ class Game {
     Tank tank;
     vector<Tank*> enemies;
     list<Rocket*> rockets;
+    list<Vector2> explosions;
     Cursor cursor;
     Level* level;
+
+    //elapsed time for last calculated frame
+    double elapsedS;
 
     eMoveState movingState;
     Vector2 tankMoveEnd;

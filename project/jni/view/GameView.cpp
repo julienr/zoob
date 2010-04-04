@@ -22,6 +22,12 @@ GameView::~GameView () {
 }
 
 void GameView::draw () {
+  //Create new explosions
+  for (list<Vector2>::const_iterator i = game.getExplosions(); i.hasNext(); i++) {
+    explosions.append(new Explosion(*i));
+  }
+
+
   levelView.draw();
   tankView.draw();
   for (size_t i=0; i<enemiesView.length(); i++)
@@ -31,6 +37,18 @@ void GameView::draw () {
 
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     rocket.draw(**i);
+  }
+
+  //Manage explosions life
+  for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
+    Explosion* e = *i;
+    e->think(game.getLastFrameElapsed());
+    if (e->getTimeLeft() <= 0)
+      i = explosions.remove(i);
+    else {
+      e->draw();
+      i++;
+    }
   }
 
   if (game.isMovingTank()) {
