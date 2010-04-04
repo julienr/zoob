@@ -9,18 +9,23 @@
 class TextureManager {
 public:
   static TextureManager* getInstance ();
+  static void destroy();
 
   //Returns texture id or TEXTURE_BLANK if an error
   //occured while loading the texture
   GLuint get (const char* filename, int* width=NULL, int* height=NULL);
 private:
   TextureManager();
+  ~TextureManager();
 
   static TextureManager* instance;
 
   struct _TextureRecord {
+    ~_TextureRecord () {
+      free(filename);
+    }
     GLuint glTexID;
-    const char* filename;
+    char* filename;
     int width, height;
     UT_hash_handle hh;
   };

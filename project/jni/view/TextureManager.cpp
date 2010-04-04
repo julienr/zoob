@@ -10,6 +10,20 @@ TextureManager::TextureManager() :
   cache(NULL) {
 }
 
+TextureManager::~TextureManager() {
+  _TextureRecord *rec;
+  while(cache) {
+    rec = cache;
+    HASH_DEL(cache, rec);
+    delete rec;
+  }
+}
+
+void TextureManager::destroy() {
+  delete instance;
+  instance = NULL;
+}
+
 TextureManager* TextureManager::getInstance () {
   if (instance == NULL)
     instance = new TextureManager();

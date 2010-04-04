@@ -52,5 +52,7 @@ int main (int argc, char** argv) {
     nativeRender();
     SDL_GL_SwapBuffers();
   }
+  nativeQuit();
+  SDL_Quit();
 }
 

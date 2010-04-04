@@ -73,6 +73,10 @@ void nativeInit (const char* apkPath) {
   glDisable(GL_CULL_FACE);
 }
 
+void nativeQuit () {
+  TextureManager::destroy();
+}
+
 /** OpenGL ES doesn't necessarily support retrieving current projection/viewport matrix
  * => We do it by hand cause we now we're in 2d, so that's pretty easy
  * To convert x (screen coords) to game coords, simply do x*xScreenToGame

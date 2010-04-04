@@ -2,6 +2,7 @@
 #define APP_H_
 
 void nativeInit (const char* apkPath);
+void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
 void nativePause ();
