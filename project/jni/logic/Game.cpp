@@ -41,11 +41,10 @@ void Game::update () {
     Rocket* r = *i;
     //LOGE("numBounces : %u", r->getNumBounces());
     if (r->getNumBounces() > 3) {
-      /*LOGE("Removing rocket with more than 3 bounces");
-      rockets.remove(i);*/
-      //FIXME:Remove from colManager as well
-      bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
-      i++;
+      LOGE("Removing rocket with more than 3 bounces");
+      colManager.removeEntity(*i);
+      delete (*i);
+      i = rockets.remove(i);
     } else {
       bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
       i++;

@@ -57,6 +57,9 @@ class Grid {
 
     void addEntity (Entity* e);
 
+    //It is ASSUMED that entity position is the one obtained after the last call to moveEntity
+    void removeEntity (Entity* e);
+
     void moveEntity (Entity* e, const Vector2& move);
 
     void clearTouched ();

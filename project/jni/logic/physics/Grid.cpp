@@ -187,6 +187,17 @@ void Grid::addEntity (Entity* e) {
     touchedCells[i]->entities.append(e);
 }
 
+void Grid::removeEntity (Entity* e) {
+  const BoundingVolume* bvol = e->getBVolume();
+  ASSERT(bvol->getType() == TYPE_CIRCLE);
+  unsigned numTouched = 0;
+  touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
+  if (numTouched == 0)
+    LOGE("removeEntity : numTouched = 0");
+  for (unsigned i=0; i<numTouched; i++)
+    touchedCells[i]->entities.remove(e);
+}
+
 #define ADD_CELL_IF(x,y,cond) \
   if ((cond) && inside((x), (y))) { \
     touchedCells[(*count)++] = grid[(x)][(y)]; \

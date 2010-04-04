@@ -15,13 +15,18 @@ class CollisionManager {
     static bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
     static bool MovingCircleAgainstCircle (const BCircle* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
     CollisionManager (int width, int height, float cellSize)
-      : entities(NULL), grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
+      : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 
     void addEntity (Entity* e) {
-      assert(e);
-      EntityNode* n = new EntityNode(e);
-      DL_APPEND(entities, n);
+      ASSERT(e);
+      entities.append(e);
       grid.addEntity(e);
+    }
+
+    void removeEntity (Entity* e) {
+      ASSERT(e);
+      entities.remove(e);
+      grid.removeEntity(e);
     }
 
     void setGridCellSolid (int x, int y, bool solid) {
@@ -29,18 +34,14 @@ class CollisionManager {
     }
 
     void unmarkCollided () {
-      EntityNode* n;
-      DL_FOREACH(entities, n) {
-        n->entity->collided = false;
-      }
+      for (list<Entity*>::iterator i = entities.begin(); i.hasNext(); i++)
+        (*i)->collided = false;
       grid.clearTouched();
     }
 
     void foreachEntity (void (*callback) (Entity*)) const {
-      EntityNode* n;
-      DL_FOREACH(entities, n) {
-        callback(n->entity);
-      }
+      for (list<Entity*>::const_iterator i = entities.begin(); i.hasNext(); i++)
+        callback(*i);
     }
 
     const Grid& getGrid () const {
@@ -61,15 +62,7 @@ class CollisionManager {
 
   private:
     //FIXME: use grid to store entities
-    struct EntityNode {
-      EntityNode (Entity* e)
-        : entity(e),prev(NULL),next(NULL) {}
-      Entity* entity;
-      EntityNode *prev;
-      EntityNode *next;
-    };
-
-    EntityNode* entities;
+    list<Entity*> entities;
 
     Grid grid;
 };
