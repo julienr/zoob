@@ -11,6 +11,10 @@ class Moveable : public Viewable {
       Viewable(), position(0,0), rotation(0) {
     }
 
+    Moveable (const Vector2& pos) :
+      Viewable(), position(pos), rotation(0) {
+    }
+
     virtual ~Moveable () {}
 
     void setRotation(float r) {

@@ -91,7 +91,7 @@ class Grid {
     //returns -1 if outside grid
     int getCellX (const Vector2& point) const {
       const int x = (int)((point.x-origin.x)/cellSize);
-      if (x < 0 || x > (int)width)
+      if (x < 0 || x >= (int)width)
         return -1;
       return x;
     }
@@ -99,7 +99,7 @@ class Grid {
     //returns -1 if outside grid
     int getCellY (const Vector2& point) const {
       const int y = (int)((point.y-origin.y)/cellSize);
-      if (y < 0 || y > (int)height)
+      if (y < 0 || y >= (int)height)
         return -1;
       return y;
     }
@@ -134,6 +134,9 @@ class Grid {
 
     //Adds the cells touched by circle at position to touchedCells, using count as counter
     void touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const;
+    void touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const;
+
+    void addCellIf (int x, int y, bool cond, unsigned* count) const;
 
     //This is a temporary array used to retrieve data from touchedCells.
     //We know that at most, a ray cast through our grid will touch sqrt(width^2+height^2)*2, so

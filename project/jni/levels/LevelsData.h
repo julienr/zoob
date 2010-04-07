@@ -3,6 +3,7 @@
 
 #include "logic/Level.h"
 
+Level* loadLevel2();
 Level* loadLevel1();
 Level* loadColTest();
 Level* loadEmpty();

@@ -179,9 +179,14 @@ bool Grid::trace(const Entity* mover, const Vector2& move, CollisionResult* resu
 
 void Grid::addEntity (Entity* e) {
   const BoundingVolume* bvol = e->getBVolume();
-  ASSERT(bvol->getType() == TYPE_CIRCLE);
   unsigned numTouched = 0;
-  touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
+  if (bvol->getType() == TYPE_CIRCLE)
+    touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
+  else if (bvol->getType() == TYPE_AABBOX)
+    touchCells(static_cast<const AABBox*>(bvol), e->getPosition(), &numTouched);
+  else
+    ASSERT(false);
+
   if (numTouched == 0)
     LOGE("addEntity : numTouched = 0");
   e->touchedCells.clear();
@@ -197,29 +202,62 @@ void Grid::removeEntity (Entity* e) {
   e->touchedCells.clear();
 }
 
-#define ADD_CELL_IF(x,y,cond) \
+/*#define ADD_CELL_IF(x,y,cond) \
   if ((cond) && inside((x), (y))) { \
-    touchedCells[(*count)++] = grid[(x)][(y)]; \
-  }
+    bool already = false; \
+    for (int __i=0; __i<(*count); __i++) { \
+      if (touchedCells[__i]->x == (x) && touchedCells[__i]->y == (y)) { \
+        already = true; \
+        break; \
+      } \
+    } \
+    if (!already) \
+      touchedCells[(*count)++] = grid[(x)][(y)]; \
+  }*/
 
+//Add cell to touchedCells and increment count if cond is true and (x,y) is inside grid
+void Grid::addCellIf (int x, int y, bool cond, unsigned* count) const {
+  if (cond && inside(x,y)) {
+    /*Check if cell is already inside*/
+    for (int i=0; i<(*count); i++)
+      if (touchedCells[i]->x == (x) && touchedCells[i]->y == (y))
+        return;
+    touchedCells[(*count)++] = grid[(x)][(y)];
+  }
+}
+
+//FIXME: should check if a cell is already in our touched list before adding
 void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const {
   ASSERT(circle->getRadius()*2 < cellSize);
   const float r = circle->getRadius();
   const int c[2] = {getCellX(position), getCellY(position)};
   //Calculate our position relative to the cell top-left corner
   const Vector2 tlPos = position - (Vector2(c[0], c[1])*cellSize + origin);
-  //LOGE("tlPos (%f,%f)", tlPos.x, tlPos.y);
   //Now, if distance to one border is < r, we have to add this cell to the touched list
   touchedCells[(*count)++] = grid[c[0]][c[1]];
-  ADD_CELL_IF(c[0]-1, c[1], tlPos.x < r) //left cell
-  ADD_CELL_IF(c[0]+1, c[1], (cellSize-tlPos.x) < r) //right cell
-  ADD_CELL_IF(c[0], c[1]-1, tlPos.y < r) //top cell
-  ADD_CELL_IF(c[0], c[1]+1, (cellSize-tlPos.y) < r) //bottom cell
-  ADD_CELL_IF(c[0]-1, c[1]-1, (tlPos.x < r) && (tlPos.y < r)) //top-left
-  ADD_CELL_IF(c[0]-1, c[1]+1, (tlPos.x < r) && (cellSize-tlPos.y < r)) //bottom-left
-  ADD_CELL_IF(c[0]+1, c[1]-1, (cellSize-tlPos.x < r) && (tlPos.y < r)) //top-right
-  ADD_CELL_IF(c[0]+1, c[1]+1, (cellSize-tlPos.x < r) && (cellSize-tlPos.y < r)) //bottom-right
+  addCellIf(c[0]-1, c[1], tlPos.x < r, count); //left cell
+  addCellIf(c[0]+1, c[1], (cellSize-tlPos.x) < r, count); //right cell
+  addCellIf(c[0], c[1]-1, tlPos.y < r, count); //top cell
+  addCellIf(c[0], c[1]+1, (cellSize-tlPos.y) < r, count); //bottom cell
+  addCellIf(c[0]-1, c[1]-1, (tlPos.x < r) && (tlPos.y < r), count); //top-left
+  addCellIf(c[0]-1, c[1]+1, (tlPos.x < r) && (cellSize-tlPos.y < r), count); //bottom-left
+  addCellIf(c[0]+1, c[1]-1, (cellSize-tlPos.x < r) && (tlPos.y < r), count); //top-right
+  addCellIf(c[0]+1, c[1]+1, (cellSize-tlPos.x < r) && (cellSize-tlPos.y < r), count); //bottom-right
 }
+
+//FIXME: should check if a cell is already in our touched list before adding
+void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const {
+  ASSERT(bbox->getHeight() <= cellSize && bbox->getWidth() <= cellSize);
+  //Just check the 4 box's corners
+  Vector2 c[4];
+  bbox->getCorners(c);
+  for (int i=0; i<4; i++) {
+    GridCell* cell = getCell(c[i]);
+    if (cell)
+      touchedCells[(*count)++] = cell;
+  }
+}
+
 /*
 bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const {
   ASSERT(circle->getRadius()*2 < cellSize);

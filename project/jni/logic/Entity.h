@@ -21,6 +21,10 @@ class Entity: public Moveable {
       Moveable(), collided(false), bvolume(v) {
     }
 
+    Entity(const BoundingVolume* v, const Vector2& pos) :
+      Moveable(pos), collided(false), bvolume(v) {
+    }
+
     virtual ~Entity () {
       delete bvolume;
     }

@@ -51,9 +51,7 @@ GameView* gameView;
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
 
-  //lvl = loadEmpty();
-  lvl = loadLevel1();
-  //lvl = loadColTest();
+  lvl = loadLevel2();
   game = new Game(lvl);
   gameView = new GameView(*game);
 
