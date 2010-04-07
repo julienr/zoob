@@ -136,7 +136,7 @@ class Grid {
     void touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const;
     void touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const;
 
-    void addCellIf (int x, int y, bool cond, unsigned* count) const;
+    void addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const;
 
     //This is a temporary array used to retrieve data from touchedCells.
     //We know that at most, a ray cast through our grid will touch sqrt(width^2+height^2)*2, so

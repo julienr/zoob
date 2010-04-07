@@ -216,10 +216,10 @@ void Grid::removeEntity (Entity* e) {
   }*/
 
 //Add cell to touchedCells and increment count if cond is true and (x,y) is inside grid
-void Grid::addCellIf (int x, int y, bool cond, unsigned* count) const {
+void Grid::addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const {
   if (cond && inside(x,y)) {
     /*Check if cell is already inside*/
-    for (int i=0; i<(*count); i++)
+    for (unsigned i=0; i<(*count); i++)
       if (touchedCells[i]->x == (x) && touchedCells[i]->y == (y))
         return;
     touchedCells[(*count)++] = grid[(x)][(y)];
