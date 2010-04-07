@@ -36,7 +36,10 @@ void GameView::draw () {
   cursorView.draw();
 
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
-    rocket.draw(**i);
+    Rocket* r = *i;
+    GLW::color(r->getOwner()->getColor());
+    rocket.draw(*r);
+    GLW::colorWhite();
   }
 
   //Manage explosions life

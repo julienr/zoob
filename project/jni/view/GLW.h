@@ -1,6 +1,8 @@
 #ifndef GLW_H_
 #define GLW_H_
 
+#include "lib/Color.h"
+
 struct GLW {
     static void translate (float x, float y, float z) {
 #ifdef PLATFORM_SDL
@@ -42,6 +44,20 @@ struct GLW {
     static void enableTextures () {
       glEnable(GL_TEXTURE_2D);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
+    static void color (eColor c) {
+      switch(c) {
+        case WHITE: glColor4f(1,1,1,1); break;
+        case BLACK: glColor4f(0,0,0,1); break;
+        case GREEN: glColor4f(0.4,1,0.24,1); break;
+        case RED: glColor4f(1,0.18,0.18,1); break;
+        case GREY: glColor4f(0.63,0.63,0.63,1); break;
+      }
+    }
+
+    static void colorWhite () {
+      glColor4f(1,1,1,1);
     }
 };
 

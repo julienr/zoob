@@ -2,11 +2,11 @@
 #include "lib/Math.h"
 
 Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition(0));
   for (size_t i=1; i<level->getNumStartPositions(); i++) {
-    Tank* t = new Tank();
+    Tank* t = new Tank(RED);
     t->setPosition(level->getStartPosition(i));
     enemies.add(t);
     colManager.addEntity(t);

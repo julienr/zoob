@@ -3,6 +3,7 @@
 
 #include "logic/Tank.h"
 #include "Sprite.h"
+#include "GLW.h"
 
 class TankView {
   public:
@@ -11,7 +12,9 @@ class TankView {
     }
 
     void draw () {
+      GLW::color(tank.getColor());
       baseSprite.draw(tank, tank.getRotation());
+      GLW::colorWhite();
       //turretSprite.draw(tank);
     }
 
