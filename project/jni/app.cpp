@@ -47,6 +47,8 @@ Level* lvl;
 Game* game;
 GameView* gameView;
 
+Sprite* levelText;
+
 
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
@@ -54,6 +56,8 @@ void nativeInit (const char* apkPath) {
   lvl = loadLevel2();
   game = new Game(lvl);
   gameView = new GameView(*game);
+
+  levelText = new Sprite("assets/sprites/level_text.png");
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
@@ -134,6 +138,9 @@ void nativeRender () {
 
   //artificial translation so we see everything (since sprites are renderer on -0.5,0.5)
   //GLW::translate(0.5f, 0.5f, 0);
+
+  levelText->draw(Vector2(transX/2.0f, 4.0f), Vector2(4.5f,4.5f));
+
   GLW::translate(transX, transY, 0);
 
   game->update();

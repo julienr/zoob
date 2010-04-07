@@ -11,8 +11,8 @@
 #include "lib/Utils.h"
 #include "containers/vector.h"
 
-#define TANK_MOVE_SPEED 1.0f
-#define ROCKET_MOVE_SPEED 0.5f
+#define TANK_MOVE_SPEED 1.5f
+#define ROCKET_MOVE_SPEED 2.0f
 
 enum eMoveState {
   MOVING_NONE=0,
