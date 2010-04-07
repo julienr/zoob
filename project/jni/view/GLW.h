@@ -33,6 +33,16 @@ struct GLW {
       glOrthof(left, right, bottom, top, near, far);
 #endif
     }
+
+    static void disableTextures () {
+      glDisable(GL_TEXTURE_2D);
+      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
+    static void enableTextures () {
+      glEnable(GL_TEXTURE_2D);
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 };
 
 #endif /* GLW_H_ */

@@ -10,7 +10,6 @@ class LevelView {
   public:
     LevelView (const Level* lvl)
       : level(lvl),
-        emptySprite("assets/sprites/earth.png"),
         wallSprite("assets/sprites/crate.png"),
         spawnSprite("assets/sprites/earth.png") {}
 
@@ -26,7 +25,6 @@ class LevelView {
     }
   private:
     const Level* level;
-    const Sprite emptySprite;
     const Sprite wallSprite;
     const Sprite spawnSprite;
 };

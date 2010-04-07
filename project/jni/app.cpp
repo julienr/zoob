@@ -65,7 +65,8 @@ void nativeInit (const char* apkPath) {
   glEnable(GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_TEXTURE_2D);
-  glClearColor(1,1,1,1);
+  //glClearColor(1,1,1,1);
+  glClearColor(0.4f, 0.4f, 0.4f, 1);
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
