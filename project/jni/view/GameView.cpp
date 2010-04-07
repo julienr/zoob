@@ -33,7 +33,7 @@ void GameView::draw () {
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
-  cursorView.draw();
+
 
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     Rocket* r = *i;
@@ -53,6 +53,9 @@ void GameView::draw () {
       i++;
     }
   }
+
+  if (game.isMovingCursor())
+    cursorView.draw();
 
   if (game.isMovingTank()) {
     const Vector2 touchPoint = game.getTankMoveTouchPoint();

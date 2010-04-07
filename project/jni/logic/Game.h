@@ -75,6 +75,10 @@ class Game {
       return movingState == MOVING_TANK;
     }
 
+    bool isMovingCursor () const {
+      return movingState == MOVING_CURSOR;
+    }
+
     const list<Rocket*>::const_iterator getRockets () const {
       return rockets.begin();
     }
