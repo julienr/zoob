@@ -36,6 +36,9 @@ void Game::update () {
   elapsedS = (now-lastTime)/1000.0;
   lastTime = now;
 
+  if (Math::epsilonEq(elapsedS, 0))
+    return;
+
   colManager.unmarkCollided();
 
   //Rockets
@@ -142,12 +145,8 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
     touch(rocket, r.collidedEntity, r.colPoint);
-    //FIXME: should bounce with 45° degree to our velocity
     rocket->addBounce();
-    const Vector2 newPos = rocket->getPosition() + move;
-    float backAmount = (r.colPoint-newPos)*r.normal;
-    Vector2 backoff = 2.0f*backAmount*r.normal;
-    move += backoff;
+    move = -2.0f*(move*r.normal)*r.normal + move;
     rocket->setDir(move);
   }
   colManager.translate(rocket, move);
@@ -162,10 +161,7 @@ void Game::slideMove (Entity* e, Vector2 move) {
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;
-    //LOGE("collision : normal(%f,%f), backoff(%f,%f), backAmount : %f", r.normal.x, r.normal.y, backoff.x, backoff.y, backAmount);
-    //LOGE("move (%f,%f)", move.x, move.y);
     move += backoff*1.1;
-    //LOGE("move after backoff (%f,%f)", move.x, move.y);
   }
   colManager.translate(e, move);
 }

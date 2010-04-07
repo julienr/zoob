@@ -84,14 +84,33 @@ void nativeQuit () {
 float xScreenToGame;
 float yScreenToGame;
 
+//The margin on (x,y) on each side of the game area, for rendering
+float transX;
+float transY;
+
 //0.5 is because sprites are square centered on their position
-#define XSG(x) (x*xScreenToGame-0.5)
-#define YSG(x) (x*xScreenToGame-0.5)
+#define XSG(x) (x*xScreenToGame-(0.5+transX))
+#define YSG(x) (x*xScreenToGame-(0.5+transY))
+
+int screenWidth = 0, screenHeight = 0;
+
+void centerGameOnScreen () {
+  //Center game area on screen
+  const int levelH = game->getLevel()->getHeight();
+  const int levelW = game->getLevel()->getWidth();
+  //screen size in game coords
+  const float gsW = screenWidth*xScreenToGame;
+  const float gsH = screenHeight*yScreenToGame;
+  transX = 0.5f + (gsW-levelW)/2.0f;
+  transY = 0.5f + (gsH-levelH)/2.0f;
+}
 
 void nativeResize (int w, int h) {
   LOGI("nativeResize (%i,%i)", w, h);
   if(h == 0)
     h = 1;
+  screenWidth = w;
+  screenHeight = h;
   glViewport(0, 0, w, h);
   checkGlError("glViewport");
   glMatrixMode(GL_PROJECTION);
@@ -104,6 +123,8 @@ void nativeResize (int w, int h) {
   xScreenToGame = gameAreaW/w;
   yScreenToGame = gameAreaH/h;
 
+  centerGameOnScreen();
+
   checkGlError("glViewport");
   glMatrixMode(GL_MODELVIEW);
 }
@@ -113,7 +134,8 @@ void nativeRender () {
   glLoadIdentity();
 
   //artificial translation so we see everything (since sprites are renderer on -0.5,0.5)
-  GLW::translate(0.5f, 0.5f, 0);
+  //GLW::translate(0.5f, 0.5f, 0);
+  GLW::translate(transX, transY, 0);
 
   game->update();
   gameView->draw();
