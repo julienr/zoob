@@ -75,6 +75,15 @@ void Game::update () {
   if (isMovingTank()) {
     Vector2 dir = getTankMoveDir();
     doTankMove(&tank, dir, elapsedS);
+
+    /*CollisionResult r;
+    if (colManager.trace(&tank, move, &r)) {
+      r.collidedEntity->collided = true;
+      tank.collided  = true;
+      tank.lastColNormal = r.normal;
+      tank.lastColPoint = r.colPoint;
+      //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
+    }*/
   }
 }
 
