@@ -60,9 +60,12 @@ void GameView::draw () {
   if (game.isMovingTank()) {
     const Vector2 touchPoint = game.getTankMoveTouchPoint();
     const Vector2 cursorSize = Vector2(1.0f, 1.0f);
-    const Vector2 cursorCenter = touchPoint + cursorSize/2.0f;
+    /*const Vector2 cursorCenter = touchPoint + cursorSize/2.0f;
     Vector2 dir = cursorCenter-tankView.getCenter();
+    dir.normalize();*/
+    Vector2 dir = game.getTankMoveDir();
     dir.normalize();
+
 
     //FIXME: paint line
 

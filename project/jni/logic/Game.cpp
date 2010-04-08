@@ -58,32 +58,35 @@ void Game::update () {
   }
 
   //Tank movement
-  if (movingState == MOVING_TANK) {
-    Vector2 dir = tankMoveEnd - tank.getPosition();
-    dir.normalize();
+  if (isMovingTank()) {
+    Vector2 dir = getTankMoveDir();
 
-    CollisionResult tmpR;
-    //colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
+    if (dir.length() != 0) {
+      dir.normalize();
 
-    //Calculate base rotation (to face movement direction)
-    //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
-    const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
-    tank.setRotation(angle);
+      CollisionResult tmpR;
+      //colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
 
-    const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
+      //Calculate base rotation (to face movement direction)
+      //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
+      const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
+      tank.setRotation(angle);
 
-    //Collision detection
-    /*CollisionResult r;
+      const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
 
-    if (colManager.trace(&tank, move, &r)) {
-      r.collidedEntity->collided = true;
-      tank.collided  = true;
-      tank.lastColNormal = r.normal;
-      tank.lastColPoint = r.colPoint;
-      //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
-    }*/
-    slideMove(&tank, move);
-    //tank.translate(move);
+      //Collision detection
+      /*CollisionResult r;
+
+      if (colManager.trace(&tank, move, &r)) {
+        r.collidedEntity->collided = true;
+        tank.collided  = true;
+        tank.lastColNormal = r.normal;
+        tank.lastColPoint = r.colPoint;
+        //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
+      }*/
+      slideMove(&tank, move);
+      //tank.translate(move);
+    }
   }
 }
 
@@ -91,7 +94,11 @@ void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
   movingState = what;
   switch(movingState) {
     case MOVING_TANK:
-      tankMoveEnd.set(touchPosition);
+      tankMoveEnd = touchPosition;
+      break;
+    case MOVING_TANK_PAD:
+      padMoveStart = touchPosition;
+      tankMoveEnd = touchPosition;
       break;
     case MOVING_CURSOR:
       cursor.setPosition(touchPosition);
@@ -104,6 +111,7 @@ void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
 void Game::setMoveTouchPoint (const Vector2& pos) {
   switch (movingState) {
     case MOVING_TANK:
+    case MOVING_TANK_PAD:
       tankMoveEnd = pos;
       break;
     case MOVING_CURSOR:

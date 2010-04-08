@@ -17,7 +17,8 @@
 enum eMoveState {
   MOVING_NONE=0,
   MOVING_TANK,
-  MOVING_CURSOR
+  MOVING_CURSOR,
+  MOVING_TANK_PAD, //moving tank using the gamepad
 };
 
 class Game {
@@ -62,9 +63,18 @@ class Game {
     void setMoveTouchPoint (const Vector2& pos);
 
     const Vector2& getTankMoveTouchPoint () const {
-      if (movingState != MOVING_TANK)
-        LOGE("getTankMovePosition called when not moving tank");
+      ASSERT(isMovingTank());
       return tankMoveEnd;
+    }
+
+    Vector2 getTankMoveDir () const {
+      ASSERT(isMovingTank());
+      if (movingState == MOVING_TANK)
+        return tankMoveEnd - tank.getPosition();
+      else if (movingState == MOVING_TANK_PAD)
+        return tankMoveEnd - padMoveStart;
+      else
+        ASSERT(false);
     }
 
     void startMoving (eMoveState what, const Vector2& touchPosition);
@@ -72,7 +82,7 @@ class Game {
     void stopMoving();
 
     bool isMovingTank () const {
-      return movingState == MOVING_TANK;
+      return movingState == MOVING_TANK || movingState == MOVING_TANK_PAD;
     }
 
     bool isMovingCursor () const {
@@ -115,6 +125,9 @@ class Game {
     double elapsedS;
 
     eMoveState movingState;
+    //If the move started on the virtual gamePad, we don't want to use tank.getPosition to calculate
+    //the direction
+    Vector2 padMoveStart;
     Vector2 tankMoveEnd;
 
     uint64_t lastTime;

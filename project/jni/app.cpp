@@ -48,6 +48,9 @@ Game* game;
 GameView* gameView;
 
 Sprite* levelText;
+Sprite* gamePad;
+const Vector2 gamePadPos(13.25f, 4.0f);
+const Vector2 gamePadSize(3.1,3.1);
 
 
 void nativeInit (const char* apkPath) {
@@ -58,6 +61,7 @@ void nativeInit (const char* apkPath) {
   gameView = new GameView(*game);
 
   levelText = new Sprite("assets/sprites/level_text.png");
+  gamePad = new Sprite("assets/sprites/control.png");
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
@@ -140,6 +144,7 @@ void nativeRender () {
   //GLW::translate(0.5f, 0.5f, 0);
 
   levelText->draw(Vector2(transX/2.0f, 4.0f), Vector2(4.5f,4.5f));
+  gamePad->draw(gamePadPos, gamePadSize);
 
   GLW::translate(transX, transY, 0);
 
@@ -153,9 +158,23 @@ void nativePause () {
   LOGE("Pause");
 }
 
+bool inGamePad (float x, float y) {
+  x *= xScreenToGame;
+  y *= yScreenToGame;
+
+  const float hW = gamePadSize.x/2.0f;
+  const float hH = gamePadSize.y/2.0f;
+
+  return ((x >= gamePadPos.x-hW) && (x <= gamePadPos.x + hW)) &&
+          ((y >= gamePadPos.y-hW) && (y <= gamePadPos.y + hH));
+}
+
 void touchEventDown (float x, float y) {
   const Vector2 p(XSG(x), YSG(y));
-  if (gameView->getTankView().touchInside(p))
+
+   if (inGamePad(x,y))
+    game->startMoving(MOVING_TANK_PAD, p);
+  else if (gameView->getTankView().touchInside(p))
     game->startMoving(MOVING_TANK, p);
   else
     game->startMoving(MOVING_CURSOR, p);
