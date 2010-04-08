@@ -38,7 +38,7 @@ class Tank: public Entity {
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
 
-    Rocket* fireRocket (const Vector2& dir);
+    Rocket* fireRocket (Vector2 dir);
   private:
     const eColor color; //This tank's color (highly symbolic, but used for rendering)
     TankAI* ai;

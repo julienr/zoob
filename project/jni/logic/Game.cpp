@@ -102,8 +102,7 @@ void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
     return;
 
   dir.normalize();
-  const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
-  tank.setRotation(angle);
+  tank.setRotationFromDir(dir);
 
   const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
   slideMove(&tank, move);
