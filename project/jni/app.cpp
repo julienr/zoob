@@ -215,7 +215,7 @@ void touchEventUp (float x, float y) {
   if (gameManager->inGame())
     game->stopMoving();
   else
-    gameManager->handleTouchUp();
+    gameManager->handleTouchUp(Vector2(XSG(x), XSG(y)));
 }
 
 void touchEventOther (float x, float y) {

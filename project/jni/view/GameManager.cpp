@@ -17,12 +17,14 @@ void GameManager::handleTouchDown (const Vector2& p) {
       touchedItem = i;
 }
 
-void GameManager::handleTouchUp () {
+void GameManager::handleTouchUp (const Vector2& p) {
   //WARNING: this depends on the order of adding to menuItems in GameManager constructor
-  switch (touchedItem) {
-    case 0: _actionRetry(); break;
-    case 1: _actionNextLvl(); break;
-    default: break;
+  if (touchedItem != -1 && menuItems[(size_t)touchedItem]->inside(p)) {
+    switch (touchedItem) {
+      case 0: _actionRetry(); break;
+      case 1: _actionNextLvl(); break;
+      default: break;
+    }
   }
   touchedItem = -1;
 }

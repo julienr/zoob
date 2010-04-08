@@ -42,7 +42,7 @@ class GameManager {
     void drawMenu ();
 
     void handleTouchDown (const Vector2& p);
-    void handleTouchUp ();
+    void handleTouchUp (const Vector2& p);
 
     void resize (float sW, float sH);
 
