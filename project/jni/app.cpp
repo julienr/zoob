@@ -8,6 +8,7 @@
 #include "view/GameView.h"
 #include "logic/Game.h"
 #include "view/GLW.h"
+#include "view/GameManager.h"
 
 zip* APKArchive;
 
@@ -43,9 +44,23 @@ static void loadAPK (const char* apkPath) {
 }
 
 #include "levels/LevelsData.h"
-Level* lvl;
-Game* game;
-GameView* gameView;
+Level* lvl = NULL;
+Game* game = NULL;
+GameView* gameView = NULL;
+
+//Callback for when a new game starts, to be called ONLY by gameManager
+void startGame (GameManager* manager) {
+  delete lvl;
+  delete game;
+  delete gameView;
+
+  lvl = levelsLoadFns[manager->getCurrentLevel()]();
+  game = new Game(lvl);
+  gameView = new GameView(*game);
+}
+
+
+GameManager* gameManager;
 
 Sprite* levelText;
 Sprite* gamePad;
@@ -56,9 +71,7 @@ const Vector2 gamePadSize(3.1,3.1);
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
 
-  lvl = loadLevel2();
-  game = new Game(lvl);
-  gameView = new GameView(*game);
+  gameManager = new GameManager(&startGame);
 
   levelText = new Sprite("assets/sprites/level_text.png");
   gamePad = new Sprite("assets/sprites/control.png");

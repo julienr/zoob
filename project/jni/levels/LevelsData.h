@@ -3,9 +3,9 @@
 
 #include "logic/Level.h"
 
-Level* loadLevel2();
-Level* loadLevel1();
-Level* loadColTest();
-Level* loadEmpty();
+typedef Level* (*lvl_callback_t) ();
+
+extern const size_t numLevels;
+extern lvl_callback_t levelsLoadFns[];
 
 #endif /* LEVELSDATA_H_ */

@@ -55,3 +55,12 @@ eTileType lvl2[8*8] = {
 Level* loadLevel2() {
   return new Level(8, 8, &lvl2[0]);
 }
+
+//Array fill
+const size_t numLevels = 4;
+lvl_callback_t levelsLoadFns[numLevels] = {
+  &loadColTest,
+  &loadEmpty,
+  &loadLevel1,
+  &loadLevel2
+};

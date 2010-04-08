@@ -234,7 +234,8 @@ void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned*
   //Calculate our position relative to the cell top-left corner
   const Vector2 tlPos = position - (Vector2(c[0], c[1])*cellSize + origin);
   //Now, if distance to one border is < r, we have to add this cell to the touched list
-  touchedCells[(*count)++] = grid[c[0]][c[1]];
+  if (inside(c[0], c[1]))
+    touchedCells[(*count)++] = grid[c[0]][c[1]];
   addCellIf(c[0]-1, c[1], tlPos.x < r, count); //left cell
   addCellIf(c[0]+1, c[1], (cellSize-tlPos.x) < r, count); //right cell
   addCellIf(c[0], c[1]-1, tlPos.y < r, count); //top cell
