@@ -38,8 +38,8 @@ class Game {
       return tank;
     }
 
-    const vector<Tank*>& getEnemies () const {
-      return enemies;
+    const vector<Tank*>* getEnemies () const {
+      return &enemies;
     }
 
     const Cursor& getCursor () const {
@@ -107,6 +107,9 @@ class Game {
 
     void update();
   private:
+    //Move and rotate the tank according to dir and calls slideMove
+    void doTankMove (Tank* t, Vector2 dir, double elapsedS);
+
     //translate the given entity of <move>, sliding against collider
     void slideMove (Entity* e, Vector2 move);
     //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)

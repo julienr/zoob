@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#define ASSERT(x) assert(x)
+#include "def.h"
 
 template <class T>
 class vector {
@@ -19,7 +19,7 @@ class vector {
       free(data);
     }
 
-    void add (const T& elem) {
+    void add (T elem) {
       if (used >= capacity) {
         capacity += capacityIncr;
         data = (T*)realloc(data, sizeof(T)*capacity);
@@ -32,11 +32,16 @@ class vector {
       return used;
     }
 
-    const T& operator [] (size_t i) const {
+    T get (size_t i) const {
+      return (*this)[i];
+    }
+
+    T operator [] (size_t i) const {
       ASSERT(i < used);
       return data[i];
     }
   private:
+    vector (const vector<T>& other):capacityIncr(0) { ASSERT(false); }
     T* data;
     size_t used;
     size_t capacity;

@@ -11,9 +11,9 @@ GameView::GameView (const Game& g)
     arrowEnd("assets/sprites/arrow_end.png"),
     rocket("assets/sprites/rocket.png"),
     enemiesView(5) {
-  const vector<Tank*> enemies = g.getEnemies();
-  for (size_t i=0; i<enemies.length(); i++)
-    enemiesView.add(new TankView(*(enemies[i])));
+  const vector<Tank*>* enemies = g.getEnemies();
+  for (size_t i=0; i<enemies->length(); i++)
+    enemiesView.add(new TankView(*(enemies->get(i))));
 }
 
 GameView::~GameView () {

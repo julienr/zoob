@@ -1,12 +1,13 @@
 #include "Game.h"
 #include "lib/Math.h"
+#include "ai/RandomAI.h"
 
 Game::Game (Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition(0));
   for (size_t i=1; i<level->getNumStartPositions(); i++) {
-    Tank* t = new Tank(RED);
+    Tank* t = new Tank(RED, new RandomAI());
     t->setPosition(level->getStartPosition(i));
     enemies.add(t);
     colManager.addEntity(t);
@@ -57,37 +58,55 @@ void Game::update () {
     }
   }
 
-  //Tank movement
-  if (isMovingTank()) {
-    Vector2 dir = getTankMoveDir();
-
-    if (dir.length() != 0) {
-      dir.normalize();
-
-      CollisionResult tmpR;
-      //colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
-
-      //Calculate base rotation (to face movement direction)
-      //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
-      const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
-      tank.setRotation(angle);
-
-      const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
-
-      //Collision detection
-      /*CollisionResult r;
-
-      if (colManager.trace(&tank, move, &r)) {
-        r.collidedEntity->collided = true;
-        tank.collided  = true;
-        tank.lastColNormal = r.normal;
-        tank.lastColPoint = r.colPoint;
-        //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
-      }*/
-      slideMove(&tank, move);
-      //tank.translate(move);
+  //Enemies
+  for (size_t i=0; i<enemies.length(); i++) {
+    Tank* t = enemies[i];
+    TankAI* ai = t->getAI();
+    if (ai) {
+      doTankMove(t, ai->decideDir(elapsedS), elapsedS);
+      Vector2 rocketDir;
+      if (ai->decideFire(elapsedS, &rocketDir)) {
+        rockets.append(t->fireRocket(rocketDir));
+      }
     }
   }
+
+  //Player Tank movement
+  if (isMovingTank()) {
+    Vector2 dir = getTankMoveDir();
+    doTankMove(&tank, dir, elapsedS);
+    //CollisionResult tmpR;
+    //colManager.getGrid().trace(static_cast<const BCircle*>(tank.getBVolume()), tankMoveEnd-tank.getPosition(), &tmpR);
+
+    //Calculate base rotation (to face movement direction)
+    //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
+
+
+    //Collision detection
+    /*CollisionResult r;
+
+    if (colManager.trace(&tank, move, &r)) {
+      r.collidedEntity->collided = true;
+      tank.collided  = true;
+      tank.lastColNormal = r.normal;
+      tank.lastColPoint = r.colPoint;
+      //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
+    }*/
+
+    //tank.translate(move);
+  }
+}
+
+void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
+  if (dir.length() == 0)
+    return;
+
+  dir.normalize();
+  const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
+  tank.setRotation(angle);
+
+  const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
+  slideMove(&tank, move);
 }
 
 void Game::startMoving (eMoveState what, const Vector2& touchPosition) {

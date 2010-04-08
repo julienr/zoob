@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "utlist.h"
+#include "def.h"
 
 //Double linked list
 //This is a wrapper around utlist.h
@@ -126,6 +127,7 @@ class list {
       return const_iterator(head);
     }
   private:
+    list(const list& other) {ASSERT(false); }
     _Element* head;
 };
 
