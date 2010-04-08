@@ -174,6 +174,7 @@ void nativeRender () {
 }
 
 void nativeMenu () {
+  //FIXME: shouldn't we "pause" the game ?
   delete lvl;
   delete game;
   delete gameView;
