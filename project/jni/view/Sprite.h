@@ -22,7 +22,7 @@ class Sprite {
     //Since this is for touch use, double the area
     bool touchInside (const Viewable& viewable, const Vector2& p) const {
       const Vector2 ext = viewable.getSize()*2;
-      return Utils::inside(viewable.getPosition()-(ext/2), ext.x, ext.y, p);
+      return Utils::insideTL(viewable.getPosition()-(ext/2), ext.x, ext.y, p);
     }
   private:
     GLuint textureID;

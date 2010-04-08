@@ -21,7 +21,7 @@ class LevelView {
 
     bool inside (const Vector2& p) {
       const Vector2 extents(level->getWidth(), level->getHeight());
-      return Utils::inside(Vector2(0,0), extents.x, extents.y, p);
+      return Utils::insideTL(Vector2(0,0), extents.x, extents.y, p);
     }
   private:
     const Level* level;

@@ -43,6 +43,7 @@ static void loadAPK (const char* apkPath) {
   }
 }
 
+void centerGameOnScreen ();
 #include "levels/LevelsData.h"
 Level* lvl = NULL;
 Game* game = NULL;
@@ -57,6 +58,8 @@ void startGame (GameManager* manager) {
   lvl = levelsLoadFns[manager->getCurrentLevel()]();
   game = new Game(lvl);
   gameView = new GameView(*game);
+
+  centerGameOnScreen();
 }
 
 
@@ -143,7 +146,10 @@ void nativeResize (int w, int h) {
   xScreenToGame = gameAreaW/w;
   yScreenToGame = gameAreaH/h;
 
-  centerGameOnScreen();
+  if (gameManager->inGame())
+    centerGameOnScreen();
+
+  gameManager->resize(screenWidth*xScreenToGame, screenHeight*yScreenToGame);
 
   checkGlError("glViewport");
   glMatrixMode(GL_MODELVIEW);
@@ -153,17 +159,18 @@ void nativeRender () {
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  //artificial translation so we see everything (since sprites are renderer on -0.5,0.5)
-  //GLW::translate(0.5f, 0.5f, 0);
+  if (gameManager->inGame()) {
+    levelText->draw(Vector2(transX/2.0f, 4.0f), Vector2(4.5f,4.5f));
+    gamePad->draw(gamePadPos, gamePadSize);
 
-  levelText->draw(Vector2(transX/2.0f, 4.0f), Vector2(4.5f,4.5f));
-  gamePad->draw(gamePadPos, gamePadSize);
+    GLW::translate(transX, transY, 0);
 
-  GLW::translate(transX, transY, 0);
-
-  game->update();
-  gameView->draw();
-  //gameView->debugDraw();
+    game->update();
+    gameView->draw();
+    //gameView->debugDraw();
+  } else {
+    gameManager->drawMenu();
+  }
 }
 
 
@@ -184,8 +191,12 @@ bool inGamePad (float x, float y) {
 
 void touchEventDown (float x, float y) {
   const Vector2 p(XSG(x), YSG(y));
+  if (!gameManager->inGame()) {
+    gameManager->handleTouchDown(p);
+    return;
+  }
 
-   if (inGamePad(x,y))
+  if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);
   else if (gameView->getTankView().touchInside(p))
     game->startMoving(MOVING_TANK, p);
@@ -194,15 +205,20 @@ void touchEventDown (float x, float y) {
 }
 
 void touchEventMove (float x, float y) {
+  if (!gameManager->inGame())
+    return;
   const Vector2 p(XSG(x), YSG(y));
   game->setMoveTouchPoint(p);
 }
 
 void touchEventUp (float x, float y) {
-  game->stopMoving();
+  if (gameManager->inGame())
+    game->stopMoving();
+  else
+    gameManager->handleTouchUp();
 }
 
 void touchEventOther (float x, float y) {
-  game->stopMoving();
+  touchEventUp(x,y);
 }
 

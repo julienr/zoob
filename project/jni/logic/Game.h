@@ -73,8 +73,10 @@ class Game {
         return tankMoveEnd - tank.getPosition();
       else if (movingState == MOVING_TANK_PAD)
         return tankMoveEnd - padMoveStart;
-      else
+      else {
         ASSERT(false);
+        return Vector2(0,0);
+      }
     }
 
     void startMoving (eMoveState what, const Vector2& touchPosition);
