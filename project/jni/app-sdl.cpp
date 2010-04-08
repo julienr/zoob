@@ -46,6 +46,8 @@ int main (int argc, char** argv) {
         case SDL_KEYDOWN:
           if (event.key.keysym.sym == SDLK_ESCAPE)
             done = true;
+          if (event.key.keysym.sym == SDLK_m)
+            nativeMenu();
           break;
       }
     }

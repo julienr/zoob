@@ -15,6 +15,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MotionEvent;
 
 public class Moob extends Activity {
@@ -23,6 +24,8 @@ public class Moob extends Activity {
 	static {
 		System.loadLibrary("moob");
 	}
+	
+	private static native void nativeMenu();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,12 @@ public class Moob extends Activity {
 	protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+		nativeMenu();
+		return false;
 	}
 }
 

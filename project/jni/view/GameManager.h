@@ -23,7 +23,7 @@ class GameManager {
     GameManager (startGameCallback_t cb)
       : newGameCB(cb), state(STATE_MENU), currentLevel(0), menuItems(2), touchedItem(-1) {
       //Immediatly start with the first level
-      //newGameCB(this);
+      newGameCB(this);
       menuItems.add(new MenuItem("assets/sprites/retry.png", "assets/sprites/retry_hover.png"));
       menuItems.add(new MenuItem("assets/sprites/nextlvl.png", "assets/sprites/nextlvl_hover.png"));
     }
@@ -37,6 +37,10 @@ class GameManager {
 
     size_t getCurrentLevel () {
       return currentLevel;
+    }
+
+    void menuMode () {
+      state = STATE_MENU;
     }
 
     void drawMenu ();

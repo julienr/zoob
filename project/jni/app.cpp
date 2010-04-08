@@ -108,8 +108,8 @@ float xScreenToGame;
 float yScreenToGame;
 
 //The margin on (x,y) on each side of the game area, for rendering
-float transX;
-float transY;
+float transX = 0;
+float transY = 0;
 
 //0.5 is because sprites are square centered on their position
 #define XSG(x) (x*xScreenToGame-(0.5+transX))
@@ -173,6 +173,12 @@ void nativeRender () {
   }
 }
 
+void nativeMenu () {
+  delete lvl;
+  delete game;
+  delete gameView;
+  gameManager->menuMode();
+}
 
 void nativePause () {
   LOGE("Pause");
