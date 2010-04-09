@@ -11,8 +11,8 @@ class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(NULL), exploded(false) {}
-    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(ai), exploded(false) {}
+    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(NULL), exploded(false), alive(true) {}
+    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(ai), exploded(false), alive(true) {}
 
     ~Tank () {
       if (ai)
@@ -32,8 +32,16 @@ class Tank: public Entity {
       LOGE("OMG, got an explosion");
     }
 
-    bool hasExploded () {
+    bool hasExploded () const {
       return exploded;
+    }
+
+    void die () {
+      alive = false;
+    }
+
+    bool isAlive () const {
+      return alive;
     }
 
     eColor getColor () const {
@@ -47,7 +55,11 @@ class Tank: public Entity {
   private:
     const eColor color; //This tank's color (highly symbolic, but used for rendering)
     TankAI* ai;
+    /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
+     * The tank should be marked as dead once this is done
+     */
     bool exploded;
+    bool alive;
 };
 
 #endif /* TANK_H_ */

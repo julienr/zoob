@@ -71,14 +71,22 @@ void Game::update () {
   }
 
   //Enemies
-  for (list<Tank*>::iterator i = enemies.begin(); i.hasNext(); i++) {
+  LIST_FOREACH(Tank*, enemies, i) {
     Tank* t = *i;
-    TankAI* ai = t->getAI();
-    if (ai) {
-      doTankMove(t, ai->decideDir(elapsedS), elapsedS);
-      Vector2 rocketDir;
-      if (ai->decideFire(elapsedS, &rocketDir)) {
-        rockets.append(t->fireRocket(rocketDir));
+    if (!t->isAlive())
+      continue;
+
+    if (t->hasExploded()) {
+      colManager.removeEntity(t);
+      t->die();
+    } else {
+      TankAI* ai = t->getAI();
+      if (ai) {
+        doTankMove(t, ai->decideDir(elapsedS), elapsedS);
+        Vector2 rocketDir;
+        if (ai->decideFire(elapsedS, &rocketDir)) {
+          rockets.append(t->fireRocket(rocketDir));
+        }
       }
     }
   }

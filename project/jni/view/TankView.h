@@ -12,6 +12,8 @@ class TankView {
     }
 
     void draw () {
+      if (!tank.isAlive())
+        return;
       GLW::color(tank.getColor());
       baseSprite.draw(tank, tank.getRotation());
       GLW::colorWhite();
