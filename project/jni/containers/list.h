@@ -5,6 +5,8 @@
 #include "utlist.h"
 #include "def.h"
 
+#define LIST_FOREACH(type,listname,itername) for (list<type>::iterator itername = listname.begin(); itername.hasNext(); itername++)
+
 //Double linked list
 //This is a wrapper around utlist.h
 template <class T>

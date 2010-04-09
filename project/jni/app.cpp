@@ -126,9 +126,9 @@ int screenWidth = 0, screenHeight = 0;
 void centerGameOnScreen () {
   //Center game area on screen
   const int levelH = game->getLevel()->getHeight();
-  const int levelW = game->getLevel()->getWidth();
+  //const int levelW = game->getLevel()->getWidth();
   //screen size in game coords
-  const float gsW = screenWidth*xScreenToGame;
+  //const float gsW = screenWidth*xScreenToGame;
   const float gsH = screenHeight*yScreenToGame;
   /*transX = 0.5f + (gsW-levelW)/2.0f;*/
   transX = 1.0f;

@@ -38,7 +38,7 @@ class Game {
       return tank;
     }
 
-    const vector<Tank*>* getEnemies () const {
+    const list<Tank*>* getEnemies () const {
       return &enemies;
     }
 
@@ -122,7 +122,7 @@ class Game {
 
     CollisionManager colManager;
     Tank tank;
-    vector<Tank*> enemies;
+    list<Tank*> enemies;
     list<Rocket*> rockets;
     list<Vector2> explosions;
     Cursor cursor;

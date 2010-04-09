@@ -9,7 +9,7 @@ Tile::Tile(int x, int y, eTileType t): type(t) {
     case B: entity = new WallEntity(1.0f, 0.5f, Vector2(x,y+0.25f)); break;
     //FIXME: have to use 0.24f instead of 0.25f to avoid rendering glitches...
     case R: entity = new WallEntity(0.5f, 1.0f, Vector2(x+0.24f,y)); break;
-    case _1: case_2: entity = NULL; break;
+    case _1: case _2: entity = NULL; break;
   }
 }
 

@@ -3,24 +3,24 @@
 #include "ai/RandomAI.h"
 
 Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
 
   //Spawn enemies
-  for (int x=0; x<level->getWidth(); x++) {
-    for (int y=0; y<level->getHeight(); y++) {
+  for (unsigned x=0; x<level->getWidth(); x++) {
+    for (unsigned y=0; y<level->getHeight(); y++) {
       Tile* tile = level->getTile(x,y);
       if (tile->getType() == _1) {
         Tank* t = new Tank(RED, new RandomAI());
         t->setPosition(Vector2(x,y));
-        enemies.add(t);
+        enemies.append(t);
         colManager.addEntity(t);
       } else if (tile->getType() == _2) {
         Tank* t = new Tank(GREEN, new RandomAI());
         t->setPosition(Vector2(x,y));
-        enemies.add(t);
+        enemies.append(t);
         colManager.addEntity(t);
       }
     }
@@ -30,8 +30,8 @@ Game::Game (Level* level)
 }
 
 Game::~Game () {
-  for (size_t i=0; i<enemies.length(); i++)
-    delete enemies[i];
+  LIST_FOREACH(Tank*, enemies, i)
+    delete *i;
 }
 
 void Game::update () {
@@ -71,8 +71,8 @@ void Game::update () {
   }
 
   //Enemies
-  for (size_t i=0; i<enemies.length(); i++) {
-    Tank* t = enemies[i];
+  for (list<Tank*>::iterator i = enemies.begin(); i.hasNext(); i++) {
+    Tank* t = *i;
     TankAI* ai = t->getAI();
     if (ai) {
       doTankMove(t, ai->decideDir(elapsedS), elapsedS);

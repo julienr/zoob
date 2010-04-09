@@ -11,8 +11,8 @@ class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(NULL) {}
-    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(ai) {}
+    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(NULL), exploded(false) {}
+    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(ai), exploded(false) {}
 
     ~Tank () {
       if (ai)
@@ -28,7 +28,12 @@ class Tank: public Entity {
     }
 
     void explode () {
+      exploded = true;
       LOGE("OMG, got an explosion");
+    }
+
+    bool hasExploded () {
+      return exploded;
     }
 
     eColor getColor () const {
@@ -42,6 +47,7 @@ class Tank: public Entity {
   private:
     const eColor color; //This tank's color (highly symbolic, but used for rendering)
     TankAI* ai;
+    bool exploded;
 };
 
 #endif /* TANK_H_ */
