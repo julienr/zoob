@@ -23,7 +23,7 @@ enum eMoveState {
 
 class Game {
   public:
-    Game (Level* level);
+    Game (Level* level); //gamePadPos is in game space
     ~Game ();
 
     void start () {
@@ -72,7 +72,7 @@ class Game {
       if (movingState == MOVING_TANK)
         return tankMoveEnd - tank.getPosition();
       else if (movingState == MOVING_TANK_PAD)
-        return tankMoveEnd - padMoveStart;
+        return tankMoveEnd - gamePadPos;
       else {
         ASSERT(false);
         return Vector2(0,0);
@@ -80,6 +80,8 @@ class Game {
     }
 
     void startMoving (eMoveState what, const Vector2& touchPosition);
+
+    void setGamePadPos (const Vector2& v) { gamePadPos = v; }
 
     void stopMoving();
 
@@ -132,7 +134,7 @@ class Game {
     eMoveState movingState;
     //If the move started on the virtual gamePad, we don't want to use tank.getPosition to calculate
     //the direction
-    Vector2 padMoveStart;
+    Vector2 gamePadPos;
     Vector2 tankMoveEnd;
 
     uint64_t lastTime;

@@ -101,11 +101,8 @@ void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
 void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
   movingState = what;
   switch(movingState) {
-    case MOVING_TANK:
-      tankMoveEnd = touchPosition;
-      break;
     case MOVING_TANK_PAD:
-      padMoveStart = touchPosition;
+    case MOVING_TANK:
       tankMoveEnd = touchPosition;
       break;
     case MOVING_CURSOR:

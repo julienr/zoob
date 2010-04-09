@@ -19,6 +19,14 @@ int main (int argc, char** argv) {
 
   bool leftBtnClicked = false;
   bool done = false;
+
+  SDL_Cursor* cursor = SDL_GetCursor();
+  int cursorW = cursor->area.w;
+  int cursorH = cursor->area.h;
+  LOGE("Cursor w,h : %i,%i", cursorW, cursorH);
+
+#define MOUSE_EVENT_POS event.button.x+cursorW, event.button.y+cursorH
+
   while (!done) {
     //Event handling
     SDL_Event event;
@@ -26,19 +34,19 @@ int main (int argc, char** argv) {
       switch (event.type) {
         case SDL_MOUSEBUTTONDOWN:
           if (event.button.button == SDL_BUTTON_LEFT) {
-            touchEventDown(event.button.x, event.button.y);
+            touchEventDown(MOUSE_EVENT_POS);
             leftBtnClicked = true;
           }
           break;
         case SDL_MOUSEBUTTONUP:
           if (event.button.button == SDL_BUTTON_LEFT) {
-            touchEventUp(event.button.x, event.button.y);
+            touchEventUp(MOUSE_EVENT_POS);
             leftBtnClicked = false;
           }
           break;
         case SDL_MOUSEMOTION:
           if (leftBtnClicked)
-            touchEventMove(event.motion.x, event.motion.y);
+            touchEventMove(MOUSE_EVENT_POS);
           break;
         case SDL_QUIT:
           done = true;
