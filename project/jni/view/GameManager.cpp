@@ -9,6 +9,7 @@ void GameManager::drawMenu () {
     else
       menuItems[i]->draw();
   }
+  //font->print("1234", Vector2(1,3), 1.5);
 }
 
 

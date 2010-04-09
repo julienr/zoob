@@ -8,6 +8,7 @@
 #include "def.h"
 #include "containers/vector.h"
 #include "menu/MenuItem.h"
+#include "menu/Font.h"
 
 enum eAppState {
   STATE_PLAYING=0,
@@ -26,6 +27,7 @@ class GameManager {
       newGameCB(this);
       menuItems.add(new MenuItem("assets/sprites/retry.png", "assets/sprites/retry_hover.png"));
       menuItems.add(new MenuItem("assets/sprites/nextlvl.png", "assets/sprites/nextlvl_hover.png"));
+      //font = new Font("assets/fonts/modenine.png");
     }
 
     ~GameManager () {
@@ -66,6 +68,8 @@ class GameManager {
     vector<MenuItem*> menuItems;
 
     int touchedItem; //idx of touched item, -1 if nothing has been touched
+
+    //Font* font;
 };
 
 #endif /* GAMEMANAGER_H_ */

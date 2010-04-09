@@ -28,6 +28,7 @@ LOCAL_SRC_FILES := \
     view/GameView.cpp \
     view/Explosion.cpp \
     view/GameManager.cpp \
+    view/menu/Font.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
     logic/physics/Grid.cpp
