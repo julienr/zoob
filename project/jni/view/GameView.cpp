@@ -19,6 +19,8 @@ GameView::GameView (const Game& g)
 GameView::~GameView () {
   for (size_t i=0; i<enemiesView.length(); i++)
     delete enemiesView[i];
+  for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
+    delete *i;
 }
 
 void GameView::draw () {

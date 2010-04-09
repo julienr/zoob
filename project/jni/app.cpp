@@ -98,6 +98,9 @@ void nativeInit (const char* apkPath) {
 
 void nativeQuit () {
   TextureManager::destroy();
+  delete lvl;
+  delete game;
+  delete gameView;
 }
 
 /** OpenGL ES doesn't necessarily support retrieving current projection/viewport matrix
