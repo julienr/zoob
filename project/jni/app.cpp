@@ -113,7 +113,10 @@ float transY = 0;
 
 //0.5 is because sprites are square centered on their position
 #define XSG(x) (x*xScreenToGame-(0.5+transX))
-#define YSG(x) (x*xScreenToGame-(0.5+transY))
+#define YSG(y) (y*yScreenToGame-(0.5+transY))
+
+#define XSG_NOTRANSX(x) (x*xScreenToGame-0.5)
+#define YSG_NOTRANSY(y) (y*yScreenToGame-0.5)
 
 int screenWidth = 0, screenHeight = 0;
 
@@ -176,8 +179,11 @@ void nativeRender () {
 void nativeMenu () {
   //FIXME: shouldn't we "pause" the game ?
   delete lvl;
+  lvl = NULL;
   delete game;
+  game = NULL;
   delete gameView;
+  gameView = NULL;
   gameManager->menuMode();
 }
 
@@ -197,12 +203,12 @@ bool inGamePad (float x, float y) {
 }
 
 void touchEventDown (float x, float y) {
-  const Vector2 p(XSG(x), YSG(y));
   if (!gameManager->inGame()) {
-    gameManager->handleTouchDown(p);
+    gameManager->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
     return;
   }
 
+  const Vector2 p(XSG(x), YSG(y));
   if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);
   else if (gameView->getTankView().touchInside(p))
@@ -222,7 +228,7 @@ void touchEventUp (float x, float y) {
   if (gameManager->inGame())
     game->stopMoving();
   else
-    gameManager->handleTouchUp(Vector2(XSG(x), XSG(y)));
+    gameManager->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
 }
 
 void touchEventOther (float x, float y) {

@@ -29,8 +29,7 @@ class Tile {
   public:
     Tile(int x, int y, eTileType t);
     ~Tile () {
-      if (entity)
-        delete entity;
+      delete entity;
     }
 
     eTileType getType () { return type; }

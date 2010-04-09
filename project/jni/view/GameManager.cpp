@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "lib/Utils.h"
+#include "levels/LevelsData.h"
 
 void GameManager::drawMenu () {
   for (size_t i=0; i<menuItems.length(); i++) {
@@ -36,7 +37,7 @@ void GameManager::_actionRetry () {
 
 void GameManager::_actionNextLvl () {
   state = STATE_PLAYING;
-  currentLevel++;
+  currentLevel = (currentLevel+1)%numLevels;
   newGameCB(this);
 }
 
