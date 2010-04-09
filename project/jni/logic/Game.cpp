@@ -5,14 +5,26 @@
 Game::Game (Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), enemies(5), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
-  tank.setPosition(level->getStartPosition(0));
-  for (size_t i=1; i<level->getNumStartPositions(); i++) {
-    Tank* t = new Tank(RED, new RandomAI());
-    t->setPosition(level->getStartPosition(i));
-    enemies.add(t);
-    colManager.addEntity(t);
-  }
+  tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
+
+  //Spawn enemies
+  for (int x=0; x<level->getWidth(); x++) {
+    for (int y=0; y<level->getHeight(); y++) {
+      Tile* tile = level->getTile(x,y);
+      if (tile->getType() == _1) {
+        Tank* t = new Tank(RED, new RandomAI());
+        t->setPosition(Vector2(x,y));
+        enemies.add(t);
+        colManager.addEntity(t);
+      } else if (tile->getType() == _2) {
+        Tank* t = new Tank(GREEN, new RandomAI());
+        t->setPosition(Vector2(x,y));
+        enemies.add(t);
+        colManager.addEntity(t);
+      }
+    }
+  }
 
   lastTime = Utils::getCurrentTimeMillis();
 }

@@ -14,14 +14,14 @@ Level* loadColTest() {
 
 
 eTileType lvl1[12*8] = {
-    W, T, T, T, W, T, T, T, T, T, T, W,
-    L, S, E, E, L, E, E, L, S, L, S, R,
-    W, B, B, E, L, S, E, L, E, L, E, R,
-    L, E, E, E, L, E, E, E, E, E, E, R,
-    L, E, S, E, E, E, E, E, E, E, E, R,
-    L, E, E, E, E, E, E, L, E, E, E, R,
-    L, E, E, E, E, E, E, L, S, E, E, R,
-    W, B, B, B, B, B, B, B, B, B, B, W,
+    W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+    L,  S,  E,  E,  L,  E,  E,  L, _1,  L, _1,  R,
+    W,  B,  B,  E,  L, _1,  E,  L,  E,  L,  E,  R,
+    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+    L,  E, _1,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+    L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
+    L,  E,  E,  E,  E,  E,  E,  L, _1,  E,  E,  R,
+    W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
 };
 
 Level* loadLevel1() {

@@ -17,13 +17,16 @@ class WallEntity : public Entity {
 /**
  * E: empty tile
  * W: wall (full cell size)
- * S: spawn
+ * S: player spawn
  * T: top (top half of cell)
  * L: left (left half of cell)
  * B: bottom (bottom half of cell)
  * R: right (right half of cell)
+ * Enemies types :
+ * _1 : normal enemy
+ * _2 : shield enemy
  */
-enum eTileType {E, W, S, T, L, B, R};
+enum eTileType {E, W, S, T, L, B, R, _1, _2};
 
 class Tile {
   public:
@@ -45,7 +48,7 @@ class Level {
   public:
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
     //and array subscripting is done our way then
-    Level (unsigned w, unsigned h, eTileType* board) : startPositions(5) {
+    Level (unsigned w, unsigned h, eTileType* board) {
       _initBoard(w,h,board);
     }
 
@@ -65,12 +68,8 @@ class Level {
 
     void addToColManager (CollisionManager& colManager);
 
-    size_t getNumStartPositions () const {
-      return startPositions.length();
-    }
-
-    Vector2 getStartPosition (size_t i) const {
-      return startPositions[i];
+    const Vector2& getStartPosition () const {
+      return playerStartPosition;
     }
 
   private:
@@ -79,7 +78,7 @@ class Level {
     unsigned height;
     //eTileType** board;
     Tile*** board;
-    vector<Vector2> startPositions;
+    Vector2 playerStartPosition;
 };
 
 #endif /* LEVEL_H_ */
