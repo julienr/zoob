@@ -67,8 +67,8 @@ GameManager* gameManager;
 
 Sprite* levelText;
 Sprite* gamePad;
-const Vector2 gamePadPos(13.25f, 4.0f);
-const Vector2 gamePadSize(3.1,3.1);
+const Vector2 gamePadPos(13.7f, 6.0f);
+const Vector2 gamePadSize(2.3,2.3);
 
 
 void nativeInit (const char* apkPath) {
@@ -115,8 +115,8 @@ float transX = 0;
 float transY = 0;
 
 //0.5 is because sprites are square centered on their position
-#define XSG(x) (x*xScreenToGame-(0.5+transX))
-#define YSG(y) (y*yScreenToGame-(0.5+transY))
+#define XSG(x) (x*xScreenToGame-(transX))
+#define YSG(y) (y*yScreenToGame-(transY))
 
 #define XSG_NOTRANSX(x) (x*xScreenToGame-0.5)
 #define YSG_NOTRANSY(y) (y*yScreenToGame-0.5)
@@ -130,7 +130,8 @@ void centerGameOnScreen () {
   //screen size in game coords
   const float gsW = screenWidth*xScreenToGame;
   const float gsH = screenHeight*yScreenToGame;
-  transX = 0.5f + (gsW-levelW)/2.0f;
+  /*transX = 0.5f + (gsW-levelW)/2.0f;*/
+  transX = 1.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
 
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
@@ -168,7 +169,7 @@ void nativeRender () {
   glLoadIdentity();
 
   if (gameManager->inGame()) {
-    levelText->draw(Vector2(transX/2.0f, 4.0f), Vector2(4.5f,4.5f));
+    levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
     gamePad->draw(gamePadPos, gamePadSize);
 
     GLW::translate(transX, transY, 0);
