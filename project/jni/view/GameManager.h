@@ -9,6 +9,7 @@
 #include "containers/vector.h"
 #include "menu/MenuItem.h"
 #include "menu/Font.h"
+#include "levels/LevelsData.h"
 
 enum eAppState {
   STATE_PLAYING=0,
@@ -31,6 +32,8 @@ class GameManager {
         logo("assets/sprites/logo.png") {
       //Immediatly start with the first level
       newGameCB(this);
+
+      //FIXME: delegate all this stuff to a "menudisplay" class and only handle the states here
       menuItems.add(new MenuItem("assets/sprites/menuitems/start.png",
                                  "assets/sprites/menuitems/start_h.png",
                                  MENU_ITEM_START));
@@ -64,6 +67,16 @@ class GameManager {
       return currentLevel;
     }
 
+    inline
+    bool isAtLastLevel () {
+      return currentLevel == numLevels-1;
+    }
+
+    inline
+    bool isAtFirstLevel () {
+      return currentLevel == 0;
+    }
+
     void menuMode () {
       state = STATE_MENU;
     }
@@ -79,8 +92,10 @@ class GameManager {
 
 
   private:
-    void _actionRetry ();
-    void _actionNextLvl ();
+    void _actionStart ();
+    void _actionOptions ();
+    void _actionNext ();
+    void _actionPrev ();
 
     const startGameCallback_t newGameCB;
     eAppState state;

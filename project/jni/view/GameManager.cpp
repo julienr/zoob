@@ -1,11 +1,14 @@
 #include "GameManager.h"
 #include "lib/Utils.h"
-#include "levels/LevelsData.h"
 
 void GameManager::drawMenu () {
   logo.draw(logoPos, logoSize);
   for (size_t i=0; i<menuItems.length(); i++) {
-    if (touchedItem != -1 && touchedItem == menuItems[i]->getID())
+    short id = menuItems[i]->getID();
+    if ((id == MENU_ITEM_NEXT && isAtLastLevel()) ||
+        (id == MENU_ITEM_PREV && isAtFirstLevel()))
+      continue;
+    if (touchedItem != -1 && touchedItem == id)
       menuItems[i]->drawHover();
     else
       menuItems[i]->draw();
@@ -26,28 +29,45 @@ void GameManager::handleTouchUp (const Vector2& p) {
   //WARNING: this depends on the order of adding to menuItems in GameManager constructor
   if (touchedItem != -1 && menuItems[(size_t)touchedItem]->inside(p)) {
     switch (touchedItem) {
-      case 0: _actionRetry(); break;
-      case 1: _actionNextLvl(); break;
-      default: break;
+      case MENU_ITEM_START: _actionStart(); break;
+      case MENU_ITEM_OPTIONS: _actionOptions(); break;
+      case MENU_ITEM_NEXT: _actionNext(); break;
+      case MENU_ITEM_PREV: _actionPrev(); break;
+      default:
+        LOGE("unhandled menu id : %i", touchedItem);
+        ASSERT(false);
+        break;
     }
   }
   touchedItem = -1;
 }
 
-void GameManager::_actionRetry () {
-  //state = STATE_PLAYING;
-  //newGameCB(this);
+void GameManager::_actionStart () {
+  state = STATE_PLAYING;
+  newGameCB(this);
 }
 
-void GameManager::_actionNextLvl () {
-  //state = STATE_PLAYING;
-  //currentLevel = (currentLevel+1)%numLevels;
-  //newGameCB(this);
+void GameManager::_actionOptions () {
+  LOGE("Options");
+}
+
+void GameManager::_actionNext () {
+  if (isAtLastLevel())
+    return;
+  currentLevel++;
+}
+
+void GameManager::_actionPrev () {
+  if (isAtFirstLevel())
+    return;
+  currentLevel--;
 }
 
 void GameManager::resize (float sW, float sH) {
   screenWidth = sW;
   screenHeight = sH;
+
+  //FIXME: all the sizes/positions should be adapted depending on sW/sH
 
   logoPos = Vector2(3,4);
   logoSize = Vector2(8,8);
