@@ -67,8 +67,8 @@ GameManager* gameManager;
 
 Sprite* levelText;
 Sprite* gamePad;
-const Vector2 gamePadPos(13.7f, 6.0f);
-const Vector2 gamePadSize(2.3,2.3);
+const Vector2 gamePadPos(13.8f, 5.0f);
+const Vector2 gamePadSize(2.5,2.5);
 
 
 void nativeInit (const char* apkPath) {
@@ -201,7 +201,7 @@ void nativeRender () {
   glLoadIdentity();
 
   if (gameManager->inGame()) {
-    levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
+    //levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
     gamePad->draw(gamePadPos, gamePadSize);
 
     GLW::translate(transX, transY, 0);

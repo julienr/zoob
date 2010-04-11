@@ -2,6 +2,7 @@
 #include "view/GLW.h"
 #include "view/Square.h"
 
+//draw bounding box around objects
 void drawBB (const Vector2& pos, const Vector2& size) {
   glColor4f(1,0,0,0.7f);
   glPushMatrix();
@@ -16,11 +17,11 @@ void drawBB (const Vector2& pos, const Vector2& size) {
 
 void MenuItem::draw () const {
   normalSprite.draw(pos, size);
-  drawBB(bbPos, bbSize);
+  //drawBB(bbPos, bbSize);
 }
 
 void MenuItem::drawHover () const {
   hoverSprite.draw(pos, size);
-  drawBB(bbPos, bbSize);
+  //drawBB(bbPos, bbSize);
 }
 
