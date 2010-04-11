@@ -150,8 +150,8 @@ void forceRatio (float sW, float sH) {
   const float targetRatio = 1.5f;
   float ratio = sW/sH;
   //The subarea in which we'll display our objects
-  float areaHeight;
-  float areaWidth;
+  float areaHeight = sH;
+  float areaWidth = sW;
   if (!Math::epsilonEq(ratio, targetRatio)) {
    if (sH > sW/1.5) {
      areaHeight = sW/1.5;
@@ -162,8 +162,8 @@ void forceRatio (float sW, float sH) {
    }
   }
   ratio = areaWidth/areaHeight;
+  LOGE("ratio=%f\tsW=%f, sH=%f, areaWidth=%f, areaHeight=%f", ratio, sW, sH, areaWidth, areaHeight);
   ASSERT(Math::epsilonEq(ratio, targetRatio));
-  LOGE("sW=%f, sH=%f, areaWidth=%f, areaHeight=%f", sW, sH, areaWidth, areaHeight);
 
   //Force the viewport to the top-left of the window
   glViewport(0, sH-areaHeight, areaWidth, areaHeight);
