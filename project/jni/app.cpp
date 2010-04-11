@@ -190,7 +190,7 @@ void nativeMenu () {
   game = NULL;
   delete gameView;
   gameView = NULL;
-  gameManager->menuMode();
+  gameManager->setState(STATE_MAINMENU);
 }
 
 void nativePause () {
