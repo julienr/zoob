@@ -115,13 +115,14 @@ float transX = 0;
 float transY = 0;
 
 //0.5 is because sprites are square centered on their position
-#define XSG(x) (x*xScreenToGame-(transX))
-#define YSG(y) (y*yScreenToGame-(transY))
+#define XSG(x) (x*xScreenToGame-(transX+0.5))
+#define YSG(y) (y*yScreenToGame-(transY+0.5))
 
 #define XSG_NOTRANSX(x) (x*xScreenToGame-0.5)
 #define YSG_NOTRANSY(y) (y*yScreenToGame-0.5)
 
-int screenWidth = 0, screenHeight = 0;
+int windowWidth = 0, windowHeight = 0;
+int viewportWidth = 0, viewportHeight = 0;
 
 void centerGameOnScreen () {
   //Center game area on screen
@@ -129,7 +130,7 @@ void centerGameOnScreen () {
   //const int levelW = game->getLevel()->getWidth();
   //screen size in game coords
   //const float gsW = screenWidth*xScreenToGame;
-  const float gsH = screenHeight*yScreenToGame;
+  const float gsH = viewportHeight*yScreenToGame;
   /*transX = 0.5f + (gsW-levelW)/2.0f;*/
   transX = 1.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
@@ -137,30 +138,61 @@ void centerGameOnScreen () {
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
 }
 
+void forceRatio (float sW, float sH) {
+/**
+  * We base all our calculations on a 480/320 = 1.5 aspect ratio (that's the most
+  * common resolution for android and iphone)
+  * If we have a screen that doesn't have this aspect ratio, we use the biggest square
+  * that has this aspect ratio that we can display in this screen and we display the menu
+  * in this square.
+  * This will of course waste some screen space, but at least the menu will look good
+  */
+  const float targetRatio = 1.5f;
+  float ratio = sW/sH;
+  //The subarea in which we'll display our objects
+  float areaHeight;
+  float areaWidth;
+  if (!Math::epsilonEq(ratio, targetRatio)) {
+   if (sH > sW/1.5) {
+     areaHeight = sW/1.5;
+     areaWidth = sW;
+   } else {
+     areaWidth = sH*1.5;
+     areaHeight = sH;
+   }
+  }
+  ratio = areaWidth/areaHeight;
+  ASSERT(Math::epsilonEq(ratio, targetRatio));
+  LOGE("sW=%f, sH=%f, areaWidth=%f, areaHeight=%f", sW, sH, areaWidth, areaHeight);
+
+  //Force the viewport to the top-left of the window
+  glViewport(0, sH-areaHeight, areaWidth, areaHeight);
+  checkGlError("glViewport");
+  viewportWidth = areaWidth;
+  viewportHeight = areaHeight;
+}
+
 void nativeResize (int w, int h) {
   LOGI("nativeResize (%i,%i)", w, h);
   if(h == 0)
     h = 1;
-  screenWidth = w;
-  screenHeight = h;
-  glViewport(0, 0, w, h);
-  checkGlError("glViewport");
+  windowWidth = w;
+  windowHeight = h;
+  forceRatio(w, h);
+
   glMatrixMode(GL_PROJECTION);
-  const float ratio=w/(float)h;
   glLoadIdentity();
+  //We work with a forced 1.5 aspect ratio => [15,10] game area
   const float gameAreaW = 15;
-  const float gameAreaH = 15/ratio;
+  const float gameAreaH = 10;
   GLW::ortho(0, gameAreaW, gameAreaH, 0, -1, 1);
 
-  xScreenToGame = gameAreaW/w;
-  yScreenToGame = gameAreaH/h;
+  xScreenToGame = gameAreaW/viewportWidth;
+  yScreenToGame = gameAreaH/viewportHeight;
 
   if (gameManager->inGame())
     centerGameOnScreen();
 
-  gameManager->resize(screenWidth*xScreenToGame, screenHeight*yScreenToGame);
-
-  checkGlError("glViewport");
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -200,6 +232,8 @@ void nativePause () {
 bool inGamePad (float x, float y) {
   x *= xScreenToGame;
   y *= yScreenToGame;
+  x -= 0.5;
+  y -= 0.5;
 
   const float hW = gamePadSize.x/2.0f;
   const float hH = gamePadSize.y/2.0f;
@@ -210,11 +244,13 @@ bool inGamePad (float x, float y) {
 
 void touchEventDown (float x, float y) {
   if (!gameManager->inGame()) {
+    LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     gameManager->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
     return;
   }
 
   const Vector2 p(XSG(x), YSG(y));
+  LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
   if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);
   else if (gameView->getTankView().touchInside(p))

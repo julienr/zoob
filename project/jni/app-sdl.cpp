@@ -2,8 +2,8 @@
 #include "def.h"
 #include "app.h"
 
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 279
+#define SCREEN_WIDTH 200//480
+#define SCREEN_HEIGHT 800//279
 
 int main (int argc, char** argv) {
   if (argc < 2) {

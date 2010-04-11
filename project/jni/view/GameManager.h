@@ -72,8 +72,6 @@ class GameManager {
     void handleTouchDown (const Vector2& p);
     void handleTouchUp (const Vector2& p);
 
-    void resize (float sW, float sH);
-
     inline bool inGame () { return state == STATE_PLAYING; }
 
 
@@ -81,7 +79,6 @@ class GameManager {
     const startGameCallback_t newGameCB;
     eAppState state;
     size_t currentLevel;
-    float screenWidth, screenHeight;
 
     MainMenu mainMenu;
 };

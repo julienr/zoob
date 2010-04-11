@@ -20,8 +20,6 @@ class Menu {
     virtual ~Menu ();
 
     virtual void draw () = 0;
-    //ALL the menuItems size/pos should be allocated in this method
-    virtual void resize (float sW, float sH) = 0;
 
     void handleTouchDown (const Vector2& p);
     void handleTouchUp (const Vector2& p);

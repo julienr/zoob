@@ -26,6 +26,8 @@ MainMenu::MainMenu (GameManager* gm)
    numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
    numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
    numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
+
+   _initItems();
 }
 
 MainMenu::~MainMenu () {
@@ -79,9 +81,7 @@ void MainMenu::_actionPrev () {
   gameManager->prevLevel();
 }
 
-void MainMenu::resize (float sW, float sH) {
-  //FIXME: all the sizes/positions should be adapted depending on sW/sH
-
+void MainMenu::_initItems () {
   logoPos = Vector2(3,4);
   logoSize = Vector2(8,8);
 

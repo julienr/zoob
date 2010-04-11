@@ -8,10 +8,10 @@ class MainMenu : public Menu {
     MainMenu (GameManager* gm);
     ~MainMenu ();
     void draw ();
-    void resize (float sW, float sH);
   protected:
     void actionPerformed (short touchedItem);
   private:
+    void _initItems ();
     void _actionStart ();
     void _actionOptions ();
     void _actionNext ();
