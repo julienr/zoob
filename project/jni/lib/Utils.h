@@ -1,6 +1,7 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include "def.h"
 #include "Vector2.h"
 #include "sys/time.h"
 
@@ -15,7 +16,7 @@ struct Utils {
   //Determine if the point is inside the box determined by its center and size (width, height)
   static bool insideC (const Vector2& boxPos, const Vector2& size, const Vector2& p) {
     const float hW = size.x/2.0f;
-    const float hH = size.x/2.0f;
+    const float hH = size.y/2.0f;
     return (p.x > boxPos.x-hW && p.x < boxPos.x+hW) &&
             (p.y > boxPos.y-hH && p.y < boxPos.y+hH);
   }

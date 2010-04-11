@@ -7,17 +7,18 @@
 
 class MenuItem {
   public:
-    MenuItem(const char* tex, const char* hoverTex) :
+    MenuItem(const char* tex, const char* hoverTex, short id) :
+      id(id),
       normalSprite(tex),
       hoverSprite(hoverTex) {}
 
-    void draw () const {
-      normalSprite.draw(pos, size);
+    short getID () const {
+      return id;
     }
 
-    void drawHover () const {
-      hoverSprite.draw(pos, size);
-    }
+    void draw () const;
+
+    void drawHover () const;
 
     void setPosition (const Vector2& pos) {
       this->pos = pos;
@@ -27,13 +28,22 @@ class MenuItem {
       this->size = size;
     }
 
+    //bounding box
+    void setBB (const Vector2& pos, const Vector2& size) {
+      bbPos = pos;
+      bbSize = size;
+    }
+
     bool inside (const Vector2& p) const {
-      return Utils::insideC(pos, size, p);
+      return Utils::insideC(bbPos, bbSize, p);
     }
 
   private:
+    short id;
     Vector2 pos;
     Vector2 size;
+    Vector2 bbPos;
+    Vector2 bbSize;
     Sprite normalSprite;
     Sprite hoverSprite;
 };

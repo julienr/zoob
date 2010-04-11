@@ -19,20 +19,43 @@ class GameManager;
 //Type for a function that will be called when a new game has to be started
 typedef void (*startGameCallback_t) (GameManager* menu);
 
+#define MENU_ITEM_START 0
+#define MENU_ITEM_OPTIONS 1
+#define MENU_ITEM_NEXT 2
+#define MENU_ITEM_PREV 3
+
 class GameManager {
   public:
     GameManager (startGameCallback_t cb)
-      : newGameCB(cb), state(STATE_MENU), currentLevel(0), menuItems(2), touchedItem(-1) {
+      : newGameCB(cb), state(STATE_MENU), currentLevel(0), menuItems(4), touchedItem(-1),
+        logo("assets/sprites/logo.png") {
       //Immediatly start with the first level
       newGameCB(this);
-      menuItems.add(new MenuItem("assets/sprites/retry.png", "assets/sprites/retry_hover.png"));
-      menuItems.add(new MenuItem("assets/sprites/nextlvl.png", "assets/sprites/nextlvl_hover.png"));
+      menuItems.add(new MenuItem("assets/sprites/menuitems/start.png",
+                                 "assets/sprites/menuitems/start_h.png",
+                                 MENU_ITEM_START));
+      menuItems.add(new MenuItem("assets/sprites/menuitems/options.png",
+                                  "assets/sprites/menuitems/options_h.png",
+                                  MENU_ITEM_OPTIONS));
+      menuItems.add(new MenuItem("assets/sprites/menuitems/next.png",
+                                  "assets/sprites/menuitems/next_h.png",
+                                  MENU_ITEM_NEXT));
+      menuItems.add(new MenuItem("assets/sprites/menuitems/prev.png",
+                                  "assets/sprites/menuitems/prev_h.png",
+                                  MENU_ITEM_PREV));
+
+      numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
+      numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
+      numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
+      numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
       //font = new Font("assets/fonts/modenine.png");
     }
 
     ~GameManager () {
       for (size_t i=0; i<menuItems.length(); i++)
         delete menuItems[i];
+      for (int i=0; i<3; i++)
+        delete numbers[i];
     }
 
     eAppState getState () { return state; }
@@ -62,12 +85,14 @@ class GameManager {
     const startGameCallback_t newGameCB;
     eAppState state;
     size_t currentLevel;
-
     float screenWidth, screenHeight;
 
     vector<MenuItem*> menuItems;
-
-    int touchedItem; //idx of touched item, -1 if nothing has been touched
+    short touchedItem; //id of touched item, -1 if nothing has been touched
+    Sprite* numbers[4];
+    Sprite logo;
+    Vector2 logoPos, logoSize;
+    Vector2 numberPos, numberSize;
 
     //Font* font;
 };
