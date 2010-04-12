@@ -96,6 +96,11 @@ class MoobGLSurface extends GLSurfaceView {
 				touchEventOther(x,y);
 				break;
 		}
+		//This is an advice from "Writing real time games for android" Google I/O presentation
+		//This avoid event flood when the screen is touched
+		try {
+	    Thread.sleep(16);
+    } catch (InterruptedException e) {}
 		return true;
 	}
 }
