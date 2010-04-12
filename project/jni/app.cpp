@@ -244,13 +244,13 @@ bool inGamePad (float x, float y) {
 
 void touchEventDown (float x, float y) {
   if (!gameManager->inGame()) {
-    LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+    //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     gameManager->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
     return;
   }
 
   const Vector2 p(XSG(x), YSG(y));
-  LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
+  //LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
   if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);
   else if (gameView->getTankView().touchInside(p))

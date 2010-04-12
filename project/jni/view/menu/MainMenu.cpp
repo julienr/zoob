@@ -104,12 +104,12 @@ void MainMenu::_initItems () {
       case MENU_ITEM_NEXT:
         mi->setPosition(Vector2(11,2));
         mi->setSize(Vector2(2,2));
-        mi->setBB(Vector2(11,2), Vector2(2,2));
+        mi->setBB(Vector2(11,2), Vector2(2.5,2.5));
         break;
       case MENU_ITEM_PREV:
         mi->setPosition(Vector2(7, 2));
         mi->setSize(Vector2(2,2));
-        mi->setBB(Vector2(7,2), Vector2(2,2));
+        mi->setBB(Vector2(7,2), Vector2(2.5,2.5));
         break;
       default:
         LOGE("unhandled menu id : %i", mi->getID());

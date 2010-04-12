@@ -1,12 +1,15 @@
-#ifndef RANDOMAI_H_
-#define RANDOMAI_H_
+#ifndef RANDOMSHOOT_H_
+#define RANDOMSHOOT_H_
+
+#include "ShootPolicy.h"
 
 #define FIRE_INTERVAL 1.0f
 #define FIRE_ROTATION_SPEED 0.5f
 
-class RandomAI : public TankAI {
+class RandomShoot : public ShootPolicy {
   public:
-    RandomAI () : TankAI(), timeSinceFire(0), angle(0) {}
+    RandomShoot () : timeSinceFire(0), angle(0) {}
+
     bool decideFire (double elapsedS, Vector2* outDir) {
       timeSinceFire += elapsedS;
       angle += elapsedS*FIRE_ROTATION_SPEED;
@@ -17,14 +20,9 @@ class RandomAI : public TankAI {
       }
       return false;
     }
-
-    Vector2 decideDir (double elapsedS) {
-      return Vector2(0,0);
-    }
-
   private:
     double timeSinceFire;
     float angle;
 };
 
-#endif /* RANDOMAI_H_ */
+#endif /* RANDOMSHOOT_H_ */
