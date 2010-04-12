@@ -5,6 +5,7 @@
 
 class StillPolicy : public MovementPolicy {
   public:
+
     Vector2 decideDir (double elapsedS) {
       return Vector2(0,0);
     }

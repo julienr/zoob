@@ -1,14 +1,14 @@
-#ifndef RANDOMSHOOT_H_
-#define RANDOMSHOOT_H_
+#ifndef RANDOMPOLICY_H_
+#define RANDOMPOLICY_H_
 
 #include "ShootPolicy.h"
 
 #define FIRE_INTERVAL 1.0f
 #define FIRE_ROTATION_SPEED 0.5f
 
-class RandomShoot : public ShootPolicy {
+class RandomPolicy : public ShootPolicy {
   public:
-    RandomShoot () : timeSinceFire(0), angle(0) {}
+    RandomPolicy () : timeSinceFire(0), angle(0) {}
 
     bool decideFire (double elapsedS, Vector2* outDir) {
       timeSinceFire += elapsedS;
@@ -20,9 +20,11 @@ class RandomShoot : public ShootPolicy {
       }
       return false;
     }
+
+    Vector2 aim (double elapsedS, Game* game, Tank* tank);
   private:
     double timeSinceFire;
     float angle;
 };
 
-#endif /* RANDOMSHOOT_H_ */
+#endif /* RANDOMPOLICY_H_ */
