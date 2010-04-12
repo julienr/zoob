@@ -17,12 +17,6 @@ static void printGLString(const char *name, GLenum s) {
     LOGI("GL %s = %s\n", name, v);
 }
 
-static void checkGlError(const char* op) {
-    for (GLint error = glGetError(); error; error = glGetError()) {
-        LOGE("after %s() glError (0x%x)\n", op, error);
-    }
-}
-
 static void loadAPK (const char* apkPath) {
   LOGI("Loading APK %s", apkPath);
   APKArchive = zip_open(apkPath, 0, NULL);
@@ -49,8 +43,29 @@ Level* lvl = NULL;
 Game* game = NULL;
 GameView* gameView = NULL;
 
-//Callback for when a new game starts, to be called ONLY by gameManager
+
+//Since startGame/nativeMenu cannot call openGL, this is used to defer state change
+//If this variable is not set to -1, then a state transition to (eAppState)stateTransition
+//must be made before next rendering
+int stateTransition = -1;
+
 void startGame (GameManager* manager) {
+  stateTransition = STATE_PLAYING;
+}
+
+void nativeMenu () {
+  stateTransition = STATE_MAINMENU;
+}
+
+
+GameManager* gameManager;
+
+Sprite* levelText;
+Sprite* gamePad;
+const Vector2 gamePadPos(13.8f, 5.0f);
+const Vector2 gamePadSize(2.5,2.5);
+
+void toPlayingState (GameManager* manager) {
   delete lvl;
   delete game;
   delete gameView;
@@ -62,13 +77,16 @@ void startGame (GameManager* manager) {
   centerGameOnScreen();
 }
 
-
-GameManager* gameManager;
-
-Sprite* levelText;
-Sprite* gamePad;
-const Vector2 gamePadPos(13.8f, 5.0f);
-const Vector2 gamePadSize(2.5,2.5);
+void toMenuState () {
+  //FIXME: shouldn't we "pause" the game ?
+  delete lvl;
+  lvl = NULL;
+  delete game;
+  game = NULL;
+  delete gameView;
+  gameView = NULL;
+  gameManager->setState(STATE_MAINMENU);
+}
 
 
 void nativeInit (const char* apkPath) {
@@ -167,7 +185,7 @@ void forceRatio (float sW, float sH) {
 
   //Force the viewport to the top-left of the window
   glViewport(0, sH-areaHeight, areaWidth, areaHeight);
-  checkGlError("glViewport");
+  GLW::checkError("glViewport");
   viewportWidth = areaWidth;
   viewportHeight = areaHeight;
 }
@@ -197,6 +215,14 @@ void nativeResize (int w, int h) {
 }
 
 void nativeRender () {
+  if (stateTransition != -1) {
+    if (stateTransition == STATE_PLAYING)
+      toPlayingState(gameManager);
+    else if (stateTransition == STATE_MAINMENU)
+      toMenuState();
+    stateTransition = -1;
+  }
+
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
@@ -214,21 +240,6 @@ void nativeRender () {
   }
 }
 
-void nativeMenu () {
-  //FIXME: shouldn't we "pause" the game ?
-  delete lvl;
-  lvl = NULL;
-  delete game;
-  game = NULL;
-  delete gameView;
-  gameView = NULL;
-  gameManager->setState(STATE_MAINMENU);
-}
-
-void nativePause () {
-  LOGE("Pause");
-}
-
 bool inGamePad (float x, float y) {
   x *= xScreenToGame;
   y *= yScreenToGame;
@@ -241,6 +252,13 @@ bool inGamePad (float x, float y) {
   return ((x >= gamePadPos.x-hW) && (x <= gamePadPos.x + hW)) &&
           ((y >= gamePadPos.y-hW) && (y <= gamePadPos.y + hH));
 }
+
+
+/**
+ * See important comment in Moob.java regarding native event-handling methods.
+ * Basically, they should lead to any OpenGL call, because they'll be run in a separate
+ * thread than the rendering thread.
+ */
 
 void touchEventDown (float x, float y) {
   if (!gameManager->inGame()) {

@@ -34,7 +34,9 @@ LOCAL_SRC_FILES := \
     view/menu/MainMenu.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
-    logic/physics/Grid.cpp
+    logic/physics/Grid.cpp \
+    ai/shoot/AimPolicy.cpp \
+    ai/shoot/RandomPolicy.cpp
 
 LIBPNG_PATH := /home/silver/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/silver/programs/android-ndk-r3/out/apps/libzip/armeabi

@@ -19,13 +19,11 @@ import android.view.Menu;
 import android.view.MotionEvent;
 
 public class Moob extends Activity {
-	private GLSurfaceView mGLView;
+	private MoobGLSurface mGLView;
 
 	static {
 		System.loadLibrary("moob");
 	}
-	
-	private static native void nativeMenu();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +49,20 @@ public class Moob extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu (Menu menu) {
-		nativeMenu();
+		mGLView.onMenu();
 		return false;
 	}
 }
 
 class MoobGLSurface extends GLSurfaceView {
 	MoobRenderer mRenderer;
-
-	private static native void nativePause();
+	
+	/**
+	 * These native methods MUST NOT CALL OPENGL. OpenGL/mRenderer is run in a separate
+	 * thread and calling opengl from these native methods will result in errors
+	 * like "call to OpenGL ES API with no current context" 
+	 */
+	private static native void nativeMenu();
 	private static native void touchEventDown (float x, float y);
 	private static native void touchEventMove (float x, float y);
 	private static native void touchEventUp (float x, float y);
@@ -69,6 +72,10 @@ class MoobGLSurface extends GLSurfaceView {
 		super(context);
 		mRenderer = new MoobRenderer(context);
 		setRenderer(mRenderer);
+	}
+	
+	public synchronized void onMenu () {
+		nativeMenu();
 	}
 
 	public boolean onTouchEvent(final MotionEvent event) {
@@ -122,10 +129,8 @@ class MoobRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 gl) {
 		nativeRender();
 	}
-
+	
 	private static native void nativeInit(String apkPath);
-
 	private static native void nativeResize(int w, int h);
-
 	private static native void nativeRender();
 }

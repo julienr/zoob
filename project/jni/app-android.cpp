@@ -19,14 +19,9 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
   nativeRender();
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_moob_Moob_nativeMenu
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativeMenu
   (JNIEnv *, jclass) {
   nativeMenu();
-}
-
-JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
-  (JNIEnv *, jclass) {
-  nativePause();
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown

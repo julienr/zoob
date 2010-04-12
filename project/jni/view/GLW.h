@@ -59,6 +59,12 @@ struct GLW {
     static void colorWhite () {
       glColor4f(1,1,1,1);
     }
+
+    static void checkError(const char* op) {
+        for (GLint error = glGetError(); error; error = glGetError()) {
+            LOGE("after %s() glError (0x%x)\n", op, error);
+        }
+    }
 };
 
 #endif /* GLW_H_ */

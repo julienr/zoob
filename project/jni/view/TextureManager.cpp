@@ -46,6 +46,7 @@ GLuint TextureManager::get (const char* filename, int* width, int* height) {
 }
 
 TextureManager::_TextureRecord* TextureManager::_load (const char* filename) {
+  LOGE("TextureManager : loading %s", filename);
   _TextureRecord* r = new _TextureRecord();
   r->filename = strdup(filename);
 
@@ -196,9 +197,11 @@ GLuint loadTextureFromPNG(const char* filename, int* width, int* height) {
   //Now generate the OpenGL texture object
   GLuint texture;
   glGenTextures(1, &texture);
+  GLW::checkError("glGenTextures");
   glBindTexture(GL_TEXTURE_2D, texture);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (*width), (*height), 0, GL_RGBA,
       GL_UNSIGNED_BYTE, (GLvoid*) image_data);
+  GLW::checkError("glTexImage2D");
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
   //clean up memory and close stuff

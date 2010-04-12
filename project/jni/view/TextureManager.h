@@ -3,6 +3,7 @@
 
 #include "def.h"
 #include "containers/uthash.h"
+#include "GLW.h"
 
 #define TEXTURE_BLANK 0
 
@@ -23,6 +24,8 @@ private:
   struct _TextureRecord {
     ~_TextureRecord () {
       free(filename);
+      glDeleteTextures(1, &glTexID);
+      GLW::checkError("glDeleteTextures");
     }
     GLuint glTexID;
     char* filename;
