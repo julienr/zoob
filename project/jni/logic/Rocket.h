@@ -5,7 +5,11 @@
 
 class Rocket : public Entity {
   public:
-    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir) : Entity(new BCircle(ROCKET_BCIRCLE_R, this)), owner(owner), numBounces(0), exploded(false) {
+    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir)
+      : Entity(new BCircle(ROCKET_BCIRCLE_R)),
+        owner(owner),
+        numBounces(0),
+        exploded(false) {
       setPosition(pos);
       setDir(dir);
     }

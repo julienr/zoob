@@ -122,7 +122,7 @@ bool collideAgainstCell (GridCell* cell,
   //Touched cell is solid, check collision against its aabb
   CollisionResult r;
   if (cell->solid) {
-    if (CollisionManager::MovingAgainstStill(cell->getBVolume(), mover, move, &r)
+    if (CollisionManager::MovingAgainstStill(cell->getPosition(), cell->getBVolume(), startPos, mover, move, &r)
          && r.tFirst < result->tFirst) {
       (*result) = r;
       result->collidedEntity = cell;
@@ -140,7 +140,7 @@ bool collideAgainstCell (GridCell* cell,
 
       const BoundingVolume* bvol = otherEnt->getBVolume();
 
-      bool col = CollisionManager::MovingAgainstStill(bvol, mover, move, &r);
+      bool col = CollisionManager::MovingAgainstStill(otherEnt->getPosition(), bvol, startPos, mover, move, &r);
       if (col && (r.tFirst < result->tFirst)) {
         (*result) = r;
         result->collidedEntity = otherEnt;
@@ -161,15 +161,19 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
   // Since the circle diameter is < cellSize, this is simply the cells that contains the extreme points
   // of the circle on the axis
   unsigned numTouched = 0;
-  touchCells(circle, circle->getPosition(), &numTouched);
-  touchCells(circle, circle->getPosition()+move, &numTouched);
+  touchCells(circle, mover->getPosition(), &numTouched);
+  touchCells(circle, mover->getPosition()+move, &numTouched);
 
-  CollisionResult r;
   result->tFirst = MOOB_INF;
   bool collided = false;
   for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->touched = true;
-    collided |= collideAgainstCell(touchedCells[i], mover, mover->getPosition(), mover->getBVolume(), move, result);
+    collided |= collideAgainstCell(touchedCells[i],
+                                   mover,
+                                   mover->getPosition(),
+                                   mover->getBVolume(),
+                                   move,
+                                   result);
   }
   /*if (collided) {
     LOGE("Collision, tFirst : %f", r.tFirst);
@@ -238,7 +242,7 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
   ASSERT(bbox->getHeight() <= cellSize && bbox->getWidth() <= cellSize);
   //Just check the 4 box's corners
   Vector2 c[4];
-  bbox->getCorners(c);
+  bbox->getCorners(position, c);
   for (int i=0; i<4; i++) {
     GridCell* cell = getCell(c[i]);
     if (cell)

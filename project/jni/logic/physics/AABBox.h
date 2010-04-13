@@ -4,21 +4,18 @@
 #include "lib/Vector2.h"
 #include "BoundingVolume.h"
 
-class Entity;
-
 //Axis-aligned bounding box
 class AABBox: public BoundingVolume {
   public:
-    AABBox(float w, float h, Entity* e) :
-      BoundingVolume(), width(w), height(h), entity(e) {
+    AABBox(float w, float h) :
+      BoundingVolume(), width(w), height(h) {
     }
 
     BVolumeType getType() const {
       return TYPE_AABBOX;
     }
 
-    void getCorners(Vector2(&c)[4]) const;
-    Vector2 getPosition() const;
+    void getCorners(const Vector2& pos, Vector2(&c)[4]) const;
 
     float getWidth() const {
       return width;
@@ -29,7 +26,6 @@ class AABBox: public BoundingVolume {
     }
   private:
     float width, height;
-    Entity* entity;
 };
 
 #endif /* BOUDINGBOX_H_ */

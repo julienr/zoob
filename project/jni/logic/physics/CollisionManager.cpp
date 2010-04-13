@@ -68,7 +68,9 @@ bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
   return true;
 }
 
-bool CollisionManager::MovingAgainstStill (const BoundingVolume* still,
+bool CollisionManager::MovingAgainstStill (const Vector2& stillPos,
+                                                const BoundingVolume* still,
+                                                const Vector2& movingPos,
                                                 const BoundingVolume* moving,
                                                 const Vector2& move,
                                                 CollisionResult* r) {
@@ -76,17 +78,23 @@ bool CollisionManager::MovingAgainstStill (const BoundingVolume* still,
   const BVolumeType mT = moving->getType();
 
   if (mT == TYPE_AABBOX && sT == TYPE_AABBOX)
-    return MovingAABBAgainstAABB(static_cast<const AABBox*>(still),
+    return MovingAABBAgainstAABB(stillPos,
+                                  static_cast<const AABBox*>(still),
+                                  movingPos,
                                   static_cast<const AABBox*>(moving),
                                   move,
                                   r);
-  else if (mT == TYPE_CIRCLE && sT == TYPE_CIRCLE)
-    return MovingCircleAgainstAABB(static_cast<const AABBox*>(still),
+  else if (mT == TYPE_CIRCLE && sT == TYPE_AABBOX)
+    return MovingCircleAgainstAABB(stillPos,
+                                    static_cast<const AABBox*>(still),
+                                    movingPos,
                                     static_cast<const BCircle*>(moving),
                                     move,
                                     r);
   else if (mT == TYPE_CIRCLE && sT == TYPE_CIRCLE)
-    return MovingCircleAgainstCircle(static_cast<const BCircle*>(still),
+    return MovingCircleAgainstCircle(stillPos,
+                                      static_cast<const BCircle*>(still),
+                                      movingPos,
                                       static_cast<const BCircle*>(moving),
                                       move,
                                       r);
@@ -113,7 +121,12 @@ bool CollisionManager::MovingAgainstStill (const BoundingVolume* still,
  * If the boxes are overlapping, NO normal is set in r
  * If they aren't, a normal is set
  */
-bool CollisionManager::MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r) {
+bool CollisionManager::MovingAABBAgainstAABB (const Vector2& stillPos,
+                                                    const AABBox* still,
+                                                    const Vector2& movingPos,
+                                                    const AABBox* moving,
+                                                    const Vector2& move,
+                                                    CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -122,8 +135,8 @@ bool CollisionManager::MovingAABBAgainstAABB (const AABBox* still, const AABBox*
   axis[1] = Vector2(0,1);
 
   Vector2 corners[2][4];
-  still->getCorners(corners[0]);
-  moving->getCorners(corners[1]);
+  still->getCorners(stillPos, corners[0]);
+  moving->getCorners(movingPos, corners[1]);
 
   //LOGE("MovingOBBAgainstOBB");
 
@@ -144,7 +157,9 @@ bool CollisionManager::MovingAABBAgainstAABB (const AABBox* still, const AABBox*
   }
   return (r->tFirst <= 1.0f);
 }
-bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still,
+bool CollisionManager::MovingCircleAgainstCircle (const Vector2& stillPos,
+                                                        const BCircle* still,
+                                                        const Vector2& movingPos,
                                                         const BCircle* moving,
                                                         const Vector2& move,
                                                         CollisionResult* r) {
@@ -153,7 +168,7 @@ bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still,
 
   //LOGE("CircleAgainstCircle still (%f,%f,r=%f) against moving (%f,%f,r=%f) with move (%f,%f)", still->getPosition().x, still->getPosition().y,
   //    still->getRadius(), moving->getPosition().x, moving->getPosition().y, moving->getRadius(), move.x, move.y);
-  const Vector2 centerToCenter = still->getPosition() - moving->getPosition();
+  const Vector2 centerToCenter = stillPos - movingPos;
 
   //distance between circles
   const float dist = centerToCenter.length() - still->getRadius() - moving->getRadius();
@@ -180,7 +195,12 @@ bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still,
   }
 }
 
-bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
+bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
+                                                      const AABBox* still,
+                                                      const Vector2& movingPos,
+                                                      const BCircle* moving,
+                                                      const Vector2& move,
+                                                      CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -198,10 +218,10 @@ bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCirc
    *  circle center to the nearest vertex. If we are in region 2,4,5,7, we just have to check 2 axis (the boxe's one)
    */
   Vector2 corners[4];
-  still->getCorners(corners);
+  still->getCorners(stillPos, corners);
 
   //Determine voronoi regions
-  const Vector2& c = moving->getPosition();
+  const Vector2& c = movingPos;
   Vector2* vertex = NULL;
   if (c.y < corners[0].y) { //region 1,2 or 3
     if (c.x < corners[0].x) //1
@@ -237,8 +257,8 @@ bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCirc
     //Projected min/max on axis for both boxes
     FILL_PROJ_MIN_MAX(min0,max0,corners)
     //For circle, min/max is always position +- radius
-    const float min1 = (moving->getPosition()*axis[i])-moving->getRadius();
-    const float max1 = (moving->getPosition()*axis[i])+moving->getRadius();
+    const float min1 = (movingPos*axis[i])-moving->getRadius();
+    const float max1 = (movingPos*axis[i])+moving->getRadius();
 
     //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
 

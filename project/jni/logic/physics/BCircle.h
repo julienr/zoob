@@ -1,13 +1,12 @@
 #ifndef BCIRCLE_H_
 #define BCIRCLE_H_
 
-#include "logic/Entity.h"
 #include "BoundingVolume.h"
 
 class BCircle : public BoundingVolume {
   public:
-    BCircle (float radius, Entity* e) :
-      BoundingVolume(), radius(radius), entity(e) {
+    BCircle (float radius) :
+      BoundingVolume(), radius(radius){
     }
 
     BVolumeType getType() const {
@@ -26,13 +25,8 @@ class BCircle : public BoundingVolume {
       return radius;
     }
 
-    const Vector2& getPosition () const {
-      return entity->getPosition();
-    }
-
   private:
     const float radius;
-    Entity* entity;
 };
 
 #endif

@@ -9,7 +9,7 @@
 
 class WallEntity : public Entity {
   public:
-    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w, h, this), pos) {}
+    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w, h), pos) {}
     eEntityType getType () const { return ENTITY_WALL; }
     void explode () {}
 };

@@ -11,7 +11,7 @@
 //FIXME: still really need to see this as Entity ? Level now adds its entity to colManager
 struct GridCell : public Entity {
   GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
-    Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)),
+    Entity(new AABBox(TILE_SIZE, TILE_SIZE)),
     x(x),y(y),touched(false), solid(false) {
     this->setPosition(worldPos);
   }

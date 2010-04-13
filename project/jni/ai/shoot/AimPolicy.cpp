@@ -8,5 +8,5 @@ Vector2 AimPolicy::aim (double elapsedS, Game* game, Tank* tank) {
 }
 
 bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
-
+  return false;
 }

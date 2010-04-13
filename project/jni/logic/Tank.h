@@ -11,8 +11,8 @@ class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(NULL), exploded(false), alive(true) {}
-    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R, this)), color(col), ai(ai), exploded(false), alive(true) {}
+    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R)), color(col), ai(NULL), exploded(false), alive(true) {}
+    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R)), color(col), ai(ai), exploded(false), alive(true) {}
 
     ~Tank () {
       if (ai)

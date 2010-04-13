@@ -87,7 +87,7 @@ void drawColEntity (Entity* e) {
     const AABBox* box = static_cast<const AABBox*>(e->getBVolume());
     MGL_DATATYPE verts[12];
     Vector2 corners[4];
-    box->getCorners(corners);
+    box->getCorners(e->getPosition(), corners);
     for (int i=0; i<4; i++) {
       verts[3*i] = fX(corners[i].x);
       verts[3*i+1] = fX(corners[i].y);
@@ -111,7 +111,7 @@ void drawColEntity (Entity* e) {
       verts[3*i+2] = 0;
     }
     glPushMatrix();
-    GLW::translate(circle->getPosition().x, circle->getPosition().y, 0);
+    GLW::translate(e->getPosition().x, e->getPosition().y, 0);
     glVertexPointer(3, MGL_TYPE, 0, verts);
     glDrawArrays(GL_LINE_LOOP, 0, numVerts);
     glPopMatrix();

@@ -12,11 +12,33 @@
 
 class CollisionManager {
   public:
-    static bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r);
-    static bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
-    static bool MovingCircleAgainstCircle (const BCircle* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
+    static bool MovingAABBAgainstAABB (const Vector2& stillPos,
+                                           const AABBox* still,
+                                           const Vector2& movingPos,
+                                           const AABBox* moving,
+                                           const Vector2& move,
+                                           CollisionResult* r);
 
-    static bool MovingAgainstStill (const BoundingVolume* still, const BoundingVolume* moving, const Vector2& mode, CollisionResult* r);
+    static bool MovingCircleAgainstAABB (const Vector2& stillPos,
+                                              const AABBox* still,
+                                              const Vector2& movingPos,
+                                              const BCircle* moving,
+                                              const Vector2& move,
+                                              CollisionResult* r);
+
+    static bool MovingCircleAgainstCircle (const Vector2& stillPos,
+                                                const BCircle* still,
+                                                const Vector2& movingPos,
+                                                const BCircle* moving,
+                                                const Vector2& move,
+                                                CollisionResult* r);
+
+    static bool MovingAgainstStill (const Vector2& stillPos,
+                                        const BoundingVolume* still,
+                                        const Vector2& movingPos,
+                                        const BoundingVolume* moving,
+                                        const Vector2& mode,
+                                        CollisionResult* r);
 
     CollisionManager (int width, int height, float cellSize)
       : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
