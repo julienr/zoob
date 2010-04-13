@@ -40,6 +40,18 @@ class CollisionManager {
                                         const Vector2& mode,
                                         CollisionResult* r);
 
+    static bool LineAgainstAABB (const Vector2& boxPos,
+                                    const AABBox* box,
+                                    const Vector2& lineStart,
+                                    const Vector2& lineMove,
+                                    CollisionResult* r);
+
+    static bool LineAgainstCircle (const Vector2& circlePos,
+                                       const BCircle* circle,
+                                       const Vector2& lineStart,
+                                       const Vector2& lineMove,
+                                       CollisionResult* r);
+
     CollisionManager (int width, int height, float cellSize)
       : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 
@@ -84,7 +96,9 @@ class CollisionManager {
     //move is move vector relative to mover
     //returns false if no collision occurs
     //if false is returned, the content of result is undetermined
-    bool trace (Entity* mover, const Vector2& move, CollisionResult* result);
+    bool trace (Entity* mover, const Vector2& move, CollisionResult* result) const;
+
+    bool traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const;
 
   private:
     //FIXME: use grid to store entities

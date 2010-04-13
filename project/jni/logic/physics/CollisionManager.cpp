@@ -98,11 +98,34 @@ bool CollisionManager::MovingAgainstStill (const Vector2& stillPos,
                                       static_cast<const BCircle*>(moving),
                                       move,
                                       r);
+  else if (mT == TYPE_LINE && sT == TYPE_AABBOX)
+    return LineAgainstAABB(stillPos, static_cast<const AABBox*>(still), movingPos, move, r);
+  else if (mT == TYPE_LINE && sT == TYPE_CIRCLE)
+    return LineAgainstCircle(stillPos, static_cast<const BCircle*>(still), movingPos, move, r);
+
   else {
     LOGE("Unhandled collision type : moving %i against still %i", mT, sT);
     ASSERT(false);
     return false;
   }
+}
+
+bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
+                                             const AABBox* box,
+                                             const Vector2& lineStart,
+                                             const Vector2& lineMove,
+                                             CollisionResult* r) {
+  //TODO
+  return false;
+}
+
+bool CollisionManager::LineAgainstCircle (const Vector2& circlePos,
+                                               const BCircle* circle,
+                                               const Vector2& lineStart,
+                                               const Vector2& lineMove,
+                                               CollisionResult* r) {
+  //TODO
+  return false;
 }
 
 #define FILL_PROJ_MIN_MAX(min,max,rect) float min = axis[i]*rect[0]; \
@@ -270,6 +293,10 @@ bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
   return (r->tFirst <= 1.0f);
 }
 
-bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
+bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) const {
   return grid.push(mover, move, result);
+}
+
+bool CollisionManager::traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const {
+  return grid.traceRay(start, move, result);
 }

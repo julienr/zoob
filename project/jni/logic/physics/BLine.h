@@ -1,11 +1,13 @@
 #ifndef BLINE_H_
 #define BLINE_H_
 
+#include "BoundingVolume.h"
+
 /* This class is only here to allow generality in grid trace methods.
  * It represents a bounding volume that is a line (ie: has no volume)
  */
-class BLine: BoundingVolume {
-    virtual BVolumeType getType () {
+class BLine: public BoundingVolume {
+    BVolumeType getType () const {
       return TYPE_LINE;
     }
 

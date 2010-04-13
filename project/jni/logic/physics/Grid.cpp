@@ -1,6 +1,7 @@
 #include "Grid.h"
 #include "lib/Math.h"
 #include "CollisionManager.h"
+#include "BLine.h"
 
 void Grid::clearTouched () {
   for (unsigned x=0; x<width; x++) {
@@ -250,15 +251,22 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
   }
 }
 
-/*bool Grid::traceRay (const Vector2& start, const Vector2& end, CollisionResult* result) const {
-  unsigned numTouched = findTouchedCells(points[0], move);
-  for (unsigned j=0; j<numTouched; j++) {
-    touchedCells[j]->touched = true;
-    if (touchedCells[j]->solid) {
-
-    }
+bool Grid::traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const {
+  result->tFirst = MOOB_INF;
+  bool collided = false;
+  unsigned numTouched = findTouchedCells(start, move);
+  BLine line;
+  for (unsigned i=0; i<numTouched; i++) {
+    touchedCells[i]->touched = true;
+    collided |= collideAgainstCell(touchedCells[i],
+                                   NULL,
+                                   start,
+                                   &line,
+                                   move,
+                                   result);
   }
-}*/
+  return collided;
+}
 
 /*
 bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const {
