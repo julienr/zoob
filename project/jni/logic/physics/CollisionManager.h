@@ -12,8 +12,12 @@
 
 class CollisionManager {
   public:
+    static bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r);
     static bool MovingCircleAgainstAABB (const AABBox* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
     static bool MovingCircleAgainstCircle (const BCircle* still, const BCircle* moving, const Vector2& move, CollisionResult* r);
+
+    static bool MovingAgainstStill (const BoundingVolume* still, const BoundingVolume* moving, const Vector2& mode, CollisionResult* r);
+
     CollisionManager (int width, int height, float cellSize)
       : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 

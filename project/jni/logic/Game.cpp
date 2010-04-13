@@ -84,9 +84,9 @@ void Game::update () {
     } else {
       TankAI* ai = t->getAI();
       if (ai) {
-        doTankMove(t, ai->decideDir(elapsedS), elapsedS);
+        doTankMove(t, ai->decideDir(elapsedS, this, t), elapsedS);
         Vector2 rocketDir;
-        if (ai->decideFire(elapsedS, &rocketDir)) {
+        if (ai->decideFire(elapsedS, &rocketDir, this, t)) {
           rockets.append(t->fireRocket(rocketDir));
         }
         t->setRotationFromDir(ai->aim(elapsedS, this, t).getNormalized());

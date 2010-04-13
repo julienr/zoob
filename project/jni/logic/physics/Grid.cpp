@@ -113,7 +113,46 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   return count;
 }
 
-bool Grid::trace(const Entity* mover, const Vector2& move, CollisionResult* result) const {
+bool collideAgainstCell (GridCell* cell,
+                            const Entity* sourceEntity,
+                            const Vector2& startPos,
+                            const BoundingVolume* mover,
+                            const Vector2& move,
+                            CollisionResult* result) {
+  //Touched cell is solid, check collision against its aabb
+  CollisionResult r;
+  if (cell->solid) {
+    if (CollisionManager::MovingAgainstStill(cell->getBVolume(), mover, move, &r)
+         && r.tFirst < result->tFirst) {
+      (*result) = r;
+      result->collidedEntity = cell;
+      result->colPoint = startPos+move*r.tFirst;
+      return true;
+    }
+  } else {
+    //Check collision against touchedCells entities list
+    for (list<Entity*>::iterator iter = cell->entities.begin(); iter.hasNext(); iter++) {
+      Entity* otherEnt = *iter;
+      if (otherEnt == sourceEntity)
+        continue;
+      if (!otherEnt->isSolid())
+        continue;
+
+      const BoundingVolume* bvol = otherEnt->getBVolume();
+
+      bool col = CollisionManager::MovingAgainstStill(bvol, mover, move, &r);
+      if (col && (r.tFirst < result->tFirst)) {
+        (*result) = r;
+        result->collidedEntity = otherEnt;
+        result->colPoint = startPos+move*r.tFirst;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result) const {
   ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
   ASSERT(circle->getRadius()*2 < cellSize);
@@ -130,46 +169,7 @@ bool Grid::trace(const Entity* mover, const Vector2& move, CollisionResult* resu
   bool collided = false;
   for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->touched = true;
-
-    //Touched cell is solid, check collision against its aabb
-    if (touchedCells[i]->solid) {
-      if (CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(touchedCells[i]->getBVolume()), circle, move, &r)
-           && r.tFirst < result->tFirst) {
-        (*result) = r;
-        result->collidedEntity = touchedCells[i];
-        result->colPoint = circle->getPosition()+move*r.tFirst;
-        collided = true;
-      }
-    } else {
-      //Check collision against touchedCells entities list
-      for (list<Entity*>::iterator iter = touchedCells[i]->entities.begin(); iter.hasNext(); iter++) {
-        Entity* otherEnt = *iter;
-        if (otherEnt == mover)
-          continue;
-        if (!otherEnt->isSolid())
-          continue;
-
-        const BoundingVolume* bvol = otherEnt->getBVolume();
-
-        bool col = false;
-        switch (bvol->getType()) {
-          case TYPE_AABBOX:
-            col = CollisionManager::MovingCircleAgainstAABB(static_cast<const AABBox*>(bvol), circle, move, &r);
-            break;
-          case TYPE_CIRCLE:
-            col = CollisionManager::MovingCircleAgainstCircle(static_cast<const BCircle*>(bvol), circle, move, &r);
-            break;
-          default:
-            LOGE("Unhandled type  : %i", bvol->getType());
-        }
-        if (col && (r.tFirst < result->tFirst)) {
-          (*result) = r;
-          result->collidedEntity = otherEnt;
-          result->colPoint = circle->getPosition()+move*r.tFirst;
-          collided = true;
-        }
-      }
-    }
+    collided |= collideAgainstCell(touchedCells[i], mover, mover->getPosition(), mover->getBVolume(), move, result);
   }
   /*if (collided) {
     LOGE("Collision, tFirst : %f", r.tFirst);
@@ -245,6 +245,16 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
       touchedCells[(*count)++] = cell;
   }
 }
+
+/*bool Grid::traceRay (const Vector2& start, const Vector2& end, CollisionResult* result) const {
+  unsigned numTouched = findTouchedCells(points[0], move);
+  for (unsigned j=0; j<numTouched; j++) {
+    touchedCells[j]->touched = true;
+    if (touchedCells[j]->solid) {
+
+    }
+  }
+}*/
 
 /*
 bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const {

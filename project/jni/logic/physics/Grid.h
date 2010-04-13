@@ -8,6 +8,7 @@
 #include "AABBox.h"
 #include "containers/list.h"
 
+//FIXME: still really need to see this as Entity ? Level now adds its entity to colManager
 struct GridCell : public Entity {
   GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
     Entity(new AABBox(TILE_SIZE, TILE_SIZE, this)),
@@ -78,7 +79,11 @@ class Grid {
       return grid[x][y]->touched;
     }
 
-    bool trace (const Entity* mover, const Vector2& move, CollisionResult* result) const;
+    //To be used for movement < cellSize
+    bool push (const Entity* mover, const Vector2& move, CollisionResult* result) const;
+
+    bool traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const;
+    bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const;
 
     unsigned getWidth () const {
       return width;

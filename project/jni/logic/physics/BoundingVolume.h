@@ -4,6 +4,7 @@
 enum BVolumeType {
   TYPE_AABBOX = 0,
   TYPE_CIRCLE,
+  TYPE_LINE,
 };
 
 struct BoundingVolume {

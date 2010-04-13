@@ -10,17 +10,8 @@ class RandomPolicy : public ShootPolicy {
   public:
     RandomPolicy () : timeSinceFire(0), angle(0) {}
 
-    bool decideFire (double elapsedS, Vector2* outDir) {
-      timeSinceFire += elapsedS;
-      angle += elapsedS*FIRE_ROTATION_SPEED;
-      if (timeSinceFire > FIRE_INTERVAL) {
-        timeSinceFire = 0;
-        outDir->set(cosf(angle), sinf(angle));
-        return true;
-      }
-      return false;
-    }
 
+    bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
     Vector2 aim (double elapsedS, Game* game, Tank* tank);
   private:
     double timeSinceFire;

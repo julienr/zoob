@@ -7,7 +7,7 @@
 
 
 /**
- * Base abstract class for a tank AI
+ * Aggregates the different policies for one tank.
  * all the "decideXX" functions will be called
  * every frame
  */
@@ -23,11 +23,11 @@ class TankAI {
       delete movementPolicy;
     }
 
-    bool decideFire (double elapsedS, Vector2* outDir) {
-      return shootPolicy->decideFire(elapsedS, outDir);
+    bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+      return shootPolicy->decideFire(elapsedS, outDir, game, tank);
     }
 
-    Vector2 decideDir (double elapsedS) {
+    Vector2 decideDir (double elapsedS, Game* game, Tank* tank) {
       return movementPolicy->decideDir(elapsedS);
     }
 

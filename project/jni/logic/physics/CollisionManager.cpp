@@ -68,6 +68,35 @@ bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
   return true;
 }
 
+bool CollisionManager::MovingAgainstStill (const BoundingVolume* still,
+                                                const BoundingVolume* moving,
+                                                const Vector2& move,
+                                                CollisionResult* r) {
+  const BVolumeType sT = still->getType();
+  const BVolumeType mT = moving->getType();
+
+  if (mT == TYPE_AABBOX && sT == TYPE_AABBOX)
+    return MovingAABBAgainstAABB(static_cast<const AABBox*>(still),
+                                  static_cast<const AABBox*>(moving),
+                                  move,
+                                  r);
+  else if (mT == TYPE_CIRCLE && sT == TYPE_CIRCLE)
+    return MovingCircleAgainstAABB(static_cast<const AABBox*>(still),
+                                    static_cast<const BCircle*>(moving),
+                                    move,
+                                    r);
+  else if (mT == TYPE_CIRCLE && sT == TYPE_CIRCLE)
+    return MovingCircleAgainstCircle(static_cast<const BCircle*>(still),
+                                      static_cast<const BCircle*>(moving),
+                                      move,
+                                      r);
+  else {
+    LOGE("Unhandled collision type : moving %i against still %i", mT, sT);
+    ASSERT(false);
+    return false;
+  }
+}
+
 #define FILL_PROJ_MIN_MAX(min,max,rect) float min = axis[i]*rect[0]; \
     float max = axis[i]*rect[0]; \
     for(short j=1;j<4;j++) { \
@@ -84,7 +113,7 @@ bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
  * If the boxes are overlapping, NO normal is set in r
  * If they aren't, a normal is set
  */
-bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r) {
+bool CollisionManager::MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vector2& move, CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -115,7 +144,10 @@ bool MovingAABBAgainstAABB (const AABBox* still, const AABBox* moving, const Vec
   }
   return (r->tFirst <= 1.0f);
 }
-bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still, const BCircle* moving, const Vector2& move, CollisionResult* r) {
+bool CollisionManager::MovingCircleAgainstCircle (const BCircle* still,
+                                                        const BCircle* moving,
+                                                        const Vector2& move,
+                                                        CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -219,5 +251,5 @@ bool CollisionManager::MovingCircleAgainstAABB (const AABBox* still, const BCirc
 }
 
 bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) {
-  return grid.trace(mover, move, result);
+  return grid.push(mover, move, result);
 }
