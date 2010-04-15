@@ -29,7 +29,7 @@ class Tank: public Entity {
       return ENTITY_TANK;
     }
 
-    virtual void explode (Entity* e, const Vector2& colPoint);
+    void explode (Entity* e, const Vector2& colPoint);
 
     bool hasExploded () const {
       return exploded;

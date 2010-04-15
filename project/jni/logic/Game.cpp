@@ -206,7 +206,8 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
-    touch(rocket, r.collidedEntity, r.colPoint);
+    if (!r.collidedEntity->bounce(rocket, r.colPoint))
+      touch(rocket, r.collidedEntity, r.colPoint);
     rocket->addBounce();
     move = -2.0f*(move*r.normal)*r.normal + move;
     rocket->setDir(move);

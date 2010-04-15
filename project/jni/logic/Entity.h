@@ -35,6 +35,15 @@ class Entity: public Moveable {
     //other is the entity responsible for the explosion, MIGHT be NULL
     virtual void explode (Entity* other, const Vector2& colPoint) = 0;
 
+    /**
+     * This function is called before a touch/explode can occur on both entities.
+     * If it returns true, the "other" entity will bounce against this one instead
+     * of touching it
+     */
+    virtual bool bounce (Entity* other, const Vector2& colPoint) {
+      return false;
+    }
+
     const BoundingVolume* getBVolume() const {
       return bvolume;
     }

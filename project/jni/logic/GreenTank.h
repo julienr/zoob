@@ -14,7 +14,7 @@ class GreenTank : public EnemyTank {
 
     eColor getColor () const { return GREEN; }
 
-    void explode (Entity* e, const Vector2& colPoint);
+    bool bounce (Entity* e, const Vector2& colPoint);
 };
 
 
