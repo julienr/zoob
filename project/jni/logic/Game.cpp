@@ -5,7 +5,7 @@
 #include "ai/shoot/AimPolicy.h"
 
 Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(GREY), level(level), elapsedS(0), movingState(MOVING_NONE) {
+    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(1000,GREY), level(level), elapsedS(0), movingState(MOVING_NONE) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -15,12 +15,12 @@ Game::Game (Level* level)
     for (unsigned y=0; y<level->getHeight(); y++) {
       Tile* tile = level->getTile(x,y);
       if (tile->getType() == _1) {
-        Tank* t = new Tank(RED, new TankAI(new AimPolicy(), new StillPolicy()));
+        Tank* t = new Tank(2000,RED, new TankAI(new AimPolicy(), new StillPolicy()));
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);
       } else if (tile->getType() == _2) {
-        Tank* t = new Tank(GREEN, new TankAI(new RandomPolicy(), new StillPolicy()));
+        Tank* t = new Tank(2000,GREEN, new TankAI(new RandomPolicy(), new StillPolicy()));
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);

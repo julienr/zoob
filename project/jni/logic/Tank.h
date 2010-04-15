@@ -8,19 +8,18 @@
 #include "ai/TankAI.h"
 #include "lib/Utils.h"
 
-#define FIRE_INTERVAL_MS 1000
-
 class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (eColor col, TankAI* ai=NULL)
+    Tank (const uint64_t fireIntervalms, eColor col, TankAI* ai=NULL)
       : Entity(new BCircle(TANK_BCIRCLE_R)),
         color(col),
         ai(ai),
         exploded(false),
         alive(true),
-        lastFireTime(0) {
+        lastFireTime(0),
+        fireInterval(fireIntervalms) {
     }
 
     ~Tank () {
@@ -61,7 +60,7 @@ class Tank: public Entity {
     TankAI* getAI () { return ai; }
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
-    bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > FIRE_INTERVAL_MS; }
+    bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > fireInterval; }
 
     Rocket* fireRocket (Vector2 dir);
   private:
@@ -74,6 +73,7 @@ class Tank: public Entity {
     bool alive;
 
     uint64_t lastFireTime;
+    const uint64_t fireInterval; //fire interval in milliseconds
 };
 
 #endif /* TANK_H_ */
