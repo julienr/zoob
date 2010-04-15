@@ -9,7 +9,7 @@
 class GreenTank : public EnemyTank {
   public:
     GreenTank ()
-      : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy())) {
+      : EnemyTank (new TankAI(new NonePolicy(), new StillPolicy())) {
     }
 
     eColor getColor () const { return GREEN; }

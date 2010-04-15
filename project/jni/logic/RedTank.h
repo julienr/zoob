@@ -6,7 +6,7 @@
 class RedTank : public EnemyTank {
   public:
     RedTank ()
-      : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy())) {
+      : EnemyTank (new TankAI(new NonePolicy(), new StillPolicy())) {
     }
 
     eColor getColor () const { return RED; }

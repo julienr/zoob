@@ -214,14 +214,46 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
 
 #define MAX_BOUNCES 4
 void Game::slideMove (Entity* e, Vector2 move) {
+  //Used to store the backoffs of previous iterations, so we don't go
+  //against a backoff we've already taken into account
+  Vector2 backoffs[MAX_BOUNCES];
+
   CollisionResult r;
-  unsigned bounces = 0;
-  for (; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
+  for (size_t bounces = 0; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
     touch(e, r.collidedEntity, r.colPoint);
+
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     Vector2 backoff = backAmount*r.normal;
     move += backoff*1.1;
+
+    //Check that we aren't going against a previous backoff
+    for (size_t j=0; j<bounces; j++) {
+      //if cos(angle between move and backoff) is in [0,1], we have an angle between
+      //-90 and 90
+      //cos = (vel*normals[i]/(||vel||*||normals[i]||)
+      //but since we only care about the sign of the cos, we can forget division
+      if (move*backoffs[j] >= 0)
+        continue;
+
+      //If we reach this point, we're going against backoffs[j], just add it once more to correct this
+      move += backoffs[j];
+
+      //Check that our new corrected move doesn't go AGAIN against another previous backoff
+      for (size_t k=0; k<bounces; k++) {
+        if (k==j)
+          continue;
+
+        if (move*backoffs[k] >= 0)
+          continue;
+
+        //LOGE("Unable to find a way out!");
+        //We're going against 2 previous backoff, just cancel the move
+        move.set(0,0);
+      }
+    }
+
+    backoffs[bounces] = backoff;
   }
   colManager.translate(e, move);
 }
