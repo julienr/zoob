@@ -48,6 +48,10 @@ class Tank: public Entity {
       alive = false;
     }
 
+    void unmarkExploded () {
+      exploded = false;
+    }
+
     bool isAlive () const {
       return alive;
     }

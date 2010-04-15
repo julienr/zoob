@@ -109,6 +109,9 @@ class Game {
 
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
+    int getPlayerNumLives () const { return playerNumLives; }
+    int getPlayerMaxLives () const { return playerMaxLives; }
+
     void update();
   private:
     //Move and rotate the tank according to dir and calls slideMove
@@ -119,6 +122,8 @@ class Game {
     //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)
     void bounceMove (Rocket* r, Vector2 move);
 
+    int playerMaxLives;
+    int playerNumLives;
 
     CollisionManager colManager;
     Tank tank;

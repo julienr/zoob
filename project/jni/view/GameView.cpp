@@ -10,6 +10,8 @@ GameView::GameView (const Game& g)
     levelView(g.getLevel()),
     arrowEnd("assets/sprites/arrow_end.png"),
     rocket("assets/sprites/rocket.png"),
+    hearthEmpty("assets/sprites/hearth_empty.png"),
+    hearthFull("assets/sprites/hearth_full.png"),
     enemiesView(5) {
   const list<Tank*>* enemies = g.getEnemies();
   for (list<Tank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
@@ -21,6 +23,16 @@ GameView::~GameView () {
     delete enemiesView[i];
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
+}
+
+void GameView::drawHearts () {
+  const int currentLife = game.getPlayerNumLives();
+  for (int i=0; i<game.getPlayerMaxLives(); i++) {
+    if (i >= currentLife)
+      hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
+    else
+      hearthFull.draw(Vector2(i,0), Vector2(1,1));
+  }
 }
 
 void GameView::draw () {

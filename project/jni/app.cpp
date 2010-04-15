@@ -227,12 +227,17 @@ void nativeRender () {
   glLoadIdentity();
 
   if (gameManager->inGame()) {
+    game->update();
+
     //levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
     gamePad->draw(gamePadPos, gamePadSize);
 
-    GLW::translate(transX, transY, 0);
+    glPushMatrix();
+    GLW::translate(10.0f, 0.55f, 0);
+    gameView->drawHearts();
+    glPopMatrix();
 
-    game->update();
+    GLW::translate(transX, transY, 0);
     gameView->draw();
     //gameView->debugDraw();
   } else {

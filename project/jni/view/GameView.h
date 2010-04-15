@@ -17,6 +17,10 @@ class GameView {
       return tankView;
     }
 
+    //Only draw the hearts representing the life
+    void drawHearts ();
+
+    //Draw main game area
     void draw();
 
     void debugDraw();
@@ -27,6 +31,8 @@ class GameView {
     LevelView levelView;
     Sprite arrowEnd;
     Sprite rocket;
+    Sprite hearthEmpty;
+    Sprite hearthFull;
     vector<TankView*> enemiesView;
     list<Explosion*> explosions;
 };

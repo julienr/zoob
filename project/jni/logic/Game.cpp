@@ -10,6 +10,9 @@ Game::Game (Level* level)
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
 
+  playerNumLives = 4;
+  playerMaxLives = 4;
+
   //Spawn enemies
   for (unsigned x=0; x<level->getWidth(); x++) {
     for (unsigned y=0; y<level->getHeight(); y++) {
@@ -92,6 +95,12 @@ void Game::update () {
         t->setRotationFromDir(ai->aim(elapsedS, this, t).getNormalized());
       }
     }
+  }
+
+  if (tank.hasExploded()) {
+    playerNumLives--;
+    tank.unmarkExploded();
+    LOGE("playerNumLives : %i", playerNumLives);
   }
 
   //Player Tank movement
