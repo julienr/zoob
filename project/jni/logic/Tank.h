@@ -5,27 +5,21 @@
 #include "Entity.h"
 #include "physics/BCircle.h"
 #include "lib/Color.h"
-#include "ai/TankAI.h"
 #include "lib/Utils.h"
 
 class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (const uint64_t fireIntervalms, eColor col, TankAI* ai=NULL)
+    Tank (const uint64_t fireIntervalms)
       : Entity(new BCircle(TANK_BCIRCLE_R)),
-        color(col),
-        ai(ai),
         exploded(false),
         alive(true),
         lastFireTime(0),
         fireInterval(fireIntervalms) {
     }
 
-    ~Tank () {
-      if (ai)
-        delete ai;
-    }
+    virtual ~Tank () {}
 
     //FIXME: only for debug draw
     Vector2 lastColNormal;
@@ -35,7 +29,7 @@ class Tank: public Entity {
       return ENTITY_TANK;
     }
 
-    void explode (Entity* e);
+    virtual void explode (Entity* e, const Vector2& colPoint);
 
     bool hasExploded () const {
       return exploded;
@@ -53,20 +47,13 @@ class Tank: public Entity {
       return alive;
     }
 
-    eColor getColor () const {
-      return color;
-    }
-
-    //Returns NULL for the player's tank
-    TankAI* getAI () { return ai; }
+    virtual eColor getColor () const = 0;
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > fireInterval; }
 
     Rocket* fireRocket (Vector2 dir);
   private:
-    const eColor color; //This tank's color (highly symbolic, but used for rendering)
-    TankAI* ai;
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
      * The tank should be marked as dead once this is done
      */

@@ -8,29 +8,41 @@
 class TankView {
   public:
     TankView (const Tank& t) :
-      tank(t), baseSprite("assets/sprites/tank1.png"), turretSprite("assets/sprites/turret.png") {
+      tank(t),
+      tankSprite("assets/sprites/tank1.png"),
+      shieldTankSprite("assets/sprites/tank_shield.png") {
     }
 
     void draw () {
       if (!tank.isAlive())
         return;
+      eColor c = tank.getColor();
       GLW::color(tank.getColor());
-      baseSprite.draw(tank, tank.getRotation());
+      switch(c) {
+        case GREY:
+        case RED:
+          tankSprite.draw(tank, tank.getRotation());
+          break;
+        case GREEN:
+          shieldTankSprite.draw(tank, tank.getRotation());
+          break;
+        default:
+          LOGE("Unhandled color %i", c);
+      }
       GLW::colorWhite();
-      //turretSprite.draw(tank);
     }
 
     Vector2 getCenter () {
-      return baseSprite.getCenter(tank);
+      return tankSprite.getCenter(tank);
     }
 
     bool touchInside (const Vector2& p) const {
-      return baseSprite.touchInside(tank, p);
+      return tankSprite.touchInside(tank, p);
     }
   private:
     const Tank& tank;
-    Sprite baseSprite;
-    Sprite turretSprite;
+    Sprite tankSprite;
+    Sprite shieldTankSprite;
 
 };
 

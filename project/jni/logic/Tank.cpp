@@ -11,7 +11,7 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   return new Rocket(this, getPosition()+trans*1.1, dir);
 }
 
-void Tank::explode (Entity* e) {
+void Tank::explode (Entity* e, const Vector2& dir) {
   //Avoid a tank being exploded by his own rocket
   //FIXME: really ?
   if (e && e->getType() == ENTITY_ROCKET) {

@@ -3,8 +3,9 @@
 #include "logic/Game.h"
 #include "logic/Tank.h"
 
-Vector2 AimPolicy::aim (double elapsedS, Game* game, Tank* myTank) {
-  return game->getPlayerTank().getPosition() - myTank->getPosition();
+bool AimPolicy::aim (double elapsedS, Game* game, Tank* myTank, Vector2* outDir) {
+  *outDir = game->getPlayerTank().getPosition() - myTank->getPosition();
+  return true;
 }
 
 bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* myTank) {

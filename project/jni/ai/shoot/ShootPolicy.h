@@ -13,7 +13,7 @@ class ShootPolicy {
     virtual bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) = 0;
 
     //Should return the tank rotation
-    virtual Vector2 aim (double elapsedS, Game* game, Tank* tank) = 0;
+    virtual bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) = 0;
 };
 
 #endif /* SHOOT_POLICY_H_ */

@@ -3,6 +3,8 @@
 
 #include "def.h"
 #include "logic/Tank.h"
+#include "logic/EnemyTank.h"
+#include "logic/PlayerTank.h"
 #include "logic/Rocket.h"
 #include "logic/Cursor.h"
 #include "logic/Level.h"
@@ -40,7 +42,7 @@ class Game {
       return tank;
     }
 
-    const list<Tank*>* getEnemies () const {
+    const list<EnemyTank*>* getEnemies () const {
       return &enemies;
     }
 
@@ -128,8 +130,8 @@ class Game {
     int playerNumLives;
 
     CollisionManager colManager;
-    Tank tank;
-    list<Tank*> enemies;
+    PlayerTank tank;
+    list<EnemyTank*> enemies;
     list<Rocket*> rockets;
     list<Vector2> explosions;
     Cursor cursor;

@@ -31,8 +31,8 @@ class TankAI {
       return movementPolicy->decideDir(elapsedS);
     }
 
-    Vector2 aim (double elapsedS, Game* game, Tank* tank) {
-      return shootPolicy->aim(elapsedS, game, tank);
+    bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) {
+      return shootPolicy->aim(elapsedS, game, tank, outDir);
     }
   private:
     ShootPolicy* shootPolicy;

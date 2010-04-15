@@ -33,7 +33,7 @@ class Entity: public Moveable {
 
     //Callback when this entity is subject to an explosion
     //other is the entity responsible for the explosion, MIGHT be NULL
-    virtual void explode (Entity* other) = 0;
+    virtual void explode (Entity* other, const Vector2& colPoint) = 0;
 
     const BoundingVolume* getBVolume() const {
       return bvolume;

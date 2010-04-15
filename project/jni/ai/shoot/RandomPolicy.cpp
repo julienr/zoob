@@ -11,6 +11,7 @@ bool RandomPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tan
   return false;
 }
 
-Vector2 RandomPolicy::aim (double elapsedS, Game* game, Tank* tank) {
-  return Vector2(cosf(angle), sinf(angle));
+bool RandomPolicy::aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) {
+  outDir->set(cosf(angle), sinf(angle));
+  return true;
 }

@@ -46,7 +46,7 @@ class Rocket : public Entity {
       return !exploded;
     }
 
-    void explode (Entity* e) {
+    void explode (Entity* e, const Vector2& colPoint) {
       LOGE("Rocket explosion");
       exploded = true;
     }

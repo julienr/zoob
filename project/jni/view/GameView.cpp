@@ -13,8 +13,8 @@ GameView::GameView (const Game& g)
     hearthEmpty("assets/sprites/hearth_empty.png"),
     hearthFull("assets/sprites/hearth_full.png"),
     enemiesView(5) {
-  const list<Tank*>* enemies = g.getEnemies();
-  for (list<Tank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
+  const list<EnemyTank*>* enemies = g.getEnemies();
+  for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.add(new TankView(**i));
 }
 

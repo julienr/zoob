@@ -19,6 +19,16 @@ struct Math {
     if (n > 0) return 1;
     return 0;
   }
+
+  //http://www.gamedev.net/community/forums/topic.asp?topic_id=563986&whichpage=1&#3615497
+  static float angleInInterval (float currentAngle, float rightAngle, float leftAngle) {
+    if (leftAngle >= rightAngle)
+      return (rightAngle <= currentAngle && currentAngle <= leftAngle);
+    else
+      return ( !(leftAngle < currentAngle && currentAngle < rightAngle) );
+
+
+  }
 };
 
 #endif /* MATH_H_ */

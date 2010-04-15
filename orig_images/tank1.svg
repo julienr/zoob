@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="tank1.svg">
+   sodipodi:docname="tank1.svg"
+   inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
+   inkscape:export-xdpi="299.86295"
+   inkscape:export-ydpi="299.86295">
   <defs
      id="defs4">
     <linearGradient
@@ -1327,6 +1330,27 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4123"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4175"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4203"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1335,9 +1359,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="1450.9113"
-     inkscape:cy="-1180.7903"
+     inkscape:zoom="2"
+     inkscape:cx="3004.8866"
+     inkscape:cy="-1059.9739"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -2271,13 +2295,13 @@
        sodipodi:nodetypes="cscccsc" />
     <g
        id="g4072"
-       transform="translate(9.2495e-5,98)"
+       transform="translate(-352.13908,126.28427)"
        style="fill:#ff3030;fill-opacity:1"
        inkscape:export-filename="/home/silver/images/moob/hearth_full.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295">
       <path
-         style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-opacity:1;stroke-width:20;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          d="m 1362.1875,2262.0277 c 5.6738,80.1002 -145.9063,191.6911 -145.9063,191.6911 0,0 -151.9367,-111.5316 -146.2156,-191.6911 2.465,-34.538 33.5996,-72.8089 74.0906,-72.8089 35.9972,0 65.923,25.9476 72.125,60.1562 6.2022,-34.2086 36.128,-60.1562 72.125,-60.1562 40.4912,0 71.34,38.3429 73.7813,72.8089 z"
          transform="translate(-9.2495e-5,-98)"
          id="path4045-9"
@@ -2285,7 +2309,7 @@
     </g>
     <g
        id="g4072-5"
-       transform="translate(352.23749,97.30081)"
+       transform="translate(-9.8011819,214.68054)"
        style="fill:#ffffff;fill-opacity:1"
        inkscape:export-filename="/home/silver/images/moob/hearth_empty.png"
        inkscape:export-xdpi="299.86295"
@@ -2302,7 +2326,10 @@
        style="font-size:40px;font-style:normal;font-weight:normal;fill:none;fill-opacity:1;stroke:#000000;font-family:Bitstream Vera Sans;stroke-opacity:1;stroke-width:8;stroke-miterlimit:4;stroke-dasharray:none"
        x="1220.4663"
        y="2088.9807"
-       id="text4103"><tspan
+       id="text4103"
+       inkscape:export-filename="/home/silver/images/moob/retry.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan4105"
          x="1220.4663"
@@ -2314,5 +2341,73 @@
    id="tspan4109">o</tspan> ret<tspan
    style="fill:#66ff3f;fill-opacity:1"
    id="tspan4113">r</tspan>y</tspan></text>
+    <rect
+       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect4161"
+       width="871.15558"
+       height="642.05298"
+       x="2018.0828"
+       y="1649.1603" />
+    <text
+       xml:space="preserve"
+       style="font-size:105.48895263999999372px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+       x="2183.7817"
+       y="1828.3544"
+       id="text4386-8"
+       inkscape:export-filename="/home/silver/images/moob/gameover.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4388-8"
+         x="2183.7817"
+         y="1828.3544"
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">ga<tspan
+   style="fill:#ffffff;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;stroke:none"
+   id="tspan4402-9">m</tspan>e o<tspan
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   id="tspan4406-1">v</tspan>er</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;stroke:none;stroke-width:8;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans;fill-opacity:1"
+       x="2129.8528"
+       y="2115.0317"
+       id="text4103-0"
+       inkscape:export-filename="/home/silver/images/moob/retry.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4105-2"
+         x="2129.8528"
+         y="2115.0317"
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;stroke:none;stroke-width:8;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie;fill-opacity:1">tap <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4163">t</tspan><tspan
+   style="fill:#66ff3f;fill-opacity:1;stroke:none"
+   id="tspan4109-6">o</tspan> retry</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ff3030;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+       x="1879.3226"
+       y="-2440.0991"
+       id="text4394-0"
+       transform="matrix(0,1,-1,0,0,0)"
+       inkscape:export-filename="/home/silver/images/moob/smile.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4396-5"
+         x="1879.3226"
+         y="-2440.0991"
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"><tspan
+   style="fill:#66ff3f;fill-opacity:1;stroke-linecap:round;stroke:none"
+   id="tspan4404-2">:</tspan>-(</tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 3091.2623,2091.0094 0,-14.127 -32.914,-14.4888 c 19.7033,-5.4739 34.0087,-23.6802 33.645,-45.0783 -0.4317,-25.4014 -21.3737,-45.6433 -46.7751,-45.2115 -25.4013,0.4317 -45.6434,21.3736 -45.2116,46.775 0.3637,21.3981 15.2796,38.7136 35.1576,43.5148 0,0 -24.8884,6.6974 -33.2549,15.1803 l 0,14.0534 89.353,-0.6179 z"
+       id="path4503-3"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"
+       sodipodi:nodetypes="cccssscccc" />
   </g>
 </svg>

@@ -3,10 +3,12 @@
 #include "ai/movement/StillPolicy.h"
 #include "ai/shoot/RandomPolicy.h"
 #include "ai/shoot/AimPolicy.h"
+#include "logic/GreenTank.h"
+#include "logic/RedTank.h"
 
 Game::Game (game_over_callback_t goCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
-      tank(1000,GREY),
+      tank(),
       level(level),
       elapsedS(0),
       movingState(MOVING_NONE),
@@ -23,12 +25,12 @@ Game::Game (game_over_callback_t goCallback, Level* level)
     for (unsigned y=0; y<level->getHeight(); y++) {
       Tile* tile = level->getTile(x,y);
       if (tile->getType() == _1) {
-        Tank* t = new Tank(2000,RED, new TankAI(new AimPolicy(), new StillPolicy()));
+        RedTank* t = new RedTank();
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);
       } else if (tile->getType() == _2) {
-        Tank* t = new Tank(2000,GREEN, new TankAI(new AimPolicy(), new StillPolicy()));
+        GreenTank* t = new GreenTank();
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);
@@ -40,7 +42,7 @@ Game::Game (game_over_callback_t goCallback, Level* level)
 }
 
 Game::~Game () {
-  LIST_FOREACH(Tank*, enemies, i)
+  LIST_FOREACH(EnemyTank*, enemies, i)
     delete *i;
 }
 
@@ -68,7 +70,7 @@ void Game::update () {
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
     if (!r->hasExploded() && (r->getNumBounces() > 3))
-      r->explode(NULL);
+      r->explode(NULL, r->getPosition());
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
       colManager.removeEntity(*i);
@@ -81,8 +83,8 @@ void Game::update () {
   }
 
   //Enemies
-  LIST_FOREACH(Tank*, enemies, i) {
-    Tank* t = *i;
+  LIST_FOREACH(EnemyTank*, enemies, i) {
+    EnemyTank* t = *i;
     if (!t->isAlive())
       continue;
 
@@ -97,7 +99,9 @@ void Game::update () {
         if (t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
           rockets.append(t->fireRocket(rocketDir));
         }
-        t->setRotationFromDir(ai->aim(elapsedS, this, t).getNormalized());
+        Vector2 aim;
+        if (ai->aim(elapsedS, this, t, &aim))
+          t->setRotationFromDir(aim.getNormalized());
       }
     }
   }
@@ -191,8 +195,8 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
       (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
     return;
 
-  e1->explode(e2);
-  e2->explode(e1);
+  e1->explode(e2, colPoint);
+  e2->explode(e1, colPoint);
 
   explosions.append(colPoint);
 }

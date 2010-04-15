@@ -12,7 +12,7 @@ class RandomPolicy : public ShootPolicy {
 
 
     bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
-    Vector2 aim (double elapsedS, Game* game, Tank* tank);
+    bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir);
   private:
     double timeSinceFire;
     float angle;
