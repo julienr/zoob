@@ -19,7 +19,7 @@ Level* loadColTest() {
 eTileType lvl1[12*8] = {
     W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
     L,  S,  E,  E,  L,  E,  E,  L, _1,  L, _1,  R,
-    W,  B,  B,  E,  L, _1,  E,  L,  E,  L,  E,  R,
+    W,  E,  B,  B,  W, _1,  E,  L,  E,  L,  E,  R,
     L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
     L,  E, _1,  E,  E,  E,  E,  E,  E,  E,  E,  R,
     L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
@@ -34,7 +34,7 @@ Level* loadLevel1() {
 eTileType lvl2[12*8] = {
     W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
     L,  S,  E,  E,  L,  E,  E,  E,  E,  E, E,  R,
-    W,  B,  B,  E,  L, _1,  E,  E,  E,  W,  E,  R,
+    W,  E,  B,  B,  W, _1,  E,  E,  E,  W,  E,  R,
     L,  E,  E,  E,  E,  E,  L, _1,  E, _2,  E,  R,
     L,  E,  E,  E,  E,  E,  L, _1,  E, _2,  E,  R,
     L,  E,  E,  E,  L, _1,  E,  E,  E,  W,  E,  R,
