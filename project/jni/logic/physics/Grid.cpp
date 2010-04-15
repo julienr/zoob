@@ -251,7 +251,7 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
   }
 }
 
-bool Grid::traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const {
+bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const {
   result->tFirst = MOOB_INF;
   bool collided = false;
   unsigned numTouched = findTouchedCells(start, move);
@@ -259,7 +259,7 @@ bool Grid::traceRay (const Vector2& start, const Vector2& move, CollisionResult*
   for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->touched = true;
     collided |= collideAgainstCell(touchedCells[i],
-                                   NULL,
+                                   source,
                                    start,
                                    &line,
                                    move,

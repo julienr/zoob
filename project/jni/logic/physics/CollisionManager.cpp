@@ -110,22 +110,38 @@ bool CollisionManager::MovingAgainstStill (const Vector2& stillPos,
   }
 }
 
-bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
-                                             const AABBox* box,
-                                             const Vector2& lineStart,
-                                             const Vector2& lineMove,
-                                             CollisionResult* r) {
-  //TODO
-  return false;
-}
-
 bool CollisionManager::LineAgainstCircle (const Vector2& circlePos,
                                                const BCircle* circle,
                                                const Vector2& lineStart,
                                                const Vector2& lineMove,
                                                CollisionResult* r) {
-  //TODO
-  return false;
+  r->tFirst = 0.0f;
+  r->tLast = MOOB_INF;
+
+  //LOGE("LineAgainstCircle");
+  const Vector2 centerToCenter = circlePos - lineStart;
+
+  //distance between circles
+  const float dist = centerToCenter.length() - circle->getRadius();
+  //Project move on centerToCenter and
+  const float moveC = lineMove*(centerToCenter.getNormalized());
+
+  if (dist <= 0) {
+    //overlap
+    r->tFirst = 0.0f;
+    r->tLast = (dist+circle->getRadius())/moveC;
+    return true;
+  } else {
+    //no overlap
+    if (moveC > dist) {
+      //collision
+      r->normal = -centerToCenter.getNormalized();
+      r->tFirst = dist/moveC;
+      r->tLast = (dist+circle->getRadius())/moveC;
+      return true;
+    } else
+      return false;
+  }
 }
 
 #define FILL_PROJ_MIN_MAX(min,max,rect) float min = axis[i]*rect[0]; \
@@ -180,6 +196,48 @@ bool CollisionManager::MovingAABBAgainstAABB (const Vector2& stillPos,
   }
   return (r->tFirst <= 1.0f);
 }
+
+bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
+                                             const AABBox* box,
+                                             const Vector2& lineStart,
+                                             const Vector2& lineMove,
+                                             CollisionResult* r) {
+  r->tFirst = 0.0f;
+  r->tLast = MOOB_INF;
+
+  //We have 4 axis of separation => the box axis
+  //and the line direction plus an axis orthogonal to the line dir
+  Vector2 axis[4];
+  axis[0] = Vector2(1,0);
+  axis[1] = Vector2(0,1);
+  axis[2] = lineMove.getNormalized();
+  axis[3] = Vector2(-axis[2].y, axis[2].x).getNormalized();
+
+  Vector2 corners[4];
+  box->getCorners(boxPos, corners);
+
+  //LOGE("LineAgainstAABB");
+
+  //SAT
+  for (int i=0; i<4; i++) {
+    const float speed = axis[i]*lineMove;
+
+    //Projected min/max on axis for both boxes
+    FILL_PROJ_MIN_MAX(min0,max0,corners)
+    float min1 = lineStart*axis[i];
+    float max1 = min1;
+
+    //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
+
+    if (!collideOnAxis(axis[i], min0, max0, min1, max1, speed, r))
+      return false;
+
+    //LOGE("COLLISION");
+  }
+  return (r->tFirst <= 1.0f);
+}
+
+
 bool CollisionManager::MovingCircleAgainstCircle (const Vector2& stillPos,
                                                         const BCircle* still,
                                                         const Vector2& movingPos,
@@ -297,6 +355,6 @@ bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResul
   return grid.push(mover, move, result);
 }
 
-bool CollisionManager::traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const {
-  return grid.traceRay(start, move, result);
+bool CollisionManager::traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const {
+  return grid.traceRay(source, start, move, result);
 }

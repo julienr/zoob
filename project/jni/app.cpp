@@ -234,7 +234,7 @@ void nativeRender () {
 
     game->update();
     gameView->draw();
-    gameView->debugDraw();
+    //gameView->debugDraw();
   } else {
     gameManager->drawMenu();
   }

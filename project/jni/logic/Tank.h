@@ -6,13 +6,22 @@
 #include "physics/BCircle.h"
 #include "lib/Color.h"
 #include "ai/TankAI.h"
+#include "lib/Utils.h"
+
+#define FIRE_INTERVAL_MS 1000
 
 class Rocket;
 
 class Tank: public Entity {
   public:
-    Tank (eColor col) : Entity (new BCircle(TANK_BCIRCLE_R)), color(col), ai(NULL), exploded(false), alive(true) {}
-    Tank (eColor col, TankAI* ai) : Entity(new BCircle(TANK_BCIRCLE_R)), color(col), ai(ai), exploded(false), alive(true) {}
+    Tank (eColor col, TankAI* ai=NULL)
+      : Entity(new BCircle(TANK_BCIRCLE_R)),
+        color(col),
+        ai(ai),
+        exploded(false),
+        alive(true),
+        lastFireTime(0) {
+    }
 
     ~Tank () {
       if (ai)
@@ -51,6 +60,9 @@ class Tank: public Entity {
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
 
+    //true if the tank can (ie is allowed by the game rules) fire a rocket
+    bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > FIRE_INTERVAL_MS; }
+
     Rocket* fireRocket (Vector2 dir);
   private:
     const eColor color; //This tank's color (highly symbolic, but used for rendering)
@@ -60,6 +72,8 @@ class Tank: public Entity {
      */
     bool exploded;
     bool alive;
+
+    uint64_t lastFireTime;
 };
 
 #endif /* TANK_H_ */

@@ -98,7 +98,7 @@ class CollisionManager {
     //if false is returned, the content of result is undetermined
     bool trace (Entity* mover, const Vector2& move, CollisionResult* result) const;
 
-    bool traceRay (const Vector2& start, const Vector2& move, CollisionResult* result) const;
+    bool traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const;
 
   private:
     //FIXME: use grid to store entities

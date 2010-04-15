@@ -3,14 +3,22 @@
 #include "logic/Game.h"
 #include "logic/Tank.h"
 
-Vector2 AimPolicy::aim (double elapsedS, Game* game, Tank* tank) {
-  return game->getPlayerTank().getPosition() - tank->getPosition();
+Vector2 AimPolicy::aim (double elapsedS, Game* game, Tank* myTank) {
+  return game->getPlayerTank().getPosition() - myTank->getPosition();
 }
 
-bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* myTank) {
   CollisionResult r;
-  if (!game->getColManager().traceRay(tank->getPosition(), game->getPlayerTank().getPosition(), &r)) {
-    LOGE("Can see player");
+  const Vector2 tP = myTank->getPosition();
+  const Vector2 dirToTank = game->getPlayerTank().getPosition()-tP;
+  if (game->getColManager().traceRay(myTank, tP, dirToTank, &r)
+      && r.collidedEntity != &game->getPlayerTank()) {
+    //LOGE("entity : %p, tFirst : %f, myTank : %p", r.collidedEntity, r.tFirst, myTank);
+    //Cannot see, don't fire
+    return false;
+  } else {
+    LOGE("see player tank");
+    outDir->set(dirToTank.getNormalized());
+    return true;
   }
-  return false;
 }

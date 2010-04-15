@@ -1,15 +1,18 @@
 #include "LevelsData.h"
 
-eTileType coltest[3*5] = {
-    S,E,E,
-    E,E,W,
-    S,E,W,
-    E,E,W,
-    E,W,W
+eTileType coltest[8*8] = {
+    W, T, T, T, T, T, T, W,
+    L, E, E, E, E, E, E, R,
+    L, S, E, E, E, E, E, R,
+    L, E, E, E, E, E, E, R,
+    L, E, E, E, E, _1, E, R,
+    L, E, E, W, E, E, E, R,
+    L, E, E, W, E, E, E, R,
+    W, B, B, B, B, B, B, W
 };
 
 Level* loadColTest() {
-  return new Level(3,5,&coltest[0]);
+  return new Level(8,8,&coltest[0]);
 }
 
 

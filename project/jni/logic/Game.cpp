@@ -86,7 +86,7 @@ void Game::update () {
       if (ai) {
         doTankMove(t, ai->decideDir(elapsedS, this, t), elapsedS);
         Vector2 rocketDir;
-        if (ai->decideFire(elapsedS, &rocketDir, this, t)) {
+        if (t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
           rockets.append(t->fireRocket(rocketDir));
         }
         t->setRotationFromDir(ai->aim(elapsedS, this, t).getNormalized());
@@ -153,9 +153,11 @@ void Game::setMoveTouchPoint (const Vector2& pos) {
 void Game::stopMoving () {
   if (movingState == MOVING_CURSOR) {
     //Fire up rocket
-    Vector2 dir = cursor.getPosition()-tank.getPosition();
-    dir.normalize();
-    rockets.append(tank.fireRocket(dir));
+    if (tank.canFire()) {
+      Vector2 dir = cursor.getPosition()-tank.getPosition();
+      dir.normalize();
+      rockets.append(tank.fireRocket(dir));
+    }
   }
   movingState = MOVING_NONE;
 }
