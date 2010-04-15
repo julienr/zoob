@@ -28,10 +28,8 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   unsigned numTouched = 0;
   touchCells(bcircle, end, &numTouched);
   for (unsigned i=0; i<numTouched; i++) {
-    if (!touchedCells[i]->solid) {
-      e->touchedCells.append(touchedCells[i]);
-      touchedCells[i]->entities.append(e);
-    }
+    e->touchedCells.append(touchedCells[i]);
+    touchedCells[i]->entities.append(e);
   }
 }
 
@@ -122,32 +120,23 @@ bool collideAgainstCell (GridCell* cell,
                             CollisionResult* result) {
   //Touched cell is solid, check collision against its aabb
   CollisionResult r;
-  if (cell->solid) {
-    if (CollisionManager::MovingAgainstStill(cell->getPosition(), cell->getBVolume(), startPos, mover, move, &r)
-         && r.tFirst < result->tFirst) {
+
+  //Check collision against touchedCells entities list
+  for (list<Entity*>::iterator iter = cell->entities.begin(); iter.hasNext(); iter++) {
+    Entity* otherEnt = *iter;
+    if (otherEnt == sourceEntity)
+      continue;
+    if (!otherEnt->isSolid())
+      continue;
+
+    const BoundingVolume* bvol = otherEnt->getBVolume();
+
+    bool col = CollisionManager::MovingAgainstStill(otherEnt->getPosition(), bvol, startPos, mover, move, &r);
+    if (col && (r.tFirst < result->tFirst)) {
       (*result) = r;
-      result->collidedEntity = cell;
+      result->collidedEntity = otherEnt;
       result->colPoint = startPos+move*r.tFirst;
       return true;
-    }
-  } else {
-    //Check collision against touchedCells entities list
-    for (list<Entity*>::iterator iter = cell->entities.begin(); iter.hasNext(); iter++) {
-      Entity* otherEnt = *iter;
-      if (otherEnt == sourceEntity)
-        continue;
-      if (!otherEnt->isSolid())
-        continue;
-
-      const BoundingVolume* bvol = otherEnt->getBVolume();
-
-      bool col = CollisionManager::MovingAgainstStill(otherEnt->getPosition(), bvol, startPos, mover, move, &r);
-      if (col && (r.tFirst < result->tFirst)) {
-        (*result) = r;
-        result->collidedEntity = otherEnt;
-        result->colPoint = startPos+move*r.tFirst;
-        return true;
-      }
     }
   }
   return false;

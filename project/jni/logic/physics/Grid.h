@@ -8,24 +8,14 @@
 #include "AABBox.h"
 #include "containers/list.h"
 
-//FIXME: still really need to see this as Entity ? Level now adds its entity to colManager
-struct GridCell : public Entity {
-  GridCell (const Vector2& worldPos, unsigned x, unsigned y) :
-    Entity(new AABBox(TILE_SIZE, TILE_SIZE)),
-    x(x),y(y),touched(false), solid(false) {
-    this->setPosition(worldPos);
+struct GridCell {
+  GridCell (unsigned x, unsigned y) :
+    x(x),y(y),touched(false){
   }
-
-  eEntityType getType () const {
-    return ENTITY_WALL;
-  }
-
-  void explode (Entity* e) {}
 
   const unsigned x;
   const unsigned y;
   bool touched;
-  bool solid;
   list<Entity*> entities;
 };
 
@@ -39,8 +29,7 @@ class Grid {
       for (unsigned x=0; x<width; x++) {
         grid[x] = new GridCell*[height];
         for (unsigned y=0; y<height; y++) {
-          //We add tile_size/2 because aabbox position is centered
-          grid[x][y] = new GridCell(gridToWorld(x,y)+Vector2(TILE_SIZE/2, TILE_SIZE/2), x,y);
+          grid[x][y] = new GridCell(x,y);
         }
       }
       const unsigned diagLength = ceilf(sqrtf(width*width+height*height));
@@ -57,11 +46,6 @@ class Grid {
       }
       delete [] grid;
       delete [] touchedCells;
-    }
-
-    void setSolid (int x, int y, bool solid) {
-      ASSERT(inside(x,y));
-      grid[x][y]->solid = true;
     }
 
     void addEntity (Entity* e);

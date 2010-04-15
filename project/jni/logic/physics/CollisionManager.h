@@ -67,10 +67,6 @@ class CollisionManager {
       grid.removeEntity(e);
     }
 
-    void setGridCellSolid (int x, int y, bool solid) {
-      grid.setSolid(x,y,solid);
-    }
-
     void unmarkCollided () {
       for (list<Entity*>::iterator i = entities.begin(); i.hasNext(); i++)
         (*i)->collided = false;
