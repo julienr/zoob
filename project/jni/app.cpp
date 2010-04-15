@@ -255,7 +255,7 @@ void nativeRender () {
 
     GLW::translate(transX, transY, 0);
     gameView->draw();
-    gameView->debugDraw();
+    //gameView->debugDraw();
   } else {
     gameManager->drawMenu();
   }
