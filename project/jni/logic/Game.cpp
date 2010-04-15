@@ -69,8 +69,10 @@ void Game::update () {
   //Rockets
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
-    if (!r->hasExploded() && (r->getNumBounces() > 3))
+    if (!r->hasExploded() && (r->getNumBounces() > 3)) {
       r->explode(NULL, r->getPosition());
+      explosions.append(r->getPosition());
+    }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
       colManager.removeEntity(*i);
