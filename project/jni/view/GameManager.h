@@ -27,7 +27,7 @@ class GameManager {
   public:
     GameManager (startGameCallback_t cb)
       : newGameCB(cb),
-        state(STATE_LOST),
+        state(STATE_MAINMENU),
         currentLevel(0) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
@@ -86,6 +86,10 @@ class GameManager {
     const startGameCallback_t newGameCB;
     eAppState state;
     size_t currentLevel;
+
+    //This is to avoid that a touchdown event that started before a state change is propagated in
+    //another state
+    eAppState stateAtTouchDown;
 
     Menu* menus[MAX_STATE];
 };

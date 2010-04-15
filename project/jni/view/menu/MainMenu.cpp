@@ -82,7 +82,7 @@ void MainMenu::_actionPrev () {
 }
 
 void MainMenu::_initItems () {
-  logoPos = Vector2(3,4);
+  logoPos = Vector2(3,5);
   logoSize = Vector2(8,8);
 
   numberPos = Vector2(8.9, 2);

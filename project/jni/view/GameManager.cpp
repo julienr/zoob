@@ -9,9 +9,10 @@ void GameManager::drawMenu () {
 void GameManager::handleTouchDown (const Vector2& p) {
   if (menus[state])
     menus[state]->handleTouchDown(p);
+  stateAtTouchDown = state;
 }
 
 void GameManager::handleTouchUp (const Vector2& p) {
-  if (menus[state])
+  if (stateAtTouchDown == state && menus[state])
     menus[state]->handleTouchUp(p);
 }
