@@ -57,6 +57,10 @@ void nativeMenu () {
   stateTransition = STATE_MAINMENU;
 }
 
+void gameOverCallback () {
+  LOGE("gameover");
+  stateTransition = STATE_LOST;
+}
 
 GameManager* gameManager;
 
@@ -71,13 +75,13 @@ void toPlayingState (GameManager* manager) {
   delete gameView;
 
   lvl = levelsLoadFns[manager->getCurrentLevel()]();
-  game = new Game(lvl);
+  game = new Game(gameOverCallback, lvl);
   gameView = new GameView(*game);
 
   centerGameOnScreen();
 }
 
-void toMenuState () {
+void toMainMenuState () {
   //FIXME: shouldn't we "pause" the game ?
   delete lvl;
   lvl = NULL;
@@ -86,6 +90,16 @@ void toMenuState () {
   delete gameView;
   gameView = NULL;
   gameManager->setState(STATE_MAINMENU);
+}
+
+void toLostState () {
+  delete lvl;
+  lvl = NULL;
+  delete game;
+  game = NULL;
+  delete gameView;
+  gameView = NULL;
+  gameManager->setState(STATE_LOST);
 }
 
 
@@ -219,7 +233,9 @@ void nativeRender () {
     if (stateTransition == STATE_PLAYING)
       toPlayingState(gameManager);
     else if (stateTransition == STATE_MAINMENU)
-      toMenuState();
+      toMainMenuState();
+    else if (stateTransition == STATE_LOST)
+      toLostState();
     stateTransition = -1;
   }
 

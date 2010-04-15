@@ -9,11 +9,14 @@
 #include "containers/vector.h"
 #include "menu/Menu.h"
 #include "menu/MainMenu.h"
+#include "menu/LostMenu.h"
 #include "levels/LevelsData.h"
 
 enum eAppState {
   STATE_PLAYING=0,
-  STATE_MAINMENU
+  STATE_MAINMENU,
+  STATE_LOST,
+  MAX_STATE
 };
 
 class GameManager;
@@ -24,12 +27,16 @@ class GameManager {
   public:
     GameManager (startGameCallback_t cb)
       : newGameCB(cb),
-        state(STATE_MAINMENU),
-        currentLevel(0),
-        mainMenu(this) {
+        state(STATE_LOST),
+        currentLevel(0) {
+      menus[STATE_PLAYING] = NULL;
+      menus[STATE_MAINMENU] = new MainMenu(this);
+      menus[STATE_LOST] = new LostMenu(this);
     }
 
     ~GameManager () {
+      for (int i=0; i<MAX_STATE; i++)
+          delete menus[i];
     }
 
     eAppState getState () { return state; }
@@ -80,7 +87,7 @@ class GameManager {
     eAppState state;
     size_t currentLevel;
 
-    MainMenu mainMenu;
+    Menu* menus[MAX_STATE];
 };
 
 #endif /* GAMEMANAGER_H_ */

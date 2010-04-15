@@ -4,14 +4,19 @@
 #include "ai/shoot/RandomPolicy.h"
 #include "ai/shoot/AimPolicy.h"
 
-Game::Game (Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f), tank(1000,GREY), level(level), elapsedS(0), movingState(MOVING_NONE) {
+Game::Game (game_over_callback_t goCallback, Level* level)
+    : colManager(level->getWidth(), level->getHeight(), 1.0f),
+      tank(1000,GREY),
+      level(level),
+      elapsedS(0),
+      movingState(MOVING_NONE),
+      gameOverCallback(goCallback) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
 
-  playerNumLives = 4;
-  playerMaxLives = 4;
+  playerMaxLives = 2;
+  playerNumLives = playerMaxLives;
 
   //Spawn enemies
   for (unsigned x=0; x<level->getWidth(); x++) {
@@ -101,6 +106,9 @@ void Game::update () {
     playerNumLives--;
     tank.unmarkExploded();
     LOGE("playerNumLives : %i", playerNumLives);
+    if (playerNumLives == 0) {
+      gameOverCallback();
+    }
   }
 
   //Player Tank movement

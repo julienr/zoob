@@ -2,13 +2,16 @@
 #include "lib/Utils.h"
 
 void GameManager::drawMenu () {
-  mainMenu.draw();
+  if (menus[state])
+    menus[state]->draw();
 }
 
 void GameManager::handleTouchDown (const Vector2& p) {
-  mainMenu.handleTouchDown(p);
+  if (menus[state])
+    menus[state]->handleTouchDown(p);
 }
 
 void GameManager::handleTouchUp (const Vector2& p) {
-  mainMenu.handleTouchUp(p);
+  if (menus[state])
+    menus[state]->handleTouchUp(p);
 }

@@ -27,7 +27,9 @@ class Menu {
     GameManager* gameManager;
 
     //Called when a menuItems is touched
-    virtual void actionPerformed (short touchedItem) = 0;
+    virtual void actionPerformed (short touchedItem) {};
+    //Called when a a click happens OUTSIDE a menuItem
+    virtual void actionPerformed () {};
 
     void drawItems();
 

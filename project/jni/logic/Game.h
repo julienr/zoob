@@ -21,9 +21,11 @@ enum eMoveState {
   MOVING_TANK_PAD, //moving tank using the gamepad
 };
 
+typedef void (*game_over_callback_t) ();
+
 class Game {
   public:
-    Game (Level* level); //gamePadPos is in game space
+    Game (game_over_callback_t goCallback, Level* level); //gamePadPos is in game space
     ~Game ();
 
     void start () {
@@ -143,6 +145,7 @@ class Game {
     Vector2 tankMoveEnd;
 
     uint64_t lastTime;
+    game_over_callback_t gameOverCallback;
 };
 
 #endif /* GAME_H_ */

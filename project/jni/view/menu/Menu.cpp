@@ -16,6 +16,7 @@ void Menu::handleTouchUp (const Vector2& p) {
   //WARNING: this depends on the order of adding to menuItems in GameManager constructor
   if (touchedItem != -1 && menuItems[(size_t)touchedItem]->inside(p)) {
     actionPerformed(touchedItem);
-  }
+  } else
+    actionPerformed();
   touchedItem = -1;
 }
