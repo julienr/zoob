@@ -28,7 +28,7 @@ Game::Game (game_over_callback_t goCallback, Level* level)
         enemies.append(t);
         colManager.addEntity(t);
       } else if (tile->getType() == _2) {
-        Tank* t = new Tank(2000,GREEN, new TankAI(new RandomPolicy(), new StillPolicy()));
+        Tank* t = new Tank(2000,GREEN, new TankAI(new AimPolicy(), new StillPolicy()));
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);
@@ -68,7 +68,7 @@ void Game::update () {
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
     if (!r->hasExploded() && (r->getNumBounces() > 3))
-      r->explode();
+      r->explode(NULL);
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
       colManager.removeEntity(*i);
@@ -190,8 +190,9 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
       (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
     return;
-  e1->explode();
-  e2->explode();
+
+  e1->explode(e2);
+  e2->explode(e1);
 
   explosions.append(colPoint);
 }

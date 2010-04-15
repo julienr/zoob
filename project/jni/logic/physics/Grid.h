@@ -20,7 +20,7 @@ struct GridCell : public Entity {
     return ENTITY_WALL;
   }
 
-  void explode () {}
+  void explode (Entity* e) {}
 
   const unsigned x;
   const unsigned y;

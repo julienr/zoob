@@ -35,10 +35,7 @@ class Tank: public Entity {
       return ENTITY_TANK;
     }
 
-    void explode () {
-      exploded = true;
-      LOGE("OMG, got an explosion");
-    }
+    void explode (Entity* e);
 
     bool hasExploded () const {
       return exploded;

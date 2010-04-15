@@ -31,19 +31,19 @@ Level* loadLevel1() {
   return new Level(12, 8, &lvl1[0]);
 }
 
-eTileType lvl2[8*8] = {
-    W, T, T, T, T, T, T, W,
-    L, E, E, E, E, E, E, R,
-    L, S, E, S, E, E, E, R,
-    L, E, E, E, R, E, E, R,
-    L, E, T, T, W, E, E, R,
-    L, E, E, E, E, E, E, R,
-    L, E, E, E, E, E, E, R,
-    W, B, B, B, B, B, B, W
+eTileType lvl2[12*8] = {
+    W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+    L,  S,  E,  E,  L,  E,  E,  E,  E,  E, E,  R,
+    W,  B,  B,  E,  L, _1,  E,  E,  E,  W,  E,  R,
+    L,  E,  E,  E,  E,  E,  L, _1,  E, _2,  E,  R,
+    L,  E,  E,  E,  E,  E,  L, _1,  E, _2,  E,  R,
+    L,  E,  E,  E,  L, _1,  E,  E,  E,  W,  E,  R,
+    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+    W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
 };
 
 Level* loadLevel2() {
-  return new Level(8, 8, &lvl2[0]);
+  return new Level(12, 8, &lvl2[0]);
 }
 
 //Array fill

@@ -46,7 +46,7 @@ class Rocket : public Entity {
       return !exploded;
     }
 
-    void explode () {
+    void explode (Entity* e) {
       LOGE("Rocket explosion");
       exploded = true;
     }
