@@ -154,6 +154,10 @@ void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
     case MOVING_CURSOR:
       cursor.setPosition(touchPosition);
       break;
+    case MOVING_TANK_EDGES:
+      //edgeMoveDir = touchPosition;
+      tankMoveEnd = touchPosition;
+      break;
     default:
       break;
   }
@@ -167,6 +171,10 @@ void Game::setMoveTouchPoint (const Vector2& pos) {
       break;
     case MOVING_CURSOR:
       cursor.setPosition(pos);
+      break;
+    case MOVING_TANK_EDGES:
+      edgeMoveDir = pos;
+      tankMoveEnd = pos;
       break;
     default:
       break;

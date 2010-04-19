@@ -21,6 +21,7 @@ enum eMoveState {
   MOVING_TANK,
   MOVING_CURSOR,
   MOVING_TANK_PAD, //moving tank using the gamepad
+  MOVING_TANK_EDGES //moving tank using the screen edges
 };
 
 typedef void (*game_over_callback_t) ();
@@ -77,6 +78,9 @@ class Game {
         return tankMoveEnd - tank.getPosition();
       else if (movingState == MOVING_TANK_PAD)
         return tankMoveEnd - gamePadPos;
+      else if (movingState == MOVING_TANK_EDGES)
+        return tankMoveEnd - tank.getPosition();
+        //return edgeMoveDir;
       else {
         ASSERT(false);
         return Vector2(0,0);
@@ -90,7 +94,11 @@ class Game {
     void stopMoving();
 
     bool isMovingTank () const {
-      return movingState == MOVING_TANK || movingState == MOVING_TANK_PAD;
+      return movingState == MOVING_TANK || movingState == MOVING_TANK_PAD || movingState == MOVING_TANK_EDGES;
+    }
+
+    eMoveState getMovingState () const {
+      return movingState;
     }
 
     bool isMovingCursor () const {
@@ -145,6 +153,8 @@ class Game {
     //the direction
     Vector2 gamePadPos;
     Vector2 tankMoveEnd;
+    //If we are using screen edges to move, the position will be given as a direction
+    Vector2 edgeMoveDir;
 
     uint64_t lastTime;
     game_over_callback_t gameOverCallback;

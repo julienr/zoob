@@ -65,9 +65,13 @@ void gameOverCallback () {
 GameManager* gameManager;
 
 Sprite* levelText;
+#define CONTROL_EDGES
+
+#ifdef CONTROL_GAMEPAD
 Sprite* gamePad;
 const Vector2 gamePadPos(13.8f, 5.0f);
 const Vector2 gamePadSize(2.5,2.5);
+#endif
 
 void toPlayingState (GameManager* manager) {
   delete lvl;
@@ -109,7 +113,9 @@ void nativeInit (const char* apkPath) {
   gameManager = new GameManager(&startGame);
 
   levelText = new Sprite("assets/sprites/level_text.png");
+#ifdef CONTROL_GAMEPAD
   gamePad = new Sprite("assets/sprites/control.png");
+#endif
 
   printGLString("Version", GL_VERSION);
   printGLString("Vendor", GL_VENDOR);
@@ -159,15 +165,19 @@ int viewportWidth = 0, viewportHeight = 0;
 void centerGameOnScreen () {
   //Center game area on screen
   const int levelH = game->getLevel()->getHeight();
-  //const int levelW = game->getLevel()->getWidth();
+  const int levelW = game->getLevel()->getWidth();
   //screen size in game coords
-  //const float gsW = screenWidth*xScreenToGame;
+  const float gsW = viewportWidth*xScreenToGame;
   const float gsH = viewportHeight*yScreenToGame;
-  /*transX = 0.5f + (gsW-levelW)/2.0f;*/
+#ifdef CONTROL_EDGES
+  transX = 0.5f + (gsW-levelW)/2.0f;
+  transY = 0.5f + (gsH-levelH)/2.0f;
+#else //CONTROL_GAMEPAD
   transX = 1.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
 
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
+#endif
 }
 
 void forceRatio (float sW, float sH) {
@@ -246,7 +256,9 @@ void nativeRender () {
     game->update();
 
     //levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
+#ifdef CONTROL_GAMEPAD
     gamePad->draw(gamePadPos, gamePadSize);
+#endif
 
     glPushMatrix();
     GLW::translate(10.0f, 0.55f, 0);
@@ -261,6 +273,7 @@ void nativeRender () {
   }
 }
 
+#ifdef CONTROL_GAMEPAD
 bool inGamePad (float x, float y) {
   x *= xScreenToGame;
   y *= yScreenToGame;
@@ -273,6 +286,67 @@ bool inGamePad (float x, float y) {
   return ((x >= gamePadPos.x-hW) && (x <= gamePadPos.x + hW)) &&
           ((y >= gamePadPos.y-hW) && (y <= gamePadPos.y + hH));
 }
+#endif
+
+
+#ifdef CONTROL_EDGES
+enum eScreenEdges {
+    EDGE_TOP,
+    EDGE_TOP_RIGHT,
+    EDGE_RIGHT,
+    EDGE_BOTTOM_RIGHT,
+    EDGE_BOTTOM,
+    EDGE_BOTTOM_LEFT,
+    EDGE_LEFT,
+    EDGE_TOP_LEFT,
+    EDGE_NONE
+};
+
+eScreenEdges inEdge (float x, float y) {
+  const float minx = transX;
+  const float miny = transY;
+  const float maxx = viewportWidth*xScreenToGame - transX;
+  const float maxy = viewportHeight*yScreenToGame - transY;
+
+  //x position relative to [minx,maxx] => -1 is on the left, 0 inside and 1 on the right
+  const int xpos = (x < minx)?-1:(x<maxx)?0:1;
+  const int ypos = (y < miny)?-1:(y<maxy)?0:1;
+
+  //LOGE("inEdge (%f,%f), min (%f,%f) max (%f,%f) => x/y : (%i,%i)", x, y, minx, miny, maxx, maxy, xpos, ypos);
+
+  if (ypos == -1) {
+    if (xpos == -1) return EDGE_TOP_LEFT;
+    if (xpos == 0) return EDGE_TOP;
+    if (xpos == 1) return EDGE_TOP_RIGHT;
+  } else if (ypos == 0) {
+    if (xpos == -1) return EDGE_LEFT;
+    if (xpos == 0) return EDGE_NONE;
+    if (xpos == 1) return EDGE_RIGHT;
+  } else if (ypos == 1) {
+    if (xpos == -1) return EDGE_BOTTOM_LEFT;
+    if (xpos == 0) return EDGE_BOTTOM;
+    if (xpos == 1) return EDGE_BOTTOM_RIGHT;
+  }
+  ASSERT(false);
+  return EDGE_NONE;
+}
+
+Vector2 edgeMoveDir (eScreenEdges edge) {
+  switch (edge) {
+    case EDGE_TOP_LEFT: return Vector2(-1,-1);
+    case EDGE_TOP: return Vector2(0, -1);
+    case EDGE_TOP_RIGHT: return Vector2(1, -1);
+    case EDGE_LEFT: return Vector2(-1, 0);
+    case EDGE_NONE: return Vector2(0, 0);
+    case EDGE_RIGHT : return Vector2(0, 1);
+    case EDGE_BOTTOM_LEFT: return Vector2(-1, 1);
+    case EDGE_BOTTOM: return Vector2(0, 1);
+    case EDGE_BOTTOM_RIGHT: return Vector2(1, 1);
+    default: ASSERT(false);
+  }
+}
+#endif
+
 
 
 /**
@@ -290,9 +364,19 @@ void touchEventDown (float x, float y) {
 
   const Vector2 p(XSG(x), YSG(y));
   //LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
+#ifdef CONTROL_EDGES
+  const eScreenEdges e = inEdge(XSG_NOTRANSX(x),YSG_NOTRANSY(y));
+  if (e != EDGE_NONE) {
+    const Vector2 center(viewportWidth*xScreenToGame/2 + transX, viewportHeight*yScreenToGame/2 + transY);
+    game->startMoving(MOVING_TANK, p/*center*//*edgeMoveDir(e)*/);
+  } else
+#endif
+#ifdef CONTROL_GAMEPAD
   if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);
-  else if (gameView->getTankView().touchInside(p))
+  else
+#endif
+  if (gameView->getTankView().touchInside(p))
     game->startMoving(MOVING_TANK, p);
   else
     game->startMoving(MOVING_CURSOR, p);
