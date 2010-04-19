@@ -65,7 +65,9 @@ void gameOverCallback () {
 GameManager* gameManager;
 
 Sprite* levelText;
-#define CONTROL_EDGES
+//CONTROL_GAMEPAD
+//CONTROL_DOUBLETAP
+#define CONTROL_DOUBLETAP
 
 #ifdef CONTROL_GAMEPAD
 Sprite* gamePad;
@@ -172,11 +174,14 @@ void centerGameOnScreen () {
 #ifdef CONTROL_EDGES
   transX = 0.5f + (gsW-levelW)/2.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
-#else //CONTROL_GAMEPAD
+#elif defined(CONTROL_GAMEPAD)
   transX = 1.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
 
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
+#else
+  transX = 1.0f;
+  transY = 0.5f + (gsH-levelH)/2.0f;
 #endif
 }
 
@@ -355,6 +360,9 @@ Vector2 edgeMoveDir (eScreenEdges edge) {
  * thread than the rendering thread.
  */
 
+static uint64_t lastTouchDownTime = 0;
+static Vector2 lastTouchDownLocation;
+
 void touchEventDown (float x, float y) {
   if (!gameManager->inGame()) {
     //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
@@ -362,13 +370,32 @@ void touchEventDown (float x, float y) {
     return;
   }
 
+#ifdef CONTROL_DOUBLETAP
   const Vector2 p(XSG(x), YSG(y));
+  //Check that the double-tap was quick and not too far away (which would indicate a fast direction
+  //change)
+  const uint64_t now = Utils::getCurrentTimeMillis();
+  const float tapDist = (p-lastTouchDownLocation).length();
+  const uint64_t elapsed = now - lastTouchDownTime;
+  LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
+  if (tapDist < 1 && elapsed <= 200) {
+    //FIXME: this is ugly =)
+    game->startMoving(MOVING_CURSOR, p);
+    game->stopMoving();
+    game->startMoving(MOVING_TANK, p);
+  } else {
+    game->startMoving(MOVING_TANK, p);
+  }
+  lastTouchDownTime = now;
+  lastTouchDownLocation = p;
+  return;
+#endif
+
   //LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
 #ifdef CONTROL_EDGES
   const eScreenEdges e = inEdge(XSG_NOTRANSX(x),YSG_NOTRANSY(y));
   if (e != EDGE_NONE) {
-    const Vector2 center(viewportWidth*xScreenToGame/2 + transX, viewportHeight*yScreenToGame/2 + transY);
-    game->startMoving(MOVING_TANK, p/*center*//*edgeMoveDir(e)*/);
+    game->startMoving(MOVING_TANK, p);
   } else
 #endif
 #ifdef CONTROL_GAMEPAD

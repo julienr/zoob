@@ -57,6 +57,8 @@ public class Moob extends Activity {
 class MoobGLSurface extends GLSurfaceView {
 	MoobRenderer mRenderer;
 	
+	//FIXME: use GestureDetector.SimpleOnGestureListener to listen to tap/double-tap ?
+	
 	/**
 	 * These native methods MUST NOT CALL OPENGL. OpenGL/mRenderer is run in a separate
 	 * thread and calling opengl from these native methods will result in errors
