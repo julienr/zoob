@@ -49,17 +49,35 @@ GameView* gameView = NULL;
 //must be made before next rendering
 int stateTransition = -1;
 
+//by setting stateTransition and transitionDelay to something non-null, one can put a small delay on the state transition
+//There is no guarantee that the state transition won't be overrided during this delay though
+int transitionDelay = 0; 
+#define WON_LOST_DELAY 500
+
 void startGame (GameManager* manager) {
+  transitionDelay = 0;
   stateTransition = STATE_PLAYING;
 }
 
 void nativeMenu () {
+  transitionDelay = 0;
   stateTransition = STATE_MAINMENU;
 }
 
 void gameOverCallback () {
-  LOGE("gameover");
+  //Since we're using a delay, this will be called multiple times, just discard
+  if (stateTransition == STATE_LOST)
+    return;
+  transitionDelay = WON_LOST_DELAY;
   stateTransition = STATE_LOST;
+}
+
+void gameWonCallback () {
+  //we're using a delay => this function will be called multiple times, just discard
+  if (stateTransition == STATE_WON)
+    return;
+  transitionDelay = WON_LOST_DELAY;
+  stateTransition = STATE_WON;
 }
 
 GameManager* gameManager;
@@ -81,10 +99,11 @@ void toPlayingState (GameManager* manager) {
   delete gameView;
 
   lvl = levelsLoadFns[manager->getCurrentLevel()]();
-  game = new Game(gameOverCallback, lvl);
+  game = new Game(gameOverCallback, gameWonCallback, lvl);
   gameView = new GameView(*game);
 
   centerGameOnScreen();
+  gameManager->setState(STATE_PLAYING);
 }
 
 void toMainMenuState () {
@@ -106,6 +125,16 @@ void toLostState () {
   delete gameView;
   gameView = NULL;
   gameManager->setState(STATE_LOST);
+}
+
+void toWonState () {
+  delete lvl;
+  lvl = NULL;
+  delete game;
+  game = NULL;
+  delete gameView;
+  gameView = NULL;
+  gameManager->setState(STATE_WON);
 }
 
 
@@ -243,16 +272,26 @@ void nativeResize (int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
+static uint64_t last = Utils::getCurrentTimeMillis();
+
 void nativeRender () {
+  uint64_t now = Utils::getCurrentTimeMillis();
   if (stateTransition != -1) {
-    if (stateTransition == STATE_PLAYING)
-      toPlayingState(gameManager);
-    else if (stateTransition == STATE_MAINMENU)
-      toMainMenuState();
-    else if (stateTransition == STATE_LOST)
-      toLostState();
-    stateTransition = -1;
+    transitionDelay -= (int)(now-last);
+    if (transitionDelay <= 0) {
+      if (stateTransition == STATE_PLAYING)
+        toPlayingState(gameManager);
+      else if (stateTransition == STATE_MAINMENU)
+        toMainMenuState();
+      else if (stateTransition == STATE_LOST)
+        toLostState();
+      else if (stateTransition == STATE_WON)
+        toWonState();
+      stateTransition = -1;
+      transitionDelay = 0;
+    }
   }
+  last = now;
 
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();

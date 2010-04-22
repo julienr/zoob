@@ -10,12 +10,14 @@
 #include "menu/Menu.h"
 #include "menu/MainMenu.h"
 #include "menu/LostMenu.h"
+#include "menu/WonMenu.h"
 #include "levels/LevelsData.h"
 
 enum eAppState {
   STATE_PLAYING=0,
   STATE_MAINMENU,
   STATE_LOST,
+  STATE_WON,
   MAX_STATE
 };
 
@@ -32,6 +34,7 @@ class GameManager {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
       menus[STATE_LOST] = new LostMenu(this);
+      menus[STATE_WON] = new WonMenu(this);
     }
 
     ~GameManager () {
@@ -60,7 +63,12 @@ class GameManager {
     }
 
     void newGame () {
-      state = STATE_PLAYING;
+      newGameCB(this);
+    }
+
+    void nextGame () {
+      ASSERT(!isAtLastLevel());
+      nextLevel();
       newGameCB(this);
     }
 

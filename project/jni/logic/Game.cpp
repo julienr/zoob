@@ -6,13 +6,14 @@
 #include "logic/GreenTank.h"
 #include "logic/RedTank.h"
 
-Game::Game (game_over_callback_t goCallback, Level* level)
+Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
       tank(),
       level(level),
       elapsedS(0),
       movingState(MOVING_NONE),
-      gameOverCallback(goCallback) {
+      gameOverCallback(overCallback),
+      gameWonCallback(wonCallback) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -85,10 +86,13 @@ void Game::update () {
   }
 
   //Enemies
+  int numAlive = 0;
   LIST_FOREACH(EnemyTank*, enemies, i) {
     EnemyTank* t = *i;
     if (!t->isAlive())
       continue;
+
+    numAlive++;
 
     if (t->hasExploded()) {
       colManager.removeEntity(t);
@@ -106,6 +110,10 @@ void Game::update () {
           t->setRotationFromDir(aim.getNormalized());
       }
     }
+  }
+
+  if (numAlive == 0) {
+    gameWonCallback();
   }
 
   if (tank.hasExploded()) {

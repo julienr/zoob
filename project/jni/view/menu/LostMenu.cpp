@@ -15,5 +15,5 @@ void LostMenu::draw () {
 }
 
 void LostMenu::actionPerformed () {
-  gameManager->newGame();
+  gameManager->nextGame();
 }

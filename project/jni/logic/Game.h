@@ -24,11 +24,13 @@ enum eMoveState {
   MOVING_TANK_EDGES //moving tank using the screen edges
 };
 
-typedef void (*game_over_callback_t) ();
+typedef void (*game_callback_t) ();
 
 class Game {
   public:
-    Game (game_over_callback_t goCallback, Level* level); //gamePadPos is in game space
+    //overCallback : the function to call when game is over
+    //wonCallback : the function to call when game is won
+    Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level); //gamePadPos is in game space
     ~Game ();
 
     void start () {
@@ -157,7 +159,8 @@ class Game {
     Vector2 edgeMoveDir;
 
     uint64_t lastTime;
-    game_over_callback_t gameOverCallback;
+    game_callback_t gameOverCallback;
+    game_callback_t gameWonCallback;
 };
 
 #endif /* GAME_H_ */
