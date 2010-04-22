@@ -233,10 +233,14 @@ void Game::slideMove (Entity* e, Vector2 move) {
   for (size_t bounces = 0; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
     touch(e, r.collidedEntity, r.colPoint);
 
+    //LOGE("position(%f,%f)\tmove(%f,%f)\ttFirst %f", e->getPosition().x, e->getPosition().y, move.x, move.y, r.tFirst);
+
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
-    Vector2 backoff = backAmount*r.normal;
-    move += backoff*1.1;
+    //multiplication by 1.1 is to have some safety margin. If we just add backoff, we might actually go inside the 
+    //wall because of rounding errors or stuff. 
+    Vector2 backoff = (backAmount*r.normal)*1.1;
+    move += backoff;
 
     //Check that we aren't going against a previous backoff
     for (size_t j=0; j<bounces; j++) {
@@ -258,7 +262,7 @@ void Game::slideMove (Entity* e, Vector2 move) {
         if (move*backoffs[k] >= 0)
           continue;
 
-        //LOGE("Unable to find a way out!");
+        LOGE("Unable to find a way out!");
         //We're going against 2 previous backoff, just cancel the move
         move.set(0,0);
       }

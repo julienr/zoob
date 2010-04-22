@@ -7,7 +7,7 @@ eTileType coltest[8*8] = {
     L, E, E, E, E, E, E, R,
     L, E, E, E, E, E, E, R,
     L, E, E, W, E, E, E, R,
-    L, E, E, W, _2, E, E, R,
+    L, E, E, W, E, E, E, R,
     W, B, B, B, B, B, B, W
 };
 
