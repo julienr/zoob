@@ -11,9 +11,9 @@ class WonMenu : public Menu {
   protected:
     void actionPerformed ();
   private:
-    Sprite gameOver;
+    Sprite complete;
     Sprite smiley;
-    Sprite retry;
+    Sprite nextlvl;
 };
 
 

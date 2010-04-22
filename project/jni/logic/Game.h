@@ -30,7 +30,9 @@ class Game {
   public:
     //overCallback : the function to call when game is over
     //wonCallback : the function to call when game is won
-    Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level); //gamePadPos is in game space
+    Game (game_callback_t overCallback, 
+          game_callback_t wonCallback, 
+          Level* level); //gamePadPos is in game space
     ~Game ();
 
     void start () {

@@ -35,6 +35,7 @@ LOCAL_SRC_FILES := \
     view/menu/MainMenu.cpp \
     view/menu/LostMenu.cpp \
     view/menu/WonMenu.cpp \
+    view/menu/EndMenu.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
     logic/physics/Grid.cpp \

@@ -106,42 +106,40 @@ void toPlayingState (GameManager* manager) {
   gameManager->setState(STATE_PLAYING);
 }
 
-void toMainMenuState () {
-  //FIXME: shouldn't we "pause" the game ?
+void toMenuState (eAppState state) {
   delete lvl;
   lvl = NULL;
   delete game;
   game = NULL;
   delete gameView;
   gameView = NULL;
-  gameManager->setState(STATE_MAINMENU);
+  gameManager->setState(state);
+}
+
+void toMainMenuState () {
+  //FIXME: shouldn't we "pause" the game ?
+  toMenuState(STATE_MAINMENU);
 }
 
 void toLostState () {
-  delete lvl;
-  lvl = NULL;
-  delete game;
-  game = NULL;
-  delete gameView;
-  gameView = NULL;
-  gameManager->setState(STATE_LOST);
+  toMenuState(STATE_LOST);
 }
 
 void toWonState () {
-  delete lvl;
-  lvl = NULL;
-  delete game;
-  game = NULL;
-  delete gameView;
-  gameView = NULL;
-  gameManager->setState(STATE_WON);
+  if (gameManager->isAtLastLevel())
+    toMenuState(STATE_END);
+  else
+    toMenuState(STATE_WON);
 }
 
+void toEndState () {
+  toMenuState(STATE_END);
+}
 
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
 
-  gameManager = new GameManager(&startGame);
+  gameManager = new GameManager(startGame, nativeMenu);
 
   levelText = new Sprite("assets/sprites/level_text.png");
 #ifdef CONTROL_GAMEPAD
@@ -279,14 +277,13 @@ void nativeRender () {
   if (stateTransition != -1) {
     transitionDelay -= (int)(now-last);
     if (transitionDelay <= 0) {
-      if (stateTransition == STATE_PLAYING)
-        toPlayingState(gameManager);
-      else if (stateTransition == STATE_MAINMENU)
-        toMainMenuState();
-      else if (stateTransition == STATE_LOST)
-        toLostState();
-      else if (stateTransition == STATE_WON)
-        toWonState();
+      switch (stateTransition) {
+        case STATE_PLAYING: toPlayingState(gameManager); break;
+        case STATE_MAINMENU: toMainMenuState(); break;
+        case STATE_LOST: toLostState(); break;
+        case STATE_WON: toWonState(); break;
+        case STATE_END: toEndState(); break;
+      }
       stateTransition = -1;
       transitionDelay = 0;
     }

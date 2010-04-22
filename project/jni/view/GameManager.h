@@ -11,6 +11,7 @@
 #include "menu/MainMenu.h"
 #include "menu/LostMenu.h"
 #include "menu/WonMenu.h"
+#include "menu/EndMenu.h"
 #include "levels/LevelsData.h"
 
 enum eAppState {
@@ -18,23 +19,27 @@ enum eAppState {
   STATE_MAINMENU,
   STATE_LOST,
   STATE_WON,
+  STATE_END,
   MAX_STATE
 };
 
 class GameManager;
 //Type for a function that will be called when a new game has to be started
 typedef void (*startGameCallback_t) (GameManager* menu);
+typedef void (*menuCallback_t) ();
 
 class GameManager {
   public:
-    GameManager (startGameCallback_t cb)
-      : newGameCB(cb),
-        state(STATE_MAINMENU),
+    GameManager (startGameCallback_t gameCb, menuCallback_t menuCb)
+      : newGameCB(gameCb),
+        menuCB(menuCb),
+        state(STATE_END),
         currentLevel(0) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
       menus[STATE_LOST] = new LostMenu(this);
       menus[STATE_WON] = new WonMenu(this);
+      menus[STATE_END] = new EndMenu(this);
     }
 
     ~GameManager () {
@@ -60,6 +65,10 @@ class GameManager {
       if (isAtFirstLevel())
         return;
       currentLevel--;
+    }
+
+    void goToMenu () {
+      menuCB();
     }
 
     void newGame () {
@@ -92,6 +101,7 @@ class GameManager {
 
   private:
     const startGameCallback_t newGameCB;
+    const menuCallback_t menuCB;
     eAppState state;
     size_t currentLevel;
 
