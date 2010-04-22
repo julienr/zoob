@@ -33,7 +33,7 @@ class GameManager {
     GameManager (startGameCallback_t gameCb, menuCallback_t menuCb)
       : newGameCB(gameCb),
         menuCB(menuCb),
-        state(STATE_END),
+        state(STATE_MAINMENU),
         currentLevel(0) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
