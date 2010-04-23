@@ -67,6 +67,7 @@ class Grid {
     bool push (const Entity* mover, const Vector2& move, CollisionResult* result) const;
 
     bool traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const;
+    bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const;
     bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const;
 
     unsigned getWidth () const {

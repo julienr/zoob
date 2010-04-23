@@ -358,3 +358,7 @@ bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResul
 bool CollisionManager::traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const {
   return grid.traceRay(source, start, move, result);
 }
+
+bool CollisionManager::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const {
+  return grid.traceCircle(source, start, move, radius, result);
+}

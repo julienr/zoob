@@ -12,7 +12,8 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* 
   CollisionResult r;
   const Vector2 tP = myTank->getPosition();
   const Vector2 dirToTank = game->getPlayerTank().getPosition()-tP;
-  if (game->getColManager().traceRay(myTank, tP, dirToTank, &r)
+  if (/*game->getColManager().traceRay(myTank, tP, dirToTank, &r)*/
+      game->getColManager().traceCircle(myTank, tP, dirToTank, ROCKET_BCIRCLE_R, &r)
       && r.collidedEntity != &game->getPlayerTank()) {
     //LOGE("entity : %p, tFirst : %f, myTank : %p", r.collidedEntity, r.tFirst, myTank);
     //Cannot see, don't fire

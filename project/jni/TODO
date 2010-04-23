@@ -4,8 +4,3 @@ we could have one for game and one for each menu. If it's needed, we can free th
 --
 remove the ugly pink arrows for moving
 --
-handle Pause status for the app. in case of switching between app, the textures (and the opengl context) gets fucked up
--- 
-green should be used for FRIENDLY tanks
---
-it's BOOM not BOUM

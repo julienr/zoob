@@ -257,6 +257,40 @@ bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& 
   return collided;
 }
 
+bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const {
+  ASSERT(2*radius < cellSize);
+  // We are tracing through the grid with a circle
+  // We ENFORCE the circle's diameter to be less than cellSize, so we can simplify the collision
+  // detections.
+  // With these hypothesis, we can say that all the cells potentially touched by our circle during the trace
+  // can be found by using two rays that represent the "extremities" of the circle on an axis perpendicular to the
+  // trace direction.
+  Vector2 perpAxis(move.y, -move.x);
+  perpAxis.normalize();
+  //the two points from which our rays will start
+  Vector2 points[2];
+  points[0] = start + perpAxis*radius;
+  points[1] = start - perpAxis*radius;
+
+
+  result->tFirst = MOOB_INF;
+  bool collided = false;
+  BCircle circle(radius);
+  for (int i=0; i<2; i++) {
+    unsigned numTouched = findTouchedCells(points[i], move);
+    for (unsigned j=0; j<numTouched; j++) {
+      touchedCells[j]->touched = true;
+      collided |= collideAgainstCell(touchedCells[j],
+                                     source,
+                                     start,
+                                     &circle,
+                                     move,
+                                     result);
+    }
+  }
+  return collided;
+}
+
 /*
 bool Grid::trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const {
   ASSERT(circle->getRadius()*2 < cellSize);
