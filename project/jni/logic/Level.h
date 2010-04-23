@@ -43,9 +43,11 @@ class Tile {
 
 //A path on the level
 struct Path {
-    size_t numNodes;
-    //must be an array of [numNodes][2] containing the tile positions
-    int** waypoints;
+  Path (size_t numNodes, Vector2* wp)
+    : numNodes(numNodes), waypoints(wp) {}
+  size_t numNodes;
+  //contains the position on the path
+  Vector2* waypoints;
 };
 
 /* This structure is used to provide some "advanced" description for tanks such as

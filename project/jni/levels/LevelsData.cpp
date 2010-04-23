@@ -1,110 +1,137 @@
 #include "LevelsData.h"
 
+
+#define DECLARE_LVL \
+  Level* load() { \
+    return new Level(xdim,ydim,tiles,tanks,numTanks); \
+  }
+
+
 /**
  * COL TEST
  */
-eTileType coltest[8*8] = {
-    W, T, T, T, T, T, T, W,
-    L, E, E, W, E, E, E, R,
-    L, E, E, W, E, E, E, R,
-    L, E, E, E, E, E, E, R,
-    L, E, E, E, E, E, E, R,
-    L, E, E, W, E, E, E, R,
-    L, E, E, W, E, E, E, R,
-    W, B, B, B, B, B, B, W
-};
+namespace coltest {
+  const int xdim = 8;
+  const int ydim = 8;
+  eTileType tiles[xdim*ydim] = {
+      W, T, T, T, T, T, T, W,
+      L, E, E, W, E, E, E, R,
+      L, E, E, W, E, E, E, R,
+      L, E, E, E, E, E, E, R,
+      L, E, E, E, E, E, E, R,
+      L, E, E, W, E, E, E, R,
+      L, E, E, W, E, E, E, R,
+      W, B, B, B, B, B, B, W
+  };
 
-TankDescription coltanks[1] = {
-    TankDescription(1, 2, TANK_PLAYER, NULL)
-};
+  const size_t numTanks = 1;
+  TankDescription tanks[numTanks] = {
+      TankDescription(1, 2, TANK_PLAYER, NULL)
+  };
 
-Level* loadColTest() {
-  return new Level(8,8,&coltest[0], coltanks, 1);
+  DECLARE_LVL
 }
 
 /**
  * LVL 1
  */
-eTileType lvl1[12*8] = {
-    W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
-    L,  E,  E,  E,  L,  E,  E,  L,  E,  L,  E,  R,
-    W,  E,  B,  B,  W,  E,  E,  L,  E,  L,  E,  R,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
-    L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
-    W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
-};
+namespace lvl1 {
+  const int xdim = 12;
+  const int ydim = 8;
+  eTileType tiles[12*8] = {
+      W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+      L,  E,  E,  E,  L,  E,  E,  L,  E,  L,  E,  R,
+      W,  E,  B,  B,  W,  E,  E,  L,  E,  L,  E,  R,
+      L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+      L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+      L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
+      L,  E,  E,  E,  E,  E,  E,  L,  E,  E,  E,  R,
+      W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
+  };
 
-TankDescription lvl1tanks[6] = {
-    TankDescription(1, 1, TANK_PLAYER, NULL),
-    TankDescription(2, 4, TANK_SIMPLE, NULL),
-    TankDescription(5, 2, TANK_SIMPLE, NULL),
-    TankDescription(8, 1, TANK_SIMPLE, NULL),
-    TankDescription(10, 1, TANK_SIMPLE, NULL),
-    TankDescription(8, 6, TANK_SIMPLE, NULL)
-};
+  const size_t numTanks = 6;
+  TankDescription tanks[numTanks] = {
+      TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(2, 4, TANK_SIMPLE, NULL),
+      TankDescription(5, 2, TANK_SIMPLE, NULL),
+      TankDescription(8, 1, TANK_SIMPLE, NULL),
+      TankDescription(10, 1, TANK_SIMPLE, NULL),
+      TankDescription(8, 6, TANK_SIMPLE, NULL)
+  };
 
-Level* loadLevel1() {
-  return new Level(12, 8, &lvl1[0], lvl1tanks, 6);
+  DECLARE_LVL
 }
 
 /**
  * LVL 2
  */
 
-eTileType lvl2[12*8] = {
-    W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
-    W,  E,  B,  B,  W,  E,  E,  E,  E,  W,  E,  R,
-    L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  W,  E,  R,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
-    W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
-};
+namespace lvl2 {
+  const int xdim = 12;
+  const int ydim = 8;
+  eTileType tiles[xdim*ydim] = {
+      W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+      L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+      W,  E,  B,  B,  W,  E,  E,  E,  E,  W,  E,  R,
+      L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
+      L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
+      L,  E,  E,  E,  L,  E,  E,  E,  E,  W,  E,  R,
+      L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+      W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
+  };
 
-TankDescription lvl2tanks[5] = {
-    TankDescription(1, 1, TANK_PLAYER, NULL),
-    TankDescription(2, 4, TANK_SIMPLE, NULL),
-    TankDescription(5, 2, TANK_SIMPLE, NULL),
-    TankDescription(9, 3, TANK_SHIELD, NULL),
-    TankDescription(9, 4, TANK_SHIELD, NULL)
-};
+  const size_t numTanks = 5;
+  TankDescription tanks[numTanks] = {
+      TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(2, 4, TANK_SIMPLE, NULL),
+      TankDescription(5, 2, TANK_SIMPLE, NULL),
+      TankDescription(9, 3, TANK_SHIELD, NULL),
+      TankDescription(9, 4, TANK_SHIELD, NULL)
+  };
 
-Level* loadLevel2() {
-  return new Level(12, 8, &lvl2[0], lvl2tanks, 5);
+  DECLARE_LVL
 }
 
 /**
  * LVL 3
  */
+namespace lvl3 {
+  const int xdim = 12;
+  const int ydim = 8;
+  eTileType tiles[xdim*ydim] = {
+    /*      0   1   2   3   4   5   6   7   8   9  10  11 */
+    /* 0*/  W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+    /* 1*/  L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+    /* 2*/  W,  E,  B,  B,  W,  E,  E,  E,  E,  W,  E,  R,
+    /* 3*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+    /* 4*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+    /* 5*/  L,  E,  E,  E,  L,  E,  E,  E,  E,  W,  E,  R,
+    /* 6*/  L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
+    /* 7*/  W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
+  };
 
-eTileType lvl3[12*8] = {
-    W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
-    W,  E,  B,  B,  W,  E,  E,  E,  E,  W,  E,  R,
-    L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  E,  E,  L,  E,  E,  E,  E,  R,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  W,  E,  R,
-    L,  E,  E,  E,  L,  E,  E,  E,  E,  E,  E,  R,
-    W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
-};
+  Vector2 wp1[4] = {
+      Vector2(7, 3),
+      Vector2(6, 2),
+      Vector2(5, 3),
+      Vector2(6, 4)
+  };
 
-TankDescription lvl3tanks[1] = {
-    TankDescription(1, 1, TANK_PLAYER, NULL)
-};
+  const size_t numTanks = 2;
+  TankDescription tanks[numTanks] = {
+      TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(7, 3, TANK_SIMPLE, new Path(4, wp1))
+  };
 
-Level* loadLevel3() {
-  return new Level(12, 8, &lvl3[0], lvl3tanks, 1);
+  DECLARE_LVL
 }
 
 
 //Array fill
 const size_t numLevels = 4;
 lvl_callback_t levelsLoadFns[numLevels] = {
-  &loadColTest,
-  &loadLevel1,
-  &loadLevel2,
-  &loadLevel3
+  coltest::load,
+  lvl1::load,
+  lvl2::load,
+  lvl3::load
 };
