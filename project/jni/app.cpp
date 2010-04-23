@@ -80,6 +80,11 @@ void gameWonCallback () {
   stateTransition = STATE_WON;
 }
 
+void gameUnPauseCallback () {
+  transitionDelay = 0;
+  stateTransition = STATE_PLAYING;
+}
+
 GameManager* gameManager = NULL;
 
 Sprite* levelText = NULL;
@@ -93,16 +98,20 @@ const Vector2 gamePadPos(13.8f, 5.0f);
 const Vector2 gamePadSize(2.5,2.5);
 #endif
 
-void toPlayingState (GameManager* manager) {
-  delete lvl;
-  delete game;
-  delete gameView;
+void toPlayingState () {
+  if (gameManager->getState() == STATE_PAUSED) {
+    game->unpause(); 
+  } else {
+    delete lvl;
+    delete game;
+    delete gameView;
 
-  lvl = levelsLoadFns[manager->getCurrentLevel()]();
-  game = new Game(gameOverCallback, gameWonCallback, lvl);
-  gameView = new GameView(*game);
+    lvl = levelsLoadFns[gameManager->getCurrentLevel()]();
+    game = new Game(gameOverCallback, gameWonCallback, lvl);
+    gameView = new GameView(*game);
 
-  centerGameOnScreen();
+    centerGameOnScreen();
+  }
   gameManager->setState(STATE_PLAYING);
 }
 
@@ -136,6 +145,11 @@ void toEndState () {
   toMenuState(STATE_END);
 }
 
+void toPauseState () {
+  game->pause();
+  gameManager->setState(STATE_PAUSED);
+}
+
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
 }
@@ -151,7 +165,7 @@ void nativeInitGL() {
     initialised = true;
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    gameManager = new GameManager(startGame, nativeMenu);
+    gameManager = new GameManager(startGame, nativeMenu, gameUnPauseCallback);
 
     levelText = new Sprite("assets/sprites/level_text.png");
 #ifdef CONTROL_GAMEPAD
@@ -287,6 +301,13 @@ void nativeResize (int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
+void nativePause () {
+  if (gameManager->getState() == STATE_PLAYING) {
+    transitionDelay = 0;
+    stateTransition = STATE_PAUSED;
+  }
+}
+
 static uint64_t last = Utils::getCurrentTimeMillis();
 
 void nativeRender () {
@@ -295,11 +316,12 @@ void nativeRender () {
     transitionDelay -= (int)(now-last);
     if (transitionDelay <= 0) {
       switch (stateTransition) {
-        case STATE_PLAYING: toPlayingState(gameManager); break;
+        case STATE_PLAYING: toPlayingState(); break;
         case STATE_MAINMENU: toMainMenuState(); break;
         case STATE_LOST: toLostState(); break;
         case STATE_WON: toWonState(); break;
         case STATE_END: toEndState(); break;
+        case STATE_PAUSED: toPauseState(); break;
       }
       stateTransition = -1;
       transitionDelay = 0;
@@ -310,8 +332,9 @@ void nativeRender () {
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  if (gameManager->inGame()) {
-    game->update();
+  if (gameManager->inGame() || gameManager->paused()) {
+    if (!gameManager->paused())
+      game->update();
 
     //levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
 #ifdef CONTROL_GAMEPAD
@@ -323,9 +346,14 @@ void nativeRender () {
     gameView->drawHearts();
     glPopMatrix();
 
+    glPushMatrix();
     GLW::translate(transX, transY, 0);
     gameView->draw();
     //gameView->debugDraw();
+    glPopMatrix();
+    
+    if (gameManager->paused())
+      gameManager->drawMenu(); //draw the pause menu
   } else {
     gameManager->drawMenu();
   }

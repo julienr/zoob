@@ -13,7 +13,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       elapsedS(0),
       movingState(MOVING_NONE),
       gameOverCallback(overCallback),
-      gameWonCallback(wonCallback) {
+      gameWonCallback(wonCallback),
+      gameState(GAME_RUNNING) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -53,9 +54,12 @@ void Game::update () {
   //This allows the game start (and unpause) to delay
   //the start of the physics by 100ms or whatever
   if (lastTime > now) {
-    LOGE("lastTime(%lu) > now(%lu)", (unsigned long)lastTime, (unsigned long)now);
+    //LOGE("lastTime(%lu) > now(%lu)", (unsigned long)lastTime, (unsigned long)now);
     return;
   }
+
+  if (gameState == GAME_PAUSED)
+    return;
 
   explosions.clear();
 

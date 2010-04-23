@@ -24,6 +24,11 @@ enum eMoveState {
   MOVING_TANK_EDGES //moving tank using the screen edges
 };
 
+enum eGameState {
+  GAME_RUNNING,
+  GAME_PAUSED
+};
+
 typedef void (*game_callback_t) ();
 
 class Game {
@@ -35,12 +40,13 @@ class Game {
           Level* level); //gamePadPos is in game space
     ~Game ();
 
-    void start () {
-      lastTime = Utils::getCurrentTimeMillis();
+    void unpause () {
+      gameState = GAME_RUNNING;
+      lastTime = Utils::getCurrentTimeMillis() + 100;
     }
 
-    void unpause () {
-      lastTime = Utils::getCurrentTimeMillis() + 100;
+    void pause () {
+      gameState = GAME_PAUSED;
     }
 
     const Tank& getPlayerTank () const {
@@ -129,6 +135,7 @@ class Game {
     int getPlayerMaxLives () const { return playerMaxLives; }
 
     void update();
+
   private:
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);
@@ -163,6 +170,8 @@ class Game {
     uint64_t lastTime;
     game_callback_t gameOverCallback;
     game_callback_t gameWonCallback;
+
+    eGameState gameState;
 };
 
 #endif /* GAME_H_ */

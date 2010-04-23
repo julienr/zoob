@@ -53,10 +53,12 @@ int main (int argc, char** argv) {
           done = true;
           break;
         case SDL_KEYDOWN:
-          if (event.key.keysym.sym == SDLK_ESCAPE)
-            done = true;
-          if (event.key.keysym.sym == SDLK_m)
-            nativeMenu();
+          switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE: done = true; break;
+            case SDLK_m: nativeMenu(); break;
+            case SDLK_p: nativePause(); break;
+            default: break;
+          }
           break;
       }
     }

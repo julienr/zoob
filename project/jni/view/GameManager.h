@@ -12,6 +12,7 @@
 #include "menu/LostMenu.h"
 #include "menu/WonMenu.h"
 #include "menu/EndMenu.h"
+#include "menu/PausedMenu.h"
 #include "levels/LevelsData.h"
 
 enum eAppState {
@@ -20,19 +21,23 @@ enum eAppState {
   STATE_LOST,
   STATE_WON,
   STATE_END,
+  STATE_PAUSED,
   MAX_STATE
 };
 
 class GameManager;
 //Type for a function that will be called when a new game has to be started
 typedef void (*startGameCallback_t) (GameManager* menu);
-typedef void (*menuCallback_t) ();
+typedef void (*callback_t) ();
 
 class GameManager {
   public:
-    GameManager (startGameCallback_t gameCb, menuCallback_t menuCb)
+    GameManager (startGameCallback_t gameCb, 
+                 callback_t menuCb,
+                 callback_t continueCb)
       : newGameCB(gameCb),
         menuCB(menuCb),
+        continueCB(continueCb),
         state(STATE_MAINMENU),
         currentLevel(0) {
       menus[STATE_PLAYING] = NULL;
@@ -40,6 +45,7 @@ class GameManager {
       menus[STATE_LOST] = new LostMenu(this);
       menus[STATE_WON] = new WonMenu(this);
       menus[STATE_END] = new EndMenu(this);
+      menus[STATE_PAUSED] = new PausedMenu(this);
     }
 
     ~GameManager () {
@@ -81,6 +87,10 @@ class GameManager {
       newGameCB(this);
     }
 
+    void unpause () {
+      continueCB();
+    }
+
     inline
     bool isAtLastLevel () {
       return currentLevel == numLevels-1;
@@ -97,11 +107,13 @@ class GameManager {
     void handleTouchUp (const Vector2& p);
 
     inline bool inGame () { return state == STATE_PLAYING; }
+    inline bool paused () { return state == STATE_PAUSED; }
 
 
   private:
     const startGameCallback_t newGameCB;
-    const menuCallback_t menuCB;
+    const callback_t menuCB;
+    const callback_t continueCB;
     eAppState state;
     size_t currentLevel;
 

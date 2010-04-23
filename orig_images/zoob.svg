@@ -1442,13 +1442,6 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective3271"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1457,16 +1450,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="1505.9255"
-     inkscape:cy="21.754817"
+     inkscape:zoom="0.5"
+     inkscape:cx="3550.1724"
+     inkscape:cy="-1081.5005"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1253"
      inkscape:window-height="934"
-     inkscape:window-x="322"
-     inkscape:window-y="58"
+     inkscape:window-x="331"
+     inkscape:window-y="28"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -1999,13 +1992,13 @@
          id="text5120"
          y="1381.682"
          x="1147.1478"
-         style="font-size:48.17210388px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+         style="font-size:48.17210388000000165px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
-           style="font-size:77.07537078999997959px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie Bold;writing-mode:lr"
+           style="font-size:77.07537078999997959px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie Bold"
            y="1381.682"
            x="1147.1478"
            id="tspan5122"
-           sodipodi:role="line">BOOM !</tspan></text>
+           sodipodi:role="line">BOUM !</tspan></text>
     </g>
     <g
        id="g5269"
@@ -2459,13 +2452,11 @@
          id="tspan4388-8"
          x="2183.7817"
          y="1828.3544"
-         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">game <tspan
-   style="fill:#ff3030;fill-opacity:1"
-   id="tspan4061">o</tspan><tspan
-   style="fill:#ff3030;fill-opacity:1;stroke:none"
-   id="tspan4406-1">v</tspan><tspan
-   style="fill:#ff3030;fill-opacity:1"
-   id="tspan4063">er</tspan></tspan></text>
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">ga<tspan
+   style="fill:#ffffff;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;stroke:none"
+   id="tspan4402-9">m</tspan>e o<tspan
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   id="tspan4406-1">v</tspan>er</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;stroke:none;stroke-width:8;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans;fill-opacity:1"
@@ -2499,7 +2490,7 @@
          x="1879.3226"
          y="-2440.0991"
          style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"><tspan
-   style="fill:#ff3030;fill-opacity:1;stroke-linecap:round;stroke:none"
+   style="fill:#66ff3f;fill-opacity:1;stroke-linecap:round;stroke:none"
    id="tspan4404-2">:</tspan>-(</tspan></text>
     <path
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -2758,7 +2749,7 @@
          sodipodi:role="line"
          id="tspan4180"
          x="4024.8518"
-         y="2083.324" /><tspan
+         y="2083.324"></tspan><tspan
          sodipodi:role="line"
          id="tspan4182" /></text>
     <path
@@ -2793,26 +2784,5 @@
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"
        sodipodi:nodetypes="cccssscccc" />
-    <rect
-       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect4161-9-3"
-       width="871.15558"
-       height="642.05298"
-       x="3164.4221"
-       y="2559.3357" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="3306"
-       y="2790.3623"
-       id="text3285"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/paused.png"
-       inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295"><tspan
-         sodipodi:role="line"
-         id="tspan3287"
-         x="3306"
-         y="2790.3623"
-         style="font-size:105;-inkscape-font-specification:OogieBoogie;font-family:OogieBoogie;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff;fill-opacity:1">game paused</tspan></text>
   </g>
 </svg>
