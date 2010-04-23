@@ -51,7 +51,7 @@ void GameView::draw () {
 
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     Rocket* r = *i;
-    GLW::color(r->getOwner()->getColor());
+    GLW::color(TankView::getColor(r->getOwner()->getTankType()));
     rocket.draw(*r);
     GLW::colorWhite();
   }

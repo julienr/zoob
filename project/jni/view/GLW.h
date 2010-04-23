@@ -1,7 +1,7 @@
 #ifndef GLW_H_
 #define GLW_H_
 
-#include "lib/Color.h"
+#include "Color.h"
 
 struct GLW {
     static void translate (float x, float y, float z) {
@@ -53,6 +53,7 @@ struct GLW {
         case GREEN: glColor4f(0.4,1,0.24,1); break;
         case RED: glColor4f(1,0.18,0.18,1); break;
         case GREY: glColor4f(0.63,0.63,0.63,1); break;
+        case ORANGE: glColor4f(1, 0.51, 0.18, 1); break;
         case TRANSPARENT_GREY: glColor4f(0.63, 0.63, 0.63, 0.8); break;
       }
     }

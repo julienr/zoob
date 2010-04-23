@@ -7,6 +7,7 @@ enum eColor {
     GREEN,
     RED,
     GREY,
+    ORANGE,
     TRANSPARENT_GREY
 };
 

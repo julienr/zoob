@@ -9,7 +9,7 @@ class PlayerTank : public Tank {
       : Tank(1000) {
     }
 
-    eColor getColor () const { return GREY; }
+    eTankType getTankType () const { return TANK_PLAYER; }
 
 };
 

@@ -4,10 +4,15 @@
 #include "def.h"
 #include "Entity.h"
 #include "physics/BCircle.h"
-#include "lib/Color.h"
 #include "lib/Utils.h"
 
 class Rocket;
+
+enum eTankType {
+    TANK_PLAYER,
+    TANK_SIMPLE,
+    TANK_SHIELD
+};
 
 class Tank: public Entity {
   public:
@@ -29,6 +34,8 @@ class Tank: public Entity {
       return ENTITY_TANK;
     }
 
+    virtual eTankType getTankType () const = 0;
+
     void explode (Entity* e, const Vector2& colPoint);
 
     bool hasExploded () const {
@@ -46,8 +53,6 @@ class Tank: public Entity {
     bool isAlive () const {
       return alive;
     }
-
-    virtual eColor getColor () const = 0;
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > fireInterval; }

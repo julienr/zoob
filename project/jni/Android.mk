@@ -20,7 +20,7 @@ LOCAL_SRC_FILES := \
     logic/Level.cpp \
     logic/Game.cpp \
     logic/Tank.cpp \
-    logic/GreenTank.cpp \
+    logic/ShieldTank.cpp \
     levels/LevelsData.cpp \
     view/TextureManager.cpp \
     view/Sprite.cpp \
@@ -36,6 +36,7 @@ LOCAL_SRC_FILES := \
     view/menu/LostMenu.cpp \
     view/menu/WonMenu.cpp \
     view/menu/EndMenu.cpp \
+    view/menu/PausedMenu.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
     logic/physics/Grid.cpp \

@@ -3,8 +3,8 @@
 #include "ai/movement/StillPolicy.h"
 #include "ai/shoot/RandomPolicy.h"
 #include "ai/shoot/AimPolicy.h"
-#include "logic/GreenTank.h"
-#include "logic/RedTank.h"
+#include "logic/ShieldTank.h"
+#include "logic/SimpleTank.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
@@ -27,12 +27,12 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     for (unsigned y=0; y<level->getHeight(); y++) {
       Tile* tile = level->getTile(x,y);
       if (tile->getType() == _1) {
-        RedTank* t = new RedTank();
+        SimpleTank* t = new SimpleTank();
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);
       } else if (tile->getType() == _2) {
-        GreenTank* t = new GreenTank();
+        ShieldTank* t = new ShieldTank();
         t->setPosition(Vector2(x,y));
         enemies.append(t);
         colManager.addEntity(t);

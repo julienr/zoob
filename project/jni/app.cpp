@@ -238,7 +238,7 @@ void centerGameOnScreen () {
 
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
 #else
-  transX = 1.0f;
+  transX = 0.5f + (gsW-levelW)/2.0f;
   transY = 0.5f + (gsH-levelH)/2.0f;
 #endif
 }

@@ -13,21 +13,28 @@ class TankView {
       shieldTankSprite("assets/sprites/tank_shield.png") {
     }
 
+     // Return the display color for the given tank (depends on tanktype)
+    static eColor getColor (eTankType type) {
+      switch(type) {
+        case TANK_PLAYER: return GREEN;
+        case TANK_SIMPLE: return RED;
+        case TANK_SHIELD: return ORANGE;
+      }
+    }
+
     void draw () {
       if (!tank.isAlive())
         return;
-      eColor c = tank.getColor();
-      GLW::color(tank.getColor());
-      switch(c) {
-        case GREY:
-        case RED:
+      eTankType type = tank.getTankType();
+      GLW::color(getColor(type));
+      switch(type) {
+        case TANK_PLAYER:
+        case TANK_SIMPLE:
           tankSprite.draw(tank, tank.getRotation());
           break;
-        case GREEN:
+        case TANK_SHIELD:
           shieldTankSprite.draw(tank, tank.getRotation());
           break;
-        default:
-          LOGE("Unhandled color %i", c);
       }
       GLW::colorWhite();
     }
