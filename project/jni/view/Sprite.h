@@ -4,11 +4,31 @@
 #include "TextureManager.h"
 #include "logic/Viewable.h"
 #include "lib/Utils.h"
+#include "containers/list.h"
 
 class Sprite {
+  /** On android, when the application goes to sleep mode, the OpenGL context is lost and all
+   * resources (such as textures) must be reloaded. To handle this, we need a way to tell all sprites
+   * that they should reload their textureID. This is done by maintaning a list of all the sprites objects
+   */
+  private:
+    static list<Sprite*> globalSpritesList;
   public:
-    Sprite (const char* filename) {
-      textureID = TextureManager::getInstance()->get(filename);
+    static void reloadAllSprites ();
+
+  public:
+    Sprite (const char* filename) 
+     : file(filename) {
+      reloadTexture();
+      globalSpritesList.append(this);
+    }
+
+    ~Sprite () {
+      globalSpritesList.remove(this);
+    }
+
+    void reloadTexture () {
+      textureID = TextureManager::getInstance()->get(file);
     }
 
     void draw (const Viewable& viewable, float rotation=0) const;
@@ -25,6 +45,7 @@ class Sprite {
       return Utils::insideTL(viewable.getPosition()-(ext/2), ext.x, ext.y, p);
     }
   private:
+    const char* file;
     GLuint textureID;
 };
 

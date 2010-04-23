@@ -15,6 +15,7 @@ int main (int argc, char** argv) {
   /*SDL_Surface* screen =*/ SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_OPENGL);
 
   nativeInit (argv[1]);
+  nativeInitGL();
   nativeResize(SCREEN_WIDTH,SCREEN_HEIGHT);
 
   bool leftBtnClicked = false;

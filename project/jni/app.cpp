@@ -80,15 +80,15 @@ void gameWonCallback () {
   stateTransition = STATE_WON;
 }
 
-GameManager* gameManager;
+GameManager* gameManager = NULL;
 
-Sprite* levelText;
+Sprite* levelText = NULL;
 //CONTROL_GAMEPAD
 //CONTROL_DOUBLETAP
 #define CONTROL_DOUBLETAP
 
 #ifdef CONTROL_GAMEPAD
-Sprite* gamePad;
+Sprite* gamePad = NULL;
 const Vector2 gamePadPos(13.8f, 5.0f);
 const Vector2 gamePadSize(2.5,2.5);
 #endif
@@ -138,18 +138,35 @@ void toEndState () {
 
 void nativeInit (const char* apkPath) {
   loadAPK(apkPath);
+}
 
-  gameManager = new GameManager(startGame, nativeMenu);
+/** Since nativeInitGL will be called on app creation AND each time the opengl 
+ * context is recreated, this indicate if we're at app creation (false) or
+ * just in context recreation (true) */
+bool initialised = false;
 
-  levelText = new Sprite("assets/sprites/level_text.png");
+
+void nativeInitGL() {
+  if (!initialised) {
+    initialised = true;
+    //This is the first time initialisation, we HAVE to instantiate 
+    //game manager here because it requires textures
+    gameManager = new GameManager(startGame, nativeMenu);
+
+    levelText = new Sprite("assets/sprites/level_text.png");
 #ifdef CONTROL_GAMEPAD
-  gamePad = new Sprite("assets/sprites/control.png");
+    gamePad = new Sprite("assets/sprites/control.png");
 #endif
 
-  printGLString("Version", GL_VERSION);
-  printGLString("Vendor", GL_VENDOR);
-  printGLString("Renderer", GL_RENDERER);
-  printGLString("Extensions", GL_EXTENSIONS);
+    printGLString("Version", GL_VERSION);
+    printGLString("Vendor", GL_VENDOR);
+    printGLString("Renderer", GL_RENDERER);
+    printGLString("Extensions", GL_EXTENSIONS);
+  } else {
+    //In case we're coming back from sleep
+    TextureManager::getInstance()->clear();
+    Sprite::reloadAllSprites();
+  }
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);

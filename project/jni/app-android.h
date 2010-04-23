@@ -10,10 +10,18 @@ extern "C" {
 /*
  * Class:     net_fhtagn_moob_MoobRenderer
  * Method:    nativeInit
- * Signature: ()V
+ * Signature: (S)V
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     net_fhtagn_moob_MoobRenderer
+ * Method:    nativeInitGL
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInitGL
+  (JNIEnv *, jclass);
 
 /*
  * Class:     net_fhtagn_moob_MoobRenderer

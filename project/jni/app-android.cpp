@@ -9,6 +9,12 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInit
   nativeInit(str);
 }
 
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeInitGL
+  (JNIEnv *, jclass) {
+    nativeInitGL();
+}
+
+
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeResize
   (JNIEnv *, jclass, jint w, jint h) {
   nativeResize(w,h);

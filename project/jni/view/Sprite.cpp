@@ -2,6 +2,15 @@
 #include "view/GLW.h"
 #include "Square.h"
 
+list<Sprite*> Sprite::globalSpritesList;
+
+void Sprite::reloadAllSprites () {
+  LOGE("reloading all sprites");
+  LIST_FOREACH(Sprite*, globalSpritesList, sprite) {
+    (*sprite)->reloadTexture();
+  }
+}
+
 void Sprite::draw (const Viewable& viewable, float rotation) const {
   //FIXME: do something if textureID = NO_TEXTURE
   glBindTexture(GL_TEXTURE_2D, textureID);

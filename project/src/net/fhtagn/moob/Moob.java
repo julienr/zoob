@@ -111,9 +111,6 @@ class MoobRenderer implements GLSurfaceView.Renderer {
 	private Context context;
 	public MoobRenderer (Context context) {
 		this.context = context;
-	}
-	
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// return apk file path (or null on error)
 		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
@@ -127,6 +124,10 @@ class MoobRenderer implements GLSurfaceView.Renderer {
 		apkFilePath = appInfo.sourceDir;
 		nativeInit(apkFilePath);
 	}
+	
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+    nativeInitGL();
+	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		// gl.glViewport(0, 0, w, h);
@@ -136,7 +137,8 @@ class MoobRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 gl) {
 		nativeRender();
 	}
-	
+
+  private static native void nativeInitGL();
 	private static native void nativeInit(String apkPath);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();

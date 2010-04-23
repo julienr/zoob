@@ -14,7 +14,16 @@ TextureManager::~TextureManager() {
   _TextureRecord *rec;
   while(cache) {
     rec = cache;
-    HASH_DEL(cache, rec);
+    HASH_DEL(cache, rec); //cache automatically advanced to next
+    delete rec;
+  }
+}
+
+void TextureManager::clear() {
+  _TextureRecord *rec;
+  while(cache) {
+    rec = cache;
+    HASH_DEL(cache, rec); //cache automatically advanced to next
     delete rec;
   }
 }

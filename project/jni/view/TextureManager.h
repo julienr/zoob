@@ -12,6 +12,10 @@ public:
   static TextureManager* getInstance ();
   static void destroy();
 
+  //After OpenGL context is lost (after a pause), need to reload
+  //all textures => this will clear the texture cache
+  void clear ();
+
   //Returns texture id or TEXTURE_BLANK if an error
   //occured while loading the texture
   GLuint get (const char* filename, int* width=NULL, int* height=NULL);
