@@ -6,7 +6,7 @@ class Tank;
 
 class MovementPolicy {
   public:
-    virtual Vector2 decideDir (double elapsedS) = 0;
+    virtual bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank) = 0;
 };
 
 #endif /* MOVEMENTPOLICY_H_ */

@@ -14,6 +14,16 @@ enum eTankType {
     TANK_SHIELD
 };
 
+
+//A path on the level that a tank can follow
+struct Path {
+  Path (size_t numNodes, Vector2* wp)
+    : numNodes(numNodes), waypoints(wp) {}
+  size_t numNodes;
+  //contains the position on the path
+  Vector2* waypoints;
+};
+
 class Tank: public Entity {
   public:
     Tank (const uint64_t fireIntervalms)
@@ -21,7 +31,8 @@ class Tank: public Entity {
         exploded(false),
         alive(true),
         lastFireTime(0),
-        fireInterval(fireIntervalms) {
+        fireInterval(fireIntervalms),
+        path(NULL) {
     }
 
     virtual ~Tank () {}
@@ -54,6 +65,15 @@ class Tank: public Entity {
       return alive;
     }
 
+    void setPath (Path* p) {
+      path = p;
+    }
+
+    //returns NULL if none
+    Path* getPath () {
+      return path;
+    }
+
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > fireInterval; }
 
@@ -67,6 +87,8 @@ class Tank: public Entity {
 
     uint64_t lastFireTime;
     const uint64_t fireInterval; //fire interval in milliseconds
+
+    Path* path;
 };
 
 #endif /* TANK_H_ */

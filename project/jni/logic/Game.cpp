@@ -27,7 +27,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     const TankDescription& desc = tanks[i];
     EnemyTank* t;
     switch (desc.tankType) {
-      case TANK_SIMPLE: t = new SimpleTank(); break;
+      case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_SHIELD: t = new ShieldTank(); break;
       case TANK_PLAYER: ASSERT(false); break; //already handled
     }
@@ -99,11 +99,14 @@ void Game::update () {
     } else {
       TankAI* ai = t->getAI();
       if (ai) {
-        doTankMove(t, ai->decideDir(elapsedS, this, t), elapsedS);
+        Vector2 moveDir;
+        if (ai->decideDir(elapsedS, &moveDir, this, t))
+          doTankMove(t, moveDir, elapsedS);
+
         Vector2 rocketDir;
-        if (t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
+        if (t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
           rockets.append(t->fireRocket(rocketDir));
-        }
+
         Vector2 aim;
         if (ai->aim(elapsedS, this, t, &aim))
           t->setRotationFromDir(aim.getNormalized());

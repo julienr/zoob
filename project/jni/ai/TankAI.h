@@ -27,8 +27,8 @@ class TankAI {
       return shootPolicy->decideFire(elapsedS, outDir, game, tank);
     }
 
-    Vector2 decideDir (double elapsedS, Game* game, Tank* tank) {
-      return movementPolicy->decideDir(elapsedS);
+    bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+      return movementPolicy->decideDir(elapsedS, outDir, game, tank);
     }
 
     bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) {

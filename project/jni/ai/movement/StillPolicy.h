@@ -6,8 +6,8 @@
 class StillPolicy : public MovementPolicy {
   public:
 
-    Vector2 decideDir (double elapsedS) {
-      return Vector2(0,0);
+    bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+      return false;
     }
 };
 

@@ -9,18 +9,13 @@
 
 class PathPolicy : public MovementPolicy {
   public:
-    PathPolicy (const vector<Vector2>& path)
-      : path(path) {
-    }
+    PathPolicy ()
+      : prev(0) {}
 
-    Vector2 decideDir (double elapsedS) {
-
-    }
-
+    bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
 
   private:
     size_t prev; //idx of last vertex of the path we passed on
-    vector<Vector2> path;
 };
 
 #endif /* PATHPOLICY_H_ */
