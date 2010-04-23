@@ -25,11 +25,11 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
   const TankDescription* tanks = level->getTanks();
   for (size_t i=1; i<level->getNumTanks(); i++) {
     const TankDescription& desc = tanks[i];
-    EnemyTank* t;
+    EnemyTank* t = NULL;
     switch (desc.tankType) {
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_SHIELD: t = new ShieldTank(); break;
-      case TANK_PLAYER: ASSERT(false); break; //already handled
+      default: ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));
     enemies.append(t);
