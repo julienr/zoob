@@ -46,6 +46,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobRenderer_nativeRender
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativeMenu
   (JNIEnv *, jclass);
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
+  (JNIEnv *, jclass);
 
 /*
  * Class:     net_fhtagn_moob_MoobGLSurface

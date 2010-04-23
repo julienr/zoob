@@ -37,7 +37,7 @@ static void loadAPK (const char* apkPath) {
   }
 }
 
-void centerGameOnScreen ();
+void centerGameInViewport ();
 #include "levels/LevelsData.h"
 Level* lvl = NULL;
 Game* game = NULL;
@@ -110,7 +110,7 @@ void toPlayingState () {
     game = new Game(gameOverCallback, gameWonCallback, lvl);
     gameView = new GameView(*game);
 
-    centerGameOnScreen();
+    centerGameInViewport();
   }
   gameManager->setState(STATE_PLAYING);
 }
@@ -212,34 +212,55 @@ float yScreenToGame;
 float transX = 0;
 float transY = 0;
 
-//0.5 is because sprites are square centered on their position
-#define XSG(x) (x*xScreenToGame-(transX+0.5))
-#define YSG(y) (y*yScreenToGame-(transY+0.5))
+//We work with a forced 1.5 aspect ratio => [15,10] viewport
+#define VIEWPORT_WIDTH 15
+#define VIEWPORT_HEIGHT 10
 
-#define XSG_NOTRANSX(x) (x*xScreenToGame-0.5)
-#define YSG_NOTRANSY(y) (y*yScreenToGame-0.5)
+/**
+ * The screen is divied as follow :
+ * - the biggest are is the window
+ * - then comes the viewport that contains EVERYTHING that we ever render. it is
+ *   COMPLETELY FORBIDDEN to render outside the viewport since it won't be visible on some devices
+ *   depending on the screen ratio
+ * - then comes the game area where the actual game (level, tanks) are rendered
+ * |----------------------------------|
+ * |      |-----------------|         |
+ * |      |    |-----| life |         |
+ * |      |    | game| pad  |         |
+ * |      |    |-----|      |         |
+ * |      |-----------------|         |
+ * |                                  |
+ * |----------------------------------|
+ */
+//viewport margin relative to the screen (in screen coords). This should be used only for input
+//since viewport placement is handled by opengl glViewport
+Vector2 viewportMargin;
+
+//0.5 is because sprites are square centered on their position
+#define XSG(x) ((x-viewportMargin.x)*xScreenToGame-(transX+0.5))
+#define YSG(y) ((y-viewportMargin.y)*yScreenToGame-(transY+0.5))
+
+#define XSG_NOTRANSX(x) ((x-viewportMargin.x)*xScreenToGame-0.5)
+#define YSG_NOTRANSY(y) ((y-viewportMargin.y)*yScreenToGame-0.5)
 
 int windowWidth = 0, windowHeight = 0;
-int viewportWidth = 0, viewportHeight = 0;
 
-void centerGameOnScreen () {
+//viewport dimensions in screen size
+Vector2 viewportScreenDim;
+
+void centerGameInViewport () {
   //Center game area on screen
   const int levelH = game->getLevel()->getHeight();
   const int levelW = game->getLevel()->getWidth();
-  //screen size in game coords
-  const float gsW = viewportWidth*xScreenToGame;
-  const float gsH = viewportHeight*yScreenToGame;
-#ifdef CONTROL_EDGES
-  transX = 0.5f + (gsW-levelW)/2.0f;
-  transY = 0.5f + (gsH-levelH)/2.0f;
-#elif defined(CONTROL_GAMEPAD)
+
+#if defined(CONTROL_GAMEPAD)
   transX = 1.0f;
-  transY = 0.5f + (gsH-levelH)/2.0f;
+  transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
 
   game->setGamePadPos(gamePadPos - Vector2(transX, transY));
 #else
-  transX = 0.5f + (gsW-levelW)/2.0f;
-  transY = 0.5f + (gsH-levelH)/2.0f;
+  transX = 0.5f + (VIEWPORT_WIDTH-levelW)/2.0f;
+  transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
 #endif
 }
 
@@ -270,11 +291,15 @@ void forceRatio (float sW, float sH) {
   LOGE("ratio=%f\tsW=%f, sH=%f, areaWidth=%f, areaHeight=%f", ratio, sW, sH, areaWidth, areaHeight);
   ASSERT(Math::epsilonEq(ratio, targetRatio));
 
+  //Center the viewport in the window
+
   //Force the viewport to the top-left of the window
-  glViewport(0, sH-areaHeight, areaWidth, areaHeight);
+  viewportMargin.x = (sW-areaWidth)/2.0f;
+  viewportMargin.y = (sH-areaHeight)/2.0f;
+  glViewport(viewportMargin.x, /*(sH-areaHeight)*/viewportMargin.y, areaWidth, areaHeight);
   GLW::checkError("glViewport");
-  viewportWidth = areaWidth;
-  viewportHeight = areaHeight;
+  viewportScreenDim.x = areaWidth;
+  viewportScreenDim.y = areaHeight;
 }
 
 void nativeResize (int w, int h) {
@@ -287,21 +312,22 @@ void nativeResize (int w, int h) {
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  //We work with a forced 1.5 aspect ratio => [15,10] game area
-  const float gameAreaW = 15;
-  const float gameAreaH = 10;
-  GLW::ortho(0, gameAreaW, gameAreaH, 0, -1, 1);
 
-  xScreenToGame = gameAreaW/viewportWidth;
-  yScreenToGame = gameAreaH/viewportHeight;
+  GLW::ortho(0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, 0, -1, 1);
+
+  xScreenToGame = VIEWPORT_WIDTH/viewportScreenDim.x;
+  yScreenToGame = VIEWPORT_HEIGHT/viewportScreenDim.y;
 
   if (gameManager->inGame())
-    centerGameOnScreen();
+    centerGameInViewport();
 
   glMatrixMode(GL_MODELVIEW);
 }
 
 void nativePause () {
+  if(!gameManager)
+    return;
+
   if (gameManager->getState() == STATE_PLAYING) {
     transitionDelay = 0;
     stateTransition = STATE_PAUSED;
@@ -374,67 +400,6 @@ bool inGamePad (float x, float y) {
 }
 #endif
 
-
-#ifdef CONTROL_EDGES
-enum eScreenEdges {
-    EDGE_TOP,
-    EDGE_TOP_RIGHT,
-    EDGE_RIGHT,
-    EDGE_BOTTOM_RIGHT,
-    EDGE_BOTTOM,
-    EDGE_BOTTOM_LEFT,
-    EDGE_LEFT,
-    EDGE_TOP_LEFT,
-    EDGE_NONE
-};
-
-eScreenEdges inEdge (float x, float y) {
-  const float minx = transX;
-  const float miny = transY;
-  const float maxx = viewportWidth*xScreenToGame - transX;
-  const float maxy = viewportHeight*yScreenToGame - transY;
-
-  //x position relative to [minx,maxx] => -1 is on the left, 0 inside and 1 on the right
-  const int xpos = (x < minx)?-1:(x<maxx)?0:1;
-  const int ypos = (y < miny)?-1:(y<maxy)?0:1;
-
-  //LOGE("inEdge (%f,%f), min (%f,%f) max (%f,%f) => x/y : (%i,%i)", x, y, minx, miny, maxx, maxy, xpos, ypos);
-
-  if (ypos == -1) {
-    if (xpos == -1) return EDGE_TOP_LEFT;
-    if (xpos == 0) return EDGE_TOP;
-    if (xpos == 1) return EDGE_TOP_RIGHT;
-  } else if (ypos == 0) {
-    if (xpos == -1) return EDGE_LEFT;
-    if (xpos == 0) return EDGE_NONE;
-    if (xpos == 1) return EDGE_RIGHT;
-  } else if (ypos == 1) {
-    if (xpos == -1) return EDGE_BOTTOM_LEFT;
-    if (xpos == 0) return EDGE_BOTTOM;
-    if (xpos == 1) return EDGE_BOTTOM_RIGHT;
-  }
-  ASSERT(false);
-  return EDGE_NONE;
-}
-
-Vector2 edgeMoveDir (eScreenEdges edge) {
-  switch (edge) {
-    case EDGE_TOP_LEFT: return Vector2(-1,-1);
-    case EDGE_TOP: return Vector2(0, -1);
-    case EDGE_TOP_RIGHT: return Vector2(1, -1);
-    case EDGE_LEFT: return Vector2(-1, 0);
-    case EDGE_NONE: return Vector2(0, 0);
-    case EDGE_RIGHT : return Vector2(0, 1);
-    case EDGE_BOTTOM_LEFT: return Vector2(-1, 1);
-    case EDGE_BOTTOM: return Vector2(0, 1);
-    case EDGE_BOTTOM_RIGHT: return Vector2(1, 1);
-    default: ASSERT(false);
-  }
-}
-#endif
-
-
-
 /**
  * See important comment in Moob.java regarding native event-handling methods.
  * Basically, they should lead to any OpenGL call, because they'll be run in a separate
@@ -459,7 +424,7 @@ void touchEventDown (float x, float y) {
   const float tapDist = (p-lastTouchDownLocation).length();
   const uint64_t elapsed = now - lastTouchDownTime;
   LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
-  if (tapDist < 1 && elapsed <= 200) {
+  if (tapDist < 1 && elapsed <= 300) {
     //FIXME: this is ugly =)
     game->startMoving(MOVING_CURSOR, p);
     game->stopMoving();
@@ -473,12 +438,6 @@ void touchEventDown (float x, float y) {
 #endif
 
   //LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
-#ifdef CONTROL_EDGES
-  const eScreenEdges e = inEdge(XSG_NOTRANSX(x),YSG_NOTRANSY(y));
-  if (e != EDGE_NONE) {
-    game->startMoving(MOVING_TANK, p);
-  } else
-#endif
 #ifdef CONTROL_GAMEPAD
   if (inGamePad(x,y))
     game->startMoving(MOVING_TANK_PAD, p);

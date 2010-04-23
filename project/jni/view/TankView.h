@@ -19,6 +19,7 @@ class TankView {
         case TANK_PLAYER: return GREEN;
         case TANK_SIMPLE: return RED;
         case TANK_SHIELD: return ORANGE;
+        default: LOGE("Unhandled tank type : %i", type); return WHITE;
       }
     }
 

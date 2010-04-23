@@ -30,6 +30,11 @@ JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativeMenu
   nativeMenu();
 }
 
+JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_nativePause
+  (JNIEnv *, jclass) {
+  nativePause();
+}
+
 JNIEXPORT void JNICALL Java_net_fhtagn_moob_MoobGLSurface_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   touchEventDown(x,y);
