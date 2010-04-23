@@ -12,6 +12,7 @@ class SimpleTank : public EnemyTank {
 
     SimpleTank (Path* p)
       : EnemyTank (new TankAI(new AimPolicy(), new PathPolicy())) {
+      this->setPath(p);
     }
 
     eTankType getTankType () const { return TANK_SIMPLE; }

@@ -148,10 +148,10 @@ void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
     return;
 
   dir.normalize();
-  tank.setRotationFromDir(dir);
+  t->setRotationFromDir(dir);
 
   const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
-  slideMove(&tank, move);
+  slideMove(t, move);
 }
 
 void Game::startMoving (eMoveState what, const Vector2& touchPosition) {

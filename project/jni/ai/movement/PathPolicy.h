@@ -10,12 +10,12 @@
 class PathPolicy : public MovementPolicy {
   public:
     PathPolicy ()
-      : prev(0) {}
+      : current(0) {}
 
     bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
 
   private:
-    size_t prev; //idx of last vertex of the path we passed on
+    size_t current; //idx the current waypoint we're trying to reach
 };
 
 #endif /* PATHPOLICY_H_ */
