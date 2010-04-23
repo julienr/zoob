@@ -1458,8 +1458,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35355339"
-     inkscape:cx="3235.9644"
-     inkscape:cy="-741.64685"
+     inkscape:cx="3728.1107"
+     inkscape:cy="-891.55348"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -2787,7 +2787,7 @@
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <path
-       style="fill:#ff8230;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ff8330;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 3525.7438,2207.4211 12.9659,5.6089 26.3657,-24.4563 c -2.7988,20.2571 8.2314,40.6151 28.0151,48.777 23.485,9.6888 50.3777,-1.4953 60.0664,-24.9803 9.6888,-23.4849 -1.4951,-50.3777 -24.9801,-60.0665 -19.7837,-8.1618 -41.598,-1.3466 -53.8967,14.9913 0,0 3.7345,-25.5018 -0.7295,-36.5486 l -12.8983,-5.5795 -34.9085,82.254 z"
        id="path4503-3-8"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"

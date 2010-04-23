@@ -22,24 +22,19 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
   playerMaxLives = 2;
   playerNumLives = playerMaxLives;
 
-  //Spawn enemies
-  for (unsigned x=0; x<level->getWidth(); x++) {
-    for (unsigned y=0; y<level->getHeight(); y++) {
-      Tile* tile = level->getTile(x,y);
-      if (tile->getType() == _1) {
-        SimpleTank* t = new SimpleTank();
-        t->setPosition(Vector2(x,y));
-        enemies.append(t);
-        colManager.addEntity(t);
-      } else if (tile->getType() == _2) {
-        ShieldTank* t = new ShieldTank();
-        t->setPosition(Vector2(x,y));
-        enemies.append(t);
-        colManager.addEntity(t);
-      }
+  const TankDescription* tanks = level->getTanks();
+  for (size_t i=1; i<level->getNumTanks(); i++) {
+    const TankDescription& desc = tanks[i];
+    EnemyTank* t;
+    switch (desc.tankType) {
+      case TANK_SIMPLE: t = new SimpleTank(); break;
+      case TANK_SHIELD: t = new ShieldTank(); break;
+      case TANK_PLAYER: ASSERT(false); break; //already handled
     }
+    t->setPosition(Vector2(desc.x, desc.y));
+    enemies.append(t);
+    colManager.addEntity(t);
   }
-
   lastTime = Utils::getCurrentTimeMillis();
 }
 
