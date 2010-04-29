@@ -32,6 +32,15 @@ class binaryheap {
       }
     }
 
+    //Looks for an item t such as t==item
+    //Returns a pointer to the contained item, NULL if no such item is found
+    T* find (const T& item) {
+      for (size_t i=0; i<array.length(); i++)
+        if (array[i] == item)
+          return &array[i];
+      return NULL;
+    }
+
     size_t size () const {
       return array.length();
     }
