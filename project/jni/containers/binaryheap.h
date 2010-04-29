@@ -41,6 +41,13 @@ class binaryheap {
       return NULL;
     }
 
+    bool contains (const T& item) {
+      for (size_t i=0; i<array.length(); i++)
+        if (array[i] == item)
+          return true;
+      return false;
+    }
+
     size_t size () const {
       return array.length();
     }

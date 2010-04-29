@@ -15,8 +15,8 @@ namespace coltest {
   const int ydim = 8;
   eTileType tiles[xdim*ydim] = {
       W, T, T, W, T, W, T, W,
-      L, E, E, W, E, E, E, R,
-      L, E, E, W, E, E, E, W,
+      L, E, E, E, E, E, E, R,
+      L, E, W, E, E, E, E, W,
       L, E, E, E, E, E, E, R,
       L, E, E, E, E, E, E, R,
       L, E, E, W, W, W, E, R,
@@ -26,8 +26,8 @@ namespace coltest {
 
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
-      TankDescription(1, 2, TANK_PLAYER, NULL),
-      TankDescription(4, 6, TANK_STATIC, NULL)
+      TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(/*4, 6*/3,3, TANK_STATIC, NULL)
   };
 
   DECLARE_LVL

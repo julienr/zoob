@@ -78,10 +78,25 @@ class Grid {
       return height;
     }
 
-    bool isCellEmpty (unsigned x, unsigned y) const {
+    //This is mainly used for pathfinding
+    enum eCellContent {
+        EMPTY, //this cell is empty
+        WALL, //this cell contains at least a wall (and possibly some other entities)
+        ENTITIES //this cell contains NO wall but some other entities
+    };
+
+    //Return eCellContent describing the content of grid[x][y]
+    eCellContent contentAt (unsigned x, unsigned y) const {
       if (!inside(x,y))
-        return false;
-      return grid[x][y]->entities.empty();
+        return WALL;
+      if (grid[x][y]->entities.empty())
+        return EMPTY;
+
+      LIST_FOREACH(Entity*, grid[x][y]->entities, iter) {
+        if ((*iter)->getType() == ENTITY_WALL)
+          return WALL;
+      }
+      return ENTITIES;
     }
 
     //returns -1 if outside grid

@@ -13,16 +13,22 @@ class AStar {
   public:
     AStar (const Grid& grid)
       : grid(grid), gridW(grid.getWidth()), gridH(grid.getHeight()), openset(10) {
-      closed = new bool*[gridW];
-      for (int x=0; x<gridW; x++)
-        closed[x] = new bool[gridH];
-      _clean();
+      cells = new Cell**[gridW];
+      for (int x=0; x<gridW; x++) {
+        cells[x] = new Cell*[gridH];
+        for (int y=0; y<gridH; y++)
+          cells[x][y] = new Cell(x,y);
+      }
+      _resetCells();
     }
 
     ~AStar () {
-      for (int x=0; x<gridW; x++)
-        delete [] closed[x];
-      delete [] closed;
+      for (int x=0; x<gridW; x++) {
+        for (int y=0; y<gridH; y++)
+          delete cells[x][y];
+        delete [] cells[x];
+      }
+      delete [] cells;
     }
 
     //Returns a newly allocated (to be freed by caller) path representing the
@@ -30,29 +36,29 @@ class AStar {
     //Returns NULL if no path can be found
     Path* shortestWay (const Vector2& start, const Vector2& end);
   protected:
-    void _clean ();
+    void _resetCells ();
 
     struct Cell {
-        Cell (uint8_t x, uint8_t y) : x(x), y(y), gCost(MOOB_INF), hCost(MOOB_INF), parent(NULL) {}
-        uint8_t x;
-        uint8_t y;
+        Cell (int x, int y) : x(x), y(y) {}
         int gCost; //cost from start to this cell
         int hCost; //ESTIMATE cost from this cell to end
         int getFCost () const { return gCost + hCost; } //total cost for path going through this cell
 
         Cell* parent;
+        bool closed;
+
+        const int x;
+        const int y;
+
+        void reset () {
+          gCost = MOOB_INF;
+          hCost = MOOB_INF;
+          parent = NULL;
+          closed = false;
+        }
 
         bool operator == (const Cell& other) const {
           return x == other.x && y == other.y;
-        }
-
-        static int neighDist (const Cell* c1, const Cell* c2);
-        static int heuristicDist (const Cell* c1, const Cell* c2);
-    };
-
-    struct cellFCostCompare {
-        bool operator() (const Cell* c1, const Cell* c2) {
-          return c1->getFCost() < c2->getFCost();
         }
     };
 
@@ -64,11 +70,18 @@ class AStar {
     const Grid& grid;
     const int gridW;
     const int gridH;
+    Cell*** cells;
 
-    bool** closed; //[grid.getWidth()][grid.getHeight()]
+    static int neighDist (const Cell* c1, const Cell* c2);
+    static int heuristicDist (const Cell* c1, const Cell* c2);
+
+    struct cellFCostCompare {
+        bool operator() (const Cell* c1, const Cell* c2) {
+          return c1->getFCost() < c2->getFCost();
+        }
+    };
+
     binaryheap<Cell*, AStar::cellFCostCompare> openset;
-
-    list<Cell*> cells; //this is just used to keep track of cell allocation to free memory
 };
 
 #endif /* ASTAR_H_ */
