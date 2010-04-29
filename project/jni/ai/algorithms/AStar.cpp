@@ -3,7 +3,6 @@
 
 Path* AStar::reconstructPath (const Cell* c) {
   const int numNodes = c->gCost/10;
-  LOGE("numNodes : %i", numNodes);
   if (numNodes <= 0) {
     _resetCells();
     return NULL;
@@ -56,11 +55,15 @@ bool AStar::walkable (const Cell* c) {
   return content == Grid::EMPTY;
 }
 
+//#define ALOGE(...) LOGE(__VA_ARGS__)
+#define ALOGE(...)
 Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
   Cell* end = cells[grid.getCellX(endPos)][grid.getCellY(endPos)];
   Cell* start = cells[grid.getCellX(startPos)][grid.getCellY(startPos)];
 
-  LOGE("\n\n---- AStar from (%i,%i) to (%i,%i)", start->x, start->y, end->x, end->y);
+
+  ALOGE("\n\n---- AStar from (%i,%i) to (%i,%i)", start->x, start->y, end->x, end->y);
+
 
   start->gCost = 0;
   start->hCost = heuristicDist(start, end);
@@ -71,7 +74,7 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
     Cell* current = openset.removeRoot();
     if (*current == *end)
       return reconstructPath(current);
-    LOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->gCost, current->hCost);
+    ALOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->gCost, current->hCost);
     current->closed = true;
     //For all 8 neighbours
     for (int nx=-1; nx<=1; nx++) {
@@ -83,33 +86,32 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
           continue;
 
         Cell* neigh = cells[x][y];
-        LOGE("\tneigh (%i,%i)", neigh->x, neigh->y);
+        ALOGE("\tneigh (%i,%i)", neigh->x, neigh->y);
 
         /** There is a special case here. If neigh is end, we have to add it to openset
          * because we'll often run our algorithms and target an unreacheable cell (containing another tank)
          */
         if (!(*neigh == *end) && (neigh->closed || !walkable(neigh))) {
-          LOGE("\t\tunwalkable : closed %i", neigh->closed);
+          ALOGE("\t\tunwalkable : closed %i", neigh->closed);
           continue;
         }
 
         const int tentativeGCost = current->gCost + neighDist(current, neigh);
-        LOGE("\t\ttentative g=%u", tentativeGCost);
+        ALOGE("\t\ttentative g=%u", tentativeGCost);
 
         if (!openset.contains(neigh)) {
-          LOGE("\t\tinserting new");
+          ALOGE("\t\tinserting new");
           neigh->parent = current;
           neigh->gCost = tentativeGCost;
           neigh->hCost = heuristicDist(neigh, end);
           openset.insert(neigh);
         } else if (tentativeGCost < neigh->gCost) {
-          LOGE("\t\tbetter than existing");
+          ALOGE("\t\tbetter than existing");
           neigh->parent = current;
           neigh->gCost = tentativeGCost;
           //h cost stay the same
         } else
-          LOGE("\t\tworst than existing");
-
+          ALOGE("\t\tworst than existing");
       }
     }
   }

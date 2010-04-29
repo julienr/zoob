@@ -136,6 +136,8 @@ void Game::update () {
     const Vector2& endPos = enemies.firstElement()->getPosition();
     AStar astar(colManager.getGrid());
     Path* path = astar.shortestWay(startPos, endPos);
+    for (size_t i=0; i<path->numNodes; i++)
+      LOGE("path[%i] (%f,%f)", i, path->waypoints[i].x, path->waypoints[i].y);
     delete path;
   }
 
