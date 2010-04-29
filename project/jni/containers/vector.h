@@ -36,7 +36,7 @@ class vector {
       return (*this)[i];
     }
 
-    T operator [] (size_t i) const {
+    T& operator [] (size_t i) const {
       ASSERT(i < used);
       return data[i];
     }
