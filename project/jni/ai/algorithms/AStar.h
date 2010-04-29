@@ -58,6 +58,9 @@ class AStar {
 
     Path* reconstructPath (const Cell* c);
 
+    //Returns true if the given cell is free from obstacle, false otherwise
+    bool walkable (const Cell* c);
+
     const Grid& grid;
     const int gridW;
     const int gridH;

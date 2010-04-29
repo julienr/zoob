@@ -78,6 +78,12 @@ class Grid {
       return height;
     }
 
+    bool isCellEmpty (unsigned x, unsigned y) const {
+      if (!inside(x,y))
+        return false;
+      return grid[x][y]->entities.empty();
+    }
+
     //returns -1 if outside grid
     int getCellX (const Vector2& point) const {
       const int x = (int)((point.x-origin.x)/cellSize);

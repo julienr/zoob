@@ -53,6 +53,10 @@ void AStar::_clean () {
   cells.clear();
 }
 
+bool AStar::walkable (const Cell* c) {
+  return grid.isCellEmpty(c->x, c->y);
+}
+
 Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
   Cell* start = new Cell((uint8_t)grid.getCellX(startPos), (uint8_t)grid.getCellY(startPos));
   Cell* end = new Cell((uint8_t)grid.getCellX(endPos), (uint8_t)grid.getCellY(endPos));
@@ -71,7 +75,6 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
       return reconstructPath(current);
     LOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->gCost, current->hCost);
     closed[current->x][current->y] = true;
-    //insertInClosedset(current);
     //For all neighbours of lowestF
     for (int nx=-1; nx<=1; nx++) {
       for (int ny=-1; ny<=1; ny++) {
@@ -83,7 +86,7 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
 
         Cell* neigh = new Cell((uint8_t)x,(uint8_t)y);
         cells.append(neigh);
-        if (closed[neigh->x][neigh->y])
+        if (closed[neigh->x][neigh->y] || !walkable(neigh))
           continue;
 
         const int tentativeGCost = current->gCost + Cell::neighDist(current, neigh);
