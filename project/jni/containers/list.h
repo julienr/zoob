@@ -91,6 +91,15 @@ class list {
       DL_APPEND(head, add);
     }
 
+    T firstElement () {
+      ASSERT(head != NULL);
+      return head->data;
+    }
+
+    bool empty () {
+      return head == NULL;
+    }
+
     /** Remove element "pointer" by the iterator i
      * Invalidates i
      * Returns an iterator to i's next element

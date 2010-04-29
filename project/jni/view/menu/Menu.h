@@ -34,7 +34,7 @@ class Menu {
     void drawItems();
 
     inline
-    void addItem (MenuItem* item) { menuItems.add(item); }
+    void addItem (MenuItem* item) { menuItems.append(item); }
 
     inline
     short getTouchedItem() const { return touchedItem; };

@@ -5,6 +5,11 @@
 struct Path {
   Path (size_t numNodes, Vector2* wp)
     : numNodes(numNodes), waypoints(wp) {}
+
+  ~Path () {
+    delete [] waypoints;
+  }
+
   size_t numNodes;
   //contains the position on the path
   Vector2* waypoints;

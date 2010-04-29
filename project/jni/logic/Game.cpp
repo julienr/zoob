@@ -5,6 +5,8 @@
 #include "ai/shoot/AimPolicy.h"
 #include "logic/ShieldTank.h"
 #include "logic/SimpleTank.h"
+#include "logic/StaticTank.h"
+#include "ai/algorithms/AStar.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
@@ -29,6 +31,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     switch (desc.tankType) {
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_SHIELD: t = new ShieldTank(); break;
+      case TANK_STATIC: t = new StaticTank(); break;
       default: ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));
@@ -126,6 +129,16 @@ void Game::update () {
       gameOverCallback();
     }
   }
+
+  //Astar debugging (from player to first enemy)
+  if (!enemies.empty()) {
+    const Vector2& startPos = tank.getPosition();
+    const Vector2& endPos = enemies.firstElement()->getPosition();
+    AStar astar(colManager.getGrid());
+    Path* path = astar.shortestWay(startPos, endPos);
+    delete path;
+  }
+
 
   //Player Tank movement
   if (isMovingTank()) {

@@ -11,9 +11,9 @@
  * if the first is less than the second. This class typically is a function pointer or a functor
  */
 template<class T, class Compare>
-class BinaryHeap {
+class binaryheap {
   public:
-    BinaryHeap (size_t startingSize, const Compare& comp = Compare())
+    binaryheap (size_t startingSize, const Compare& comp = Compare())
       : array(startingSize), comp(comp) {
     }
 
@@ -34,6 +34,10 @@ class BinaryHeap {
 
     size_t size () const {
       return array.length();
+    }
+
+    void clear () {
+      array.clear();
     }
 
     //returns root element without removing it
@@ -67,9 +71,9 @@ class BinaryHeap {
       const size_t left = 2*idx;
       const size_t right = 2*idx+1;
       size_t smallest = idx;
-      if (left < array.length() && (array[left] < array[smallest]))
+      if (left < array.length() && comp(array[left],array[smallest]))
         smallest = left;
-      if (right < array.length() && (array[right] < array[smallest]))
+      if (right < array.length() && comp(array[right],array[smallest]))
         smallest = right;
       if (smallest != idx) {
         swap(idx, smallest);
