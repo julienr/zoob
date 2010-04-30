@@ -3,14 +3,46 @@ import os
 dirs = ['ai','containers','levels','lib','logic','logic/physics','view','view/menu', 'ai/movement', 'ai/shoot']
 files = [glob.glob(dir+'/*.cpp') for dir in dirs]
 
-cflags = '-ggdb -Wall -DPLATFORM_SDL'
-ldflags = '-lm -lSDL -lGL -lpng -lzip'
+def build_mac():
+	print '-- MAC build'
+	libzip_inc=' -I/opt/local/var/macports/software/libzip/0.9.3_0/opt/local/include/'
+	libzip_ld=' -L/opt/local/var/macports/software/libzip/0.9.3_0/opt/local/lib/'
+	libpng_inc=' -I/opt/local/var/macports/software/libpng/1.2.43_0/opt/local/include/'
+	libpng_ld=' -L/opt/local/var/macports/software/libpng/1.2.43_0/opt/local/lib/'
+	opengl_inc=' -I/System/Library/Frameworks/OpenGL.framework/Headers/'
+	sdl_inc ='  -I/Library/Frameworks/SDL.framework/Headers/'
+	
+	cflags = '-ggdb -Wall -DPLATFORM_SDL' + libzip_inc + libpng_inc + opengl_inc + sdl_inc
+	#ldflags = '-lm -lSDL -lGL -lpng -lzip'
+	
+	ldflags = libzip_ld + libpng_ld + ' -framework SDL -framework Cocoa -framework OpenGL -lm -lpng -lzip'
+	
+	env = Environment(ENV = {'PATH': os.environ['PATH']},
+										CPPPATH=['.'],
+										CFLAGS=cflags,
+										CXX='g++',
+										CXXFLAGS=cflags,
+										LINKFLAGS=ldflags)
+	
+	env.Program(target='./app', source=['app-sdl.cpp','app.cpp','SDLMain.m']+files)
 
-env = Environment(ENV = {'PATH': os.environ['PATH']},
-                  CPPPATH=['.'],
-                  CXX='g++',
-                  CXXFLAGS=cflags,
-                  LINKFLAGS=ldflags)
+def build_linux():
+	print '--LINUX build'
+	cflags = '-ggdb -Wall -DPLATFORM_SDL'
+	ldflags = '-lm -lSDL -lGL -lpng -lzip'
+	
+	env = Environment(ENV = {'PATH': os.environ['PATH']},
+										CPPPATH=['.'],
+										CXX='g++',
+										CXXFLAGS=cflags,
+										LINKFLAGS=ldflags)
+	
+	env.Program(target='./app', source=['app-sdl.cpp','app.cpp']+files)
 
-env.Program(target='./app', source=['app-sdl.cpp','app.cpp']+files)
 
+import platform
+plat = platform.platform()
+if plat.find('Darwin') != -1:
+	build_mac()
+elif plat.find('Linux') != -1:
+	build_linux()

@@ -3,6 +3,7 @@
 
 #include <zip.h>
 #include <assert.h>
+#include <stdint.h>
 
 extern zip* APKArchive;
 
@@ -13,7 +14,7 @@ extern zip* APKArchive;
 
 
 #ifdef PLATFORM_SDL //SDL standalone build
-  #include <GL/gl.h>
+  #include <gl.h>
   #define LOGI(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
   #define LOGE(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
 #else //Android build
