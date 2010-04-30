@@ -7,6 +7,7 @@
 struct Vector2 {
   static const Vector2 X_AXIS;
   static const Vector2 Y_AXIS;
+  static const Vector2 ZERO;
 
   float x, y;
 
@@ -28,6 +29,10 @@ struct Vector2 {
   Vector2 getNormalized () const {
     const float l = length();
     return Vector2(x/l, y/l);
+  }
+
+  bool isZero () {
+    return x == 0 && y == 0;
   }
 
   void set (float x, float y) {

@@ -27,7 +27,7 @@ class GameView {
   private:
     const Game& game;
     TankView tankView;
-    CursorView cursorView;
+    //CursorView cursorView;
     LevelView levelView;
     Sprite arrowEnd;
     Sprite rocket;

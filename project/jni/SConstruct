@@ -1,6 +1,6 @@
 import glob
 import os
-dirs = ['ai','containers','levels','lib','logic','logic/physics','view','view/menu', 'ai/movement', 'ai/shoot', 'ai/algorithms']
+dirs = ['ai','containers','levels','lib','logic','logic/physics','view','view/menu', 'ai/movement', 'ai/shoot', 'ai/algorithms', 'input']
 files = [glob.glob(dir+'/*.cpp') for dir in dirs]
 
 def build_mac():

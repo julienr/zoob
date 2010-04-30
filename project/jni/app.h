@@ -16,4 +16,13 @@ void touchEventMove (float x, float y);
 void touchEventUp (float x, float y);
 void touchEventOther (float x, float y);
 
+//Utility functions to transform window coordinates to our internal coordinate system
+float XSG (const float x);
+float YSG (const float y);
+float XSG_NOTRANSX(const float x);
+float YSG_NOTRANSY(const float y);
+
+extern float transX;
+extern float transY;
+
 #endif

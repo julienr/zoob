@@ -13,7 +13,6 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       tank(),
       level(level),
       elapsedS(0),
-      movingState(MOVING_NONE),
       gameOverCallback(overCallback),
       gameWonCallback(wonCallback),
       gameState(GAME_RUNNING) {
@@ -143,8 +142,8 @@ void Game::update () {
 
 
   //Player Tank movement
-  if (isMovingTank()) {
-    Vector2 dir = getTankMoveDir();
+  if (!tankMoveDir.isZero()) {
+    Vector2 dir = tankMoveDir;
     doTankMove(&tank, dir, elapsedS);
 
     /*CollisionResult r;
@@ -158,8 +157,17 @@ void Game::update () {
   }
 }
 
+void Game::playerFire (const Vector2& cursorPosition) {
+  //Fire up rocket
+  if (tank.canFire()) {
+    Vector2 dir = cursorPosition-tank.getPosition();
+    dir.normalize();
+    rockets.append(tank.fireRocket(dir));
+  }
+}
+
 void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
-  if (dir.length() == 0)
+  if (dir.isZero())
     return;
 
   dir.normalize();
@@ -167,47 +175,6 @@ void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
 
   const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
   slideMove(t, move);
-}
-
-void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
-  movingState = what;
-  switch(movingState) {
-    case MOVING_TANK_PAD:
-    case MOVING_TANK:
-      tankMoveEnd = touchPosition;
-      break;
-    case MOVING_CURSOR:
-      cursor.setPosition(touchPosition);
-      break;
-    default:
-      break;
-  }
-}
-
-void Game::setMoveTouchPoint (const Vector2& pos) {
-  switch (movingState) {
-    case MOVING_TANK:
-    case MOVING_TANK_PAD:
-      tankMoveEnd = pos;
-      break;
-    case MOVING_CURSOR:
-      cursor.setPosition(pos);
-      break;
-    default:
-      break;
-  }
-}
-
-void Game::stopMoving () {
-  if (movingState == MOVING_CURSOR) {
-    //Fire up rocket
-    if (tank.canFire()) {
-      Vector2 dir = cursor.getPosition()-tank.getPosition();
-      dir.normalize();
-      rockets.append(tank.fireRocket(dir));
-    }
-  }
-  movingState = MOVING_NONE;
 }
 
 void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {

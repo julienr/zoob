@@ -9,6 +9,7 @@
 #include "logic/Game.h"
 #include "view/GLW.h"
 #include "view/GameManager.h"
+#include "input/AndroidInputManager.h"
 
 zip* APKArchive;
 
@@ -42,7 +43,6 @@ void centerGameInViewport ();
 Level* lvl = NULL;
 Game* game = NULL;
 GameView* gameView = NULL;
-
 
 //Since startGame/nativeMenu cannot call openGL, this is used to defer state change
 //If this variable is not set to -1, then a state transition to (eAppState)stateTransition
@@ -86,15 +86,7 @@ void gameUnPauseCallback () {
 }
 
 GameManager* gameManager = NULL;
-
-bool showGamePad = true;
-Sprite* gamePad = NULL;
-const Vector2 gamePadPos(13.8f, 2.0f);
-const Vector2 gamePadSize(2.5,2.5);
-Sprite* fireButton = NULL;
-Sprite* fireButtonClicked = NULL;
-const Vector2 fireButtonPos(13.8f, 6.0f);
-const Vector2 fireButtonSize(2.5,2.5);
+AndroidInputManager* inputManager = NULL;
 
 void toPlayingState () {
   if (gameManager->getState() == STATE_PAUSED) {
@@ -106,6 +98,7 @@ void toPlayingState () {
 
     lvl = levelsLoadFns[gameManager->getCurrentLevel()]();
     game = new Game(gameOverCallback, gameWonCallback, lvl);
+    inputManager->setGame(game);
     gameView = new GameView(*game);
 
     centerGameInViewport();
@@ -118,6 +111,7 @@ void toMenuState (eAppState state) {
   lvl = NULL;
   delete game;
   game = NULL;
+  inputManager->setGame(NULL);
   delete gameView;
   gameView = NULL;
   gameManager->setState(state);
@@ -164,10 +158,7 @@ void nativeInitGL() {
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
     gameManager = new GameManager(startGame, nativeMenu, gameUnPauseCallback);
-
-    gamePad = new Sprite("assets/sprites/control.png");
-    fireButton = new Sprite("assets/sprites/fire_btn.png");
-    fireButtonClicked = new Sprite("assets/sprites/fire_btn_clicked.png");
+    inputManager = new AndroidInputManager(gameManager);
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -234,11 +225,21 @@ float transY = 0;
 Vector2 viewportMargin;
 
 //0.5 is because sprites are square centered on their position
-#define XSG(x) ((x-viewportMargin.x)*xScreenToGame-(transX+0.5))
-#define YSG(y) ((y-viewportMargin.y)*yScreenToGame-(transY+0.5))
+float XSG (const float x) {
+  return (x-viewportMargin.x)*xScreenToGame-(transX+0.5);
+}
 
-#define XSG_NOTRANSX(x) ((x-viewportMargin.x)*xScreenToGame-0.5)
-#define YSG_NOTRANSY(y) ((y-viewportMargin.y)*yScreenToGame-0.5)
+float YSG (const float y) {
+  return (y-viewportMargin.y)*yScreenToGame-(transY+0.5);
+}
+
+float XSG_NOTRANSX (const float x) {
+  return (x-viewportMargin.x)*xScreenToGame-0.5;
+}
+
+float YSG_NOTRANSY (const float y) {
+  return (y-viewportMargin.y)*yScreenToGame-0.5;
+}
 
 int windowWidth = 0, windowHeight = 0;
 
@@ -250,14 +251,15 @@ void centerGameInViewport () {
   const int levelH = game->getLevel()->getHeight();
   const int levelW = game->getLevel()->getWidth();
 
-  if (showGamePad) {
+  //FIXME
+  //if (showGamePad) {
     transX = 1.0f;
     transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-    game->setGamePadPos(gamePadPos - Vector2(transX, transY));
+  /*  game->setGamePadPos(gamePadPos - Vector2(transX, transY));
   } else {
     transX = 0.5f + (VIEWPORT_WIDTH-levelW)/2.0f;
     transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-  }
+  }*/
 }
 
 void forceRatio (float sW, float sH) {
@@ -288,11 +290,9 @@ void forceRatio (float sW, float sH) {
   ASSERT(Math::epsilonEq(ratio, targetRatio));
 
   //Center the viewport in the window
-
-  //Force the viewport to the top-left of the window
   viewportMargin.x = (sW-areaWidth)/2.0f;
   viewportMargin.y = (sH-areaHeight)/2.0f;
-  glViewport(viewportMargin.x, /*(sH-areaHeight)*/viewportMargin.y, areaWidth, areaHeight);
+  glViewport(viewportMargin.x, viewportMargin.y, areaWidth, areaHeight);
   GLW::checkError("glViewport");
   viewportScreenDim.x = areaWidth;
   viewportScreenDim.y = areaHeight;
@@ -332,9 +332,6 @@ void nativePause () {
 
 static uint64_t last = Utils::getCurrentTimeMillis();
 
-bool fireButtonPressed = false;
-bool firingMode = false;
-
 void nativeRender () {
   uint64_t now = Utils::getCurrentTimeMillis();
   if (stateTransition != -1) {
@@ -354,12 +351,6 @@ void nativeRender () {
   }
   last = now;
 
-  //FIXME: ugly hack to notify about rocket firing
-  if (firingMode || fireButtonPressed)
-    glClearColor(1, 0.18f, 0.18f, 1);
-  else
-    glClearColor(0.4f, 0.4f, 0.4f, 1);
-
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
@@ -367,13 +358,7 @@ void nativeRender () {
     if (!gameManager->paused())
       game->update();
 
-    if (showGamePad) {
-      gamePad->draw(gamePadPos, gamePadSize);
-      if (firingMode || fireButtonPressed)
-        fireButtonClicked->draw(fireButtonPos, fireButtonSize);
-      else
-        fireButton->draw(fireButtonPos, fireButtonSize);
-    }
+    inputManager->draw();
 
     glPushMatrix();
     GLW::translate(10.0f, 0.55f, 0);
@@ -393,79 +378,19 @@ void nativeRender () {
   }
 }
 
-bool inGamePad (float x, float y) {
-  return Utils::insideC(gamePadPos, gamePadSize, Vector2(XSG_NOTRANSX(x),YSG_NOTRANSY(y)));
-}
-
-bool inFireButton (float x, float y) {
-  return Utils::insideC(fireButtonPos, fireButtonSize, Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
-}
-
-/**
- * See important comment in Moob.java regarding native event-handling methods.
- * Basically, they should lead to any OpenGL call, because they'll be run in a separate
- * thread than the rendering thread.
- */
-
-static uint64_t lastTouchDownTime = 0;
-static Vector2 lastTouchDownLocation;
-
 void touchEventDown (float x, float y) {
-  if (!gameManager->inGame()) {
-    //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    gameManager->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
-    return;
-  }
-
-  LOGE("fireButtonPressed : %i, firingMode : %i", fireButtonPressed, firingMode);
-
-  const Vector2 p(XSG(x), YSG(y));
-  //Check that the double-tap was quick and not too far away (which would indicate a fast direction
-  //change)
-  const uint64_t now = Utils::getCurrentTimeMillis();
-  const float tapDist = (p-lastTouchDownLocation).length();
-  const uint64_t elapsed = now - lastTouchDownTime;
-  LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
-  if (showGamePad && inGamePad(x,y)) {
-    LOGE("in game pad");
-    game->startMoving(MOVING_TANK_PAD, p);
-  } else if (firingMode) {
-    game->startMoving(MOVING_CURSOR, p);
-    firingMode = false;
-  } else if (showGamePad && inFireButton(x,y)) {
-    fireButtonPressed = true;
-  } else if (tapDist < 1 && elapsed <= 300) {
-    //FIXME: this is ugly =)
-    game->startMoving(MOVING_CURSOR, p);
-    game->stopMoving();
-    game->startMoving(MOVING_TANK, p);
-  } else {
-    game->startMoving(MOVING_TANK, p);
-  }
-  lastTouchDownTime = now;
-  lastTouchDownLocation = p;
-  return;
+  inputManager->touchEventDown(x,y);
 }
 
 void touchEventMove (float x, float y) {
-  if (!gameManager->inGame())
-    return;
-  const Vector2 p(XSG(x), YSG(y));
-  game->setMoveTouchPoint(p);
+  inputManager->touchEventMove(x,y);
 }
 
 void touchEventUp (float x, float y) {
-  if (fireButtonPressed) {
-    firingMode = true;
-    fireButtonPressed = false;
-  }
-  if (gameManager->inGame())
-    game->stopMoving();
-  else
-    gameManager->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+  inputManager->touchEventUp(x,y);
 }
 
 void touchEventOther (float x, float y) {
-  touchEventUp(x,y);
+  inputManager->touchEventOther(x,y);
 }
 
