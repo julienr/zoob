@@ -3,6 +3,7 @@
 
 #include "ai/shoot/AimPolicy.h"
 #include "ai/shoot/NonePolicy.h"
+#include "ai/movement/PathPolicy.h"
 #include "ai/movement/StillPolicy.h"
 #include "EnemyTank.h"
 
@@ -10,6 +11,11 @@ class ShieldTank : public EnemyTank {
   public:
     ShieldTank ()
       : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy())) {
+    }
+
+    ShieldTank (Path* p)
+      : EnemyTank (new TankAI(new AimPolicy(), new PathPolicy())) {
+      this->setPath(p);
     }
 
     eTankType getTankType () const { return TANK_SHIELD; }

@@ -1,5 +1,5 @@
 #ifndef PATHPOLICY_H_
-#define PATHPOLICY_H
+#define PATHPOLICY_H_
 
 #include "def.h"
 #include "lib/Vector2.h"

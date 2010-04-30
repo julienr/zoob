@@ -1,8 +1,8 @@
 #ifndef SIMPLETANK_H_
 #define SIMPLETANK_H_
 
-#include "EnemyTank.h"
 #include "ai/movement/PathPolicy.h"
+#include "EnemyTank.h"
 
 class SimpleTank : public EnemyTank {
   public:

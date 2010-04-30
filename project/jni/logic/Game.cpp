@@ -1,8 +1,5 @@
 #include "Game.h"
 #include "lib/Math.h"
-#include "ai/movement/StillPolicy.h"
-#include "ai/shoot/RandomPolicy.h"
-#include "ai/shoot/AimPolicy.h"
 #include "logic/ShieldTank.h"
 #include "logic/SimpleTank.h"
 #include "logic/StaticTank.h"
@@ -29,7 +26,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     EnemyTank* t = NULL;
     switch (desc.tankType) {
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
-      case TANK_SHIELD: t = new ShieldTank(); break;
+      case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
       case TANK_STATIC: t = new StaticTank(); break;
       default: ASSERT(false); break;
     }

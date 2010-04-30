@@ -26,6 +26,8 @@ MainMenu::MainMenu (GameManager* gm)
    numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
    numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
    numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
+   numbers[4] = new Sprite("assets/sprites/menuitems/4.png");
+   numbers[5] = new Sprite("assets/sprites/menuitems/5.png");
 
    _initItems();
 }
@@ -85,8 +87,8 @@ void MainMenu::_initItems () {
   logoPos = Vector2(3,5);
   logoSize = Vector2(8,8);
 
-  numberPos = Vector2(8.9, 2);
-  numberSize = Vector2(3.5,3.5);
+  numberPos = Vector2(9, 2);
+  numberSize = Vector2(3,3);
 
   for (size_t i=0; i<numItems(); i++) {
     MenuItem* mi = getItem(i);
