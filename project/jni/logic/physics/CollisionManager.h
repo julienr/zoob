@@ -61,6 +61,16 @@ class CollisionManager {
       grid.addEntity(e);
     }
 
+    //FIXME: This is some kind of ugly hack, but we want to avoid that rounding errors make a wall
+    //belongs to 4 cells (since the wall has EXACTLY the size of a cell, it'll happen quite often).
+    //So this function will add the entity to the grid based ONLY on the entity center, without regards
+    //to the entity bounding box. ONLY use with caution !
+    void addWallFromPosition (Entity* e) {
+      ASSERT(e);
+      entities.append(e);
+      grid.addWallFromPosition(e);
+    }
+
     void removeEntity (Entity* e) {
       ASSERT(e);
       entities.remove(e);

@@ -131,7 +131,7 @@ void Game::update () {
   }
 
   //Astar debugging (from player to first enemy)
-  if (!enemies.empty()) {
+  /*if (!enemies.empty()) {
     const Vector2& startPos = tank.getPosition();
     const Vector2& endPos = enemies.firstElement()->getPosition();
     AStar astar(colManager.getGrid());
@@ -139,7 +139,7 @@ void Game::update () {
     for (size_t i=0; i<path->numNodes; i++)
       LOGE("path[%i] (%f,%f)", i, path->waypoints[i].x, path->waypoints[i].y);
     delete path;
-  }
+  }*/
 
 
   //Player Tank movement
@@ -179,10 +179,6 @@ void Game::startMoving (eMoveState what, const Vector2& touchPosition) {
     case MOVING_CURSOR:
       cursor.setPosition(touchPosition);
       break;
-    case MOVING_TANK_EDGES:
-      //edgeMoveDir = touchPosition;
-      tankMoveEnd = touchPosition;
-      break;
     default:
       break;
   }
@@ -196,10 +192,6 @@ void Game::setMoveTouchPoint (const Vector2& pos) {
       break;
     case MOVING_CURSOR:
       cursor.setPosition(pos);
-      break;
-    case MOVING_TANK_EDGES:
-      edgeMoveDir = pos;
-      tankMoveEnd = pos;
       break;
     default:
       break;

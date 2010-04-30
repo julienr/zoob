@@ -1,16 +1,14 @@
 #include "Level.h"
 
 Tile::Tile(int x, int y, eTileType t): type(t) {
-  //FIXME: We use 0.95f instead of 1.0f and 0.45f instead of 0.5f to avoid a block spanning on more than one grid
-  //cell (due to rounding errors)
   switch(t) {
-    case W: entity = new WallEntity(0.95f, 0.95f, Vector2(x,y)); break;
+    case W: entity = new WallEntity(1, 1, Vector2(x,y)); break;
     case E: entity = NULL; break;
-    case T: entity = new WallEntity(0.95f, 0.45f, Vector2(x,y-0.25f)); break;
-    case L: entity = new WallEntity(0.45f, 0.95f, Vector2(x-0.25f,y)); break;
-    case B: entity = new WallEntity(0.95f, 0.45f, Vector2(x,y+0.25f)); break;
+    case T: entity = new WallEntity(1, 0.5f, Vector2(x,y-0.25f)); break;
+    case L: entity = new WallEntity(0.5f, 1, Vector2(x-0.25f,y)); break;
+    case B: entity = new WallEntity(1, 0.5f, Vector2(x,y+0.25f)); break;
     //FIXME: have to use 0.24f instead of 0.25f to avoid rendering glitches...
-    case R: entity = new WallEntity(0.45f, 0.95f, Vector2(x+0.24f,y)); break;
+    case R: entity = new WallEntity(0.5f, 1, Vector2(x+0.24f,y)); break;
   }
 }
 
@@ -47,7 +45,7 @@ void Level::addToColManager(CollisionManager& colManager) {
   for (unsigned y = 0; y < height; y++) {
     for (unsigned x = 0; x < width; x++) {
       if (board[x][y]->getEntity())
-        colManager.addEntity(board[x][y]->getEntity());
+        colManager.addWallFromPosition(board[x][y]->getEntity());
         //colManager.setGridCellSolid(x,y,true);
     }
   }

@@ -87,16 +87,14 @@ void gameUnPauseCallback () {
 
 GameManager* gameManager = NULL;
 
-Sprite* levelText = NULL;
-//CONTROL_GAMEPAD
-//CONTROL_DOUBLETAP
-#define CONTROL_DOUBLETAP
-
-#ifdef CONTROL_GAMEPAD
+bool showGamePad = true;
 Sprite* gamePad = NULL;
-const Vector2 gamePadPos(13.8f, 5.0f);
+const Vector2 gamePadPos(13.8f, 2.0f);
 const Vector2 gamePadSize(2.5,2.5);
-#endif
+Sprite* fireButton = NULL;
+Sprite* fireButtonClicked = NULL;
+const Vector2 fireButtonPos(13.8f, 6.0f);
+const Vector2 fireButtonSize(2.5,2.5);
 
 void toPlayingState () {
   if (gameManager->getState() == STATE_PAUSED) {
@@ -167,10 +165,9 @@ void nativeInitGL() {
     //game manager here because it requires textures
     gameManager = new GameManager(startGame, nativeMenu, gameUnPauseCallback);
 
-    levelText = new Sprite("assets/sprites/level_text.png");
-#ifdef CONTROL_GAMEPAD
     gamePad = new Sprite("assets/sprites/control.png");
-#endif
+    fireButton = new Sprite("assets/sprites/fire_btn.png");
+    fireButtonClicked = new Sprite("assets/sprites/fire_btn_clicked.png");
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -253,15 +250,14 @@ void centerGameInViewport () {
   const int levelH = game->getLevel()->getHeight();
   const int levelW = game->getLevel()->getWidth();
 
-#if defined(CONTROL_GAMEPAD)
-  transX = 1.0f;
-  transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-
-  game->setGamePadPos(gamePadPos - Vector2(transX, transY));
-#else
-  transX = 0.5f + (VIEWPORT_WIDTH-levelW)/2.0f;
-  transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-#endif
+  if (showGamePad) {
+    transX = 1.0f;
+    transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
+    game->setGamePadPos(gamePadPos - Vector2(transX, transY));
+  } else {
+    transX = 0.5f + (VIEWPORT_WIDTH-levelW)/2.0f;
+    transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
+  }
 }
 
 void forceRatio (float sW, float sH) {
@@ -336,6 +332,9 @@ void nativePause () {
 
 static uint64_t last = Utils::getCurrentTimeMillis();
 
+bool fireButtonPressed = false;
+bool firingMode = false;
+
 void nativeRender () {
   uint64_t now = Utils::getCurrentTimeMillis();
   if (stateTransition != -1) {
@@ -355,6 +354,12 @@ void nativeRender () {
   }
   last = now;
 
+  //FIXME: ugly hack to notify about rocket firing
+  if (firingMode || fireButtonPressed)
+    glClearColor(1, 0.18f, 0.18f, 1);
+  else
+    glClearColor(0.4f, 0.4f, 0.4f, 1);
+
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
@@ -362,10 +367,13 @@ void nativeRender () {
     if (!gameManager->paused())
       game->update();
 
-    //levelText->draw(Vector2(13.7f, 2.0f), Vector2(3.0f,3.0f));
-#ifdef CONTROL_GAMEPAD
-    gamePad->draw(gamePadPos, gamePadSize);
-#endif
+    if (showGamePad) {
+      gamePad->draw(gamePadPos, gamePadSize);
+      if (firingMode || fireButtonPressed)
+        fireButtonClicked->draw(fireButtonPos, fireButtonSize);
+      else
+        fireButton->draw(fireButtonPos, fireButtonSize);
+    }
 
     glPushMatrix();
     GLW::translate(10.0f, 0.55f, 0);
@@ -375,7 +383,7 @@ void nativeRender () {
     glPushMatrix();
     GLW::translate(transX, transY, 0);
     gameView->draw();
-    gameView->debugDraw();
+    //gameView->debugDraw();
     glPopMatrix();
     
     if (gameManager->paused())
@@ -385,20 +393,13 @@ void nativeRender () {
   }
 }
 
-#ifdef CONTROL_GAMEPAD
 bool inGamePad (float x, float y) {
-  x *= xScreenToGame;
-  y *= yScreenToGame;
-  x -= 0.5;
-  y -= 0.5;
-
-  const float hW = gamePadSize.x/2.0f;
-  const float hH = gamePadSize.y/2.0f;
-
-  return ((x >= gamePadPos.x-hW) && (x <= gamePadPos.x + hW)) &&
-          ((y >= gamePadPos.y-hW) && (y <= gamePadPos.y + hH));
+  return Utils::insideC(gamePadPos, gamePadSize, Vector2(XSG_NOTRANSX(x),YSG_NOTRANSY(y)));
 }
-#endif
+
+bool inFireButton (float x, float y) {
+  return Utils::insideC(fireButtonPos, fireButtonSize, Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+}
 
 /**
  * See important comment in Moob.java regarding native event-handling methods.
@@ -416,7 +417,8 @@ void touchEventDown (float x, float y) {
     return;
   }
 
-#ifdef CONTROL_DOUBLETAP
+  LOGE("fireButtonPressed : %i, firingMode : %i", fireButtonPressed, firingMode);
+
   const Vector2 p(XSG(x), YSG(y));
   //Check that the double-tap was quick and not too far away (which would indicate a fast direction
   //change)
@@ -424,7 +426,15 @@ void touchEventDown (float x, float y) {
   const float tapDist = (p-lastTouchDownLocation).length();
   const uint64_t elapsed = now - lastTouchDownTime;
   LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
-  if (tapDist < 1 && elapsed <= 300) {
+  if (showGamePad && inGamePad(x,y)) {
+    LOGE("in game pad");
+    game->startMoving(MOVING_TANK_PAD, p);
+  } else if (firingMode) {
+    game->startMoving(MOVING_CURSOR, p);
+    firingMode = false;
+  } else if (showGamePad && inFireButton(x,y)) {
+    fireButtonPressed = true;
+  } else if (tapDist < 1 && elapsed <= 300) {
     //FIXME: this is ugly =)
     game->startMoving(MOVING_CURSOR, p);
     game->stopMoving();
@@ -435,18 +445,6 @@ void touchEventDown (float x, float y) {
   lastTouchDownTime = now;
   lastTouchDownLocation = p;
   return;
-#endif
-
-  //LOGE("touchEventDown(inGame) (%f,%f) => (%f,%f)", x, y, p.x, p.y);
-#ifdef CONTROL_GAMEPAD
-  if (inGamePad(x,y))
-    game->startMoving(MOVING_TANK_PAD, p);
-  else
-#endif
-  if (gameView->getTankView().touchInside(p))
-    game->startMoving(MOVING_TANK, p);
-  else
-    game->startMoving(MOVING_CURSOR, p);
 }
 
 void touchEventMove (float x, float y) {
@@ -457,6 +455,10 @@ void touchEventMove (float x, float y) {
 }
 
 void touchEventUp (float x, float y) {
+  if (fireButtonPressed) {
+    firingMode = true;
+    fireButtonPressed = false;
+  }
   if (gameManager->inGame())
     game->stopMoving();
   else

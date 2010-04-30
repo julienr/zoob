@@ -171,6 +171,12 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
   return collided;
 }
 
+void Grid::addWallFromPosition (Entity* e) {
+  GridCell* c = getCell(e->getPosition());
+  c->entities.append(e);
+  e->touchedCells.append(c);
+}
+
 void Grid::addEntity (Entity* e) {
   const BoundingVolume* bvol = e->getBVolume();
   unsigned numTouched = 0;
@@ -239,7 +245,7 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
     if (cell) {
       //Check if we already have this cell in our list
       bool alreadyIn = false;
-      for (int j=0; j<*count; j++) {
+      for (unsigned j=0; j<*count; j++) {
         if (touchedCells[j] == cell) {
           alreadyIn = true;
           break;

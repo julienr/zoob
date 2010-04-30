@@ -20,8 +20,7 @@ enum eMoveState {
   MOVING_NONE=0,
   MOVING_TANK,
   MOVING_CURSOR,
-  MOVING_TANK_PAD, //moving tank using the gamepad
-  MOVING_TANK_EDGES //moving tank using the screen edges
+  MOVING_TANK_PAD //moving tank using the gamepad
 };
 
 enum eGameState {
@@ -88,9 +87,6 @@ class Game {
         return tankMoveEnd - tank.getPosition();
       else if (movingState == MOVING_TANK_PAD)
         return tankMoveEnd - gamePadPos;
-      else if (movingState == MOVING_TANK_EDGES)
-        return tankMoveEnd - tank.getPosition();
-        //return edgeMoveDir;
       else {
         ASSERT(false);
         return Vector2(0,0);
@@ -104,7 +100,7 @@ class Game {
     void stopMoving();
 
     bool isMovingTank () const {
-      return movingState == MOVING_TANK || movingState == MOVING_TANK_PAD || movingState == MOVING_TANK_EDGES;
+      return movingState == MOVING_TANK || movingState == MOVING_TANK_PAD;
     }
 
     eMoveState getMovingState () const {
