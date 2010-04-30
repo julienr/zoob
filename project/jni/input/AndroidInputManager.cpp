@@ -102,8 +102,9 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (getGameManager()->inGame()) {
-    if (showGamePad && state != FIRING_MODE && inFireButton(x,y)) {
+    if (showGamePad && state == STATE_DEFAULT && inFireButton(x,y)) {
       state = FIRING_MODE;
+      getGame()->setTankMoveDir(Vector2::ZERO);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),XSG(y)));
       state = STATE_DEFAULT;

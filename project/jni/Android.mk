@@ -42,7 +42,8 @@ LOCAL_SRC_FILES := \
     logic/physics/Grid.cpp \
     ai/shoot/AimPolicy.cpp \
     ai/shoot/RandomPolicy.cpp \
-    ai/movement/PathPolicy.cpp
+    ai/movement/PathPolicy.cpp \
+    input/AndroidInputManager.cpp
 
 LIBPNG_PATH := /home/silver/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/silver/programs/android-ndk-r3/out/apps/libzip/armeabi
