@@ -6,7 +6,6 @@
 #include "containers/vector.h"
 #include "MovementPolicy.h"
 
-
 class PathPolicy : public MovementPolicy {
   public:
     PathPolicy ()

@@ -183,6 +183,7 @@ void Grid::addEntity (Entity* e) {
 
   if (numTouched == 0)
     LOGE("addEntity : numTouched = 0");
+  //LOGE("addEntity: numTouched : %u", numTouched);
   e->touchedCells.clear();
   for (unsigned i=0; i<numTouched; i++) {
     touchedCells[i]->entities.append(e);
@@ -227,16 +228,27 @@ void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned*
   addCellIf(c[0]+1, c[1]+1, (cellSize-tlPos.x < r) && (cellSize-tlPos.y < r), count); //bottom-right
 }
 
-//FIXME: should check if a cell is already in our touched list before adding
 void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const {
   ASSERT(bbox->getHeight() <= cellSize && bbox->getWidth() <= cellSize);
   //Just check the 4 box's corners
   Vector2 c[4];
   bbox->getCorners(position, c);
   for (int i=0; i<4; i++) {
+    //LOGE("c[%i](%f,%f) => cell(%i,%i)", i, c[i].x, c[i].y, getCellX(c[i]), getCellY(c[i]));
     GridCell* cell = getCell(c[i]);
-    if (cell)
-      touchedCells[(*count)++] = cell;
+    if (cell) {
+      //Check if we already have this cell in our list
+      bool alreadyIn = false;
+      for (int j=0; j<*count; j++) {
+        if (touchedCells[j] == cell) {
+          alreadyIn = true;
+          break;
+        }
+      }
+
+      if (!alreadyIn)
+        touchedCells[(*count)++] = cell;
+    }
   }
 }
 

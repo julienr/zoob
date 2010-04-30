@@ -19,7 +19,7 @@ class vector {
       free(data);
     }
 
-    void add (T elem) {
+    void append (T elem) {
       if (used >= capacity) {
         capacity += capacityIncr;
         data = (T*)realloc(data, sizeof(T)*capacity);
@@ -28,15 +28,26 @@ class vector {
       data[used++] = elem;
     }
 
+    void removeLast () {
+      ASSERT(used > 0);
+      used--;
+    }
+
     size_t length () const {
       return used;
+    }
+
+    void clear () {
+      //reinitialize to initial size
+      data = (T*)realloc(data, sizeof(T)*capacityIncr);
+      used = 0;
     }
 
     T get (size_t i) const {
       return (*this)[i];
     }
 
-    T operator [] (size_t i) const {
+    T& operator [] (size_t i) const {
       ASSERT(i < used);
       return data[i];
     }

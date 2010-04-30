@@ -19,6 +19,7 @@ class TankView {
         case TANK_PLAYER: return GREEN;
         case TANK_SIMPLE: return RED;
         case TANK_SHIELD: return ORANGE;
+        case TANK_STATIC: return GREY;
         default: LOGE("Unhandled tank type : %i", type); return WHITE;
       }
     }
@@ -30,6 +31,7 @@ class TankView {
       GLW::color(getColor(type));
       switch(type) {
         case TANK_PLAYER:
+        case TANK_STATIC:
         case TANK_SIMPLE:
           tankSprite.draw(tank, tank.getRotation());
           break;

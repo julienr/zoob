@@ -5,23 +5,15 @@
 #include "Entity.h"
 #include "physics/BCircle.h"
 #include "lib/Utils.h"
+#include "Path.h"
 
 class Rocket;
 
 enum eTankType {
     TANK_PLAYER,
+    TANK_STATIC,
     TANK_SIMPLE,
     TANK_SHIELD
-};
-
-
-//A path on the level that a tank can follow
-struct Path {
-  Path (size_t numNodes, Vector2* wp)
-    : numNodes(numNodes), waypoints(wp) {}
-  size_t numNodes;
-  //contains the position on the path
-  Vector2* waypoints;
 };
 
 class Tank: public Entity {

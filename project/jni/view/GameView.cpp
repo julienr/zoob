@@ -15,7 +15,7 @@ GameView::GameView (const Game& g)
     enemiesView(5) {
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
-    enemiesView.add(new TankView(**i));
+    enemiesView.append(new TankView(**i));
 }
 
 GameView::~GameView () {
