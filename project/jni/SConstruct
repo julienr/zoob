@@ -28,7 +28,7 @@ def build_mac():
 
 def build_linux():
 	print '--LINUX build'
-	cflags = '-ggdb -Wall -DPLATFORM_SDL'
+	cflags = '-ggdb -Wall -DPLATFORM_SDL -I/usr/include/GL/'
 	ldflags = '-lm -lSDL -lGL -lpng -lzip'
 	
 	env = Environment(ENV = {'PATH': os.environ['PATH']},
