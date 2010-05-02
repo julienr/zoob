@@ -57,6 +57,7 @@ int main (int argc, char** argv) {
             case SDLK_ESCAPE: done = true; break;
             case SDLK_m: nativeMenu(); break;
             case SDLK_p: nativePause(); break;
+            case SDLK_g: toggleGodMode(); break;
             default: break;
           }
           break;

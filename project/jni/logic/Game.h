@@ -84,6 +84,10 @@ class Game {
       tankMoveDir.set(dir.x,dir.y);
     }
 
+    void toggleGodMode () {
+      godMode = !godMode;
+    }
+
   private:
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);
@@ -113,6 +117,8 @@ class Game {
     game_callback_t gameWonCallback;
 
     eGameState gameState;
+
+    bool godMode;
 };
 
 #endif /* GAME_H_ */

@@ -16,6 +16,8 @@ void touchEventMove (float x, float y);
 void touchEventUp (float x, float y);
 void touchEventOther (float x, float y);
 
+void toggleGodMode ();
+
 //Utility functions to transform window coordinates to our internal coordinate system
 float XSG (const float x);
 float YSG (const float y);

@@ -12,7 +12,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       elapsedS(0),
       gameOverCallback(overCallback),
       gameWonCallback(wonCallback),
-      gameState(GAME_RUNNING) {
+      gameState(GAME_RUNNING),
+      godMode(false) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -117,7 +118,7 @@ void Game::update () {
     gameWonCallback();
   }
 
-  if (tank.hasExploded()) {
+  if (!godMode && tank.hasExploded()) {
     playerNumLives--;
     tank.unmarkExploded();
     LOGE("playerNumLives : %i", playerNumLives);
@@ -206,6 +207,8 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
 
 #define MAX_BOUNCES 4
 void Game::slideMove (Entity* e, Vector2 move) {
+  const Vector2 origMove = move;
+
   //Used to store the backoffs of previous iterations, so we don't go
   //against a backoff we've already taken into account
   Vector2 backoffs[MAX_BOUNCES];
@@ -214,7 +217,7 @@ void Game::slideMove (Entity* e, Vector2 move) {
   for (size_t bounces = 0; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
     touch(e, r.collidedEntity, r.colPoint);
 
-    //LOGE("position(%f,%f)\tmove(%f,%f)\ttFirst %f", e->getPosition().x, e->getPosition().y, move.x, move.y, r.tFirst);
+    //LOGE("position(%f,%f)\tmove(%f,%f)\ttFirst %f\ttLast %f", e->getPosition().x, e->getPosition().y, move.x, move.y, r.tFirst, r.tLast);
 
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
@@ -223,8 +226,10 @@ void Game::slideMove (Entity* e, Vector2 move) {
     Vector2 backoff = (backAmount*r.normal)*1.1;
     move += backoff;
 
+    backoffs[bounces] = backoff;
+
     //Check that we aren't going against a previous backoff
-    for (size_t j=0; j<bounces; j++) {
+    for (size_t j=0; j<=bounces; j++) {
       //if cos(angle between move and backoff) is in [0,1], we have an angle between
       //-90 and 90
       //cos = (vel*normals[i]/(||vel||*||normals[i]||)
@@ -234,22 +239,24 @@ void Game::slideMove (Entity* e, Vector2 move) {
 
       //If we reach this point, we're going against backoffs[j], just add it once more to correct this
       move += backoffs[j];
+      //LOGE("move+=backoffs[%u](%f,%f)", j, backoffs[j].x, backoffs[j].y);
 
       //Check that our new corrected move doesn't go AGAIN against another previous backoff
-      for (size_t k=0; k<bounces; k++) {
+      for (size_t k=0; k<=bounces; k++) {
         if (k==j)
           continue;
 
         if (move*backoffs[k] >= 0)
           continue;
 
-        LOGE("Unable to find a way out!");
+        //LOGE("Going against backoffs[%u] : unable to find a way out!", k);
         //We're going against 2 previous backoff, just cancel the move
         move.set(0,0);
+        goto end;
       }
     }
 
-    backoffs[bounces] = backoff;
   }
+end:
   colManager.translate(e, move);
 }
