@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: current level indicator
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 15:16:27.017452 Z
+references: []
+
+id: 270ecee69fe875201aa0883532cc42664f59d6c8
+log_events: 
+- - 2010-05-02 15:16:27.801321 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
