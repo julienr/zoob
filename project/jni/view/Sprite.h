@@ -31,7 +31,7 @@ class Sprite {
       textureID = TextureManager::getInstance()->get(file);
     }
 
-    void draw (const Viewable& viewable, float rotation=0) const;
+    void draw (const Viewable& viewable, float rotation=0, float scale=1) const;
     void draw (const Vector2& pos, const Vector2& size, float rotation=0) const;
 
     Vector2 getCenter (const Viewable& viewable) const {

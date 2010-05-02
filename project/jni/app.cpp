@@ -10,6 +10,7 @@
 #include "view/GLW.h"
 #include "view/GameManager.h"
 #include "input/AndroidInputManager.h"
+#include "logic/Difficulty.h"
 
 zip* APKArchive;
 
@@ -159,6 +160,8 @@ void nativeInitGL() {
     //game manager here because it requires textures
     gameManager = new GameManager(startGame, nativeMenu, gameUnPauseCallback);
     inputManager = new AndroidInputManager(gameManager);
+
+    Difficulty::setDifficulty(new DifficultyEasy());
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);

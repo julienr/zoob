@@ -33,14 +33,16 @@ class TankView {
         case TANK_PLAYER:
         case TANK_STATIC:
         case TANK_SIMPLE:
-          tankSprite.draw(tank, tank.getRotation());
+          tankSprite.draw(tank, tank.getRotation(), getTankScale());
           break;
         case TANK_SHIELD:
-          shieldTankSprite.draw(tank, tank.getRotation());
+          shieldTankSprite.draw(tank, tank.getRotation(), getTankScale());
           break;
       }
       GLW::colorWhite();
     }
+
+    virtual float getTankScale () { return 1.0f; }
 
     Vector2 getCenter () {
       return tankSprite.getCenter(tank);

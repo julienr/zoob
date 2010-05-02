@@ -2,6 +2,7 @@
 #include "view/GLW.h"
 #include "view/Square.h"
 #include "logic/physics/Grid.h"
+#include "EnemyTankView.h"
 
 GameView::GameView (const Game& g)
   : game(g),
@@ -15,7 +16,7 @@ GameView::GameView (const Game& g)
     enemiesView(5) {
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
-    enemiesView.append(new TankView(**i));
+    enemiesView.append(new EnemyTankView(**i));
 }
 
 GameView::~GameView () {

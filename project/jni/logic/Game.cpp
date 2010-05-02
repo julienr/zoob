@@ -97,6 +97,7 @@ void Game::update () {
       colManager.removeEntity(t);
       t->die();
     } else {
+      t->think(elapsedS);
       TankAI* ai = t->getAI();
       if (ai) {
         Vector2 moveDir;
@@ -104,8 +105,18 @@ void Game::update () {
           doTankMove(t, moveDir, elapsedS);
 
         Vector2 rocketDir;
-        if (t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
+        //AI fire decision is done in two time :
+        //- first, AI can decide to prepare to fire
+        //- after a delay, decideFire is called again and if the ai decide to actually fire, the rocket is
+        // created
+        if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
+          t->prepareFire();
+
+        //the enemy is ready to fire
+        if (t->fireReady() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
           rockets.append(t->fireRocket(rocketDir));
+        }
+
 
         Vector2 aim;
         if (ai->aim(elapsedS, this, t, &aim))

@@ -11,13 +11,13 @@ void Sprite::reloadAllSprites () {
   }
 }
 
-void Sprite::draw (const Viewable& viewable, float rotation) const {
+void Sprite::draw (const Viewable& viewable, float rotation, float scale) const {
   //FIXME: do something if textureID = NO_TEXTURE
   glBindTexture(GL_TEXTURE_2D, textureID);
   glPushMatrix();
   GLW::translate(viewable.getPosition().x, viewable.getPosition().y, 0);
   GLW::rotate(RAD_TO_DEG(rotation), 0, 0, 1);
-  GLW::scale(viewable.getWidth(), viewable.getHeight(), 1);
+  GLW::scale(viewable.getWidth()*scale, viewable.getHeight()*scale, 1);
   Square::draw(true);
   glPopMatrix();
 }

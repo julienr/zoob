@@ -1,12 +1,12 @@
 --- !ditz.rubyforge.org,2008-03-06/issue 
-title: Display countdown before firing on tanks when they see the player
+title: Tank should have a cooldown (during which they "grow") before they fire at player, leaving some time for reaction
 desc: ""
 type: :feature
 component: zoob
 release: android market
 reporter: Julien Rebetez <julien@fhtagn.net>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2010-05-02 13:23:50.044294 Z
 references: []
 
@@ -15,4 +15,12 @@ log_events:
 - - 2010-05-02 13:23:50.264413 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-02 15:19:39.529707 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - edited title
+  - ""
+- - 2010-05-02 16:01:54.502622 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
   - ""

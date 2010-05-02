@@ -40,6 +40,7 @@ LOCAL_SRC_FILES := \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
     logic/physics/Grid.cpp \
+    logic/Difficulty.cpp \
     ai/shoot/AimPolicy.cpp \
     ai/shoot/RandomPolicy.cpp \
     ai/movement/PathPolicy.cpp \
