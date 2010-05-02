@@ -106,7 +106,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       state = FIRING_MODE;
       getGame()->setTankMoveDir(Vector2::ZERO);
     } else if (state == FIRING_MODE) {
-      getGame()->playerFire(Vector2(XSG(x),XSG(y)));
+      getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       state = STATE_DEFAULT;
     } else
       stopMoving();
