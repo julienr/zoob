@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: end of level set boss
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:22:41.320396 Z
+references: []
+
+id: c7f5456cece00ed3e59059d8e6a1c7a0f8fdb469
+log_events: 
+- - 2010-05-02 13:22:41.548414 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

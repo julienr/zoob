@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: double-tapping to fire rocket leads to small player movement
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:23:01.644398 Z
+references: []
+
+id: b5b5858264b78afa70f56f51845d36b0fc177a7e
+log_events: 
+- - 2010-05-02 13:23:01.872271 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

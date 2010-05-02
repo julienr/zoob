@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: downloadable levels
+desc: ""
+type: :feature
+component: zoob
+release: 
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:21:08.525419 Z
+references: []
+
+id: e10cf74a5192cdbbc7b1f338977a69fda248097c
+log_events: 
+- - 2010-05-02 13:21:09.757307 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

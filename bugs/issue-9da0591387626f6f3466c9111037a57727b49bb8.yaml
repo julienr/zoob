@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "gain new switchable tank type "
+desc: |-
+  When the player finish a bunch of levels (5?) that included a new enemy (like shield tanks), he then got the possibility to change his tank to a shield tank or whatever else.
+  This change can be done during the game using an icon on the right.
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:23:36.296399 Z
+references: []
+
+id: 9da0591387626f6f3466c9111037a57727b49bb8
+log_events: 
+- - 2010-05-02 13:23:36.812387 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

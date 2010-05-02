@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: win32 build
+desc: ""
+type: :task
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:25:01.977432 Z
+references: []
+
+id: 08291c0f55a26277a5e331417d2cff405edc22d7
+log_events: 
+- - 2010-05-02 13:25:02.773354 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: enemies firing in more than one direction
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-02 13:22:20.021548 Z
+references: []
+
+id: 1ac928e8d8be51f23b5faf9fcc5f504f12f9b2b8
+log_events: 
+- - 2010-05-02 13:22:22.836275 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
