@@ -3,6 +3,7 @@
 #include "logic/enemies/ShieldTank.h"
 #include "logic/enemies/SimpleTank.h"
 #include "logic/enemies/StaticTank.h"
+#include "logic/enemies/BurstTank.h"
 #include "ai/algorithms/AStar.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
@@ -28,6 +29,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     switch (desc.tankType) {
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
+      case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
       case TANK_STATIC: t = new StaticTank(); break;
       default: ASSERT(false); break;
     }

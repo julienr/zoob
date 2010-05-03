@@ -8,7 +8,8 @@ enum eColor {
     RED,
     GREY,
     ORANGE,
-    TRANSPARENT_GREY
+    TRANSPARENT_GREY,
+    VIOLET
 };
 
 #endif /* COLOR_H_ */

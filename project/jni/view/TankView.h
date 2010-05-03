@@ -20,6 +20,7 @@ class TankView {
         case TANK_SIMPLE: return RED;
         case TANK_SHIELD: return ORANGE;
         case TANK_STATIC: return GREY;
+        case TANK_BURST: return VIOLET;
         default: LOGE("Unhandled tank type : %i", type); return WHITE;
       }
     }
@@ -33,6 +34,7 @@ class TankView {
         case TANK_PLAYER:
         case TANK_STATIC:
         case TANK_SIMPLE:
+        case TANK_BURST:
           tankSprite.draw(tank, tank.getRotation(), getTankScale());
           break;
         case TANK_SHIELD:

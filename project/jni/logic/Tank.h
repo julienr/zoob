@@ -14,7 +14,8 @@ enum eTankType {
     TANK_PLAYER,
     TANK_STATIC,
     TANK_SIMPLE,
-    TANK_SHIELD
+    TANK_SHIELD,
+    TANK_BURST
 };
 
 class Tank: public Entity {

@@ -7,8 +7,8 @@
 
 class EnemyTank: public Tank {
   public:
-    EnemyTank(TankAI* ai)
-      : Tank(new BurstFirePolicy(2000, 300, 3)),
+    EnemyTank(TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(2000))
+      : Tank(firePol),
         ai(ai),
         prepareFiring(false) {
     }
@@ -18,7 +18,6 @@ class EnemyTank: public Tank {
     }
 
     void prepareFire () {
-      LOGE("prepareFire");
       prepareFiring = true;
       firingDelay = Difficulty::getInstance()->getFiringDelay();
     }

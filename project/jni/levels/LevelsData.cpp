@@ -171,7 +171,7 @@ namespace lvl4 {
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
       TankDescription(5, 1, TANK_SHIELD, new Path(4, wp1)),
-      TankDescription(7, 4, TANK_SHIELD, new Path(4, wp2))
+      TankDescription(7, 4, TANK_BURST, new Path(4, wp2))
   };
 
   DECLARE_LVL
