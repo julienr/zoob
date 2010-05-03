@@ -11,7 +11,7 @@
 class Rocket;
 
 enum eTankType {
-    TANK_PLAYER,
+    TANK_PLAYER=0,
     TANK_STATIC,
     TANK_SIMPLE,
     TANK_SHIELD,

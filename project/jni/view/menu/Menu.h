@@ -23,6 +23,8 @@ class Menu {
 
     void handleTouchDown (const Vector2& p);
     void handleTouchUp (const Vector2& p);
+
+    bool inside (const Vector2& p);
   protected:
     GameManager* gameManager;
 

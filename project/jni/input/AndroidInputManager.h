@@ -2,6 +2,7 @@
 #define ANDROIDINPUTMANAGER_H_
 
 #include "InputManager.h"
+#include "PlayerFormControl.h"
 
 /**
  * See important comment in Moob.java regarding native event-handling methods.
@@ -12,7 +13,7 @@
 
 class AndroidInputManager : public InputManager {
   public:
-    AndroidInputManager (GameManager* gameManager);
+    AndroidInputManager ();
     void tick ();
     void draw ();
 
@@ -42,6 +43,8 @@ class AndroidInputManager : public InputManager {
     const Sprite gamePad;
     const Sprite fireButton;
     const Sprite fireButtonClicked;
+
+    PlayerFormControl formControl;
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;

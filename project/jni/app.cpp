@@ -86,25 +86,24 @@ void gameUnPauseCallback () {
   stateTransition = STATE_PLAYING;
 }
 
-GameManager* gameManager = NULL;
 AndroidInputManager* inputManager = NULL;
 
 void toPlayingState () {
-  if (gameManager->getState() == STATE_PAUSED) {
+  if (GameManager::getInstance()->getState() == STATE_PAUSED) {
     game->unpause(); 
   } else {
     delete lvl;
     delete game;
     delete gameView;
 
-    lvl = levelsLoadFns[gameManager->getCurrentLevel()]();
+    lvl = levelsLoadFns[GameManager::getInstance()->getCurrentLevel()]();
     game = new Game(gameOverCallback, gameWonCallback, lvl);
-    inputManager->setGame(game);
+    GameManager::getInstance()->setGame(game);
     gameView = new GameView(*game);
 
     centerGameInViewport();
   }
-  gameManager->setState(STATE_PLAYING);
+  GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
 void toMenuState (eAppState state) {
@@ -112,10 +111,10 @@ void toMenuState (eAppState state) {
   lvl = NULL;
   delete game;
   game = NULL;
-  inputManager->setGame(NULL);
+  GameManager::getInstance()->setGame(NULL);
   delete gameView;
   gameView = NULL;
-  gameManager->setState(state);
+  GameManager::getInstance()->setState(state);
 }
 
 void toMainMenuState () {
@@ -128,7 +127,7 @@ void toLostState () {
 }
 
 void toWonState () {
-  if (gameManager->isAtLastLevel())
+  if (GameManager::getInstance()->isAtLastLevel())
     toMenuState(STATE_END);
   else
     toMenuState(STATE_WON);
@@ -140,7 +139,7 @@ void toEndState () {
 
 void toPauseState () {
   game->pause();
-  gameManager->setState(STATE_PAUSED);
+  GameManager::getInstance()->setState(STATE_PAUSED);
 }
 
 void nativeInit (const char* apkPath) {
@@ -158,8 +157,8 @@ void nativeInitGL() {
     initialised = true;
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    gameManager = new GameManager(startGame, nativeMenu, gameUnPauseCallback);
-    inputManager = new AndroidInputManager(gameManager);
+    GameManager::create(startGame, nativeMenu, gameUnPauseCallback);
+    inputManager = new AndroidInputManager();
 
     Difficulty::setDifficulty(new DifficultyEasy());
 
@@ -322,17 +321,17 @@ void nativeResize (int w, int h) {
   xScreenToGame = VIEWPORT_WIDTH/viewportScreenDim.x;
   yScreenToGame = VIEWPORT_HEIGHT/viewportScreenDim.y;
 
-  if (gameManager->inGame())
+  if (GameManager::getInstance()->inGame())
     centerGameInViewport();
 
   glMatrixMode(GL_MODELVIEW);
 }
 
 void nativePause () {
-  if(!gameManager)
+  if(!GameManager::created())
     return;
 
-  if (gameManager->getState() == STATE_PLAYING) {
+  if (GameManager::getInstance()->getState() == STATE_PLAYING) {
     transitionDelay = 0;
     stateTransition = STATE_PAUSED;
   }
@@ -362,8 +361,8 @@ void nativeRender () {
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  if (gameManager->inGame() || gameManager->paused()) {
-    if (!gameManager->paused())
+  if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
+    if (!GameManager::getInstance()->paused())
       game->update();
 
     inputManager->draw();
@@ -379,10 +378,10 @@ void nativeRender () {
     //gameView->debugDraw();
     glPopMatrix();
     
-    if (gameManager->paused())
-      gameManager->drawMenu(); //draw the pause menu
+    if (GameManager::getInstance()->paused())
+      GameManager::getInstance()->drawMenu(); //draw the pause menu
   } else {
-    gameManager->drawMenu();
+    GameManager::getInstance()->drawMenu();
   }
 }
 

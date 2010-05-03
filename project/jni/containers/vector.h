@@ -37,6 +37,13 @@ class vector {
       return used;
     }
 
+    bool contains (const T& elem) const {
+      for (size_t i=0; i<used; i++)
+        if (data[i] == elem)
+          return true;
+      return false;
+    }
+
     void clear () {
       //reinitialize to initial size
       data = (T*)realloc(data, sizeof(T)*capacityIncr);

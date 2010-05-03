@@ -5,6 +5,13 @@ Menu::~Menu () {
     delete menuItems[i];
 }
 
+bool Menu::inside (const Vector2& p) {
+  for (size_t i=0; i<menuItems.length(); i++)
+    if (menuItems[i]->inside(p))
+      return true;
+  return false;
+}
+
 void Menu::handleTouchDown (const Vector2& p) {
   touchedItem = -1;
   for (size_t i=0; i<menuItems.length(); i++)

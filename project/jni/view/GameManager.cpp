@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include "lib/Utils.h"
 
+GameManager* GameManager::instance = NULL;
+
 void GameManager::drawMenu () {
   if (menus[state])
     menus[state]->draw();

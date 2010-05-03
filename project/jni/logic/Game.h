@@ -40,7 +40,11 @@ class Game {
       gameState = GAME_PAUSED;
     }
 
-    const Tank& getPlayerTank () const {
+    PlayerTank& getPlayerTank () {
+      return tank;
+    }
+
+    const PlayerTank& getPlayerTank () const {
       return tank;
     }
 

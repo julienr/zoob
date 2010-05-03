@@ -14,6 +14,7 @@
 #include "menu/EndMenu.h"
 #include "menu/PausedMenu.h"
 #include "levels/LevelsData.h"
+#include "logic/Game.h"
 
 enum eAppState {
   STATE_PLAYING=0,
@@ -32,6 +33,28 @@ typedef void (*callback_t) ();
 
 class GameManager {
   public:
+    static void create (startGameCallback_t gameCb,
+                          callback_t menuCb,
+                          callback_t continueCb) {
+      instance = new GameManager(gameCb, menuCb, continueCb);
+    }
+
+    inline
+    static GameManager* getInstance() {
+      ASSERT(instance);
+      return instance;
+    }
+
+    static void destroy () {
+      delete instance;
+    }
+
+    static bool created () {
+      return instance != NULL;
+    }
+  private:
+    static GameManager* instance;
+
     GameManager (startGameCallback_t gameCb, 
                  callback_t menuCb,
                  callback_t continueCb)
@@ -52,6 +75,7 @@ class GameManager {
       for (int i=0; i<MAX_STATE; i++)
           delete menus[i];
     }
+  public:
 
     eAppState getState () { return state; }
 
@@ -109,6 +133,13 @@ class GameManager {
     inline bool inGame () { return state == STATE_PLAYING; }
     inline bool paused () { return state == STATE_PAUSED; }
 
+    Game* getGame () {
+      return currentGame;
+    }
+
+    void setGame (Game* g) {
+      currentGame = g;
+    }
 
   private:
     const startGameCallback_t newGameCB;
@@ -122,6 +153,9 @@ class GameManager {
     eAppState stateAtTouchDown;
 
     Menu* menus[MAX_STATE];
+
+    //poitner to the current game, NULL if not in game
+    Game* currentGame;
 };
 
 #endif /* GAMEMANAGER_H_ */

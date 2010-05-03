@@ -16,8 +16,8 @@ bool inFireButton (float x, float y) {
 }
 
 
-AndroidInputManager::AndroidInputManager (GameManager* gameManager)
-  : InputManager(gameManager),
+AndroidInputManager::AndroidInputManager ()
+  : InputManager(),
     state(STATE_DEFAULT),
     showGamePad(true),
     gamePad("assets/sprites/control.png"),
@@ -27,13 +27,15 @@ AndroidInputManager::AndroidInputManager (GameManager* gameManager)
 }
 
 void AndroidInputManager::draw () {
-  if (showGamePad) {
+  if (showGamePad)
     gamePad.draw(gamePadPos, gamePadSize);
-    if (state == FIRING_MODE)
-      fireButtonClicked.draw(fireButtonPos, fireButtonSize);
-    else
-      fireButton.draw(fireButtonPos, fireButtonSize);
-  }
+
+  if (state == FIRING_MODE)
+    fireButtonClicked.draw(fireButtonPos, fireButtonSize);
+  else
+    fireButton.draw(fireButtonPos, fireButtonSize);
+
+  formControl.draw();
 }
 
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
@@ -65,13 +67,14 @@ void AndroidInputManager::stopMoving () {
 }
 
 void AndroidInputManager::touchEventDown (float x, float y) {
-  if (!getGameManager()->inGame()) {
+  if (!GameManager::getInstance()->inGame()) {
     //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    getGameManager()->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+    GameManager::getInstance()->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
     return;
   }
 
   const Vector2 p(XSG(x), YSG(y));
+  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
   //Check that the double-tap was quick and not too far away (which would indicate a fast direction
   //change)
   const uint64_t now = Utils::getCurrentTimeMillis();
@@ -79,6 +82,8 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   const uint64_t elapsed = now - lastTouchDownTime;
   //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
   if (state == FIRING_MODE || inFireButton(x,y)) {
+  } else if (formControl.inside(pNoTrans)) {
+    formControl.handleTouchDown(pNoTrans);
   } else if (showGamePad && inGamePad(x,y)) {
     //LOGE("in game pad");
     startMoving(MOVING_TANK_PAD, p);
@@ -94,24 +99,27 @@ void AndroidInputManager::touchEventDown (float x, float y) {
 }
 
 void AndroidInputManager::touchEventMove (float x, float y) {
-  if (!getGameManager()->inGame())
+  if (!GameManager::getInstance()->inGame())
     return;
   const Vector2 p(XSG(x), YSG(y));
   setMoveTouchPoint(p);
 }
 
 void AndroidInputManager::touchEventUp (float x, float y) {
-  if (getGameManager()->inGame()) {
+  if (GameManager::getInstance()->inGame()) {
+    const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     if (showGamePad && state == STATE_DEFAULT && inFireButton(x,y)) {
       state = FIRING_MODE;
       getGame()->setTankMoveDir(Vector2::ZERO);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       state = STATE_DEFAULT;
+    } else if (formControl.inside(pNoTrans)) {
+      formControl.handleTouchUp(pNoTrans);
     } else
       stopMoving();
   } else
-    getGameManager()->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+    GameManager::getInstance()->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
 }
 
 void AndroidInputManager::touchEventOther (float x, float y) {

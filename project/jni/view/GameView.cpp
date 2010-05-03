@@ -13,7 +13,7 @@ GameView::GameView (const Game& g)
     rocket("assets/sprites/rocket.png"),
     hearthEmpty("assets/sprites/hearth_empty.png"),
     hearthFull("assets/sprites/hearth_full.png"),
-    enemiesView(5) {
+    enemiesView(5){
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.append(new EnemyTankView(**i));

@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "Allow instanciation of multiple texture manager that can be deleted (for one-time menus for example). "
+desc: These texture manager should be indexed by an id and the getinstance method should have a signature like TextureManager::getInstance(int id)
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-03 08:33:23.033422 Z
+references: []
+
+id: 35023857b7ef2390527ba4cd804961a5aa01ea1c
+log_events: 
+- - 2010-05-03 08:33:23.861236 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
