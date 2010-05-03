@@ -112,12 +112,15 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   return count;
 }
 
+//entityMask determine which entities WON'T be collided against
+//(0~ENTITY_ROCKET) won't collide against rocket for example
 bool collideAgainstCell (GridCell* cell,
                             const Entity* sourceEntity,
                             const Vector2& startPos,
                             const BoundingVolume* mover,
                             const Vector2& move,
-                            CollisionResult* result) {
+                            CollisionResult* result,
+                            int entityMask=0) {
   //Touched cell is solid, check collision against its aabb
   CollisionResult r;
 
@@ -127,6 +130,8 @@ bool collideAgainstCell (GridCell* cell,
     if (otherEnt == sourceEntity)
       continue;
     if (!otherEnt->isSolid())
+      continue;
+    if (otherEnt->getType() & entityMask)
       continue;
 
     const BoundingVolume* bvol = otherEnt->getBVolume();
@@ -142,7 +147,7 @@ bool collideAgainstCell (GridCell* cell,
   return false;
 }
 
-bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result) const {
+bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const {
   ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
   ASSERT(circle->getRadius()*2 < cellSize);
@@ -163,7 +168,8 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
                                    mover->getPosition(),
                                    mover->getBVolume(),
                                    move,
-                                   result);
+                                   result,
+                                   entityMask);
   }
   /*if (collided) {
     LOGE("Collision, tFirst : %f", r.tFirst);
@@ -258,7 +264,7 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
   }
 }
 
-bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const {
+bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask) const {
   result->tFirst = MOOB_INF;
   bool collided = false;
   unsigned numTouched = findTouchedCells(start, move);
@@ -270,12 +276,13 @@ bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& 
                                    start,
                                    &line,
                                    move,
-                                   result);
+                                   result,
+                                   entityMask);
   }
   return collided;
 }
 
-bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const {
+bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const {
   ASSERT(2*radius < cellSize);
   // We are tracing through the grid with a circle
   // We ENFORCE the circle's diameter to be less than cellSize, so we can simplify the collision
@@ -303,7 +310,8 @@ bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& mov
                                      start,
                                      &circle,
                                      move,
-                                     result);
+                                     result,
+                                     entityMask);
     }
   }
   return collided;

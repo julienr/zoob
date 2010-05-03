@@ -6,10 +6,11 @@
 #include "Viewable.h"
 #include "containers/list.h"
 
+//Assign numeric values so we can use masks
 enum eEntityType {
-  ENTITY_TANK,
-  ENTITY_ROCKET,
-  ENTITY_WALL
+  ENTITY_TANK=0,
+  ENTITY_ROCKET=2,
+  ENTITY_WALL=4
 };
 
 class GridCell;

@@ -102,10 +102,11 @@ class CollisionManager {
     //move is move vector relative to mover
     //returns false if no collision occurs
     //if false is returned, the content of result is undetermined
-    bool trace (Entity* mover, const Vector2& move, CollisionResult* result) const;
-
-    bool traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const;
-    bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const;
+    //entityMask can be used to mask out some entities type from the trace
+    //for example (0 ~ ENTITY_ROCKET) as an entityMask will make the trace ignore rockets
+    bool trace (Entity* mover, const Vector2& move, CollisionResult* result, int entityMask=0) const;
+    bool traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask=0) const;
+    bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask=0) const;
 
   private:
     //FIXME: use grid to store entities

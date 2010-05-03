@@ -109,12 +109,24 @@ void Game::update () {
         //- first, AI can decide to prepare to fire
         //- after a delay, decideFire is called again and if the ai decide to actually fire, the rocket is
         // created
-        if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
-          t->prepareFire();
+        //- for some firing policy, the tank will then stay in "inFiring" mode (burst mode) for some time
+        if (t->isFiring()) { //burst mode, let it fire without delay
+          if (t->canFire()) {
+            if (ai->decideFire(elapsedS, &rocketDir, this, t))
+              rockets.append(t->fireRocket(rocketDir));
+            else { //ai decided to stop firing, stop the burst
+              LOGE("cancelFiring");
+              t->cancelFiring();
+            }
+          }
+        } else { //normal mode or between burst mode
+          if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
+            t->prepareFire();
 
-        //the enemy is ready to fire
-        if (t->fireReady() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
-          rockets.append(t->fireRocket(rocketDir));
+          //the enemy is ready to fire
+          if (t->fireReady() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
+            rockets.append(t->fireRocket(rocketDir));
+          }
         }
 
 

@@ -8,7 +8,7 @@
 class EnemyTank: public Tank {
   public:
     EnemyTank(TankAI* ai)
-      : Tank(new IntervalFirePolicy(2000)),
+      : Tank(new BurstFirePolicy(2000, 300, 3)),
         ai(ai),
         prepareFiring(false) {
     }
@@ -35,6 +35,17 @@ class EnemyTank: public Tank {
 
     double getFiringDelay () const {
       return firingDelay;
+    }
+
+    //indicate wether the tank is in a "firing streak" (for burst tank), so the delay
+    //between fire will be handled by the firerate policy.
+    //This will return false for all non-burst mode tanks
+    bool isFiring () const {
+      return getFireRatePolicy()->isFiring();
+    }
+
+    void cancelFiring () {
+      return getFireRatePolicy()->cancelFiring();
     }
 
     bool fireReady () {

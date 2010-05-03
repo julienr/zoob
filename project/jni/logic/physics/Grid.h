@@ -66,11 +66,11 @@ class Grid {
     }
 
     //To be used for movement < cellSize
-    bool push (const Entity* mover, const Vector2& move, CollisionResult* result) const;
+    bool push (const Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const;
 
-    bool traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const;
-    bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const;
-    bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result) const;
+    bool traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask) const;
+    bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const;
+    bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result, int entityMask) const;
 
     unsigned getWidth () const {
       return width;

@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: when player is in burst mode, let him click the fire button and draw an arc to fire rockets at multiple locations
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-03 07:06:26.273389 Z
+references: []
+
+id: 01a3f929861732f0dde1cadcaf450a4f484a4df1
+log_events: 
+- - 2010-05-03 07:06:27.049332 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

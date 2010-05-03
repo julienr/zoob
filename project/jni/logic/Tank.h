@@ -73,6 +73,8 @@ class Tank: public Entity {
     bool canFire () { return firePolicy->canFire(); }
 
     Rocket* fireRocket (Vector2 dir);
+  protected:
+    FireRatePolicy* getFireRatePolicy () const { return firePolicy; }
   private:
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
      * The tank should be marked as dead once this is done

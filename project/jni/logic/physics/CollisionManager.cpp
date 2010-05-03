@@ -351,14 +351,14 @@ bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
   return (r->tFirst <= 1.0f);
 }
 
-bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result) const {
-  return grid.push(mover, move, result);
+bool CollisionManager::trace (Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const {
+  return grid.push(mover, move, result, entityMask);
 }
 
-bool CollisionManager::traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) const {
-  return grid.traceRay(source, start, move, result);
+bool CollisionManager::traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask) const {
+  return grid.traceRay(source, start, move, result, entityMask);
 }
 
-bool CollisionManager::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result) const {
-  return grid.traceCircle(source, start, move, radius, result);
+bool CollisionManager::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const {
+  return grid.traceCircle(source, start, move, radius, result, entityMask);
 }
