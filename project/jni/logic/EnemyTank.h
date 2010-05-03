@@ -8,7 +8,7 @@
 class EnemyTank: public Tank {
   public:
     EnemyTank(TankAI* ai)
-      : Tank(2000),
+      : Tank(new IntervalFirePolicy(2000)),
         ai(ai),
         prepareFiring(false) {
     }

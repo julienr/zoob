@@ -22,6 +22,18 @@
   <defs
      id="defs4">
     <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4166">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4168" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4170" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient8342">
       <stop
          style="stop-color:#000000;stop-opacity:1;"
@@ -1477,6 +1489,51 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3287"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3309"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3359"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4166"
+       id="linearGradient4172"
+       x1="2425.0225"
+       y1="787.37796"
+       x2="2446.1105"
+       y2="787.37796"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(4.9497475,1.767767)" />
+    <inkscape:perspective
+       id="perspective4183"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4205"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1486,8 +1543,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="681.81233"
-     inkscape:cy="-517.99864"
+     inkscape:cx="652.06627"
+     inkscape:cy="-542.22538"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1506,7 +1563,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2862,7 +2919,7 @@
          id="tspan4090"
          x="780.64587"
          y="1668.0022"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">Rocket</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">rocket</tspan></text>
     <g
        id="g4225"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn_clicked.png"
@@ -2914,7 +2971,80 @@
            y="1665.7791"
            x="322.13208"
            id="tspan4090-8"
-           sodipodi:role="line">Rocket</tspan></text>
+           sodipodi:role="line">rocket</tspan></text>
     </g>
+    <rect
+       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4161-9-7-7-7"
+       width="978.6358"
+       height="661.85199"
+       x="-888.1261"
+       y="1120.2444" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3973-1"
+       sodipodi:cx="1067"
+       sodipodi:cy="1554.3622"
+       sodipodi:rx="172"
+       sodipodi:ry="172"
+       d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
+       transform="translate(-1674.2114,-164.0667)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:117.19049835px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-740.25647"
+       y="1595.9685"
+       id="text4088-9"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4090-1"
+         x="-740.25647"
+         y="1595.9685"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">mine</tspan></text>
+    <path
+       style="fill:#68ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3.54414678;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 2397.0727,835.8148 c -0.3296,-10e-5 -13.0327,30.01591 -13.3182,30.18063 -0.2856,0.16471 -32.5908,-3.88492 -32.7557,-3.59953 -0.1649,0.2854 19.4652,26.27919 19.4651,26.60879 -1e-4,0.32961 -19.6575,26.32329 -19.4928,26.60879 0.1647,0.2855 32.4979,-3.73672 32.7834,-3.57183 0.2854,0.16489 12.9609,30.18051 13.2905,30.18062 0.3297,1.1e-4 13.005,-29.98822 13.2906,-30.15293 0.2855,-0.16472 32.6184,3.85722 32.7834,3.57183 0.1648,-0.28539 -19.4653,-26.27918 -19.4652,-26.60879 10e-5,-0.3296 19.6298,-26.2956 19.4652,-26.5811 -0.1648,-0.2855 -32.4704,3.70904 -32.7558,3.54415 -0.2853,-0.16489 -12.9609,-30.18052 -13.2905,-30.18063 z m -0.028,30.0145 c 12.8027,0 23.203,10.40038 23.203,23.20308 0,12.8027 -10.4003,23.1754 -23.203,23.1754 -12.8027,0 -23.1754,-10.3727 -23.1754,-23.1754 0,-12.8027 10.3727,-23.20308 23.1754,-23.20308 z"
+       id="path3385" />
+    <path
+       style="fill:#68ff3f;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m -645.33627,1292.544 c -0.70194,-2e-4 -27.75568,63.9249 -28.36372,64.2757 -0.60823,0.3508 -69.4085,-8.2736 -69.75969,-7.666 -0.35118,0.6078 41.45497,55.9666 41.45476,56.6686 -2.2e-4,0.702 -41.86451,56.0607 -41.51375,56.6686 0.35076,0.6081 69.21066,-7.958 69.81868,-7.6067 0.60782,0.3511 27.60278,64.2752 28.30474,64.2754 0.70215,2e-4 27.6967,-63.8657 28.30493,-64.2165 0.60804,-0.3507 69.46729,8.2147 69.81869,7.6069 0.35098,-0.6079 -41.45518,-55.9667 -41.45496,-56.6687 2.1e-4,-0.7019 41.80551,-56.0016 41.45496,-56.6097 -0.35097,-0.6079 -69.15209,7.8993 -69.7599,7.5481 -0.60761,-0.3512 -27.60278,-64.2753 -28.30474,-64.2757 z m -0.0596,63.9218 c 27.26586,0 49.41534,22.1497 49.41534,49.4155 0,27.2659 -22.14948,49.3565 -49.41534,49.3565 -27.26586,0 -49.35656,-22.0906 -49.35656,-49.3565 0,-27.2658 22.0907,-49.4155 49.35656,-49.4155 z"
+       id="path3385-4" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#ffffff;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       id="path3973-1-5"
+       sodipodi:cx="1067"
+       sodipodi:cy="1554.3622"
+       sodipodi:rx="172"
+       sodipodi:ry="172"
+       d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
+       transform="translate(-1194.2793,-167.08081)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:117.19049834999999860px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-260.32428"
+       y="1592.9545"
+       id="text4088-9-2"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4090-1-4"
+         x="-260.32428"
+         y="1592.9545"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">mine</tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-opacity:1"
+       d="m -165.40412,1289.5299 c -0.70194,-2e-4 -27.75568,63.9249 -28.36372,64.2757 -0.60823,0.3508 -69.4085,-8.2736 -69.75969,-7.666 -0.35118,0.6078 41.45497,55.9666 41.45476,56.6686 -2.2e-4,0.702 -41.86451,56.0607 -41.51375,56.6686 0.35076,0.6081 69.21066,-7.958 69.81868,-7.6067 0.60782,0.3511 27.60278,64.2752 28.30474,64.2754 0.70215,2e-4 27.6967,-63.8657 28.30493,-64.2165 0.60804,-0.3507 69.467295,8.2147 69.818695,7.6069 0.35098,-0.6079 -41.455185,-55.9667 -41.454965,-56.6687 2.1e-4,-0.7019 41.805515,-56.0016 41.454965,-56.6097 -0.35097,-0.6079 -69.152095,7.8993 -69.759905,7.5481 -0.60761,-0.3512 -27.60278,-64.2753 -28.30474,-64.2757 z m -0.0596,63.9218 c 27.26586,0 49.41534,22.1497 49.41534,49.4155 0,27.2659 -22.14948,49.3565 -49.41534,49.3565 -27.26586,0 -49.35656,-22.0906 -49.35656,-49.3565 0,-27.2658 22.0907,-49.4155 49.35656,-49.4155 z"
+       id="path3385-4-1" />
   </g>
 </svg>

@@ -9,6 +9,8 @@
 
 #define EPSILON 10E-5
 struct Math {
+  //FIXME: implement (more expensive cause induces a division) http://floating-point-gui.de/errors/comparison/
+  //or paper "comparing floating-point numbers"
   static bool epsilonEq (float x, float y) {
     return fabs(x-y) < EPSILON;
   }

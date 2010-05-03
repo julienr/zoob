@@ -6,7 +6,7 @@
 class PlayerTank : public Tank {
   public:
     PlayerTank ()
-      : Tank(1000) {
+      : Tank(new IntervalFirePolicy(1000)) {
     }
 
     eTankType getTankType () const { return TANK_PLAYER; }

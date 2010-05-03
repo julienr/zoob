@@ -6,6 +6,7 @@
 #include "physics/BCircle.h"
 #include "lib/Utils.h"
 #include "Path.h"
+#include "FireRatePolicy.h"
 
 class Rocket;
 
@@ -18,16 +19,18 @@ enum eTankType {
 
 class Tank: public Entity {
   public:
-    Tank (const uint64_t fireIntervalms)
+    Tank (FireRatePolicy* pol)
       : Entity(new BCircle(TANK_BCIRCLE_R)),
         exploded(false),
         alive(true),
-        lastFireTime(0),
-        fireInterval(fireIntervalms),
+        firePolicy(pol),
         path(NULL) {
+      ASSERT(pol != NULL);
     }
 
-    virtual ~Tank () {}
+    virtual ~Tank () {
+      delete firePolicy;
+    }
 
     //FIXME: only for debug draw
     Vector2 lastColNormal;
@@ -67,7 +70,7 @@ class Tank: public Entity {
     }
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
-    bool canFire () { return Utils::getCurrentTimeMillis() - lastFireTime > fireInterval; }
+    bool canFire () { return firePolicy->canFire(); }
 
     Rocket* fireRocket (Vector2 dir);
   private:
@@ -77,8 +80,7 @@ class Tank: public Entity {
     bool exploded;
     bool alive;
 
-    uint64_t lastFireTime;
-    const uint64_t fireInterval; //fire interval in milliseconds
+    FireRatePolicy* const firePolicy;
 
     Path* path;
 };
