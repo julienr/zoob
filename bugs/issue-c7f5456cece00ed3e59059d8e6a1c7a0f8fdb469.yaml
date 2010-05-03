@@ -1,6 +1,6 @@
 --- !ditz.rubyforge.org,2008-03-06/issue 
 title: end of level set boss
-desc: ""
+desc: The boss should be a BIG tank of the color of the new form the player will gain when he kills it (ie BIG SHIELD TANK)
 type: :feature
 component: zoob
 release: android market
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-02 13:22:41.548414 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-03 07:45:27.773376 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - edited description
   - ""
