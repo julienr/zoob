@@ -1,8 +1,8 @@
 #include "Game.h"
 #include "lib/Math.h"
-#include "logic/ShieldTank.h"
-#include "logic/SimpleTank.h"
-#include "logic/StaticTank.h"
+#include "logic/enemies/ShieldTank.h"
+#include "logic/enemies/SimpleTank.h"
+#include "logic/enemies/StaticTank.h"
 #include "ai/algorithms/AStar.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)

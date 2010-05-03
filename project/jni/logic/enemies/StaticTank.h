@@ -1,7 +1,7 @@
 #ifndef STATICTANK_H_
 #define STATICTANK_H_
 
-#include "EnemyTank.h"
+#include "logic/EnemyTank.h"
 
 class StaticTank : public EnemyTank {
   public:

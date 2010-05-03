@@ -2,7 +2,7 @@
 #define SIMPLETANK_H_
 
 #include "ai/movement/PathPolicy.h"
-#include "EnemyTank.h"
+#include "logic/EnemyTank.h"
 
 class SimpleTank : public EnemyTank {
   public:

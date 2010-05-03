@@ -1,5 +1,5 @@
 #include "ShieldTank.h"
-#include "Entity.h"
+#include "logic/Entity.h"
 
 bool ShieldTank::bounce (Entity* e, const Vector2& colPoint) {
   //The shield of the green tank protects him of ROCKET explosions happening in front of him (90 degree FOV)

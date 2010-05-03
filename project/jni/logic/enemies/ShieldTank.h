@@ -5,7 +5,7 @@
 #include "ai/shoot/NonePolicy.h"
 #include "ai/movement/PathPolicy.h"
 #include "ai/movement/StillPolicy.h"
-#include "EnemyTank.h"
+#include "logic/EnemyTank.h"
 
 class ShieldTank : public EnemyTank {
   public:
