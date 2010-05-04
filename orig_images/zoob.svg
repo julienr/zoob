@@ -3171,20 +3171,24 @@
            sodipodi:role="line">mine</tspan></text>
     </g>
     <g
-       id="g4967">
+       id="g4967"
+       transform="translate(1.4142136,0)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_rocket_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
       <path
          inkscape:export-ydpi="299.86295"
          inkscape:export-xdpi="299.86295"
          inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_rocket.png"
          id="path4503-0-03-0-88-3"
          d="m 8.85448,2075.7227 -32.01207,30.4849 c -26.62265,-16.537 -62.00015,-13.7723 -85.75216,8.8467 -28.19565,26.8504 -29.28591,71.4743 -2.4353,99.67 26.85044,28.1957 71.47447,29.2862 99.6703,2.4355 23.75175,-22.6188 28.24111,-57.8193 13.02404,-85.2177 l 32.01206,-30.4849 -24.50687,-25.7345 z"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:22.98900031999999882;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:22.98900032;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          inkscape:export-ydpi="299.86295"
          inkscape:export-xdpi="299.86295"
          inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_rocket.png"
          transform="translate(-1502.0563,1461.5693)"
-         d="m 1572.6055,593.44989 a 9.1923885,9.1923885 0 1 1 -18.3848,0 9.1923885,9.1923885 0 1 1 18.3848,0 z"
+         d="m 1572.6055,593.44989 c 0,5.07682 -4.1156,9.19239 -9.1924,9.19239 -5.0768,0 -9.1924,-4.11557 -9.1924,-9.19239 0,-5.07682 4.1156,-9.19239 9.1924,-9.19239 5.0768,0 9.1924,4.11557 9.1924,9.19239 z"
          sodipodi:ry="9.1923885"
          sodipodi:rx="9.1923885"
          sodipodi:cy="593.44989"
@@ -3210,7 +3214,10 @@
     <g
        transform="translate(616.37009,-28.017232)"
        id="g4918-7"
-       style="fill-opacity:1;fill:#ffffff">
+       style="fill-opacity:1;fill:#ffffff"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
       <path
          inkscape:export-ydpi="299.86295"
          inkscape:export-xdpi="299.86295"
