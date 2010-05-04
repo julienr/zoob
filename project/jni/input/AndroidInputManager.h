@@ -39,8 +39,6 @@ class AndroidInputManager : public InputManager {
 
     Vector2 tankMoveEnd;
 
-    bool showGamePad;
-    const Sprite gamePad;
     const Sprite fireButton;
     const Sprite fireButtonClicked;
 

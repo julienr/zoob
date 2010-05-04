@@ -2,14 +2,8 @@
 #include "app.h"
 
 
-const Vector2 gamePadPos(13.8f, 2.0f);
-const Vector2 gamePadSize(2.5,2.5);
 const Vector2 fireButtonPos(13.8f, 6.0f);
 const Vector2 fireButtonSize(2.5,2.5);
-
-bool inGamePad (float x, float y) {
-  return Utils::insideC(gamePadPos, gamePadSize, Vector2(XSG_NOTRANSX(x),YSG_NOTRANSY(y)));
-}
 
 bool inFireButton (float x, float y) {
   return Utils::insideC(fireButtonPos, fireButtonSize, Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
@@ -19,17 +13,12 @@ bool inFireButton (float x, float y) {
 AndroidInputManager::AndroidInputManager ()
   : InputManager(),
     state(STATE_DEFAULT),
-    showGamePad(true),
-    gamePad("assets/sprites/control.png"),
     fireButton("assets/sprites/fire_btn.png"),
     fireButtonClicked("assets/sprites/fire_btn_clicked.png"),
     lastTouchDownTime(0) {
 }
 
 void AndroidInputManager::draw () {
-  if (showGamePad)
-    gamePad.draw(gamePadPos, gamePadSize);
-
   if (state == FIRING_MODE)
     fireButtonClicked.draw(fireButtonPos, fireButtonSize);
   else
@@ -41,7 +30,7 @@ void AndroidInputManager::draw () {
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
     case MOVING_TANK_PAD:
-      getGame()->setTankMoveDir(touchPosition-(gamePadPos-Vector2(transX, transY)));
+      ASSERT(false); //disabled
       break;
     case MOVING_TANK:
       getGame()->setTankMoveDir(touchPosition-getGame()->getPlayerTank().getPosition());
@@ -84,9 +73,6 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   if (state == FIRING_MODE || inFireButton(x,y)) {
   } else if (formControl.inside(pNoTrans)) {
     formControl.handleTouchDown(pNoTrans);
-  } else if (showGamePad && inGamePad(x,y)) {
-    //LOGE("in game pad");
-    startMoving(MOVING_TANK_PAD, p);
   } else if (tapDist < 1 && elapsed <= 300) {
     getGame()->playerFire(p);
     startMoving(MOVING_TANK, p);
@@ -108,7 +94,7 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    if (showGamePad && state == STATE_DEFAULT && inFireButton(x,y)) {
+    if (state == STATE_DEFAULT && inFireButton(x,y)) {
       state = FIRING_MODE;
       getGame()->setTankMoveDir(Vector2::ZERO);
     } else if (state == FIRING_MODE) {
