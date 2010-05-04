@@ -73,10 +73,7 @@ void PlayerFormControl::draw () {
     if ((id == BTN_NEXT && currentFormIdx >= availableForms.length()-1) ||
         (id == BTN_PREV && currentFormIdx == 0))
       continue;
-    if (getTouchedItem() != -1 && getTouchedItem() == id)
-      item->drawHover();
-    else
-      item->draw();
+    item->draw();
   }
 
   static const Vector2 tankPos(13.5, 0.5f);

@@ -16,12 +16,10 @@ void drawBB (const Vector2& pos, const Vector2& size) {
 }
 
 void MenuItem::draw () const {
-  normalSprite.draw(pos, size);
+  if (pressed)
+    hoverSprite.draw(pos, size);
+  else
+    normalSprite.draw(pos, size);
+
   //drawBB(bbPos, bbSize);
 }
-
-void MenuItem::drawHover () const {
-  hoverSprite.draw(pos, size);
-  //drawBB(bbPos, bbSize);
-}
-

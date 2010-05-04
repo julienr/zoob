@@ -10,15 +10,14 @@ class MenuItem {
     MenuItem(const char* tex, const char* hoverTex, short id) :
       id(id),
       normalSprite(tex),
-      hoverSprite(hoverTex) {}
+      hoverSprite(hoverTex),
+      pressed(false) {}
 
     short getID () const {
       return id;
     }
 
     void draw () const;
-
-    void drawHover () const;
 
     void setPosition (const Vector2& pos) {
       this->pos = pos;
@@ -38,6 +37,14 @@ class MenuItem {
       return Utils::insideC(bbPos, bbSize, p);
     }
 
+    //FIXME: used ONLY by input manager, also use for menus
+    void setPressed (bool p) {
+      pressed = p;
+    }
+
+    bool isPressed () {
+      return pressed;
+    }
   private:
     short id;
     Vector2 pos;
@@ -46,6 +53,8 @@ class MenuItem {
     Vector2 bbSize;
     Sprite normalSprite;
     Sprite hoverSprite;
+
+    bool pressed;
 };
 
 #endif /* MENUITEM_H_ */

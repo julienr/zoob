@@ -2,28 +2,35 @@
 #include "app.h"
 
 
-const Vector2 fireButtonPos(13.8f, 6.0f);
-const Vector2 fireButtonSize(2.5,2.5);
+const Vector2 rocketButtonPos(13.8f, 4.0f);
+const Vector2 rocketButtonSize(2.5,1.25);
+const Vector2 mineButtonPos(rocketButtonPos.x, 6.0f);
+const Vector2 mineButtonSize(rocketButtonSize);
 
-bool inFireButton (float x, float y) {
-  return Utils::insideC(fireButtonPos, fireButtonSize, Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
-}
-
+#define ROCKET_BUTTON_ID 0 //just used for button creation
+#define MINE_BUTTON_ID 1 //just used for button creation
 
 AndroidInputManager::AndroidInputManager ()
   : InputManager(),
     state(STATE_DEFAULT),
-    fireButton("assets/sprites/fire_btn.png"),
-    fireButtonClicked("assets/sprites/fire_btn_clicked.png"),
+    rocketButton("assets/sprites/fire_rocket.png",
+                 "assets/sprites/fire_rocket_clicked.png",
+                 ROCKET_BUTTON_ID),
+    mineButton("assets/sprites/fire_mine.png",
+               "assets/sprites/fire_mine_clicked.png",
+               MINE_BUTTON_ID),
     lastTouchDownTime(0) {
+  rocketButton.setPosition(rocketButtonPos);
+  rocketButton.setSize(rocketButtonSize);
+  rocketButton.setBB(rocketButtonPos, rocketButtonSize);
+  mineButton.setPosition(mineButtonPos);
+  mineButton.setSize(mineButtonSize);
+  mineButton.setBB(mineButtonPos, mineButtonSize);
 }
 
 void AndroidInputManager::draw () {
-  if (state == FIRING_MODE)
-    fireButtonClicked.draw(fireButtonPos, fireButtonSize);
-  else
-    fireButton.draw(fireButtonPos, fireButtonSize);
-
+  rocketButton.draw();
+  mineButton.draw();
   formControl.draw();
 }
 
@@ -70,7 +77,10 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   const float tapDist = (p-lastTouchDownLocation).length();
   const uint64_t elapsed = now - lastTouchDownTime;
   //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
-  if (state == FIRING_MODE || inFireButton(x,y)) {
+  if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
+    rocketButton.setPressed(true);
+  } else if (mineButton.inside(pNoTrans)) {
+    mineButton.setPressed(true);
   } else if (formControl.inside(pNoTrans)) {
     formControl.handleTouchDown(pNoTrans);
   } else if (tapDist < 1 && elapsed <= 300) {
@@ -94,11 +104,19 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    if (state == STATE_DEFAULT && inFireButton(x,y)) {
-      state = FIRING_MODE;
-      getGame()->setTankMoveDir(Vector2::ZERO);
+    if (state == STATE_DEFAULT) {
+      if (rocketButton.inside(pNoTrans)) {
+        state = FIRING_MODE;
+        getGame()->setTankMoveDir(Vector2::ZERO);
+      } else
+        rocketButton.setPressed(false);
+
+      if (mineButton.inside(pNoTrans))
+        LOGE("drop mine");
+      mineButton.setPressed(false);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
+      rocketButton.setPressed(false);
       state = STATE_DEFAULT;
     } else if (formControl.inside(pNoTrans)) {
       formControl.handleTouchUp(pNoTrans);

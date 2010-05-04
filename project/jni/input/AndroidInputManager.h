@@ -1,6 +1,7 @@
 #ifndef ANDROIDINPUTMANAGER_H_
 #define ANDROIDINPUTMANAGER_H_
 
+#include "view/menu/MenuItem.h"
 #include "InputManager.h"
 #include "PlayerFormControl.h"
 
@@ -39,8 +40,8 @@ class AndroidInputManager : public InputManager {
 
     Vector2 tankMoveEnd;
 
-    const Sprite fireButton;
-    const Sprite fireButtonClicked;
+    MenuItem rocketButton;
+    MenuItem mineButton;
 
     PlayerFormControl formControl;
 

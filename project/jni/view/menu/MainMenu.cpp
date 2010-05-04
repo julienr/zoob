@@ -45,10 +45,7 @@ void MainMenu::draw () {
     if ((id == MENU_ITEM_NEXT && gameManager->isAtLastLevel()) ||
         (id == MENU_ITEM_PREV && gameManager->isAtFirstLevel()))
       continue;
-    if (getTouchedItem() != -1 && getTouchedItem() == id)
-      item->drawHover();
-    else
-      item->draw();
+    item->draw();
   }
   numbers[gameManager->getCurrentLevel()]->draw(numberPos, numberSize);
   //font->print("1234", Vector2(1,3), 1.5);
