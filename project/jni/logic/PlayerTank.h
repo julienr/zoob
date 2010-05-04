@@ -24,6 +24,13 @@ class PlayerTank : public Tank {
       ASSERT(ProgressionManager::getInstance()->getAvailablePlayerForms().contains(newForm));
       currentForm = newForm;
     }
+
+    bool bounce (Entity* e, const Vector2& colPoint) {
+      if (currentForm == FORM_SHIELD)
+        return shieldBounce(e, colPoint);
+      else
+        return false;
+    }
   private:
     ePlayerForm currentForm;
 

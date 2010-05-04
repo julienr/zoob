@@ -2,6 +2,7 @@
 #define GAMEVIEW_H_
 
 #include "view/TankView.h"
+#include "view/PlayerTankView.h"
 #include "view/CursorView.h"
 #include "view/LevelView.h"
 #include "logic/Game.h"
@@ -13,8 +14,8 @@ class GameView {
     GameView (const Game& g);
     ~GameView ();
 
-    const TankView& getTankView () const {
-      return tankView;
+    const PlayerTankView& getTankView () const {
+      return playerTankView;
     }
 
     //Only draw the hearts representing the life
@@ -26,7 +27,7 @@ class GameView {
     void debugDraw();
   private:
     const Game& game;
-    TankView tankView;
+    PlayerTankView playerTankView;
     //CursorView cursorView;
     LevelView levelView;
     Sprite arrowEnd;

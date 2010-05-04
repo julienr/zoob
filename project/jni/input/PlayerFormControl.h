@@ -4,6 +4,7 @@
 #include "view/menu/Menu.h"
 #include "logic/PlayerTank.h"
 
+//This is the displayed control that allow the player to change the player form
 class PlayerFormControl : public Menu {
   public:
     PlayerFormControl ();

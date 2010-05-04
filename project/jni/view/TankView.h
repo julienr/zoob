@@ -25,7 +25,7 @@ class TankView {
       }
     }
 
-    void draw () {
+    virtual void draw () {
       if (!tank.isAlive())
         return;
       eTankType type = tank.getTankType();
@@ -53,6 +53,9 @@ class TankView {
     bool touchInside (const Vector2& p) const {
       return tankSprite.touchInside(tank, p);
     }
+  protected:
+    const Sprite& getTankSprite () { return tankSprite; }
+    const Sprite& getShieldTankSprite () { return shieldTankSprite; }
   private:
     const Tank& tank;
     Sprite tankSprite;

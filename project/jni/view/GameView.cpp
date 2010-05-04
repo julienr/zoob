@@ -6,7 +6,7 @@
 
 GameView::GameView (const Game& g)
   : game(g),
-    tankView(g.getPlayerTank()),
+    playerTankView(g.getPlayerTank()),
     //cursorView(g.getCursor()),
     levelView(g.getLevel()),
     arrowEnd("assets/sprites/arrow_end.png"),
@@ -44,7 +44,7 @@ void GameView::draw () {
 
 
   levelView.draw();
-  tankView.draw();
+  playerTankView.draw();
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()

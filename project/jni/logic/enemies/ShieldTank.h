@@ -20,7 +20,9 @@ class ShieldTank : public EnemyTank {
 
     eTankType getTankType () const { return TANK_SHIELD; }
 
-    bool bounce (Entity* e, const Vector2& colPoint);
+    bool bounce (Entity* e, const Vector2& colPoint) {
+      return shieldBounce(e, colPoint);
+    }
 };
 
 
