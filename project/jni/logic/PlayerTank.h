@@ -4,10 +4,15 @@
 #include "Tank.h"
 #include "ProgressionManager.h"
 
+#define PLAYER_FIRE_INTERVAL 1000
+#define PLAYER_BURST_INTERVAL 1500
+#define PLAYER_IN_BURST_INTERVAL 200
+#define PLAYER_NUM_BURSTS 3
+
 class PlayerTank : public Tank {
   public:
     PlayerTank ()
-      : Tank(new IntervalFirePolicy(1000)),
+      : Tank(new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
         currentForm (FORM_SIMPLE) {
     }
 
@@ -20,10 +25,7 @@ class PlayerTank : public Tank {
       return currentForm;
     }
 
-    void changePlayerForm (ePlayerForm newForm) {
-      ASSERT(ProgressionManager::getInstance()->getAvailablePlayerForms().contains(newForm));
-      currentForm = newForm;
-    }
+    void changePlayerForm (ePlayerForm newForm);
 
     bool bounce (Entity* e, const Vector2& colPoint) {
       if (currentForm == FORM_SHIELD)

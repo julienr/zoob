@@ -20,7 +20,7 @@ LOCAL_SRC_FILES := \
     logic/Level.cpp \
     logic/Game.cpp \
     logic/Tank.cpp \
-    logic/ShieldTank.cpp \
+    logic/ProgressionManager.cpp \
     levels/LevelsData.cpp \
     view/TextureManager.cpp \
     view/Sprite.cpp \
@@ -44,7 +44,8 @@ LOCAL_SRC_FILES := \
     ai/shoot/AimPolicy.cpp \
     ai/shoot/RandomPolicy.cpp \
     ai/movement/PathPolicy.cpp \
-    input/AndroidInputManager.cpp
+    input/AndroidInputManager.cpp \
+    input/PlayerFormControl.cpp
 
 LIBPNG_PATH := /home/silver/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/silver/programs/android-ndk-r3/out/apps/libzip/armeabi

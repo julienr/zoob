@@ -163,7 +163,6 @@ void Game::update () {
     delete path;
   }*/
 
-
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;

@@ -80,6 +80,11 @@ class Tank: public Entity {
     //This function simulate a 90-degrees shield on the front of the tank and returns
     //true if the hit is on this shield, bouncing the entity
     bool shieldBounce (Entity* e, const Vector2& colPoint);
+
+    void setFirePolicy (FireRatePolicy* newPol) {
+      delete firePolicy;
+      firePolicy = newPol;
+    }
   private:
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
      * The tank should be marked as dead once this is done
@@ -87,7 +92,7 @@ class Tank: public Entity {
     bool exploded;
     bool alive;
 
-    FireRatePolicy* const firePolicy;
+    FireRatePolicy* firePolicy;
 
     Path* path;
 };
