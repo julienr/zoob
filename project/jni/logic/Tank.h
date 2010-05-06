@@ -19,6 +19,8 @@ enum eTankType {
     TANK_BURST
 };
 
+class CollisionManager;
+
 class Tank: public Entity {
   public:
     Tank (FireRatePolicy* pol)
@@ -75,6 +77,8 @@ class Tank: public Entity {
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return firePolicy->canFire(); }
     bool canMine () { return (numMines < MAX_BOMBS_PER_TANK) && minePolicy->canFire(); }
+    //This function check that if the tank would fire now, the rocket wouldn't end up stuck in a wall
+    bool checkFireDir (const Vector2& dir, const CollisionManager& colManager);
 
     Rocket* fireRocket (Vector2 dir);
     Bomb* dropBomb ();
@@ -96,6 +100,7 @@ class Tank: public Entity {
       firePolicy = newPol;
     }
   private:
+
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
      * The tank should be marked as dead once this is done
      */

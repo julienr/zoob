@@ -137,7 +137,7 @@ void Game::update () {
         //- for some firing policy, the tank will then stay in "inFiring" mode (burst mode) for some time
         if (t->isFiring()) { //burst mode, let it fire without delay
           if (t->canFire()) {
-            if (ai->decideFire(elapsedS, &rocketDir, this, t))
+            if (ai->decideFire(elapsedS, &rocketDir, this, t) && t->checkFireDir(rocketDir, colManager))
               rockets.append(t->fireRocket(rocketDir));
             else { //ai decided to stop firing, stop the burst
               LOGE("cancelFiring");
@@ -149,7 +149,7 @@ void Game::update () {
             t->prepareFire();
 
           //the enemy is ready to fire
-          if (t->fireReady() && ai->decideFire(elapsedS, &rocketDir, this, t)) {
+          if (t->fireReady() && ai->decideFire(elapsedS, &rocketDir, this, t) && t->checkFireDir(rocketDir, colManager)) {
             rockets.append(t->fireRocket(rocketDir));
           }
         }
@@ -204,9 +204,9 @@ void Game::update () {
 
 void Game::playerFire (const Vector2& cursorPosition) {
   //Fire up rocket
-  if (tank.canFire()) {
-    Vector2 dir = cursorPosition-tank.getPosition();
-    dir.normalize();
+  Vector2 dir = cursorPosition-tank.getPosition();
+  dir.normalize();
+  if (tank.canFire() && tank.checkFireDir(dir, colManager)) {
     rockets.append(tank.fireRocket(dir));
   }
 }

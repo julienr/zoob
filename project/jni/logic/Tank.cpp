@@ -1,6 +1,7 @@
 #include "Tank.h"
 #include "Rocket.h"
 #include "Bomb.h"
+#include "physics/CollisionManager.h"
 
 Rocket* Tank::fireRocket (Vector2 dir) {
   ASSERT(dir.length() > 0);
@@ -10,6 +11,12 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   setRotationFromDir(dir);
   firePolicy->fire();
   return new Rocket(this, getPosition()+trans*1.1, dir);
+}
+
+bool Tank::checkFireDir (const Vector2& dir, const CollisionManager& colManager) {
+  CollisionResult r;
+  const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*TANK_BCIRCLE_R;
+  return !colManager.traceCircle(this, getPosition(), trans*1.1, ROCKET_BCIRCLE_R, &r, 0);
 }
 
 Bomb* Tank::dropBomb () {
