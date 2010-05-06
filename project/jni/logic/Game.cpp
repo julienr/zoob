@@ -216,6 +216,7 @@ void Game::playerDropBomb()
   //Fire mine
   if (tank.canMine()) {
     //FIXME: check that there isn't already a mine here ?
+    LOGE("drop bomb");
     Bomb* m = tank.dropBomb();
     bombs.append(m);
   }

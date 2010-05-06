@@ -101,6 +101,8 @@ void toPlayingState () {
     GameManager::getInstance()->setGame(game);
     gameView = new GameView(*game);
 
+    inputManager->reset();
+
     centerGameInViewport();
   }
   GameManager::getInstance()->setState(STATE_PLAYING);

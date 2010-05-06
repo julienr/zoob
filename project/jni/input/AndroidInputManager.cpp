@@ -28,6 +28,13 @@ AndroidInputManager::AndroidInputManager ()
   bombButton.setBB(mineButtonPos, mineButtonSize);
 }
 
+void AndroidInputManager::reset () {
+  formControl.reset();
+  rocketButton.setPressed(false);
+  bombButton.setPressed(false);
+  state = STATE_DEFAULT;
+}
+
 void AndroidInputManager::draw () {
   rocketButton.draw();
   bombButton.draw();
@@ -111,10 +118,8 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       } else
         rocketButton.setPressed(false);
 
-      if (bombButton.inside(pNoTrans)) {
-        LOGE("drop mine");
+      if (bombButton.inside(pNoTrans))
         getGame()->playerDropBomb();
-      }
       bombButton.setPressed(false);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));

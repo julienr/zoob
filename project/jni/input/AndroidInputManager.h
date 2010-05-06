@@ -22,6 +22,9 @@ class AndroidInputManager : public InputManager {
     void touchEventMove (float x, float y);
     void touchEventUp (float x, float y);
     void touchEventOther (float x, float y);
+
+    //reset all states
+    void reset ();
   protected:
     enum eState {
       STATE_DEFAULT=0,

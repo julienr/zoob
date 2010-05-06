@@ -34,6 +34,10 @@ PlayerFormControl::PlayerFormControl ()
   addItem(prev);
 }
 
+void PlayerFormControl::reset () {
+  currentFormIdx = 0;
+}
+
 void PlayerFormControl::actionPerformed (short touchedItem) {
   switch (touchedItem) {
     case BTN_NEXT: _actionNext(); break;

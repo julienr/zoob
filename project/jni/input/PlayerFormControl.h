@@ -10,6 +10,7 @@ class PlayerFormControl : public Menu {
     PlayerFormControl ();
 
     void draw ();
+    void reset ();
   protected:
     void actionPerformed (short touchedItem);
   private:
