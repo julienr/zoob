@@ -47,10 +47,10 @@ extern zip* APKArchive;
 #define TILE_SIZE 1.0
 #define TANK_BCIRCLE_R 0.4f
 #define ROCKET_BCIRCLE_R 0.2f
-#define MINE_BCIRCLE_R 0.3f
+#define MINE_BCIRCLE_R 0.4f
 
 #define MAX_MINES_PER_TANK 3
 
-#define MINE_LIFETIME 3
+#define MINE_LIFETIME 5
 
 #endif /* DEF_H_ */

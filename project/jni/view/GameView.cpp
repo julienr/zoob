@@ -60,12 +60,10 @@ void GameView::draw () {
     
     GLW::color(TankView::getColor(m->getOwner()->getTankType()));
     mine.draw(*m);
-    
+    GLW::colorWhite();
     const int timeLeft = (int)floor(m->getTimeLeft());
     ASSERT(timeLeft < 6);
-    numbers[timeLeft]->draw(m->getPosition(), Vector2(1.5,1.5));
-    
-    GLW::colorWhite();
+    numbers[timeLeft]->draw(m->getPosition(), Vector2(0.9,0.9));
   }
   
   playerTankView.draw();

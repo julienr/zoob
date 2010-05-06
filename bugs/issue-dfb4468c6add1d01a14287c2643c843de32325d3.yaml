@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Rockets exploding because of max bounces should display "poof" instead of "BOOM"
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-04 05:53:15.393337 Z
+references: []
+
+id: dfb4468c6add1d01a14287c2643c843de32325d3
+log_events: 
+- - 2010-05-04 05:53:15.741222 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
