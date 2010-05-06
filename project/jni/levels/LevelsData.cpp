@@ -131,7 +131,7 @@ namespace lvl3 {
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(5, 2, TANK_SIMPLE, NULL),
+      TankDescription(5, 2, BOSS_SIMPLE, NULL),
       TankDescription(5, 4, TANK_SIMPLE, NULL),
       TankDescription(5, 6, TANK_SIMPLE, NULL),
       TankDescription(7, 1, TANK_SIMPLE, new Path(2, wp1)),

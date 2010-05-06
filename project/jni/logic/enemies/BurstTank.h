@@ -10,13 +10,13 @@
 
 class BurstTank : public EnemyTank {
   public:
-    BurstTank ()
-      : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy()),
+    BurstTank (float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy()),
                    new BurstFirePolicy(BURST_INTERVAL, IN_BURST_INTERVAL, NUM_BURST)) {
     }
 
-    BurstTank (Path* p)
-      : EnemyTank (new TankAI(new AimPolicy(), new PathPolicy()),
+    BurstTank (Path* p, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy()),
                    new BurstFirePolicy(BURST_INTERVAL, IN_BURST_INTERVAL, NUM_BURST)) {
       this->setPath(p);
     }

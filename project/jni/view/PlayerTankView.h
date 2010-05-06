@@ -19,10 +19,10 @@ class PlayerTankView : public TankView {
       switch(form) {
         case FORM_SIMPLE:
         case FORM_BURST:
-          getTankSprite().draw(tank, tank.getRotation());
+          getTankSprite()->draw(tank, tank.getRotation());
           break;
         case FORM_SHIELD:
-          getShieldTankSprite().draw(tank, tank.getRotation());
+          getShieldTankSprite()->draw(tank, tank.getRotation());
           break;
       }
       GLW::colorWhite();

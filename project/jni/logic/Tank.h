@@ -15,8 +15,11 @@ enum eTankType {
     TANK_PLAYER=0,
     TANK_STATIC,
     TANK_SIMPLE,
+    BOSS_SIMPLE,
     TANK_SHIELD,
-    TANK_BURST
+    BOSS_SHIELD,
+    TANK_BURST,
+    BOSS_BURST
 };
 
 class CollisionManager;
@@ -26,6 +29,8 @@ class Tank: public Entity {
     //radius is the radius of the tank
     Tank (float radius, FireRatePolicy* pol)
       : Entity(new BCircle(radius)),
+        maxLives(1),
+        numLives(1),
         tankRadius(radius),
         exploded(false),
         alive(true),
@@ -50,7 +55,7 @@ class Tank: public Entity {
 
     virtual eTankType getTankType () const = 0;
 
-    void explode (Entity* e, const Vector2& colPoint);
+    virtual void explode (Entity* e, const Vector2& colPoint);
 
     bool hasExploded () const {
       return exploded;
@@ -91,6 +96,10 @@ class Tank: public Entity {
       ASSERT(numMines > 0);
       numMines--;
     }
+
+    unsigned getLivesLeft () const { return numLives; }
+    unsigned getMaxLives () const { return maxLives; }
+
   protected:
     FireRatePolicy* getFireRatePolicy () const { return firePolicy; }
 
@@ -102,7 +111,11 @@ class Tank: public Entity {
       delete firePolicy;
       firePolicy = newPol;
     }
+
+    void setLives (unsigned num) { maxLives = numLives = num; }
   private:
+    unsigned maxLives;
+    unsigned numLives;
     float tankRadius;
 
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)

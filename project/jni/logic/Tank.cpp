@@ -35,6 +35,10 @@ void Tank::explode (Entity* e, const Vector2& dir) {
       return;
     }
   }*/
+  numLives--;
+  if (numLives > 0)
+    return;
+
   exploded = true;
   LOGE("OMG, got an explosion");
 }

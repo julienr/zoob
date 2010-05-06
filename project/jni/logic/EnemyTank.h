@@ -7,8 +7,8 @@
 
 class EnemyTank: public Tank {
   public:
-    EnemyTank(TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(2000))
-      : Tank(TANK_BCIRCLE_R, firePol),
+    EnemyTank(float radius, TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(2000))
+      : Tank(radius, firePol),
         ai(ai),
         prepareFiring(false) {
     }
@@ -19,7 +19,7 @@ class EnemyTank: public Tank {
 
     void prepareFire () {
       prepareFiring = true;
-      firingDelay = Difficulty::getInstance()->getFiringDelay();
+      firingDelay = getInitialFiringDelay();
     }
 
     void think (double elapsedS) {
@@ -56,6 +56,8 @@ class EnemyTank: public Tank {
 
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
+
+    virtual double getInitialFiringDelay () const { return Difficulty::getInstance()->getFiringDelay(); }
 
   private:
     TankAI* ai;

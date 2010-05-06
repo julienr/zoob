@@ -6,12 +6,12 @@
 
 class SimpleTank : public EnemyTank {
   public:
-    SimpleTank ()
-      : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy())) {
+    SimpleTank (float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy())) {
     }
 
-    SimpleTank (Path* p)
-      : EnemyTank (new TankAI(new AimPolicy(), new PathPolicy())) {
+    SimpleTank (Path* p, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy())) {
       this->setPath(p);
     }
 

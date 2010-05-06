@@ -9,12 +9,14 @@
 
 class ShieldTank : public EnemyTank {
   public:
-    ShieldTank ()
-      : EnemyTank (new TankAI(new AimPolicy(), new StillPolicy())) {
+    ShieldTank (float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy())) {
     }
 
-    ShieldTank (Path* p)
-      : EnemyTank (new TankAI(new AimPolicy(), new PathPolicy())) {
+
+
+    ShieldTank (Path* p, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy())) {
       this->setPath(p);
     }
 

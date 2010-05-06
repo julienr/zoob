@@ -4,6 +4,8 @@
 #include "logic/enemies/SimpleTank.h"
 #include "logic/enemies/StaticTank.h"
 #include "logic/enemies/BurstTank.h"
+#include "logic/enemies/BossSimpleTank.h"
+#include "logic/enemies/BossShieldTank.h"
 #include "ai/algorithms/AStar.h"
 #include "Bomb.h"
 
@@ -31,7 +33,10 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
       case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
-      case TANK_STATIC: t = new StaticTank(); break;
+      case TANK_STATIC: ASSERT(!desc.path); t = new StaticTank(); break;
+      case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
+      case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
+      case BOSS_BURST: ASSERT(false);
       default: ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));
@@ -258,16 +263,7 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
     if (!r.collidedEntity->bounce(rocket, r.colPoint))
       touch(rocket, r.collidedEntity, r.colPoint);
     rocket->addBounce();
-    //move = -2.0f*(move*r.normal)*r.normal + move;
-
-    //a is the part of the move before collision with the wall
-    const Vector2 a = r.colPoint - rocket->getPosition();
-
-    //this is the fraction of the length of the move that went in the wall
-    const float bl = 1-r.tFirst;
-
-
-
+    move = -2.0f*(move*r.normal)*r.normal + move;
     rocket->setDir(move);
   }
   colManager.translate(rocket, move);

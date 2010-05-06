@@ -19,7 +19,7 @@ class EnemyTankView : public TankView {
         return TANK_END_FIRING_SIZE; //burst fire => display at big size
       if (!eTank->isPreparingFire())
         return 1.0f;
-      const float maxDelay = Difficulty::getInstance()->getFiringDelay();
+      const float maxDelay = eTank->getInitialFiringDelay();
       const float sizeIncr = (TANK_END_FIRING_SIZE-TANK_START_FIRING_SIZE)/maxDelay;
       return TANK_START_FIRING_SIZE + sizeIncr*(maxDelay - eTank->getFiringDelay());
     }

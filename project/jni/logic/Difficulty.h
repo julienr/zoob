@@ -23,6 +23,7 @@ class Difficulty {
     //Enemy tanks will observe this delay between the moment they decide to fire and the moment the
     //rocket is actually launched. During this time, they'll visually grow
     virtual double getFiringDelay () = 0;
+    virtual double getBossFiringDelay () = 0;
 
   private:
     static Difficulty* difficulty;
@@ -32,6 +33,7 @@ class Difficulty {
 class DifficultyEasy : public Difficulty {
   public:
     double getFiringDelay () { return 2.0; }
+    double getBossFiringDelay () { return 0.5f; }
 };
 
 #endif /* DIFFICULTY_H_ */

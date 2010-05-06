@@ -6,7 +6,7 @@
 class StaticTank : public EnemyTank {
   public:
     StaticTank ()
-      : EnemyTank (new TankAI(new NonePolicy(), new StillPolicy())) {
+      : EnemyTank (TANK_BCIRCLE_R, new TankAI(new NonePolicy(), new StillPolicy())) {
     }
 
     eTankType getTankType () const { return TANK_STATIC; }
