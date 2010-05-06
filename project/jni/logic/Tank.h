@@ -23,8 +23,10 @@ class CollisionManager;
 
 class Tank: public Entity {
   public:
-    Tank (FireRatePolicy* pol)
-      : Entity(new BCircle(TANK_BCIRCLE_R)),
+    //radius is the radius of the tank
+    Tank (float radius, FireRatePolicy* pol)
+      : Entity(new BCircle(radius)),
+        tankRadius(radius),
         exploded(false),
         alive(true),
         firePolicy(pol),
@@ -101,6 +103,7 @@ class Tank: public Entity {
       firePolicy = newPol;
     }
   private:
+    float tankRadius;
 
     /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
      * The tank should be marked as dead once this is done

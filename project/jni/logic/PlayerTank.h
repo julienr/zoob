@@ -12,7 +12,7 @@
 class PlayerTank : public Tank {
   public:
     PlayerTank ()
-      : Tank(new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
+      : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
         currentForm (FORM_SIMPLE) {
     }
 

@@ -7,7 +7,7 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   ASSERT(dir.length() > 0);
   dir.normalize();
   //Have to spawn the rocket just outside of our bounding box
-  const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*TANK_BCIRCLE_R;
+  const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
   setRotationFromDir(dir);
   firePolicy->fire();
   return new Rocket(this, getPosition()+trans*1.1, dir);
@@ -15,7 +15,7 @@ Rocket* Tank::fireRocket (Vector2 dir) {
 
 bool Tank::checkFireDir (const Vector2& dir, const CollisionManager& colManager) {
   CollisionResult r;
-  const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*TANK_BCIRCLE_R;
+  const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
   return !colManager.traceCircle(this, getPosition(), trans*1.1, ROCKET_BCIRCLE_R, &r, 0);
 }
 

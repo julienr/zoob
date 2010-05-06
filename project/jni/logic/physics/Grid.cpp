@@ -151,11 +151,10 @@ bool collideAgainstCell (GridCell* cell,
 bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const {
   ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
-  ASSERT(circle->getRadius()*2 < cellSize);
   ASSERT(move.length() < cellSize);
-  //Calculate starting position covered cells
-  // Since the circle diameter is < cellSize, this is simply the cells that contains the extreme points
-  // of the circle on the axis
+
+  // Calculate cells covered by movement. Since move's length is < cellSize, this is simply the cells
+  // that contains the circle at the start and at the end of the movement
   unsigned numTouched = 0;
   touchCells(circle, mover->getPosition(), &numTouched);
   touchCells(circle, mover->getPosition()+move, &numTouched);
@@ -172,9 +171,6 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
                                    result,
                                    entityMask);
   }
-  /*if (collided) {
-    LOGE("Collision, tFirst : %f", r.tFirst);
-  }*/
   return collided;
 }
 
@@ -210,72 +206,67 @@ void Grid::removeEntity (Entity* e) {
   e->touchedCells.clear();
 }
 
-//Add cell to touchedCells and increment count if cond is true and (x,y) is inside grid
-void Grid::addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const {
-  if (cond && inside(x,y)) {
-    /*Check if cell is already inside*/
-    for (unsigned i=0; i<(*count); i++)
-      if (touchedCells[i]->x == (x) && touchedCells[i]->y == (y))
-        return;
-    touchedCells[(*count)++] = grid[(x)][(y)];
-  }
-}
-
 list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
   list<Entity*>* touchedList = new list<Entity*>();
-  //Loop through all the cells touched by this circle
-  for (int x=getCellX(center.x-radius); x<getCellX(center.x+radius); x++) {
-    for (int y=getCellY(center.y-radius); y<getCellY(center.y+radius); y++) {
-      for (list<Entity*>::iterator iter = grid[x][y]->entities.begin(); iter.hasNext(); iter++) {
-         Entity* entity = *iter;
-         if (Utils::inCircle(center, radius, entity->getPosition()))
-           touchedList->append(entity);
-      }
+  unsigned numTouched = 0;
+  BCircle circ(radius);
+  touchCells(&circ, center, &numTouched);
+  for (unsigned i=0; i<numTouched; i++) {
+    for (list<Entity*>::iterator iter = touchedCells[i]->entities.begin(); iter.hasNext(); iter++) {
+       Entity* entity = *iter;
+       if (Utils::inCircle(center, radius, entity->getPosition()))
+         touchedList->append(entity);
     }
   }
   return touchedList;
 }
 
-//FIXME: should check if a cell is already in our touched list before adding
+bool Grid::_touched (unsigned x, unsigned y, unsigned count) const {
+  for (unsigned i=0; i<count; i++)
+    if (touchedCells[i]->x == x && touchedCells[i]->y == y)
+      return true;
+  return false;
+}
+
+//Add cell to touchedCells and increment count if cond is true and (x,y) is inside grid
+void Grid::addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const {
+  if (cond && inside(x,y)) {
+    /*Check if cell is already inside*/
+    if (!_touched(x,y,*count))
+      touchedCells[(*count)++] = grid[(x)][(y)];
+  }
+}
+
 void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const {
-  ASSERT(circle->getRadius()*2 < cellSize);
   const float r = circle->getRadius();
-  const int c[2] = {getCellX(position), getCellY(position)};
-  //Calculate our position relative to the cell top-left corner
-  const Vector2 tlPos = position - (Vector2(c[0], c[1])*cellSize + origin);
-  //Now, if distance to one border is < r, we have to add this cell to the touched list
-  if (inside(c[0], c[1]))
-    touchedCells[(*count)++] = grid[c[0]][c[1]];
-  addCellIf(c[0]-1, c[1], tlPos.x < r, count); //left cell
-  addCellIf(c[0]+1, c[1], (cellSize-tlPos.x) < r, count); //right cell
-  addCellIf(c[0], c[1]-1, tlPos.y < r, count); //top cell
-  addCellIf(c[0], c[1]+1, (cellSize-tlPos.y) < r, count); //bottom cell
-  addCellIf(c[0]-1, c[1]-1, (tlPos.x < r) && (tlPos.y < r), count); //top-left
-  addCellIf(c[0]-1, c[1]+1, (tlPos.x < r) && (cellSize-tlPos.y < r), count); //bottom-left
-  addCellIf(c[0]+1, c[1]-1, (cellSize-tlPos.x < r) && (tlPos.y < r), count); //top-right
-  addCellIf(c[0]+1, c[1]+1, (cellSize-tlPos.x < r) && (cellSize-tlPos.y < r), count); //bottom-right
+  //All the touched cells are contained between the two extremities of this circle on the two axis
+  const int startX = getCellXBounded(position.x-r);
+  const int endX = getCellXBounded(position.x+r);
+  const int startY = getCellYBounded(position.y-r);
+  const int endY = getCellYBounded(position.y+r);
+  for (int x=startX; x<=endX; x++) {
+    for (int y=startY; y<=endY; y++) {
+      if (!_touched(x,y,*count))
+        touchedCells[(*count)++] = grid[x][y];
+    }
+  }
 }
 
 void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const {
   ASSERT(bbox->getHeight() <= cellSize && bbox->getWidth() <= cellSize);
   //Just check the 4 box's corners
   Vector2 c[4];
-  bbox->getCorners(position, c);
-  for (int i=0; i<4; i++) {
-    //LOGE("c[%i](%f,%f) => cell(%i,%i)", i, c[i].x, c[i].y, getCellX(c[i]), getCellY(c[i]));
-    GridCell* cell = getCell(c[i]);
-    if (cell) {
-      //Check if we already have this cell in our list
-      bool alreadyIn = false;
-      for (unsigned j=0; j<*count; j++) {
-        if (touchedCells[j] == cell) {
-          alreadyIn = true;
-          break;
-        }
-      }
-
-      if (!alreadyIn)
-        touchedCells[(*count)++] = cell;
+  //All the touched cells are contained between the two extremities of this box on the two axis
+  const float hw = bbox->getWidth()/2.0f;
+  const float hh = bbox->getHeight()/2.0f;
+  const int startX = getCellXBounded(position.x-hw);
+  const int endX = getCellXBounded(position.x+hw);
+  const int startY = getCellYBounded(position.y-hh);
+  const int endY = getCellYBounded(position.y+hh);
+  for (int x=startX; x<=endX; x++) {
+    for (int y=startY; y<=endY; y++) {
+      if (!_touched(x,y,*count))
+        touchedCells[(*count)++] = grid[x][y];
     }
   }
 }

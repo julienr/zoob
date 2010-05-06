@@ -258,7 +258,16 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
     if (!r.collidedEntity->bounce(rocket, r.colPoint))
       touch(rocket, r.collidedEntity, r.colPoint);
     rocket->addBounce();
-    move = -2.0f*(move*r.normal)*r.normal + move;
+    //move = -2.0f*(move*r.normal)*r.normal + move;
+
+    //a is the part of the move before collision with the wall
+    const Vector2 a = r.colPoint - rocket->getPosition();
+
+    //this is the fraction of the length of the move that went in the wall
+    const float bl = 1-r.tFirst;
+
+
+
     rocket->setDir(move);
   }
   colManager.translate(rocket, move);

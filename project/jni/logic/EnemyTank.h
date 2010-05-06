@@ -8,7 +8,7 @@
 class EnemyTank: public Tank {
   public:
     EnemyTank(TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(2000))
-      : Tank(firePol),
+      : Tank(TANK_BCIRCLE_R, firePol),
         ai(ai),
         prepareFiring(false) {
     }

@@ -113,6 +113,13 @@ class Grid {
       return x;
     }
 
+    int getCellXBounded (float px) const {
+      const int x = (int)((px-origin.x)/cellSize);
+      if (x < 0) return 0;
+      if (x >= (int)width) return width-1;
+      return x;
+    }
+
     //returns -1 if outside grid
     int getCellY (const Vector2& point) const {
       return getCellY(point.y);
@@ -122,6 +129,13 @@ class Grid {
       const int y = (int)((py-origin.y)/cellSize);
       if (y < 0 || y >= (int)height)
         return -1;
+      return y;
+    }
+
+    int getCellYBounded (float py) const {
+      const int y = (int)((py-origin.y)/cellSize);
+      if (y < 0) return 0;
+      if (y >= (int)height) return height-1;
       return y;
     }
 
@@ -148,6 +162,9 @@ class Grid {
     const unsigned width;
     const unsigned height;
     const float cellSize;
+
+    //check if the cell [x][y] is in the touched cells
+    bool _touched (unsigned x, unsigned y, unsigned count) const;
 
     GridCell* getCell (const Vector2& p) const {
       int x = getCellX(p);
