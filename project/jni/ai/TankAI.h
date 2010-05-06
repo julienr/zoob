@@ -23,15 +23,15 @@ class TankAI {
       delete movementPolicy;
     }
 
-    bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+    bool decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
       return shootPolicy->decideFire(elapsedS, outDir, game, tank);
     }
 
-    bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+    bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
       return movementPolicy->decideDir(elapsedS, outDir, game, tank);
     }
 
-    bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) {
+    bool aim (double elapsedS, Game* game, EnemyTank* tank, Vector2* outDir) {
       return shootPolicy->aim(elapsedS, game, tank, outDir);
     }
   private:

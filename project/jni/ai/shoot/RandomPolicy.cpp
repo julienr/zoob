@@ -1,6 +1,6 @@
 #include "RandomPolicy.h"
 
-bool RandomPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+bool RandomPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   timeSinceFire += elapsedS;
   angle += elapsedS*FIRE_ROTATION_SPEED;
   if (timeSinceFire > FIRE_INTERVAL) {
@@ -11,7 +11,7 @@ bool RandomPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, Tan
   return false;
 }
 
-bool RandomPolicy::aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir) {
+bool RandomPolicy::aim (double elapsedS, Game* game, EnemyTank* tank, Vector2* outDir) {
   outDir->set(cosf(angle), sinf(angle));
   return true;
 }

@@ -10,6 +10,9 @@ const Vector2 mineButtonSize(rocketButtonSize);
 #define ROCKET_BUTTON_ID 0 //just used for button creation
 #define MINE_BUTTON_ID 1 //just used for button creation
 
+//shortcut
+ProgressionManager* _progMan () { return ProgressionManager::getInstance(); }
+
 AndroidInputManager::AndroidInputManager ()
   : InputManager(),
     state(STATE_DEFAULT),
@@ -37,8 +40,10 @@ void AndroidInputManager::reset () {
 
 void AndroidInputManager::draw () {
   rocketButton.draw();
-  bombButton.draw();
-  formControl.draw();
+  if (_progMan()->hasBombs())
+    bombButton.draw();
+  if (_progMan()->hasForms())
+    formControl.draw();
 }
 
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
@@ -84,9 +89,11 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
   } else if (bombButton.inside(pNoTrans)) {
-    bombButton.setPressed(true);
+    if (_progMan()->hasBombs())
+      bombButton.setPressed(true);
   } else if (formControl.inside(pNoTrans)) {
-    formControl.handleTouchDown(pNoTrans);
+    if (_progMan()->hasForms())
+      formControl.handleTouchDown(pNoTrans);
   } else if (tapDist < 1 && elapsed <= 300) {
     getGame()->playerFire(p);
     startMoving(MOVING_TANK, p);
@@ -118,9 +125,9 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         getGame()->setTankMoveDir(Vector2::ZERO);
       } else {
         rocketButton.setPressed(false);
-        if (bombButton.inside(pNoTrans))
+        if (_progMan()->hasBombs() && bombButton.inside(pNoTrans))
           getGame()->playerDropBomb();
-        else if (formControl.inside(pNoTrans))
+        else if (_progMan()->hasForms() && formControl.inside(pNoTrans))
           formControl.handleTouchUp(pNoTrans);
         else
            stopMoving();

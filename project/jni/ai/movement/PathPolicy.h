@@ -11,7 +11,7 @@ class PathPolicy : public MovementPolicy {
     PathPolicy ()
       : current(0) {}
 
-    bool decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
+    bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
 
   private:
     size_t current; //idx the current waypoint we're trying to reach

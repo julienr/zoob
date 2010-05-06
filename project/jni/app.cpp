@@ -100,6 +100,7 @@ void toPlayingState () {
     game = new Game(gameOverCallback, gameWonCallback, lvl);
     GameManager::getInstance()->setGame(game);
     gameView = new GameView(*game);
+    ProgressionManager::getInstance()->changedLevel();
 
     inputManager->reset();
 

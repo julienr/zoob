@@ -5,9 +5,9 @@
 
 class AimPolicy : public ShootPolicy {
   public:
-    bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
+    bool decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
 
-    bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir);
+    bool aim (double elapsedS, Game* game, EnemyTank* tank, Vector2* outDir);
 };
 
 #endif /* AIMPOLICY_H_ */

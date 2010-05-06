@@ -31,7 +31,17 @@ class ProgressionManager {
     const vector<ePlayerForm>& getAvailablePlayerForms () {
       return availablePlayerForms;
     }
+
+    bool hasForms () {
+      return availablePlayerForms.length() > 1;
+    }
+
+    //called when the level has changed
+    void changedLevel ();
+
+    bool hasBombs ();
   private:
+    size_t _level();
     vector<ePlayerForm> availablePlayerForms;
 };
 

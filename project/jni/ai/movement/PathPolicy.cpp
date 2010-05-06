@@ -1,9 +1,13 @@
 #include "PathPolicy.h"
-#include "logic/Tank.h"
+#include "logic/EnemyTank.h"
 
-bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Tank* tank) {
+bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   Path* path = tank->getPath();
   if (!path)
+    return false;
+
+  //Stop moving while the tank is preparing to fire
+  if (tank->isPreparingFire())
     return false;
 
   //Did we arrive to the waypoint

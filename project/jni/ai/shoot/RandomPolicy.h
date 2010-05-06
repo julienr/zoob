@@ -11,8 +11,8 @@ class RandomPolicy : public ShootPolicy {
     RandomPolicy () : timeSinceFire(0), angle(0) {}
 
 
-    bool decideFire (double elapsedS, Vector2* outDir, Game* game, Tank* tank);
-    bool aim (double elapsedS, Game* game, Tank* tank, Vector2* outDir);
+    bool decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
+    bool aim (double elapsedS, Game* game, EnemyTank* tank, Vector2* outDir);
   private:
     double timeSinceFire;
     float angle;

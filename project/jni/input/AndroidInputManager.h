@@ -49,7 +49,6 @@ class AndroidInputManager : public InputManager {
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;
-
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */
