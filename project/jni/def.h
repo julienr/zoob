@@ -49,6 +49,8 @@ extern zip* APKArchive;
 #define ROCKET_BCIRCLE_R 0.2f
 #define BOMB_BCIRCLE_R 0.4f
 
+#define ROCKET_MAX_BOUNCES 3
+
 #define MAX_BOMBS_PER_TANK 3
 
 #define BOMB_LIFETIME 5

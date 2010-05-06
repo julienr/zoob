@@ -201,9 +201,11 @@ namespace lvl5 {
       Vector2(7, 6)
   };
 
-  const size_t numTanks = 3;
+  const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(3, 1, TANK_SIMPLE, NULL),
+      TankDescription(5, 1, TANK_SIMPLE, NULL),
       TankDescription(6, 2, TANK_SHIELD, new Path(2, wp1)),
       TankDescription(4, 6, TANK_SHIELD, new Path(2, wp2)),
   };

@@ -72,7 +72,7 @@ void Game::update () {
   //Rockets
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
-    if (!r->hasExploded() && (r->getNumBounces() > 3)) {
+    if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
       explosions.append(r->getPosition());
     }
