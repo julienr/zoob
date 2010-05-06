@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: if the tank is put near to a wall and fire, the rocket appears in the wall...
+desc: Check before firing that the place where the rocket would appear (tankpos + (1,1)) is not inside a wall
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-06 12:02:41.385883 Z
+references: []
+
+id: 3d37c60e8c7c192e0c204414301fbe9a7d6400b8
+log_events: 
+- - 2010-05-06 12:02:43.034050 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
