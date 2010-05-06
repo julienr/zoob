@@ -43,9 +43,6 @@ void AndroidInputManager::draw () {
 
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
-    case MOVING_TANK_PAD:
-      ASSERT(false); //disabled
-      break;
     case MOVING_TANK:
       getGame()->setTankMoveDir(touchPosition-getGame()->getPlayerTank().getPosition());
       break;
@@ -111,24 +108,26 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    if (state == STATE_DEFAULT) {
-      if (rocketButton.inside(pNoTrans)) {
-        state = FIRING_MODE;
-        getGame()->setTankMoveDir(Vector2::ZERO);
-      } else
-        rocketButton.setPressed(false);
-
-      if (bombButton.inside(pNoTrans))
-        getGame()->playerDropBomb();
-      bombButton.setPressed(false);
-    } else if (state == FIRING_MODE) {
+    LOGE("State : %i", state);
+    if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
-    } else if (formControl.inside(pNoTrans)) {
-      formControl.handleTouchUp(pNoTrans);
-    } else
-      stopMoving();
+    } else {
+      if (rocketButton.inside(pNoTrans)) {
+        state = FIRING_MODE;
+        getGame()->setTankMoveDir(Vector2::ZERO);
+      } else {
+        rocketButton.setPressed(false);
+        if (bombButton.inside(pNoTrans))
+          getGame()->playerDropBomb();
+        else if (formControl.inside(pNoTrans))
+          formControl.handleTouchUp(pNoTrans);
+        else
+           stopMoving();
+        bombButton.setPressed(false);
+      }
+    }
   } else
     GameManager::getInstance()->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
 }

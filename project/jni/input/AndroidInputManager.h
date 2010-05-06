@@ -29,7 +29,6 @@ class AndroidInputManager : public InputManager {
     enum eState {
       STATE_DEFAULT=0,
       MOVING_TANK,
-      MOVING_TANK_PAD, //moving tank using the gamepad
       FIRING_MODE //pressed on fire button and need to touch somewhere to fire the rocket
     };
 
