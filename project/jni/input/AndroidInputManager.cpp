@@ -108,7 +108,6 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    LOGE("State : %i", state);
     if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);

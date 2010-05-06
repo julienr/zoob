@@ -21,7 +21,7 @@ bool Tank::checkFireDir (const Vector2& dir, const CollisionManager& colManager)
 
 Bomb* Tank::dropBomb () {
   numMines++;
-  minePolicy->fire();
+  bombPolicy->fire();
   return new Bomb(this, getPosition());
 }
 

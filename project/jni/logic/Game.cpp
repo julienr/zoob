@@ -78,8 +78,7 @@ void Game::update () {
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
-      //rockets aren't added to colManager
-      //colManager.removeEntity(r);
+      colManager.removeEntity(r);
       delete r;
       i = rockets.remove(i);
     } else {
@@ -207,7 +206,9 @@ void Game::playerFire (const Vector2& cursorPosition) {
   Vector2 dir = cursorPosition-tank.getPosition();
   dir.normalize();
   if (tank.canFire() && tank.checkFireDir(dir, colManager)) {
-    rockets.append(tank.fireRocket(dir));
+    Rocket* r = tank.fireRocket(dir);
+    colManager.addEntity(r);
+    rockets.append(r);
   }
 }
 

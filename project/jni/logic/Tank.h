@@ -28,13 +28,14 @@ class Tank: public Entity {
         exploded(false),
         alive(true),
         firePolicy(pol),
-        minePolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
+        bombPolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
         path(NULL) {
       ASSERT(pol != NULL);
     }
 
     virtual ~Tank () {
       delete firePolicy;
+      delete bombPolicy;
     }
 
     //FIXME: only for debug draw
@@ -76,7 +77,7 @@ class Tank: public Entity {
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return firePolicy->canFire(); }
-    bool canMine () { return (numMines < MAX_BOMBS_PER_TANK) && minePolicy->canFire(); }
+    bool canMine () { return (numMines < MAX_BOMBS_PER_TANK) && bombPolicy->canFire(); }
     //This function check that if the tank would fire now, the rocket wouldn't end up stuck in a wall
     bool checkFireDir (const Vector2& dir, const CollisionManager& colManager);
 
@@ -108,7 +109,7 @@ class Tank: public Entity {
     bool alive;
 
     FireRatePolicy* firePolicy;
-    FireRatePolicy* minePolicy;
+    FireRatePolicy* bombPolicy;
 
     Path* path;
     

@@ -66,7 +66,7 @@ class Entity: public Moveable {
     //FIXME: only for debug
     bool collided;
   private:
-    //Used by Grid for performance reason. Entries equals to NULL are unused
+    //Used by Grid for performance reason.
     list<GridCell*> touchedCells;
     const BoundingVolume* bvolume;
 };

@@ -34,6 +34,9 @@ GameView::~GameView () {
     delete enemiesView[i];
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
+
+  for (int i=0; i<6; i++)
+    delete numbers[i];
 }
 
 void GameView::drawHearts () {
