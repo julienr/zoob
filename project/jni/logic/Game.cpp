@@ -5,7 +5,7 @@
 #include "logic/enemies/StaticTank.h"
 #include "logic/enemies/BurstTank.h"
 #include "ai/algorithms/AStar.h"
-#include "Mine.h"
+#include "Bomb.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
@@ -88,22 +88,23 @@ void Game::update () {
     }
   }
   
-  //Mines
-  for (list<Mine*>::iterator i = mines.begin(); i.hasNext(); ) {
-    Mine* m = *i;
+  //Bombs
+  for (list<Bomb*>::iterator i = bombs.begin(); i.hasNext(); ) {
+    Bomb* m = *i;
     m->think(elapsedS);
-    if (!m->hasExploded() && (m->getTimeLeft() <= 0)) {
+    if (m->getTimeLeft() <= 0) {
+      list<Entity*>* touchedEntities = colManager.getGrid().entitiesIn(m->getPosition(), BOMB_EXPLOSION_RADIUS);
+      //touch all the entities in the explosion area
+      for (list<Entity*>::iterator iter = touchedEntities->begin(); iter.hasNext(); iter++)
+        touch(m, *iter, m->getPosition());
+
       m->explode(NULL, m->getPosition());
+      delete touchedEntities;
       explosions.append(m->getPosition());
-    }
-    //FIXME: check if a tank is near this mine
-    
-    //Might have exploded because of timeleft OR collision
-    if (m->hasExploded()) {
-      //mines aren't added to colManager
-      //colManager.removeEntity(m);
+      //notify the owner
+      m->getOwner()->bombExploded();
       delete m;
-      i = mines.remove(i);
+      i = bombs.remove(i);
     } else
       i++;
   }
@@ -210,11 +211,13 @@ void Game::playerFire (const Vector2& cursorPosition) {
   }
 }
 
-void Game::playerDropMine()
+void Game::playerDropBomb()
 {
   //Fire mine
   if (tank.canMine()) {
-    mines.append(tank.dropMine());
+    //FIXME: check that there isn't already a mine here ?
+    Bomb* m = tank.dropBomb();
+    bombs.append(m);
   }
 }
 

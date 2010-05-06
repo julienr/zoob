@@ -41,7 +41,7 @@ class AndroidInputManager : public InputManager {
     Vector2 tankMoveEnd;
 
     MenuItem rocketButton;
-    MenuItem mineButton;
+    MenuItem bombButton;
 
     PlayerFormControl formControl;
 

@@ -21,6 +21,12 @@ struct Utils {
             (p.y > boxPos.y-hH && p.y < boxPos.y+hH);
   }
 
+  //Determine if p is in circle[center,radius]
+  static bool inCircle (const Vector2& center, float radius, const Vector2& p) {
+    return (p.x > center.x-radius && p.x < center.x+radius) &&
+            (p.y > center.y-radius && p.y < center.y+radius);
+  }
+
   static uint64_t getCurrentTimeMillis () {
     timeval tv;
     gettimeofday(&tv, NULL);

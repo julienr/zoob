@@ -18,8 +18,8 @@ class ExplosiveEntity : public Entity {
       return !exploded;
     }
 
+    //WARNING: this MIGHT be called multiple time during one frame (if an entity touch many other entities)
     virtual void explode (Entity* e, const Vector2& colPoint) {
-      LOGE("Explosion");
       exploded = true;
     }
   private:

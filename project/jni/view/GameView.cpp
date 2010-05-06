@@ -3,7 +3,7 @@
 #include "view/Square.h"
 #include "logic/physics/Grid.h"
 #include "EnemyTankView.h"
-#include <logic/Mine.h>
+#include <logic/Bomb.h>
 
 GameView::GameView (const Game& g)
   : game(g),
@@ -12,9 +12,10 @@ GameView::GameView (const Game& g)
     levelView(g.getLevel()),
     arrowEnd("assets/sprites/arrow_end.png"),
     rocket("assets/sprites/rocket.png"),
-    mine("assets/sprites/mine.png"),
+    bomb("assets/sprites/bomb.png"),
     hearthEmpty("assets/sprites/hearth_empty.png"),
     hearthFull("assets/sprites/hearth_full.png"),
+    circle("assets/sprites/circle.png"),
     enemiesView(5){
   numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
   numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
@@ -51,19 +52,30 @@ void GameView::draw () {
     explosions.append(new Explosion(*i));
   }
 
-
   levelView.draw();
-  
-  //mines
-  for (list<Mine*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
-    Mine* m = *i;
-    
-    GLW::color(TankView::getColor(m->getOwner()->getTankType()));
-    mine.draw(*m);
+
+  //bombs radius
+  for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
+    Bomb* m = *i;
+    GLW::color(LIGHT_GREY);
+    circle.draw(m->getPosition(), Vector2(BOMB_EXPLOSION_RADIUS, BOMB_EXPLOSION_RADIUS));
     GLW::colorWhite();
+  }
+  
+  //bombs
+  for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
+    Bomb* m = *i;
     const int timeLeft = (int)floor(m->getTimeLeft());
+    if (timeLeft == 0)
+      GLW::color(RED);
+    else
+      GLW::color(TankView::getColor(m->getOwner()->getTankType()));
+
+    bomb.draw(*m);
+    GLW::colorWhite();
+
     ASSERT(timeLeft < 6);
-    numbers[timeLeft]->draw(m->getPosition(), Vector2(0.9,0.9));
+    numbers[timeLeft]->draw(m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
   playerTankView.draw();

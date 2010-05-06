@@ -2,6 +2,7 @@
 #include "lib/Math.h"
 #include "CollisionManager.h"
 #include "BLine.h"
+#include "lib/Utils.h"
 
 void Grid::clearTouched () {
   for (unsigned x=0; x<width; x++) {
@@ -218,6 +219,21 @@ void Grid::addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const 
         return;
     touchedCells[(*count)++] = grid[(x)][(y)];
   }
+}
+
+list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
+  list<Entity*>* touchedList = new list<Entity*>();
+  //Loop through all the cells touched by this circle
+  for (int x=getCellX(center.x-radius); x<getCellX(center.x+radius); x++) {
+    for (int y=getCellY(center.y-radius); y<getCellY(center.y+radius); y++) {
+      for (list<Entity*>::iterator iter = grid[x][y]->entities.begin(); iter.hasNext(); iter++) {
+         Entity* entity = *iter;
+         if (Utils::inCircle(center, radius, entity->getPosition()))
+           touchedList->append(entity);
+      }
+    }
+  }
+  return touchedList;
 }
 
 //FIXME: should check if a cell is already in our touched list before adding

@@ -16,21 +16,21 @@ AndroidInputManager::AndroidInputManager ()
     rocketButton("assets/sprites/fire_rocket.png",
                  "assets/sprites/fire_rocket_clicked.png",
                  ROCKET_BUTTON_ID),
-    mineButton("assets/sprites/fire_mine.png",
-               "assets/sprites/fire_mine_clicked.png",
+    bombButton("assets/sprites/fire_bomb.png",
+               "assets/sprites/fire_bomb_clicked.png",
                MINE_BUTTON_ID),
     lastTouchDownTime(0) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);
   rocketButton.setBB(rocketButtonPos, rocketButtonSize);
-  mineButton.setPosition(mineButtonPos);
-  mineButton.setSize(mineButtonSize);
-  mineButton.setBB(mineButtonPos, mineButtonSize);
+  bombButton.setPosition(mineButtonPos);
+  bombButton.setSize(mineButtonSize);
+  bombButton.setBB(mineButtonPos, mineButtonSize);
 }
 
 void AndroidInputManager::draw () {
   rocketButton.draw();
-  mineButton.draw();
+  bombButton.draw();
   formControl.draw();
 }
 
@@ -79,8 +79,8 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
-  } else if (mineButton.inside(pNoTrans)) {
-    mineButton.setPressed(true);
+  } else if (bombButton.inside(pNoTrans)) {
+    bombButton.setPressed(true);
   } else if (formControl.inside(pNoTrans)) {
     formControl.handleTouchDown(pNoTrans);
   } else if (tapDist < 1 && elapsed <= 300) {
@@ -111,11 +111,11 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       } else
         rocketButton.setPressed(false);
 
-      if (mineButton.inside(pNoTrans)) {
+      if (bombButton.inside(pNoTrans)) {
         LOGE("drop mine");
-        getGame()->playerDropMine();
+        getGame()->playerDropBomb();
       }
-      mineButton.setPressed(false);
+      bombButton.setPressed(false);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);

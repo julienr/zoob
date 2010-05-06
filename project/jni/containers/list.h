@@ -138,7 +138,7 @@ class list {
       return const_iterator(head);
     }
   private:
-    list(const list& other) {ASSERT(false); }
+    list(const list& other) { ASSERT(false); }
     _Element* head;
 };
 

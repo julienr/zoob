@@ -103,7 +103,11 @@ class Grid {
 
     //returns -1 if outside grid
     int getCellX (const Vector2& point) const {
-      const int x = (int)((point.x-origin.x)/cellSize);
+      return getCellX(point.x);
+    }
+
+    int getCellX (float px) const {
+      const int x = (int)((px-origin.x)/cellSize);
       if (x < 0 || x >= (int)width)
         return -1;
       return x;
@@ -111,7 +115,11 @@ class Grid {
 
     //returns -1 if outside grid
     int getCellY (const Vector2& point) const {
-      const int y = (int)((point.y-origin.y)/cellSize);
+      return getCellY(point.y);
+    }
+
+    int getCellY (float py) const {
+      const int y = (int)((py-origin.y)/cellSize);
       if (y < 0 || y >= (int)height)
         return -1;
       return y;
@@ -129,6 +137,10 @@ class Grid {
     Vector2 gridToWorld (int x, int y) const {
       return Vector2(x*cellSize + origin.x, y*cellSize + origin.y);
     }
+
+    //Return a list of entities that are touched by a circle.
+    //A newly allocated list is returned, freeing it is the caller's resposibility
+    list<Entity*>* entitiesIn (const Vector2& center, float radius) const;
 
   private:
     GridCell*** grid;

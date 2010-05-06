@@ -32,9 +32,10 @@ class GameView {
     LevelView levelView;
     Sprite arrowEnd;
     Sprite rocket;
-    Sprite mine;
+    Sprite bomb;
     Sprite hearthEmpty;
     Sprite hearthFull;
+    Sprite circle;
     vector<TankView*> enemiesView;
     list<Explosion*> explosions;
     Sprite* numbers[6];

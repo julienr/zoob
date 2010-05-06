@@ -1,6 +1,6 @@
 #include "Tank.h"
 #include "Rocket.h"
-#include "Mine.h"
+#include "Bomb.h"
 
 Rocket* Tank::fireRocket (Vector2 dir) {
   ASSERT(dir.length() > 0);
@@ -12,10 +12,10 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   return new Rocket(this, getPosition()+trans*1.1, dir);
 }
 
-Mine* Tank::dropMine () {
+Bomb* Tank::dropBomb () {
   numMines++;
   minePolicy->fire();
-  return new Mine(this, getPosition());
+  return new Bomb(this, getPosition());
 }
 
 void Tank::explode (Entity* e, const Vector2& dir) {

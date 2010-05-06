@@ -1618,6 +1618,27 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3352"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4158"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4180-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1627,15 +1648,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="-300.49079"
-     inkscape:cy="-1488.8484"
+     inkscape:cx="-293.58364"
+     inkscape:cy="-1548.3514"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1321"
      inkscape:window-height="939"
-     inkscape:window-x="1259"
-     inkscape:window-y="42"
+     inkscape:window-x="1271"
+     inkscape:window-y="53"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -1647,7 +1668,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -3134,7 +3155,7 @@
        style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="rect4161-9-7-7-4"
        width="1482.0958"
-       height="999.84906"
+       height="1237.4369"
        x="-810.34436"
        y="1941.9025" />
     <g
@@ -3176,15 +3197,16 @@
     </g>
     <path
        style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m -634.44967,2340.273 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z m -0.0522,55.9436 c 23.86276,0 43.24772,19.3852 43.24772,43.2479 0,23.8628 -19.38496,43.1962 -43.24772,43.1962 -23.86277,0 -43.19629,-19.3334 -43.19629,-43.1962 0,-23.8627 19.33352,-43.2479 43.19629,-43.2479 z"
-       id="path3385-4-15"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
+       d="m -637.75879,2339.57 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z"
+       id="path3385-4-15-6-3"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/mine.png"
        inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295" />
+       inkscape:export-ydpi="299.86295"
+       sodipodi:nodetypes="csssssssssssc" />
     <text
        xml:space="preserve"
        style="font-size:117.19049835px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="-570.03705"
+       x="-586.03705"
        y="2485.2603"
        id="text4088-9-4"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
@@ -3192,9 +3214,9 @@
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan4090-1-6"
-         x="-570.03705"
+         x="-586.03705"
          y="2485.2603"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">mine</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">bomb</tspan></text>
     <g
        id="g4967"
        transform="translate(1.4142136,0)"
@@ -3236,56 +3258,20 @@
            id="tspan4090-7-6"
            sodipodi:role="line">rocket</tspan></text>
     </g>
-    <g
-       transform="translate(616.37009,-28.017232)"
-       id="g4918-7"
-       style="fill-opacity:1;fill:#ffffff"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine_clicked.png"
-       inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295">
-      <path
-         inkscape:export-ydpi="299.86295"
-         inkscape:export-xdpi="299.86295"
-         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
-         id="path3385-4-15-0"
-         d="m -634.44967,2340.273 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z m -0.0522,55.9436 c 23.86276,0 43.24772,19.3852 43.24772,43.2479 0,23.8628 -19.38496,43.1962 -43.24772,43.1962 -23.86277,0 -43.19629,-19.3334 -43.19629,-43.1962 0,-23.8627 19.33352,-43.2479 43.19629,-43.2479 z"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
-      <text
-         inkscape:export-ydpi="299.86295"
-         inkscape:export-xdpi="299.86295"
-         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
-         id="text4088-9-4-6"
-         y="2485.2603"
-         x="-570.03705"
-         style="font-size:117.19049834999999860px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
-           y="2485.2603"
-           x="-570.03705"
-           id="tspan4090-1-6-2"
-           sodipodi:role="line">mine</tspan></text>
-    </g>
     <path
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 502.35105,2333.4689 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z m -0.0522,55.9436 c 23.86276,0 43.24772,19.3852 43.24772,43.2479 0,23.8628 -19.38496,43.1962 -43.24772,43.1962 -23.86277,0 -43.19629,-19.3334 -43.19629,-43.1962 0,-23.8627 19.33352,-43.2479 43.19629,-43.2479 z"
+       d="m 502.35105,2333.4689 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z"
        id="path3385-4-15-6"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/mine.png"
        inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295" />
-    <text
-       xml:space="preserve"
-       style="font-size:98.20905304px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="-661.59235"
-       y="2474.6062"
-       id="text3328"><tspan
-         sodipodi:role="line"
-         id="tspan3330"
-         x="-661.59235"
-         y="2474.6062"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">2</tspan></text>
+       inkscape:export-ydpi="299.86295"
+       sodipodi:nodetypes="csssssssssssc" />
     <g
        id="g4142"
-       transform="translate(-158.02439,16.970563)">
+       transform="translate(-158.02439,16.970563)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
       <rect
          rx="19.79899"
          ry="32.526913"
@@ -3360,5 +3346,39 @@
          x="9.8516035"
          y="2793.8257"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie;stroke:#ffffff;stroke-opacity:1">mine</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect4135-8"
+       width="162.63457"
+       height="162.63457"
+       x="-713.47076"
+       y="2959.4292"
+       ry="32.526913"
+       rx="19.79899"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/mine.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m -82.606623,2336.2974 c -0.61433,-2e-4 -24.291447,55.9463 -24.823597,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.157627,56.253 24.771977,56.2531 0.61451,2e-4 24.23984,-55.8945 24.77215,-56.2015 0.53215,-0.3069 60.7969603,7.1894 61.1045103,6.6575 0.30717,-0.5321 -36.2810903,-48.9814 -36.2809003,-49.5958 1.8e-4,-0.6143 36.5876903,-49.012 36.2809003,-49.5442 -0.30717,-0.532 -60.5211103,6.9134 -61.0530503,6.606 -0.53178,-0.3073 -24.15765,-56.2529 -24.77199,-56.2533 z"
+       id="path3385-4-15-6-3-4"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/mine.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"
+       sodipodi:nodetypes="csssssssssssc" />
+    <text
+       xml:space="preserve"
+       style="font-size:117.19049834999999860px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-30.884872"
+       y="2481.9875"
+       id="text4088-9-4-1"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_mine.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4090-1-6-6"
+         x="-30.884872"
+         y="2481.9875"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">bomb</tspan></text>
   </g>
 </svg>
