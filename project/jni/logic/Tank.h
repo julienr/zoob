@@ -9,6 +9,7 @@
 #include "FireRatePolicy.h"
 
 class Rocket;
+class Mine;
 
 enum eTankType {
     TANK_PLAYER=0,
@@ -25,6 +26,7 @@ class Tank: public Entity {
         exploded(false),
         alive(true),
         firePolicy(pol),
+        minePolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
         path(NULL) {
       ASSERT(pol != NULL);
     }
@@ -72,8 +74,16 @@ class Tank: public Entity {
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return firePolicy->canFire(); }
+    bool canMine () { return (numMines < MAX_MINES_PER_TANK) && minePolicy->canFire(); }
 
     Rocket* fireRocket (Vector2 dir);
+    Mine* dropMine ();
+    
+    //A mine this tank owned just exploded => this is used to keep track of the number of mines currently owned by this tank
+    void mineExploded () {
+      ASSERT(numMines > 0);
+      numMines--;
+    }
   protected:
     FireRatePolicy* getFireRatePolicy () const { return firePolicy; }
 
@@ -93,8 +103,11 @@ class Tank: public Entity {
     bool alive;
 
     FireRatePolicy* firePolicy;
+    FireRatePolicy* minePolicy;
 
     Path* path;
+    
+    int numMines;
 };
 
 #endif /* TANK_H_ */

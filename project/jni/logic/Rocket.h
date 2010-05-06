@@ -1,15 +1,14 @@
 #ifndef ROCKET_H_
 #define ROCKET_H_
 
-#include "Entity.h"
+#include "ExplosiveEntity.h"
 
-class Rocket : public Entity {
+class Rocket : public ExplosiveEntity {
   public:
     Rocket (Tank* owner, const Vector2& pos, const Vector2& dir)
-      : Entity(new BCircle(ROCKET_BCIRCLE_R)),
+      : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(owner),
-        numBounces(0),
-        exploded(false) {
+        numBounces(0) {
       setPosition(pos);
       setDir(dir);
     }
@@ -38,25 +37,10 @@ class Rocket : public Entity {
       return numBounces;
     }
 
-    bool hasExploded () {
-      return exploded;
-    }
-
-    bool isSolid () const {
-      return !exploded;
-    }
-
-    void explode (Entity* e, const Vector2& colPoint) {
-      LOGE("Rocket explosion");
-      exploded = true;
-    }
-
   private:
     Tank* owner;
     Vector2 dir;
     unsigned numBounces;
-    //When it has exploded, a rocket is marked as such and scheduled for explosion
-    bool exploded;
 };
 
 #endif /* ROCKET_H_ */

@@ -32,10 +32,12 @@ class GameView {
     LevelView levelView;
     Sprite arrowEnd;
     Sprite rocket;
+    Sprite mine;
     Sprite hearthEmpty;
     Sprite hearthFull;
     vector<TankView*> enemiesView;
     list<Explosion*> explosions;
+    Sprite* numbers[6];
 };
 
 #endif /* GAMEVIEW_H_ */

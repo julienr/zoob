@@ -5,6 +5,7 @@
 #include "logic/enemies/StaticTank.h"
 #include "logic/enemies/BurstTank.h"
 #include "ai/algorithms/AStar.h"
+#include "Mine.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), 1.0f),
@@ -77,13 +78,34 @@ void Game::update () {
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
-      colManager.removeEntity(*i);
-      delete (*i);
+      //rockets aren't added to colManager
+      //colManager.removeEntity(r);
+      delete r;
       i = rockets.remove(i);
     } else {
       bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
       i++;
     }
+  }
+  
+  //Mines
+  for (list<Mine*>::iterator i = mines.begin(); i.hasNext(); ) {
+    Mine* m = *i;
+    m->think(elapsedS);
+    if (!m->hasExploded() && (m->getTimeLeft() <= 0)) {
+      m->explode(NULL, m->getPosition());
+      explosions.append(m->getPosition());
+    }
+    //FIXME: check if a tank is near this mine
+    
+    //Might have exploded because of timeleft OR collision
+    if (m->hasExploded()) {
+      //mines aren't added to colManager
+      //colManager.removeEntity(m);
+      delete m;
+      i = mines.remove(i);
+    } else
+      i++;
   }
 
   //Enemies
@@ -185,6 +207,14 @@ void Game::playerFire (const Vector2& cursorPosition) {
     Vector2 dir = cursorPosition-tank.getPosition();
     dir.normalize();
     rockets.append(tank.fireRocket(dir));
+  }
+}
+
+void Game::playerDropMine()
+{
+  //Fire mine
+  if (tank.canMine()) {
+    mines.append(tank.dropMine());
   }
 }
 

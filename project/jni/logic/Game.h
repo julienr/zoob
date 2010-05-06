@@ -63,6 +63,10 @@ class Game {
     const list<Rocket*>::const_iterator getRockets () const {
       return rockets.begin();
     }
+    
+    const list<Mine*>::const_iterator getMines () const {
+      return mines.begin();
+    }
 
     //Returns an iterator over the explosions location that happened
     //since last frame
@@ -82,6 +86,7 @@ class Game {
     void update();
 
     void playerFire (const Vector2& cursorPosition);
+    void playerDropMine ();
 
     //Set tank movement direction. Set to (0,0) for now move
     void setTankMoveDir (const Vector2& dir) {
@@ -108,6 +113,7 @@ class Game {
     PlayerTank tank;
     list<EnemyTank*> enemies;
     list<Rocket*> rockets;
+    list<Mine*> mines;
     list<Vector2> explosions;
     Level* level;
 

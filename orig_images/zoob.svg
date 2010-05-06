@@ -1590,6 +1590,13 @@
        x2="-294.57162"
        y2="2439.4387"
        gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective3334"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1599,15 +1606,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="-197.98988"
-     inkscape:cy="-1167.3078"
+     inkscape:cx="133.15178"
+     inkscape:cy="-1280.4449"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1511"
-     inkscape:window-height="955"
-     inkscape:window-x="16"
-     inkscape:window-y="38"
+     inkscape:window-width="1321"
+     inkscape:window-height="939"
+     inkscape:window-x="1259"
+     inkscape:window-y="42"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -3240,5 +3247,12 @@
            id="tspan4090-1-6-2"
            sodipodi:role="line">mine</tspan></text>
     </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 502.35105,2333.4689 c -0.61433,-2e-4 -24.29145,55.9463 -24.8236,56.2533 -0.53232,0.3071 -60.74551,-7.2409 -61.05287,-6.7092 -0.30734,0.532 36.28091,48.9814 36.28073,49.5957 -2e-4,0.6144 -36.63933,49.0637 -36.33235,49.5957 0.30698,0.5322 60.57236,-6.9647 61.10449,-6.6573 0.53196,0.3073 24.15763,56.253 24.77198,56.2531 0.61451,2e-4 24.23983,-55.8945 24.77214,-56.2015 0.53215,-0.3069 60.79696,7.1894 61.10451,6.6575 0.30717,-0.5321 -36.28109,-48.9814 -36.2809,-49.5958 1.8e-4,-0.6143 36.58769,-49.012 36.2809,-49.5442 -0.30717,-0.532 -60.52111,6.9134 -61.05305,6.606 -0.53178,-0.3073 -24.15764,-56.2529 -24.77198,-56.2533 z m -0.0522,55.9436 c 23.86276,0 43.24772,19.3852 43.24772,43.2479 0,23.8628 -19.38496,43.1962 -43.24772,43.1962 -23.86277,0 -43.19629,-19.3334 -43.19629,-43.1962 0,-23.8627 19.33352,-43.2479 43.19629,-43.2479 z"
+       id="path3385-4-15-6"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/mine.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
   </g>
 </svg>

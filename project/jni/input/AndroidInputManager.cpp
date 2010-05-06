@@ -111,8 +111,10 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       } else
         rocketButton.setPressed(false);
 
-      if (mineButton.inside(pNoTrans))
+      if (mineButton.inside(pNoTrans)) {
         LOGE("drop mine");
+        getGame()->playerDropMine();
+      }
       mineButton.setPressed(false);
     } else if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));

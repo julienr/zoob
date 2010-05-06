@@ -3,6 +3,7 @@
 #include "view/Square.h"
 #include "logic/physics/Grid.h"
 #include "EnemyTankView.h"
+#include <logic/Mine.h>
 
 GameView::GameView (const Game& g)
   : game(g),
@@ -11,9 +12,17 @@ GameView::GameView (const Game& g)
     levelView(g.getLevel()),
     arrowEnd("assets/sprites/arrow_end.png"),
     rocket("assets/sprites/rocket.png"),
+    mine("assets/sprites/mine.png"),
     hearthEmpty("assets/sprites/hearth_empty.png"),
     hearthFull("assets/sprites/hearth_full.png"),
     enemiesView(5){
+  numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
+  numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
+  numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
+  numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
+  numbers[4] = new Sprite("assets/sprites/menuitems/4.png");
+  numbers[5] = new Sprite("assets/sprites/menuitems/5.png");
+  
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.append(new EnemyTankView(**i));
@@ -44,12 +53,28 @@ void GameView::draw () {
 
 
   levelView.draw();
+  
+  //mines
+  for (list<Mine*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
+    Mine* m = *i;
+    
+    GLW::color(TankView::getColor(m->getOwner()->getTankType()));
+    mine.draw(*m);
+    
+    const int timeLeft = (int)floor(m->getTimeLeft());
+    ASSERT(timeLeft < 6);
+    numbers[timeLeft]->draw(m->getPosition(), Vector2(1.5,1.5));
+    
+    GLW::colorWhite();
+  }
+  
   playerTankView.draw();
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
 
 
+  //rockets
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     Rocket* r = *i;
     GLW::color(TankView::getColor(r->getOwner()->getTankType()));
