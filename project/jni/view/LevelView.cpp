@@ -21,7 +21,8 @@ void LevelView::draw () {
         case R:
         case B:
         case L:
-        case T: {
+        case T:
+        case M:{
           Entity* tileEntity = level->getTile(x,y)->getEntity();
           ASSERT(tileEntity != NULL);
           wallSprite.draw(tileEntity->getPosition(), tileEntity->getSize());

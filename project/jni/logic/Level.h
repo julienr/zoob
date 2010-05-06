@@ -22,8 +22,9 @@ class WallEntity : public Entity {
  * L: left (left half of cell)
  * B: bottom (bottom half of cell)
  * R: right (right half of cell)
+ * M: only small block in the middle
  */
-enum eTileType {E, W, T, L, B, R};
+enum eTileType {E, W, T, L, B, R, M};
 
 class Tile {
   public:

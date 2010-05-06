@@ -18,7 +18,7 @@ class ShieldTank : public EnemyTank {
       this->setPath(p);
     }
 
-    eTankType getTankType () const { return TANK_SHIELD; }
+    virtual eTankType getTankType () const { return TANK_SHIELD; }
 
     bool bounce (Entity* e, const Vector2& colPoint) {
       return shieldBounce(e, colPoint);
