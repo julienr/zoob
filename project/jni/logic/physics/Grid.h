@@ -88,17 +88,21 @@ class Grid {
     };
 
     //Return eCellContent describing the content of grid[x][y]
-    eCellContent contentAt (unsigned x, unsigned y) const {
+    //if not NULL, source won't be taken into account
+    eCellContent contentAt (unsigned x, unsigned y, Entity* source=NULL) const {
       if (!inside(x,y))
         return WALL;
       if (grid[x][y]->entities.empty())
         return EMPTY;
 
+      bool empty = source != NULL; //if entities only contains source, it will be considered empty
       LIST_FOREACH(Entity*, grid[x][y]->entities, iter) {
         if ((*iter)->getType() == ENTITY_WALL)
           return WALL;
+        if ((*iter) != source)
+          empty = false;
       }
-      return ENTITIES;
+      return empty?EMPTY:ENTITIES;
     }
 
     //returns -1 if outside grid
@@ -150,6 +154,15 @@ class Grid {
 
     Vector2 gridToWorld (int x, int y) const {
       return Vector2(x*cellSize + origin.x, y*cellSize + origin.y);
+    }
+
+    void capToGrid (Vector2* v) const {
+      if (v->x < 0) v->x = 0.1f;
+      if (v->y < 0) v->y = 0.1f;
+      const float maxX = width*cellSize;
+      const float maxY = height*cellSize;
+      if (v->x > maxX) v->x = maxX-0.1f;
+      if (v->y > maxY) v->y = maxY-0.1f;
     }
 
     //Return a list of entities that are touched by a circle.

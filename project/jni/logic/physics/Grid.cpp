@@ -151,13 +151,28 @@ bool collideAgainstCell (GridCell* cell,
 bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const {
   ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
-  ASSERT(move.length() < cellSize);
 
-  // Calculate cells covered by movement. Since move's length is < cellSize, this is simply the cells
-  // that contains the circle at the start and at the end of the movement
+  // To calculate cells covered by movement, we decompose the move in small moves whos length
+  // don't exceed cellSize. We just merge the set of cells touched by each of these small moves
   unsigned numTouched = 0;
+  // Start position
   touchCells(circle, mover->getPosition(), &numTouched);
-  touchCells(circle, mover->getPosition()+move, &numTouched);
+  if (move.length() < cellSize) {
+    //Simplest case
+    touchCells(circle, mover->getPosition()+move, &numTouched);
+  } else {
+    //What we are doing here is dividing the big move in small moves
+    //that are no longer than cellSize (cellMove) and we
+    const Vector2 cellMove = move.getNormalized()*cellSize;
+    Vector2 cumulativeMove;
+    float div = move.length()/cellMove.length();
+    int num = floor(div);
+    for (int i=0; i<num; i++) {
+      cumulativeMove += cellMove;
+      touchCells(circle, mover->getPosition()+cumulativeMove, &numTouched);
+    }
+    touchCells(circle, mover->getPosition()+move, &numTouched);
+  }
 
   result->tFirst = MOOB_INF;
   bool collided = false;
