@@ -53,8 +53,12 @@ class vector {
     }
 
     void clear () {
-      //reinitialize to initial size
-      data = (T*)realloc(data, sizeof(T)*capacityIncr);
+      if (used >= 5*capacityIncr) {
+        //reinitialize to initial size if it has grown a lot
+        data = (T*)realloc(data, sizeof(T)*capacityIncr);
+        capacity = capacityIncr;
+        ASSERT(data);
+      }
       used = 0;
     }
 
@@ -68,10 +72,10 @@ class vector {
     }
   private:
     vector (const vector<T>& other):capacityIncr(0) { ASSERT(false); }
-    T* data;
     size_t used;
     size_t capacity;
     const size_t capacityIncr; //By how much a realloc will increase the capacity
+    T* data;
 };
 
 #endif /* VECTOR_H_ */
