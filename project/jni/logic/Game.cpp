@@ -59,6 +59,7 @@ void Game::update () {
   }
 
   //FIXME: we don't really need max refresh rate..
+  //FIXME: AI could be refreshed much less often
   if (lastTime - now < 50)
     return;
 

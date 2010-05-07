@@ -25,10 +25,10 @@ AndroidInputManager::AndroidInputManager ()
     lastTouchDownTime(0) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);
-  rocketButton.setBB(rocketButtonPos, rocketButtonSize);
+  rocketButton.setBB(rocketButtonPos, 1.5f*rocketButtonSize);
   bombButton.setPosition(mineButtonPos);
   bombButton.setSize(mineButtonSize);
-  bombButton.setBB(mineButtonPos, mineButtonSize);
+  bombButton.setBB(mineButtonPos, 1.5f*mineButtonSize);
 }
 
 void AndroidInputManager::reset () {
