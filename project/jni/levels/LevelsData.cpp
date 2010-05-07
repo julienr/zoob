@@ -132,7 +132,7 @@ namespace lvl3 {
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(5, 2, BOSS_SIMPLE, NULL),
+      TankDescription(5, 2, TANK_SIMPLE, NULL),
       TankDescription(5, 4, TANK_SIMPLE, NULL),
       TankDescription(5, 6, TANK_SIMPLE, NULL),
       TankDescription(7, 1, TANK_SIMPLE, new Path(2, wp1)),
@@ -167,17 +167,51 @@ namespace lvl4 {
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(5, 3, TANK_SHIELD, NULL),
-      TankDescription(7, 1, TANK_SHIELD, new Path(2, wp1)),
+      TankDescription(5, 3, TANK_SIMPLE, NULL),
+      TankDescription(7, 1, TANK_SIMPLE, new Path(2, wp1)),
+  };
+
+  DECLARE_LVL
+}
+
+
+/**
+ * LVL 5
+ */
+namespace lvl5 {
+  const int xdim = 9;
+  const int ydim = 8;
+  eTileType tiles[xdim*ydim] = {
+    /*      0   1   2   3   4   5   6   7   8*/
+    /* 0*/  W,  T,  W,  T,  T,  T,  T,  T,  W,
+    /* 1*/  L,  E,  R,  E,  E,  L,  E,  E,  R,
+    /* 2*/  L,  E,  T,  E,  E,  E,  E,  E,  R,
+    /* 3 */ L,  E,  E,  E,  E,  E,  E,  E,  R,
+    /* 4 */ L,  E,  M,  E,  E,  E,  E,  E,  R,
+    /* 5 */ L,  E,  E,  E,  E,  L,  E,  E,  R,
+    /* 6 */ L,  E,  E,  E,  E,  E,  E,  E,  R,
+    /* 7 */ W,  B,  B,  B,  B,  B,  B,  B,  W
+  };
+
+  Vector2 wp1[3] = {
+       Vector2(3, 4),
+       Vector2(6, 1),
+       Vector2(6, 5)
+  };
+
+  const size_t numTanks = 2;
+  TankDescription tanks[numTanks] = {
+      TankDescription(1, 1, TANK_PLAYER, NULL),
+      TankDescription(4, 4, BOSS_SIMPLE, new Path(3, wp1))
   };
 
   DECLARE_LVL
 }
 
 /**
- * LVL 5
+ * LVL 6
  */
-namespace lvl5 {
+namespace lvl6 {
   const int xdim = 9;
   const int ydim = 8;
   eTileType tiles[xdim*ydim] = {
@@ -370,12 +404,13 @@ namespace lvl7 {
 }
 #endif
 //Array fill
-const size_t numLevels = 6;
+const size_t numLevels = 7;
 lvl_callback_t levelsLoadFns[numLevels] = {
   lvl0::load,
   lvl1::load,
   lvl2::load,
   lvl3::load,
   lvl4::load,
-  lvl5::load
+  lvl5::load,
+  lvl6::load
 };

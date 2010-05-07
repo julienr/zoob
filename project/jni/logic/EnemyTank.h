@@ -59,7 +59,6 @@ class EnemyTank: public Tank {
     TankAI* getAI () { return ai; }
 
     virtual double getInitialFiringDelay () const { return Difficulty::getInstance()->getFiringDelay(); }
-
   private:
     TankAI* ai;
     /**

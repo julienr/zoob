@@ -22,9 +22,6 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
 
-  playerMaxLives = 2;
-  playerNumLives = playerMaxLives;
-
   const TankDescription* tanks = level->getTanks();
   for (size_t i=1; i<level->getNumTanks(); i++) {
     const TankDescription& desc = tanks[i];
@@ -35,7 +32,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
       case TANK_STATIC: ASSERT(!desc.path); t = new StaticTank(); break;
       case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
-      case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
+      case BOSS_SIMPLE: ASSERT(desc.path); t = new BossSimpleTank(desc.path); break;
       case BOSS_BURST: ASSERT(false);
       default: ASSERT(false); break;
     }
@@ -175,12 +172,8 @@ void Game::update () {
   }
 
   if (!godMode && tank.hasExploded()) {
-    playerNumLives--;
     tank.unmarkExploded();
-    LOGE("playerNumLives : %i", playerNumLives);
-    if (playerNumLives == 0) {
-      gameOverCallback();
-    }
+    gameOverCallback();
   }
 
   //Player Tank movement

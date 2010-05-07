@@ -13,7 +13,7 @@ size_t ProgressionManager::_level() {
 }
 
 bool ProgressionManager::hasBombs () {
-  if (_level() < 2)
+  if (_level() <= 5)
     return false;
   else
     return true;
@@ -23,7 +23,7 @@ bool ProgressionManager::hasBombs () {
 void ProgressionManager::changedLevel () {
   availablePlayerForms.clear();
   AV_FORM(FORM_SIMPLE);
-  if (_level() <= 4) {
+  if (_level() <= 5) {
   } else {
     AV_FORM(FORM_SHIELD);
     AV_FORM(FORM_BURST);

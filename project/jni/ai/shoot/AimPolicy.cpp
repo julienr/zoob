@@ -19,7 +19,7 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
     //Cannot see, don't fire
     return false;
   } else {
-    LOGE("see player tank");
+    //LOGE("see player tank");
     outDir->set(dirToTank.getNormalized());
     return true;
   }

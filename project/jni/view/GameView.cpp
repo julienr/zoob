@@ -40,8 +40,8 @@ GameView::~GameView () {
 }
 
 void GameView::drawHearts () {
-  const int currentLife = game.getPlayerNumLives();
-  for (int i=0; i<game.getPlayerMaxLives(); i++) {
+  const int currentLife = game.getPlayerTank().getLivesLeft();
+  for (int i=0; i<game.getPlayerTank().getMaxLives(); i++) {
     if (i >= currentLife)
       hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
     else

@@ -28,6 +28,7 @@ MainMenu::MainMenu (GameManager* gm)
    numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
    numbers[4] = new Sprite("assets/sprites/menuitems/4.png");
    numbers[5] = new Sprite("assets/sprites/menuitems/5.png");
+   numbers[6] = new Sprite("assets/sprites/menuitems/6.png");
 
    _initItems();
 }

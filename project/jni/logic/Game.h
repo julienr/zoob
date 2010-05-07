@@ -80,9 +80,6 @@ class Game {
 
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
-    int getPlayerNumLives () const { return playerNumLives; }
-    int getPlayerMaxLives () const { return playerMaxLives; }
-
     void update();
 
     void playerFire (const Vector2& cursorPosition);
@@ -105,9 +102,6 @@ class Game {
     void slideMove (Entity* e, Vector2 move);
     //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)
     void bounceMove (Rocket* r, Vector2 move);
-
-    int playerMaxLives;
-    int playerNumLives;
 
     CollisionManager colManager;
     PlayerTank tank;

@@ -1,15 +1,18 @@
 #ifndef BOSSSIMPLETANK_H_
 #define BOSSSIMPLETANK_H_
 
-#include "SimpleTank.h"
+#include "logic/EnemyTank.h"
 
-class BossSimpleTank : public SimpleTank {
+class BossSimpleTank : public EnemyTank {
   public:
-    BossSimpleTank ()
-      : SimpleTank(BOSS_BCIRCLE_R) {
+    BossSimpleTank (Path* p)
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new PathPolicy())) {
+      setPath(p);
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(1000));
     }
+
+    eTankType getTankType () const { return BOSS_SIMPLE; }
 
     double getInitialFiringDelay () const { return Difficulty::getInstance()->getBossFiringDelay(); }
 };

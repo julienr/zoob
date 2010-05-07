@@ -3,17 +3,6 @@
 #include "ai/algorithms/AStar.h"
 #include "logic/Game.h"
 
-bool rocketNear (Game* game, EnemyTank* tank) {
-  list<Entity*>* entities = game->getColManager().getGrid().entitiesIn(tank->getPosition(), 2*GRID_CELL_SIZE);
-  LIST_FOREACH(Entity*, (*entities), iter) {
-     if ((*iter)->getType() == ENTITY_ROCKET) {
-       return true;
-     }
-  }
-
-  return false;
-}
-
 bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   Path* path = tank->getPath();
   if (!path)
@@ -21,7 +10,7 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
 
   //If a rocket is near the tank, cancel all firing and just run away
   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
-  if (rocketNear(game, tank))
+  if (rocketNear(game, tank,2*GRID_CELL_SIZE))
     tank->cancelFiring();
 
   //Stop moving while the tank is preparing to fire

@@ -14,6 +14,7 @@ class PlayerTank : public Tank {
     PlayerTank ()
       : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
         currentForm (FORM_SIMPLE) {
+      setLives(3);
     }
 
     eTankType getTankType () const { return TANK_PLAYER; }

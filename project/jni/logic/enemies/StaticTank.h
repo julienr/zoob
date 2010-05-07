@@ -2,7 +2,6 @@
 #define STATICTANK_H_
 
 #include "logic/EnemyTank.h"
-#include "ai/movement/DefensivePolicy.h"
 
 class StaticTank : public EnemyTank {
   public:
