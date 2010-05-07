@@ -1,6 +1,9 @@
 #ifndef MOVEMENTPOLICY_H_
 #define MOVEMENTPOLICY_H_
 
+#include "def.h"
+#include "lib/Vector2.h"
+
 class Game;
 class EnemyTank;
 

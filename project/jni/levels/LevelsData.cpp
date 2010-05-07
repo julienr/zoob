@@ -13,23 +13,36 @@
 namespace lvl0 {
   const int xdim = 8;
   const int ydim = 8;
+#if 0
   eTileType tiles[xdim*ydim] = {
     /*      0   1   2   3   4   5   6   7 */
     /* 0*/  W,  T,  T,  T,  T,  T,  T,  W,
     /* 1*/  L,  E,  E,  E,  E,  E,  E,  R,
-    /* 2*/  L,  E,  W,  E,  E,  E,  E,  R,
+    /* 2*/  L,  E,  W,  W,  E,  E,  E,  R,
     /* 3 */ L,  E,  E,  E,  E,  E,  E,  R,
     /* 4 */ L,  E,  E,  E,  E,  E,  E,  R,
     /* 5 */ L,  E,  E,  E,  E,  W,  E,  R,
     /* 6 */ L,  E,  E,  E,  E,  E,  E,  R,
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };
+#endif
+  eTileType tiles[xdim*ydim] = {
+      /*      0   1   2   3   4   5   6   7 */
+      /* 0*/  W,  T,  T,  T,  T,  T,  T,  W,
+      /* 1*/  L,  E,  E,  W,  E,  E,  E,  R,
+      /* 2*/  L,  E,  W,  W,  E,  W,  E,  R,
+      /* 3 */ L,  E,  W,  E,  E,  E,  E,  R,
+      /* 4 */ L,  E,  W,  W,  E,  W,  E,  R,
+      /* 5 */ L,  E,  E,  W,  E,  W,  E,  R,
+      /* 6 */ L,  E,  E,  E,  E,  W,  E,  R,
+      /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
+    };
 
-  const size_t numTanks = 3;
+  const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(3, 3, TANK_STATIC, NULL),
-      TankDescription(6, 6, TANK_STATIC, NULL)
+      TankDescription(6, 6, TANK_STATIC, NULL)/*,
+      TankDescription(6, 6, TANK_STATIC, NULL)*/
   };
 
   DECLARE_LVL

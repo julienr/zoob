@@ -2,16 +2,24 @@
 #include "string.h"
 
 Path* AStar::reconstructPath (const Cell* c) {
-  const int numNodes = c->gCost/10;
-  if (numNodes <= 0) {
+  //calculate number of nodes in path
+  int numNodes = 0;
+  const Cell* curr = c;
+  while (curr->parent) {
+    numNodes++;
+    curr = curr->parent;
+  }
+
+  //FIXME: really ?
+  if (numNodes == 0) {
     _resetCells();
     return NULL;
   }
 
   Vector2* nodes = new Vector2[numNodes];
-  float cs2 = grid.getCellSize()/2.0f;
+  float cs2 = 0;//grid.getCellSize()/2.0f;
 
-  const Cell* curr = c;
+  curr = c;
   for (int i=numNodes-1; i>=0; i--) {
     nodes[i] = Vector2(curr->x+cs2, curr->y+cs2);
     curr = curr->parent;
@@ -52,7 +60,7 @@ void AStar::_resetCells () {
 bool AStar::walkable (const Cell* c) {
   Grid::eCellContent content = grid.contentAt(c->x, c->y);
   //FIXME: we consider everything but walls walkable
-  return content == Grid::EMPTY;
+  return content != Grid::WALL;
 }
 
 //#define ALOGE(...) LOGE(__VA_ARGS__)
@@ -86,7 +94,9 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
           continue;
 
         Cell* neigh = cells[x][y];
-        ALOGE("\tneigh (%i,%i)", neigh->x, neigh->y);
+        ALOGE("\tneigh (%i,%i) : walkable : %i, content : %i", neigh->x, neigh->y,
+               walkable(neigh),
+               grid.contentAt(neigh->x, neigh->y));
 
         /** There is a special case here. If neigh is end, we have to add it to openset
          * because we'll often run our algorithms and target an unreacheable cell (containing another tank)

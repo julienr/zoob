@@ -15,6 +15,14 @@ class vector {
       ASSERT(data);
     }
 
+    //COPY elements from an existing array
+    vector (size_t len, T* arr)
+      : used(len), capacity(len), capacityIncr(len) {
+      data = (T*)malloc(sizeof(T)*capacity);
+      memcpy(data, arr, sizeof(T)*len);
+      ASSERT(data);
+    }
+
     ~vector () {
       free(data);
     }

@@ -11,10 +11,10 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
     return false;
 
   //Did we arrive to the waypoint
-  if ((tank->getPosition() - path->waypoints[current]).length() < 0.1) {
-    current = (current+1)%path->numNodes;
+  if ((tank->getPosition() - path->get(current)).length() < 0.1) {
+    current = (current+1)%path->length();
   }
 
-  outDir->set((path->waypoints[current] - tank->getPosition()).getNormalized());
+  outDir->set((path->get(current) - tank->getPosition()).getNormalized());
   return true;
 }
