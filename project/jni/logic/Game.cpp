@@ -61,6 +61,10 @@ void Game::update () {
     return;
   }
 
+  //FIXME: we don't really need max refresh rate..
+  if (lastTime - now < 50)
+    return;
+
   if (gameState == GAME_PAUSED)
     return;
 
@@ -179,30 +183,10 @@ void Game::update () {
     }
   }
 
-  //Astar debugging (from player to first enemy)
-  /*if (!enemies.empty()) {
-    const Vector2& startPos = tank.getPosition();
-    const Vector2& endPos = enemies.firstElement()->getPosition();
-    AStar astar(colManager.getGrid());
-    Path* path = astar.shortestWay(startPos, endPos);
-    for (size_t i=0; i<path->numNodes; i++)
-      LOGE("path[%i] (%f,%f)", i, path->waypoints[i].x, path->waypoints[i].y);
-    delete path;
-  }*/
-
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;
     doTankMove(&tank, dir, elapsedS);
-
-    /*CollisionResult r;
-    if (colManager.trace(&tank, move, &r)) {
-      r.collidedEntity->collided = true;
-      tank.collided  = true;
-      tank.lastColNormal = r.normal;
-      tank.lastColPoint = r.colPoint;
-      //LOGE("tFirst: %f, tLast: %f, normal: (%f,%f) colPoint (%f,%f)", r.tFirst, r.tLast, r.normal.x, r.normal.y, r.colPoint.x, r.colPoint.y);
-    }*/
   }
 }
 

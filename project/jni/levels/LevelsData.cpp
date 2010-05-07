@@ -28,7 +28,7 @@ namespace lvl0 {
 #endif
   eTileType tiles[xdim*ydim] = {
       /*      0   1   2   3   4   5   6   7 */
-      /* 0*/  W,  T,  T,  T,  T,  T,  T,  W,
+      /* 0*/  W,  T,  T,  W,  T,  T,  T,  W,
       /* 1*/  L,  E,  E,  W,  E,  E,  E,  R,
       /* 2*/  L,  E,  W,  W,  E,  W,  E,  R,
       /* 3 */ L,  E,  W,  E,  E,  E,  E,  R,

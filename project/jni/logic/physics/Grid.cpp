@@ -253,9 +253,6 @@ void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned*
 }
 
 void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const {
-  ASSERT(bbox->getHeight() <= cellSize && bbox->getWidth() <= cellSize);
-  //Just check the 4 box's corners
-  Vector2 c[4];
   //All the touched cells are contained between the two extremities of this box on the two axis
   const float hw = bbox->getWidth()/2.0f;
   const float hh = bbox->getHeight()/2.0f;
