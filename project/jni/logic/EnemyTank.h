@@ -44,7 +44,8 @@ class EnemyTank: public Tank {
     }
 
     void cancelFiring () {
-      return getFireRatePolicy()->cancelFiring();
+      prepareFiring = false;
+      getFireRatePolicy()->cancelFiring();
     }
 
     bool fireReady () {

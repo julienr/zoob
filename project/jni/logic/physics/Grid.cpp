@@ -18,7 +18,7 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   ASSERT(e->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* bcircle = static_cast<const BCircle *>(e->getBVolume());
   const Vector2& p = e->getPosition();
-  const Vector2& end = p+move;
+  const Vector2 end = p+move;
 
   //Remove from old cells
   for (list<GridCell*>::iterator i = e->touchedCells.begin(); i.hasNext(); i++)
@@ -26,17 +26,17 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
   e->touchedCells.clear();
 
   //Add to new
-  unsigned numTouched = 0;
-  touchCells(bcircle, end, &numTouched);
-  for (unsigned i=0; i<numTouched; i++) {
-    e->touchedCells.append(touchedCells[i]);
-    touchedCells[i]->entities.append(e);
+  tmpTouched->clear();
+  touchCells(bcircle, end);
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    e->touchedCells.append(tmpTouched->get(i));
+    tmpTouched->get(i)->entities.append(e);
   }
 }
 
-unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
+void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
   if (Math::epsilonEq(move.x, 0) && Math::epsilonEq(move.y, 0))
-    return false;
+    return;
 
   const Vector2 end = start+move;
   //see "A Fast Voxel Traversal Algorithm for Ray Tracing"
@@ -49,7 +49,7 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   //The case were start is outside is not handled by cx/cy below
   if (x == -1 || y == -1) {
     LOGE("(%i,%i) outside grid", x, y);
-    return 0;
+    return;
   }
 
   const int stepX = Math::signum(move.x);
@@ -81,7 +81,6 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   }
   //LOGE("(tMaxX,tMaxY) : (%f,%f)\t(tDeltaX,tDeltaY) : (%f,%f)", tMaxX, tMaxY, tDeltaX, tDeltaY);
 
-  unsigned count = 0;
   while (true) {
     //If endX,endY is in the boundaries, we must have gone past it to stop, otherwise, we stop
     //just before leaving the boundaries
@@ -91,7 +90,7 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
     else if (!inside(x,y))
       break;
 
-    touchedCells[count++] = grid[x][y];
+    _addTouched(grid[x][y]);
     //We got into a solid cell, no need to go further => Fixme: sure ?
     /*if (grid[x][y]->solid)
       return count;*/
@@ -109,8 +108,7 @@ unsigned Grid::findTouchedCells (const Vector2& start, const Vector2& move) cons
   }
   //We'll of course touch the end cell (if it's in the boundary), so add it
   if (inside(endX,endY))
-    touchedCells[count++] = grid[endX][endY];
-  return count;
+    _addTouched(grid[endX][endY]);
 }
 
 //entityMask determine which entities WON'T be collided against
@@ -154,12 +152,12 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
 
   // To calculate cells covered by movement, we decompose the move in small moves whos length
   // don't exceed cellSize. We just merge the set of cells touched by each of these small moves
-  unsigned numTouched = 0;
+  tmpTouched->clear();
   // Start position
-  touchCells(circle, mover->getPosition(), &numTouched);
+  touchCells(circle, mover->getPosition());
   if (move.length() < cellSize) {
     //Simplest case
-    touchCells(circle, mover->getPosition()+move, &numTouched);
+    touchCells(circle, mover->getPosition()+move);
   } else {
     //What we are doing here is dividing the big move in small moves
     //that are no longer than cellSize (cellMove) and we
@@ -169,16 +167,16 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
     int num = floor(div);
     for (int i=0; i<num; i++) {
       cumulativeMove += cellMove;
-      touchCells(circle, mover->getPosition()+cumulativeMove, &numTouched);
+      touchCells(circle, mover->getPosition()+cumulativeMove);
     }
-    touchCells(circle, mover->getPosition()+move, &numTouched);
+    touchCells(circle, mover->getPosition()+move);
   }
 
   result->tFirst = MOOB_INF;
   bool collided = false;
-  for (unsigned i=0; i<numTouched; i++) {
-    touchedCells[i]->touched = true;
-    collided |= collideAgainstCell(touchedCells[i],
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    tmpTouched->get(i)->touched = true;
+    collided |= collideAgainstCell(tmpTouched->get(i),
                                    mover,
                                    mover->getPosition(),
                                    mover->getBVolume(),
@@ -197,21 +195,21 @@ void Grid::addWallFromPosition (Entity* e) {
 
 void Grid::addEntity (Entity* e) {
   const BoundingVolume* bvol = e->getBVolume();
-  unsigned numTouched = 0;
+  tmpTouched->clear();
   if (bvol->getType() == TYPE_CIRCLE)
-    touchCells(static_cast<const BCircle*>(bvol), e->getPosition(), &numTouched);
+    touchCells(static_cast<const BCircle*>(bvol), e->getPosition());
   else if (bvol->getType() == TYPE_AABBOX)
-    touchCells(static_cast<const AABBox*>(bvol), e->getPosition(), &numTouched);
+    touchCells(static_cast<const AABBox*>(bvol), e->getPosition());
   else
     ASSERT(false);
 
-  if (numTouched == 0)
+  if (tmpTouched->length() == 0)
     LOGE("addEntity : numTouched = 0");
   //LOGE("addEntity: numTouched : %u", numTouched);
   e->touchedCells.clear();
-  for (unsigned i=0; i<numTouched; i++) {
-    touchedCells[i]->entities.append(e);
-    e->touchedCells.append(touchedCells[i]);
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    tmpTouched->get(i)->entities.append(e);
+    e->touchedCells.append(tmpTouched->get(i));
   }
 }
 
@@ -223,12 +221,13 @@ void Grid::removeEntity (Entity* e) {
 
 list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
   list<Entity*>* touchedList = new list<Entity*>();
-  unsigned numTouched = 0;
   BCircle circ(radius);
-  touchCells(&circ, center, &numTouched);
-  for (unsigned i=0; i<numTouched; i++) {
-    for (list<Entity*>::iterator iter = touchedCells[i]->entities.begin(); iter.hasNext(); iter++) {
+  tmpTouched->clear();
+  touchCells(&circ, center);
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    for (list<Entity*>::iterator iter = tmpTouched->get(i)->entities.begin(); iter.hasNext(); iter++) {
        Entity* entity = *iter;
+       //FIXME: should use entity bounding box
        if (Utils::inCircle(center, radius, entity->getPosition()))
          touchedList->append(entity);
     }
@@ -236,23 +235,7 @@ list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
   return touchedList;
 }
 
-bool Grid::_touched (unsigned x, unsigned y, unsigned count) const {
-  for (unsigned i=0; i<count; i++)
-    if (touchedCells[i]->x == x && touchedCells[i]->y == y)
-      return true;
-  return false;
-}
-
-//Add cell to touchedCells and increment count if cond is true and (x,y) is inside grid
-void Grid::addCellIf (unsigned x, unsigned y, bool cond, unsigned* count) const {
-  if (cond && inside(x,y)) {
-    /*Check if cell is already inside*/
-    if (!_touched(x,y,*count))
-      touchedCells[(*count)++] = grid[(x)][(y)];
-  }
-}
-
-void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned* count) const {
+void Grid::touchCells (const BCircle* circle, const Vector2& position) const {
   const float r = circle->getRadius();
   //All the touched cells are contained between the two extremities of this circle on the two axis
   const int startX = getCellXBounded(position.x-r);
@@ -261,13 +244,12 @@ void Grid::touchCells (const BCircle* circle, const Vector2& position, unsigned*
   const int endY = getCellYBounded(position.y+r);
   for (int x=startX; x<=endX; x++) {
     for (int y=startY; y<=endY; y++) {
-      if (!_touched(x,y,*count))
-        touchedCells[(*count)++] = grid[x][y];
+      _addTouched(grid[x][y]);
     }
   }
 }
 
-void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* count) const {
+void Grid::touchCells (const AABBox* bbox, const Vector2& position) const {
   //All the touched cells are contained between the two extremities of this box on the two axis
   const float hw = bbox->getWidth()/2.0f;
   const float hh = bbox->getHeight()/2.0f;
@@ -277,8 +259,7 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
   const int endY = getCellYBounded(position.y+hh);
   for (int x=startX; x<=endX; x++) {
     for (int y=startY; y<=endY; y++) {
-      if (!_touched(x,y,*count))
-        touchedCells[(*count)++] = grid[x][y];
+      _addTouched(grid[x][y]);
     }
   }
 }
@@ -286,11 +267,12 @@ void Grid::touchCells (const AABBox* bbox, const Vector2& position, unsigned* co
 bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask) const {
   result->tFirst = MOOB_INF;
   bool collided = false;
-  unsigned numTouched = findTouchedCells(start, move);
+  tmpTouched->clear();
+  findTouchedCells(start, move);
   BLine line;
-  for (unsigned i=0; i<numTouched; i++) {
-    touchedCells[i]->touched = true;
-    collided |= collideAgainstCell(touchedCells[i],
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    tmpTouched->get(i)->touched = true;
+    collided |= collideAgainstCell(tmpTouched->get(i),
                                    source,
                                    start,
                                    &line,
@@ -321,10 +303,11 @@ bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& mov
   bool collided = false;
   BCircle circle(radius);
   for (int i=0; i<2; i++) {
-    unsigned numTouched = findTouchedCells(points[i], move);
-    for (unsigned j=0; j<numTouched; j++) {
-      touchedCells[j]->touched = true;
-      collided |= collideAgainstCell(touchedCells[j],
+    tmpTouched->clear();
+    findTouchedCells(points[i], move);
+    for (unsigned j=0; j<tmpTouched->length(); j++) {
+      tmpTouched->get(j)->touched = true;
+      collided |= collideAgainstCell(tmpTouched->get(j),
                                      source,
                                      start,
                                      &circle,

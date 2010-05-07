@@ -45,6 +45,7 @@ extern zip* APKArchive;
 //logical tile size
 //FIXME: move to a logic-specific include ?
 #define TILE_SIZE 1.0
+#define GRID_CELL_SIZE TILE_SIZE
 #define TANK_BCIRCLE_R 0.4f
 #define BOSS_BCIRCLE_R 0.8f
 #define ROCKET_BCIRCLE_R 0.2f

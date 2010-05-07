@@ -17,11 +17,10 @@ Path* AStar::reconstructPath (const Cell* c) {
   }
 
   Vector2* nodes = new Vector2[numNodes];
-  float cs2 = 0;//grid.getCellSize()/2.0f;
 
   curr = c;
   for (int i=numNodes-1; i>=0; i--) {
-    nodes[i] = Vector2(curr->x+cs2, curr->y+cs2);
+    nodes[i] = Vector2(curr->x, curr->y);
     curr = curr->parent;
   }
 
@@ -58,9 +57,7 @@ void AStar::_resetCells () {
 }
 
 bool AStar::walkable (const Cell* c) {
-  Grid::eCellContent content = grid.contentAt(c->x, c->y);
-  //FIXME: we consider everything but walls walkable
-  return content != Grid::WALL;
+  return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET);
 }
 
 //#define ALOGE(...) LOGE(__VA_ARGS__)

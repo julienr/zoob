@@ -4,6 +4,8 @@
 #include <math.h>
 
 #define RAD_TO_DEG(x) (x*180.0f/M_PI)
+#define MIN(x,y) (x<y)?x:y
+#define MAX(x,y) (x>y)?x:y
 
 #define MOOB_INF 10E6
 

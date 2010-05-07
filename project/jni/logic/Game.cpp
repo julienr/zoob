@@ -10,7 +10,7 @@
 #include "Bomb.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
-    : colManager(level->getWidth(), level->getHeight(), 1.0f),
+    : colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
       tank(),
       level(level),
       elapsedS(0),
