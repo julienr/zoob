@@ -36,7 +36,8 @@ class Tank: public Entity {
         alive(true),
         firePolicy(pol),
         bombPolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
-        path(NULL) {
+        path(NULL),
+        numMines(0) {
       ASSERT(pol != NULL);
     }
 
