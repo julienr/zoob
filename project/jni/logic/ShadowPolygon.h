@@ -41,6 +41,10 @@ class ShadowPolygon {
                         const Vector2& bboxPos);
     void _calculateFar (const Vector2& lightSource,
                           eVert far);
+
+    void _calculatePenumbra (const Vector2& lightSource,
+                                const Vector2& bboxPos,
+                                eVert penum);
     Vector2 verts[6];
 };
 

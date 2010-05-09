@@ -44,38 +44,32 @@ void ShadowPolygon::_calculateFar (const Vector2& lightSource,
   verts[far] = verts[near]+dir*FARDIST;
 }
 
+void ShadowPolygon::_calculatePenumbra (const Vector2& lightSource,
+                                            const Vector2& bboxPos,
+                                            eVert penum) {
+  const eVert near = (penum == PENUMBRA_0) ? NEAR_0 : NEAR_1;
+  const Vector2 cv = (verts[near] - bboxPos).getNormalized();
+  const Vector2 tmp = (verts[near] - lightSource).getNormalized();
+  Vector2 p = Vector2(tmp.y, -tmp.x);
+  if (cv * p < 0)
+    p = -p;
+
+  const Vector2 dir = (verts[near] + p * 0.2f - lightSource).getNormalized();
+  verts[penum] = verts[near] + dir * FARDIST;
+
+  //To calculate the inner edge (FAR_0) as in the article
+  // http://www.gamedev.net/reference/programming/features/2dsoftshadow/page4.asp
+  // we should use that. But just using C as the inner edge works fine and save some calculation
+  /*const Vector2 dir2 = (verts[NEAR_0]-p*0.2f-lightSource).getNormalized();
+  verts[FAR_0] = verts[NEAR_0]+dir2*FARDIST;*/
+}
+
 ShadowPolygon::ShadowPolygon (const Vector2& lightSource,
                                   const AABBox* bbox,
                                   const Vector2& bboxPos) {
   _castShadow(lightSource, bbox, bboxPos);
-  {
-    const Vector2 cv = (verts[NEAR_0] - bboxPos).getNormalized();
-    const Vector2 tmp = (verts[NEAR_0]-lightSource).getNormalized();
-    Vector2 p = Vector2(tmp.y, -tmp.x);
-    if (cv*p < 0)
-      p = -p;
-
-    const Vector2 dir = (verts[NEAR_0]+p*0.2f-lightSource).getNormalized();
-    verts[PENUMBRA_0] = verts[NEAR_0]+dir*FARDIST;
-
-    const Vector2 dir2 = (verts[NEAR_0]-p*0.2f-lightSource).getNormalized();
-    verts[FAR_0] = verts[NEAR_0]+dir2*FARDIST;
-  }
-  {
-    const Vector2 cv = (verts[NEAR_1] - bboxPos).getNormalized();
-    const Vector2 tmp = (verts[NEAR_1]-lightSource).getNormalized();
-    Vector2 p = Vector2(tmp.y, -tmp.x);
-    if (cv*p < 0)
-      p = -p;
-
-    const Vector2 dir = (verts[NEAR_1]+p*0.2f-lightSource).getNormalized();
-    verts[PENUMBRA_1] = verts[NEAR_1]+dir*FARDIST;
-
-    const Vector2 dir2 = (verts[NEAR_1]-p*0.2f-lightSource).getNormalized();
-    verts[FAR_1] = verts[NEAR_1]+dir2*FARDIST;
-  }
-
-
-  /*_calculateFar(lightSource, FAR_0);
-  _calculateFar(lightSource, FAR_1);*/
+  _calculatePenumbra(lightSource, bboxPos, PENUMBRA_0);
+  _calculatePenumbra(lightSource, bboxPos, PENUMBRA_1);
+  _calculateFar(lightSource, FAR_0);
+  _calculateFar(lightSource, FAR_1);
 }
