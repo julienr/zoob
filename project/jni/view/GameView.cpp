@@ -4,6 +4,9 @@
 #include "logic/physics/Grid.h"
 #include "EnemyTankView.h"
 #include <logic/Bomb.h>
+#include "logic/ShadowPolygon.h"
+#include "view/ShadowPolygonView.h"
+
 
 GameView::GameView (const Game& g)
   : game(g),
@@ -40,8 +43,8 @@ GameView::~GameView () {
 }
 
 void GameView::drawHearts () {
-  const int currentLife = game.getPlayerTank().getLivesLeft();
-  for (int i=0; i<game.getPlayerTank().getMaxLives(); i++) {
+  const unsigned currentLife = game.getPlayerTank().getLivesLeft();
+  for (unsigned i=0; i<game.getPlayerTank().getMaxLives(); i++) {
     if (i >= currentLife)
       hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
     else
@@ -56,6 +59,17 @@ void GameView::draw () {
   }
 
   levelView.draw();
+
+  //Shadows
+  const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
+  if (shadows.length() != 0) {
+    GLW::color(TRANSPARENT_GREY);
+    GLW::disableTextures();
+    for (unsigned i=0; i<shadows.length(); i++)
+      ShadowPolygonView::draw(shadows[i]);
+    GLW::enableTextures();
+    GLW::colorWhite();
+  }
 
   //bombs radius
   for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {

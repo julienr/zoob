@@ -17,7 +17,9 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       gameOverCallback(overCallback),
       gameWonCallback(wonCallback),
       gameState(GAME_RUNNING),
-      godMode(false) {
+      godMode(false),
+      playerShadows(10),
+      calculateShadows(true) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -168,6 +170,7 @@ void Game::update () {
     }
   }
 
+  //End of game ?
   if (numAlive == 0) {
     gameWonCallback();
   }
@@ -181,6 +184,31 @@ void Game::update () {
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;
     doTankMove(&tank, dir, elapsedS);
+  }
+
+  if (calculateShadows)
+    _calculatePlayerShadows();
+}
+
+void Game::_calculatePlayerShadows () {
+  playerShadows.clear();
+  const Vector2& lightSource = tank.getPosition();
+  const unsigned w = level->getWidth();
+  const unsigned h = level->getHeight();
+  for (unsigned x=0; x<w; x++) {
+    for (unsigned y=0; y<h; y++) {
+      //Don't calculate shadows for level border tiles
+      if (x == 0 || y == 0 || x == w-1 || y == h-1)
+        continue;
+
+      const Tile* tile = level->getTile(x,y);
+      if (!tile->getEntity())
+        continue;
+      ASSERT(tile->getEntity()->getBVolume()->getType() == TYPE_AABBOX);
+
+      const AABBox* bbox = static_cast<const AABBox*>(tile->getEntity()->getBVolume());
+      playerShadows.append(ShadowPolygon(level, lightSource, bbox, tile->getEntity()->getPosition()));
+    }
   }
 }
 

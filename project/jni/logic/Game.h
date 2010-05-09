@@ -11,6 +11,7 @@
 #include "logic/physics/CollisionManager.h"
 #include "lib/Utils.h"
 #include "containers/vector.h"
+#include "logic/ShadowPolygon.h"
 
 #define TANK_MOVE_SPEED 1.5f
 #define ROCKET_MOVE_SPEED 2.0f
@@ -68,6 +69,10 @@ class Game {
       return bombs.begin();
     }
 
+    const vector<ShadowPolygon>& getPlayerShadows () const {
+      return playerShadows;
+    }
+
     //Returns an iterator over the explosions location that happened
     //since last frame
     const list<Vector2>::const_iterator getExplosions () const {
@@ -103,6 +108,8 @@ class Game {
     //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)
     void bounceMove (Rocket* r, Vector2 move);
 
+    void _calculatePlayerShadows ();
+
     CollisionManager colManager;
     PlayerTank tank;
     list<EnemyTank*> enemies;
@@ -123,6 +130,11 @@ class Game {
     eGameState gameState;
 
     bool godMode;
+
+    //shadows calculated using the player as a light source
+    vector<ShadowPolygon> playerShadows;
+    //Shadow calculations might be disabled
+    bool calculateShadows;
 };
 
 #endif /* GAME_H_ */
