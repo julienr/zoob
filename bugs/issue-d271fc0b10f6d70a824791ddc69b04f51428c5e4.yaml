@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Tanks that get dizzy when lighted ?
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 13:22:41.070015 Z
+references: []
+
+id: d271fc0b10f6d70a824791ddc69b04f51428c5e4
+log_events: 
+- - 2010-05-09 13:22:41.417487 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

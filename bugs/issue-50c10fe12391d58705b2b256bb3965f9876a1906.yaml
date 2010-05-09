@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "ta boule pourais devenir plus puissante au file des rebon et il y aurait des ennemi blind\xC3\xA9"
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 11:40:15.133575 Z
+references: []
+
+id: 50c10fe12391d58705b2b256bb3965f9876a1906
+log_events: 
+- - 2010-05-09 11:40:15.521452 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
+- - 2010-05-09 11:40:29.070648 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - edited title
+  - ""
