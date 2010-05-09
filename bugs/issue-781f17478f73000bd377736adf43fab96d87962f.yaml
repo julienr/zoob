@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: when in front of a wall, enemies should fire and the rocket explode immediatly
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 11:19:50.166671 Z
+references: []
+
+id: 781f17478f73000bd377736adf43fab96d87962f
+log_events: 
+- - 2010-05-09 11:19:50.462547 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

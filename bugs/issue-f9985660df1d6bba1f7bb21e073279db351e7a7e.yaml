@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: better AI => avoid mines / rockets, no path, looks more like human player
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 11:15:55.065622 Z
+references: []
+
+id: f9985660df1d6bba1f7bb21e073279db351e7a7e
+log_events: 
+- - 2010-05-09 11:15:55.685472 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

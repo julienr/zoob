@@ -5,7 +5,7 @@
 #include "logic/EnemyTank.h"
 
 //When a tank is preparing to fire, it will grow from 0.7*size to 1.5*size
-#define TANK_START_FIRING_SIZE 0.7f
+#define TANK_START_FIRING_SIZE 1.0f
 #define TANK_END_FIRING_SIZE 1.2f
 
 class EnemyTankView : public TankView {

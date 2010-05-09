@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Boss with funny emotes
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 11:16:40.542681 Z
+references: []
+
+id: 404974469bbe2324813da10be5854eac661f1a1b
+log_events: 
+- - 2010-05-09 11:16:40.926557 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

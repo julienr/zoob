@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: enemies should move randomly and spawn new one when they meet
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-09 11:24:20.513573 Z
+references: []
+
+id: bda6226df613b6321adba278df20cd04ff232575
+log_events: 
+- - 2010-05-09 11:24:20.989445 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
