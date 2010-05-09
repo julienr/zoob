@@ -20,6 +20,7 @@ Level::~Level() {
     delete[] board[x];
   }
   delete[] board;
+  delete bounds;
 }
 
 void Level::_initBoard (unsigned w, unsigned h, eTileType* b, TankDescription* tanks, size_t numTanks) {

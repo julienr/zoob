@@ -14,6 +14,19 @@ namespace lvl0 {
   const int xdim = 8;
   const int ydim = 8;
 
+#if 0
+  eTileType tiles[xdim*ydim] = {
+      /*      0   1   2   3   4   5   6   7 */
+      /* 0*/  E,  E,  E,  E,  E,  E,  E,  E,
+      /* 1*/  E,  E,  E,  E,  E,  E,  E,  E,
+      /* 2*/  E,  E,  E,  E,  E,  E,  E,  E,
+      /* 3 */ E,  E,  W,  E,  E,  E,  E,  E,
+      /* 4 */ E,  E,  E,  E,  E,  E,  E,  E,
+      /* 5 */ E,  E,  E,  E,  E,  E,  E,  E,
+      /* 6 */ E,  E,  E,  E,  E,  E,  E,  E,
+      /* 7 */ E,  E,  E,  E,  E,  E,  E,  E
+    };
+#else
   eTileType tiles[xdim*ydim] = {
     /*      0   1   2   3   4   5   6   7 */
     /* 0*/  W,  T,  T,  T,  T,  T,  T,  W,
@@ -25,7 +38,7 @@ namespace lvl0 {
     /* 6 */ L,  E,  E,  E,  E,  E,  E,  R,
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };
-
+#endif
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),

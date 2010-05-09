@@ -36,7 +36,7 @@ class Tile {
     eTileType getType () { return type; }
 
     //Returns associated entity, MIGHT be NULL if this tile is not solid
-    Entity* getEntity () { return entity; }
+    Entity* getEntity () const { return entity; }
   private:
     eTileType type;
     Entity* entity;
@@ -58,7 +58,7 @@ class Level {
     //and array subscripting is done our way then
     //The tanks array MUST contain the player tank description in its first index
     Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks)
-      : tanks(tanks), numTanks(numTanks){
+      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)){
       _initBoard(w,h,board, tanks, numTanks);
     }
 
@@ -85,6 +85,9 @@ class Level {
     const TankDescription* getTanks () const { return tanks; }
     size_t getNumTanks () const { return numTanks; }
 
+    const AABBox* getBounds () const { return bounds; }
+    const Vector2 getCenter () const { return Vector2(width/2.0f, height/2.0f); }
+
   private:
     void _initBoard (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks);
     unsigned width;
@@ -94,6 +97,8 @@ class Level {
 
     const TankDescription* tanks;
     const size_t numTanks;
+
+    AABBox* bounds;
 };
 
 #endif /* LEVEL_H_ */
