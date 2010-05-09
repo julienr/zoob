@@ -33,7 +33,7 @@ class Tile {
       delete entity;
     }
 
-    eTileType getType () { return type; }
+    eTileType getType () const { return type; }
 
     //Returns associated entity, MIGHT be NULL if this tile is not solid
     Entity* getEntity () const { return entity; }

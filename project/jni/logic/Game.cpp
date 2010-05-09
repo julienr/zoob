@@ -197,11 +197,20 @@ void Game::_calculatePlayerShadows () {
   const unsigned h = level->getHeight();
   for (unsigned x=0; x<w; x++) {
     for (unsigned y=0; y<h; y++) {
-      //Don't calculate shadows for level border tiles
-      if (x == 0 || y == 0 || x == w-1 || y == h-1)
+      const Tile* tile = level->getTile(x,y);
+      const eTileType type = tile->getType();
+
+
+      /** Discard border tiles that cannot cast shadows.
+       * For example, if we are on the right border, only R tiles cannot
+       * cast shadows, but a W tile will cast (albeit small) one
+       */
+      if ((y == 0 && type == T) ||
+          (y == h-1 && type == B) ||
+          (x == 0 && type == L) ||
+          (x == w-1 && type == R))
         continue;
 
-      const Tile* tile = level->getTile(x,y);
       if (!tile->getEntity())
         continue;
       ASSERT(tile->getEntity()->getBVolume()->getType() == TYPE_AABBOX);

@@ -21,7 +21,8 @@ GameView::GameView (const Game& g)
     hearthFull("assets/sprites/hearth_full.png"),
     circle("assets/sprites/circle.png"),
     enemiesView(5),
-    shadow("assets/sprites/shadow.png"){
+    shadow("assets/sprites/shadow.png"),
+    light("assets/sprites/light.png") {
   numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
   numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
   numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
@@ -54,6 +55,65 @@ void GameView::drawHearts () {
   }
 }
 
+void GameView::_drawLighting() const {
+  if (!game.hasShadows())
+    return;
+
+  //Use scissor so shadows are clipped to the level area
+   glEnable(GL_SCISSOR_TEST);
+   glScissor(XGS(0), YGS(0), game.getLevel()->getWidth() / xScreenToGame,
+                             game.getLevel()->getHeight() / yScreenToGame);
+
+   //Lighting
+   const int numSubdiv = 20;
+   const int numVerts = numSubdiv + 2;
+   const float angleIncr = 2.0f * M_PI / (float) numSubdiv;
+   //FIXME: this is somehow ugly, but this is to cover the whole level
+   const float radius = 10.0f;
+   MGL_DATATYPE lightingVerts[3 * numVerts];
+   MGL_DATATYPE lightingCoords[2 * numVerts];
+   const Vector2& center = game.getPlayerTank().getPosition();
+   lightingVerts[0] = fX(center.x);
+   lightingVerts[1] = fX(center.y);
+   lightingVerts[2] = 0;
+   lightingCoords[0] = lightingCoords[1] = 0;
+   float angle = 0;
+   for (int i = 1; i < numVerts; i++, angle += angleIncr) {
+     const Vector2 pos = center + Vector2(radius * cosf(angle), radius * sinf(
+         angle));
+     lightingVerts[3 * i] = fX(pos.x);
+     lightingVerts[3 * i + 1] = fX(pos.y);
+     lightingVerts[3 * i + 2] = 0;
+
+     lightingCoords[2 * i] = fX(1);
+     lightingCoords[2 * i + 1] = 0;
+   }
+
+   light.bind();
+   glVertexPointer(3, MGL_TYPE, 0, lightingVerts);
+   glTexCoordPointer(2, MGL_TYPE, 0, lightingCoords);
+   glDrawArrays(GL_TRIANGLE_FAN, 0, numVerts);
+   glDisable(GL_SCISSOR_TEST);
+}
+
+void GameView::_drawShadows() const {
+  if (!game.hasShadows())
+    return;
+
+  const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
+  if (shadows.length() != 0) {
+    //Use scissor so shadows are clipped to the level area
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(XGS(0), YGS(0), game.getLevel()->getWidth() / xScreenToGame,
+                               game.getLevel()->getHeight() / yScreenToGame);
+    //Shadows
+    shadow.bind();
+    for (unsigned i = 0; i < shadows.length(); i++)
+      ShadowPolygonView::draw(shadows[i]);
+    glDisable(GL_SCISSOR_TEST);
+  }
+}
+
 void GameView::draw () {
   //Create new explosions
   for (list<Vector2>::const_iterator i = game.getExplosions(); i.hasNext(); i++) {
@@ -62,17 +122,7 @@ void GameView::draw () {
 
   levelView.drawBackground();
 
-  //Shadows
-  const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
-  if (shadows.length() != 0) {
-    //Use scissor so shadows are clipped to the level area
-    glEnable(GL_SCISSOR_TEST);
-    glScissor(XGS(0), YGS(0), game.getLevel()->getWidth()/xScreenToGame, game.getLevel()->getHeight()/yScreenToGame);
-    shadow.bind();
-    for (unsigned i=0; i<shadows.length(); i++)
-      ShadowPolygonView::draw(shadows[i]);
-    glDisable(GL_SCISSOR_TEST);
-  }
+  _drawLighting();
 
   levelView.drawWalls();
 
@@ -113,6 +163,8 @@ void GameView::draw () {
     rocket.draw(*r);
     GLW::colorWhite();
   }
+
+  _drawShadows();
 
   //Manage explosions life
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {

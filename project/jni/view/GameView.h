@@ -26,6 +26,10 @@ class GameView {
 
     void debugDraw();
   private:
+    //Draw a lighting gradient around the player tank
+    void _drawLighting() const;
+    //Draw the shadows projected by the walls
+    void _drawShadows() const;
     const Game& game;
     PlayerTankView playerTankView;
     //CursorView cursorView;
@@ -41,6 +45,7 @@ class GameView {
     Sprite* numbers[6];
 
     Sprite shadow;
+    Sprite light;
 };
 
 #endif /* GAMEVIEW_H_ */

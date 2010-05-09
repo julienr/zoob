@@ -99,6 +99,10 @@ class Game {
       godMode = !godMode;
     }
 
+    bool hasShadows () const {
+      return calculateShadows;
+    }
+
   private:
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);

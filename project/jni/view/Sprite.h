@@ -46,7 +46,7 @@ class Sprite {
     }
 
     inline
-    void bind () {
+    void bind () const {
       glBindTexture(GL_TEXTURE_2D, textureID);
     }
   private:
