@@ -3,7 +3,7 @@
 #include "Square.h"
 #include "GameManager.h"
 
-void LevelView::draw () {
+void LevelView::drawBackground() {
   //Draw a big white quad for the level background
   GLW::disableTextures();
   glPushMatrix();
@@ -13,7 +13,9 @@ void LevelView::draw () {
   Square::draw(false);
   glPopMatrix();
   GLW::enableTextures();
+}
 
+void LevelView::drawWalls () {
   for (unsigned x=0; x<level->getWidth(); x++) {
     for (unsigned y=0; y<level->getHeight(); y++) {
       switch (level->getTile(x,y)->getType()) {

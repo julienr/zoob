@@ -13,7 +13,8 @@ class LevelView {
         wallSprite("assets/sprites/crate.png"),
         spawnSprite("assets/sprites/earth.png") {}
 
-    void draw ();
+    void drawWalls ();
+    void drawBackground ();
 
     Vector2 getCenter () {
       return Vector2(level->getWidth()/2.0f, level->getHeight()/2.0f);

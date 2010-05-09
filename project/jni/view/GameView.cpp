@@ -20,7 +20,8 @@ GameView::GameView (const Game& g)
     hearthEmpty("assets/sprites/hearth_empty.png"),
     hearthFull("assets/sprites/hearth_full.png"),
     circle("assets/sprites/circle.png"),
-    enemiesView(5){
+    enemiesView(5),
+    shadow("assets/sprites/shadow.png"){
   numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
   numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
   numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
@@ -59,7 +60,7 @@ void GameView::draw () {
     explosions.append(new Explosion(*i));
   }
 
-  levelView.draw();
+  levelView.drawBackground();
 
   //Shadows
   const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
@@ -67,14 +68,13 @@ void GameView::draw () {
     //Use scissor so shadows are clipped to the level area
     glEnable(GL_SCISSOR_TEST);
     glScissor(XGS(0), YGS(0), game.getLevel()->getWidth()/xScreenToGame, game.getLevel()->getHeight()/yScreenToGame);
-    GLW::color(TRANSPARENT_GREY);
-    GLW::disableTextures();
+    shadow.bind();
     for (unsigned i=0; i<shadows.length(); i++)
       ShadowPolygonView::draw(shadows[i]);
-    GLW::enableTextures();
-    GLW::colorWhite();
     glDisable(GL_SCISSOR_TEST);
   }
+
+  levelView.drawWalls();
 
   //bombs radius
   for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {

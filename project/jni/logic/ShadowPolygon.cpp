@@ -2,7 +2,8 @@
 #include "logic/physics/CollisionManager.h"
 #include "logic/Level.h"
 
-#define FARDIST 100
+//We're using a game screen resolution of 10/15, so 20 will just project our shadows out screen
+#define FARDIST 15
 
 void ShadowPolygon::_castShadow (const Vector2& lightSource,
                                      const AABBox* bbox,
@@ -47,6 +48,34 @@ ShadowPolygon::ShadowPolygon (const Vector2& lightSource,
                                   const AABBox* bbox,
                                   const Vector2& bboxPos) {
   _castShadow(lightSource, bbox, bboxPos);
-  _calculateFar(lightSource, FAR_0);
-  _calculateFar(lightSource, FAR_1);
+  {
+    const Vector2 cv = (verts[NEAR_0] - bboxPos).getNormalized();
+    const Vector2 tmp = (verts[NEAR_0]-lightSource).getNormalized();
+    Vector2 p = Vector2(tmp.y, -tmp.x);
+    if (cv*p < 0)
+      p = -p;
+
+    const Vector2 dir = (verts[NEAR_0]+p*0.2f-lightSource).getNormalized();
+    verts[PENUMBRA_0] = verts[NEAR_0]+dir*FARDIST;
+
+    const Vector2 dir2 = (verts[NEAR_0]-p*0.2f-lightSource).getNormalized();
+    verts[FAR_0] = verts[NEAR_0]+dir2*FARDIST;
+  }
+  {
+    const Vector2 cv = (verts[NEAR_1] - bboxPos).getNormalized();
+    const Vector2 tmp = (verts[NEAR_1]-lightSource).getNormalized();
+    Vector2 p = Vector2(tmp.y, -tmp.x);
+    if (cv*p < 0)
+      p = -p;
+
+    const Vector2 dir = (verts[NEAR_1]+p*0.2f-lightSource).getNormalized();
+    verts[PENUMBRA_1] = verts[NEAR_1]+dir*FARDIST;
+
+    const Vector2 dir2 = (verts[NEAR_1]-p*0.2f-lightSource).getNormalized();
+    verts[FAR_1] = verts[NEAR_1]+dir2*FARDIST;
+  }
+
+
+  /*_calculateFar(lightSource, FAR_0);
+  _calculateFar(lightSource, FAR_1);*/
 }

@@ -23,9 +23,12 @@ class ShadowPolygon {
 
     enum eVert {
         NEAR_0 = 0,
-        NEAR_1 = 3,
-        FAR_0 = 1,
-        FAR_1 = 2
+        NEAR_1 = 1,
+        FAR_0 = 2,
+        FAR_1 = 3,
+        PENUMBRA_0=4,
+        PENUMBRA_1=5,
+        NUM_VERTS=6
     };
     const Vector2& getVert (eVert which) const { return verts[which]; }
 
@@ -38,7 +41,7 @@ class ShadowPolygon {
                         const Vector2& bboxPos);
     void _calculateFar (const Vector2& lightSource,
                           eVert far);
-    Vector2 verts[4];
+    Vector2 verts[6];
 };
 
 #endif /* SHADOWPOLYGON_H_ */

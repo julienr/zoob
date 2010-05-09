@@ -39,6 +39,8 @@ class GameView {
     vector<TankView*> enemiesView;
     list<Explosion*> explosions;
     Sprite* numbers[6];
+
+    Sprite shadow;
 };
 
 #endif /* GAMEVIEW_H_ */

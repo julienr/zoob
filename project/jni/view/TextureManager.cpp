@@ -212,6 +212,8 @@ GLuint loadTextureFromPNG(const char* filename, int* width, int* height) {
       GL_UNSIGNED_BYTE, (GLvoid*) image_data);
   GLW::checkError("glTexImage2D");
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
   //clean up memory and close stuff
   png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);

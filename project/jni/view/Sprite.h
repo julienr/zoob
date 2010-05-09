@@ -44,6 +44,11 @@ class Sprite {
       const Vector2 ext = viewable.getSize()*2;
       return Utils::insideTL(viewable.getPosition()-(ext/2), ext.x, ext.y, p);
     }
+
+    inline
+    void bind () {
+      glBindTexture(GL_TEXTURE_2D, textureID);
+    }
   private:
     const char* file;
     GLuint textureID;
