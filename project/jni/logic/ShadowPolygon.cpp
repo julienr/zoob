@@ -2,6 +2,8 @@
 #include "logic/physics/CollisionManager.h"
 #include "logic/Level.h"
 
+#define FARDIST 100
+
 void ShadowPolygon::_castShadow (const Vector2& lightSource,
                                      const AABBox* bbox,
                                      const Vector2& bboxPos) {
@@ -34,22 +36,17 @@ void ShadowPolygon::_castShadow (const Vector2& lightSource,
   ASSERT(false);
 }
 
-void ShadowPolygon::_calculateFar (const Level* level,
-                                       const Vector2& lightSource,
+void ShadowPolygon::_calculateFar (const Vector2& lightSource,
                                        eVert far) {
   const eVert near = (far==FAR_0)?NEAR_0:NEAR_1;
   const Vector2 dir = (verts[near]-lightSource).getNormalized();
-  CollisionResult r;
-  verts[far] = verts[near]+dir*10;
-  /*ASSERT(CollisionManager::LineAgainstAABB(level->getCenter(), level->getBounds(), verts[which-2], dir*100, &r));
-  verts[which] = verts[which-2]+dir*r.tLast;*/
+  verts[far] = verts[near]+dir*FARDIST;
 }
 
-ShadowPolygon::ShadowPolygon (const Level* level,
-                                  const Vector2& lightSource,
+ShadowPolygon::ShadowPolygon (const Vector2& lightSource,
                                   const AABBox* bbox,
                                   const Vector2& bboxPos) {
   _castShadow(lightSource, bbox, bboxPos);
-  _calculateFar(level, lightSource, FAR_0);
-  _calculateFar(level, lightSource, FAR_1);
+  _calculateFar(lightSource, FAR_0);
+  _calculateFar(lightSource, FAR_1);
 }

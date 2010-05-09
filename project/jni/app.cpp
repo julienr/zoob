@@ -251,6 +251,14 @@ float YSG_NOTRANSY (const float y) {
   return (y-viewportMargin.y)*yScreenToGame-0.5;
 }
 
+float XGS (const float x) {
+  return (x+transX-0.5)/xScreenToGame + viewportMargin.x;
+}
+
+float YGS (const float y) {
+  return (y+transY-0.5)/yScreenToGame + viewportMargin.y;
+}
+
 int windowWidth = 0, windowHeight = 0;
 
 //viewport dimensions in screen size

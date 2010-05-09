@@ -16,10 +16,8 @@ class Level;
 class ShadowPolygon {
   public:
     /** Create a shadow polygon for the shadow casted by lightSource and the given aabbox
-     * level is used so the shadow extends only to level bounds
      * */
-    ShadowPolygon (const Level* level,
-                     const Vector2& lightSource,
+    ShadowPolygon (const Vector2& lightSource,
                      const AABBox* bbox,
                      const Vector2& bboxPos);
 
@@ -38,8 +36,7 @@ class ShadowPolygon {
     void _castShadow (const Vector2& lightSource,
                         const AABBox* bbox,
                         const Vector2& bboxPos);
-    void _calculateFar (const Level* level,
-                          const Vector2& lightSource,
+    void _calculateFar (const Vector2& lightSource,
                           eVert far);
     Vector2 verts[4];
 };

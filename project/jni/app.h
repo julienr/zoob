@@ -24,6 +24,13 @@ float YSG (const float y);
 float XSG_NOTRANSX(const float x);
 float YSG_NOTRANSY(const float y);
 
+//game to screen
+float XGS (const float x);
+float YGS (const float x);
+
+extern float xScreenToGame;
+extern float yScreenToGame;
+
 extern float transX;
 extern float transY;
 

@@ -134,7 +134,7 @@ class Game {
     //shadows calculated using the player as a light source
     vector<ShadowPolygon> playerShadows;
     //Shadow calculations might be disabled
-    bool calculateShadows;
+    const bool calculateShadows;
 };
 
 #endif /* GAME_H_ */

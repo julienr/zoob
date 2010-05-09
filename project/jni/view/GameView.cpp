@@ -6,6 +6,7 @@
 #include <logic/Bomb.h>
 #include "logic/ShadowPolygon.h"
 #include "view/ShadowPolygonView.h"
+#include "app.h"
 
 
 GameView::GameView (const Game& g)
@@ -63,12 +64,16 @@ void GameView::draw () {
   //Shadows
   const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
   if (shadows.length() != 0) {
+    //Use scissor so shadows are clipped to the level area
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(XGS(0), YGS(0), game.getLevel()->getWidth()/xScreenToGame, game.getLevel()->getHeight()/yScreenToGame);
     GLW::color(TRANSPARENT_GREY);
     GLW::disableTextures();
     for (unsigned i=0; i<shadows.length(); i++)
       ShadowPolygonView::draw(shadows[i]);
     GLW::enableTextures();
     GLW::colorWhite();
+    glDisable(GL_SCISSOR_TEST);
   }
 
   //bombs radius

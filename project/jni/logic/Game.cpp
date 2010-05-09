@@ -207,7 +207,7 @@ void Game::_calculatePlayerShadows () {
       ASSERT(tile->getEntity()->getBVolume()->getType() == TYPE_AABBOX);
 
       const AABBox* bbox = static_cast<const AABBox*>(tile->getEntity()->getBVolume());
-      playerShadows.append(ShadowPolygon(level, lightSource, bbox, tile->getEntity()->getPosition()));
+      playerShadows.append(ShadowPolygon(lightSource, bbox, tile->getEntity()->getPosition()));
     }
   }
 }
