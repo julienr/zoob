@@ -187,12 +187,6 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
   return collided;
 }
 
-void Grid::addWallFromPosition (Entity* e) {
-  GridCell* c = getCell(e->getPosition());
-  c->entities.append(e);
-  e->touchedCells.append(c);
-}
-
 void Grid::addEntity (Entity* e) {
   const BoundingVolume* bvol = e->getBVolume();
   tmpTouched->clear();
@@ -205,7 +199,7 @@ void Grid::addEntity (Entity* e) {
 
   if (tmpTouched->length() == 0)
     LOGE("addEntity : numTouched = 0");
-  //LOGE("addEntity: numTouched : %u", numTouched);
+  //LOGE("addEntity: numTouched : %u", tmpTouched->length());
   e->touchedCells.clear();
   for (unsigned i=0; i<tmpTouched->length(); i++) {
     tmpTouched->get(i)->entities.append(e);

@@ -47,7 +47,8 @@ void Level::addToColManager(CollisionManager& colManager) {
   for (unsigned y = 0; y < height; y++) {
     for (unsigned x = 0; x < width; x++) {
       if (board[x][y]->getEntity())
-        colManager.addWallFromPosition(board[x][y]->getEntity());
+        colManager.addEntity(board[x][y]->getEntity());
+        //colManager.addWallFromPosition(board[x][y]->getEntity());
         //colManager.setGridCellSolid(x,y,true);
     }
   }

@@ -10,9 +10,23 @@
 
 class WallEntity : public Entity {
   public:
-    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w, h), pos) {}
+    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h) {}
     eEntityType getType () const { return ENTITY_WALL; }
     void explode (Entity* e, const Vector2& colPoint) {}
+
+    float getWidth() const {
+      return width;
+    }
+
+    float getHeight() const {
+      return height;
+    }
+  private:
+    //We store our own width/height (used for display) separate from the width/height used for aabbox
+    //The bbox will be an EPSILON smaller than the displayed box just to avoid that when the level is added
+    //to colmanager, a level tile spawns 5 cells
+    const float width;
+    const float height;
 };
 
 /**

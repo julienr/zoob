@@ -19,8 +19,12 @@ class TankAI {
     }
 
     ~TankAI () {
-      delete shootPolicy;
-      delete movementPolicy;
+      if ((void*)shootPolicy == (void*)movementPolicy)
+        delete shootPolicy;
+      else {
+        delete shootPolicy;
+        delete movementPolicy;
+      }
     }
 
     bool decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {

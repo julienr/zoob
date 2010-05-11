@@ -47,8 +47,6 @@ class Grid {
     }
 
     void addEntity (Entity* e);
-    //@see CollisionManager::addWallFromPosition
-    void addWallFromPosition (Entity* e);
 
     //It is ASSUMED that entity position is the one obtained after the last call to moveEntity
     void removeEntity (Entity* e);

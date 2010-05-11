@@ -50,11 +50,11 @@ class Entity: public Moveable {
       return bvolume;
     }
 
-    float getWidth() const {
+    virtual float getWidth() const {
       return bvolume->getWidth();
     }
 
-    float getHeight() const {
+    virtual float getHeight() const {
       return bvolume->getHeight();
     }
 

@@ -14,7 +14,7 @@ namespace lvl0 {
   const int xdim = 8;
   const int ydim = 8;
 
-#if 0
+#if 1
   eTileType tiles[xdim*ydim] = {
       /*      0   1   2   3   4   5   6   7 */
       /* 0*/  E,  E,  E,  E,  E,  E,  E,  E,
@@ -39,11 +39,11 @@ namespace lvl0 {
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };
 #endif
-  const size_t numTanks = 3;
+  const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
       TankDescription(3, 3, TANK_STATIC, NULL),
-      TankDescription(6, 6, TANK_STATIC, NULL)
+      /*TankDescription(6, 6, TANK_STATIC, NULL)*/
   };
 
   DECLARE_LVL
