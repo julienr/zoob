@@ -242,8 +242,6 @@ void drawColEntity (Entity* e) {
 void drawGrid (const Grid& g) {
   const float cs = g.getCellSize();
   glPushMatrix();
-  //FIXME: doesn't quite work with GRID_CELL_SIZE=0.25f
-  //float d = (TILE_SIZE/2)/GRID_CELL_SIZE;
   GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0); 
   for (unsigned x=0; x<g.getWidth(); x++) {
     for (unsigned y=0; y<g.getHeight(); y++) {
