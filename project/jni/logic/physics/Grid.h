@@ -24,8 +24,8 @@ class Grid {
   public:
     //We have to subdivise the area [width, height] in cells of size cellSize
     //Origin is the origin of the coordinate systems wolrd objects to be placed in the grid are in
-    Grid (const Vector2& origin, unsigned width, unsigned height, float cellSize) :
-      origin(origin), width(width), height(height), cellSize(cellSize) {
+    Grid (const Vector2& origin, unsigned w, unsigned h, float cellSize) :
+      origin(origin), width(w/cellSize), height(h/cellSize), cellSize(cellSize) {
       grid = new GridCell**[width];
       for (unsigned x=0; x<width; x++) {
         grid[x] = new GridCell*[height];
@@ -149,6 +149,8 @@ class Grid {
       }
       return false;
     }
+
+    const Vector2& getOrigin () const { return origin; }
 
   private:
     GridCell*** grid;

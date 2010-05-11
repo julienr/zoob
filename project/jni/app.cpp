@@ -386,7 +386,7 @@ void nativeRender () {
     glPushMatrix();
     GLW::translate(transX, transY, 0);
     gameView->draw();
-    //gameView->debugDraw();
+    gameView->debugDraw();
     glPopMatrix();
     
     if (GameManager::getInstance()->paused())

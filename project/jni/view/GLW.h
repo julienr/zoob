@@ -1,6 +1,7 @@
 #ifndef GLW_H_
 #define GLW_H_
 
+#include "lib/Vector2.h"
 #include "Color.h"
 
 struct GLW {
@@ -10,6 +11,10 @@ struct GLW {
 #else
       glTranslatex (fX(x), fX(y), fX(z));
 #endif
+    }
+
+    static void translate (const Vector2& v) {
+      translate(v.x,v.y,0);
     }
 
     static void rotate (float a, float x, float y, float z) {
