@@ -14,7 +14,7 @@ namespace lvl0 {
   const int xdim = 8;
   const int ydim = 8;
 
-#if 1
+#if 0
   eTileType tiles[xdim*ydim] = {
       /*      0   1   2   3   4   5   6   7 */
       /* 0*/  E,  E,  E,  E,  E,  E,  E,  E,
@@ -33,8 +33,8 @@ namespace lvl0 {
     /* 1*/  L,  E,  E,  E,  E,  E,  E,  R,
     /* 2*/  L,  E,  W,  E,  E,  E,  E,  R,
     /* 3 */ L,  E,  E,  E,  E,  E,  E,  R,
-    /* 4 */ L,  E,  E,  E,  E,  E,  E,  R,
-    /* 5 */ L,  E,  E,  E,  E,  W,  E,  R,
+    /* 4 */ L,  E,  R,  E,  E,  E,  E,  R,
+    /* 5 */ L,  E,  R,  E,  E,  W,  E,  R,
     /* 6 */ L,  E,  E,  E,  E,  E,  E,  R,
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };

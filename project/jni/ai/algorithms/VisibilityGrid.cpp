@@ -17,7 +17,7 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
         if (shadows[i]->inside(grid.gridToWorld(x, y)))
           cells[x][y]->data.visible = false;
         else
-          cells[x][y]->data.visible = true;
+          cells[x][y]->data.visible &= true;
       }
     }
   }
@@ -35,7 +35,8 @@ void VisibilityGrid::print () {
   printf("\nvisibility...\n");
   for (int y=0; y<gridH; y++) {
     for (int x=0; x<gridW; x++) {
-      printf("%i[%i] ", cells[x][y]->data.visible, cells[x][y]->data.dist);
+      //printf("%i[%i] ", cells[x][y]->data.visible, cells[x][y]->data.dist);
+      printf("%i", cells[x][y]->data.visible);
     }
     printf("\n");
   }
