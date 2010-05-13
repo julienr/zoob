@@ -26,7 +26,7 @@ class VisibilityGrid : public AbstractGrid<CellData> {
   public:
     VisibilityGrid(const Grid& grid);
 
-    void djikstra (const Vector2& startPos);
+    void djikstra (const Vector2& startPos, const Entity* source);
 
     void calculateVisibility (const Game* game);
 
@@ -40,6 +40,9 @@ class VisibilityGrid : public AbstractGrid<CellData> {
     bool walkable (const Cell* c);
     void _resetCells ();
     static int neighDist (const Cell* c1, const Cell* c2);
+
+    Cell* djikstraStart; //contains the last cell used to start a djikstra
+    const Entity* djikstraSource; //source entity for djikstra
 };
 
 #endif

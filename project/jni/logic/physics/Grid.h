@@ -124,7 +124,7 @@ class Grid {
     }
 
     Vector2 gridToWorld (int x, int y) const {
-      return Vector2(x*cellSize + origin.x, y*cellSize + origin.y);
+      return Vector2(x*cellSize - origin.x, y*cellSize - origin.y);
     }
 
     void capToGrid (Vector2* v) const {
@@ -140,11 +140,11 @@ class Grid {
     //A newly allocated list is returned, freeing it is the caller's resposibility
     list<Entity*>* entitiesIn (const Vector2& center, float radius) const;
 
-    //Returns if the given grid cell contains at least one entity of type
-    bool containsEntity (int x, int y, int entityMask) const {
+    //Returns if the given grid cell contains at least one entity of type. "source" isn't taken into account
+    bool containsEntity (int x, int y, int entityMask, const Entity* source=NULL) const {
       ASSERT(inside(x,y));
       LIST_FOREACH(Entity*, grid[x][y]->entities, iter) {
-        if ((*iter)->getType() & entityMask)
+        if ((*iter != source) && ((*iter)->getType() & entityMask))
           return true;
       }
       return false;

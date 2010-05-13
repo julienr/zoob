@@ -23,6 +23,10 @@ class Line {
       return normal;
     }
 
+    float distance (const Vector2& p) const {
+      return normal*p+c;
+    }
+
     void flipNormal () {
       normal = -normal;
       c *= -1;

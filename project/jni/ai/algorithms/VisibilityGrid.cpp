@@ -4,17 +4,19 @@
 #include "logic/Game.h"
 
 VisibilityGrid::VisibilityGrid(const Grid& grid)
-  : AbstractGrid<CellData>(grid) {
+  : AbstractGrid<CellData>(grid), djikstraStart(NULL), djikstraSource(NULL) {
   _resetCells();
 }
 
 void VisibilityGrid::calculateVisibility (const Game* game) {
   const vector<ShadowPolygon*>& shadows = game->getPlayerShadows();
 
+  //To speed up things a little, we use circle to approximate our cells
+  const float r = grid.getCellSize()/2.0f;
   for (unsigned i = 0; i < shadows.length(); i++) {
     for (int x = 0; x < gridW; x++) {
       for (int y = 0; y < gridH; y++) {
-        if (shadows[i]->inside(grid.gridToWorld(x, y)))
+        if (shadows[i]->fullyInside(grid.gridToWorld(x, y), r))
           cells[x][y]->data.visible = false;
         else
           cells[x][y]->data.visible &= true;
@@ -35,8 +37,12 @@ void VisibilityGrid::print () {
   printf("\nvisibility...\n");
   for (int y=0; y<gridH; y++) {
     for (int x=0; x<gridW; x++) {
-      //printf("%i[%i] ", cells[x][y]->data.visible, cells[x][y]->data.dist);
-      printf("%i", cells[x][y]->data.visible);
+      if (!walkable(cells[x][y]))
+        printf("# ");
+        //printf("#      ");
+      else
+        //printf("%i[%3i] ", cells[x][y]->data.visible, cells[x][y]->data.dist);
+        printf("%i ", cells[x][y]->data.visible);
     }
     printf("\n");
   }
@@ -60,6 +66,8 @@ Path* VisibilityGrid::pathToClosestHidden () {
     LOGE("No path to hidden cell");
     return NULL;
   }
+
+  LOGE("closest hidden : [%i,%i]", coords[0], coords[1]);
 
   //calculate number of nodes in path
   int numNodes = 0;
@@ -105,7 +113,7 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
 }
 
 bool VisibilityGrid::walkable (const Cell* c) {
-  return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET);
+  return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET | ENTITY_TANK, djikstraSource);
 }
 
 struct cellDistCompare {
@@ -115,12 +123,13 @@ struct cellDistCompare {
   }
 };
 
-void VisibilityGrid::djikstra (const Vector2& startPos) {
+void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
   _resetCells();
-  Cell* start = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];
+  djikstraSource = source;
+  djikstraStart = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];
   binaryheap<Cell*, cellDistCompare> openset(gridW*gridH);
 
-  start->data.dist = 0;
+  djikstraStart->data.dist = 0;
 
   //Insert all cells in open set
   for (int x=0; x<gridW; x++)
@@ -131,7 +140,7 @@ void VisibilityGrid::djikstra (const Vector2& startPos) {
     //LOGE("openset size : %i", openset.size());
     Cell* current = openset.removeRoot();
     if (current->data.dist == INT_INF) { //all remaining verts unreachable
-      LOGE("all remaining verts unreachable");
+      //LOGE("all remaining verts unreachable");
       return;
     }
 

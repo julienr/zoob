@@ -191,16 +191,17 @@ void Game::update () {
   if (calculateShadows)
     _calculatePlayerShadows();
 
-  /*LIST_FOREACH(EnemyTank*, enemies, i) {
+  //FIXME: remove
+  LIST_FOREACH(EnemyTank*, enemies, i) {
     EnemyTank* t = *i;
     if (!t->isAlive())
       continue;
 
     for (size_t i=0; i<playerShadows.length(); i++) {
-      if (playerShadows[i]->inside(t->getPosition()))
+      if (playerShadows[i]->fullyInside(t->getPosition(), t->getBVolume()->getWidth()/2.0f))
         LOGE("EnemyTank %p in shadow %i", t, i);
     }
-  }*/
+  }
 }
 
 void Game::_calculatePlayerShadows () {

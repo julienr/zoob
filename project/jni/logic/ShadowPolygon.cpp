@@ -46,6 +46,14 @@ bool ShadowPolygon::inside (const Vector2& p) const {
   return true;
 }
 
+bool ShadowPolygon::fullyInside (const Vector2& center, float r) const {
+  for (int i=0; i<4; i++) {
+    if (lines[i]->distance(center) > -r)
+      return false;
+  }
+  return true;
+}
+
 void ShadowPolygon::_calculateFar (const Vector2& lightSource,
                                        eVert far) {
   const eVert near = (far==FAR_0)?NEAR_0:NEAR_1;

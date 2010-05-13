@@ -38,7 +38,10 @@ class ShadowPolygon {
     };
     const Vector2& getVert (eVert which) const { return verts[which]; }
 
-    bool inside (const Vector2& p) const ;
+    //Test if a point is inside this volume
+    bool inside (const Vector2& p) const;
+    //Test if a circle is FULLY inside this polygon
+    bool fullyInside (const Vector2& center, float r) const;
 
     //The vertices, returned in an order suitable for drawing (NEAR_0,FAR_0,FAR_1,NEAR_1)
     const Vector2* getVerts () const { return verts; }
