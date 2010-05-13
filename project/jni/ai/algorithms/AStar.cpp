@@ -1,13 +1,18 @@
 #include "AStar.h"
 #include "string.h"
 
+AStar::AStar (const Grid& grid) 
+  : AbstractGrid<CellData>(grid), openset(10) {
+  _resetCells();
+}
+
 Path* AStar::reconstructPath (const Cell* c) {
   //calculate number of nodes in path
   int numNodes = 0;
   const Cell* curr = c;
-  while (curr->parent) {
+  while (curr->data.parent) {
     numNodes++;
-    curr = curr->parent;
+    curr = curr->data.parent;
   }
 
   //FIXME: really ?
@@ -20,8 +25,8 @@ Path* AStar::reconstructPath (const Cell* c) {
 
   curr = c;
   for (int i=numNodes-1; i>=0; i--) {
-    nodes[i] = Vector2(curr->x, curr->y);
-    curr = curr->parent;
+    nodes[i] = grid.gridToWorld(curr->x, curr->y);
+    curr = curr->data.parent;
   }
 
   _resetCells();
@@ -50,7 +55,7 @@ int AStar::heuristicDist (const Cell* c1, const Cell* c2) {
 void AStar::_resetCells () {
   for (int x=0; x<gridW; x++) {
     for (int y=0; y<gridH; y++) {
-      cells[x][y]->reset();
+      cells[x][y]->data.reset();
     }
   }
   openset.clear();
@@ -70,8 +75,8 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
   ALOGE("\n\n---- AStar from (%i,%i) to (%i,%i)", start->x, start->y, end->x, end->y);
 
 
-  start->gCost = 0;
-  start->hCost = heuristicDist(start, end);
+  start->data.gCost = 0;
+  start->data.hCost = heuristicDist(start, end);
   openset.insert(start);
 
   while (openset.size() > 0) {
@@ -79,8 +84,8 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
     Cell* current = openset.removeRoot();
     if (*current == *end)
       return reconstructPath(current);
-    ALOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->gCost, current->hCost);
-    current->closed = true;
+    ALOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->data.gCost, current->data.hCost);
+    current->data.closed = true;
     //For all 8 neighbours
     for (int nx=-1; nx<=1; nx++) {
       for (int ny=-1; ny<=1; ny++) {
@@ -98,24 +103,25 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
         /** There is a special case here. If neigh is end, we have to add it to openset
          * because we'll often run our algorithms and target an unreacheable cell (containing another tank)
          */
-        if (!(*neigh == *end) && (neigh->closed || !walkable(neigh))) {
+        if (!(*neigh == *end) && (neigh->data.closed || !walkable(neigh))) {
           ALOGE("\t\tunwalkable : closed %i", neigh->closed);
           continue;
         }
 
-        const int tentativeGCost = current->gCost + neighDist(current, neigh);
+        const int tentativeGCost = current->data.gCost + neighDist(current, neigh);
         ALOGE("\t\ttentative g=%u", tentativeGCost);
 
         if (!openset.contains(neigh)) {
           ALOGE("\t\tinserting new");
-          neigh->parent = current;
-          neigh->gCost = tentativeGCost;
-          neigh->hCost = heuristicDist(neigh, end);
+          neigh->data.parent = current;
+          neigh->data.gCost = tentativeGCost;
+          neigh->data.hCost = heuristicDist(neigh, end);
           openset.insert(neigh);
-        } else if (tentativeGCost < neigh->gCost) {
+        } else if (tentativeGCost < neigh->data.gCost) {
           ALOGE("\t\tbetter than existing");
-          neigh->parent = current;
-          neigh->gCost = tentativeGCost;
+          neigh->data.parent = current;
+          neigh->data.gCost = tentativeGCost;
+          openset.updateElement(neigh);
           //h cost stay the same
         } else
           ALOGE("\t\tworst than existing");

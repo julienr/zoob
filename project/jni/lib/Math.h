@@ -8,6 +8,7 @@
 #define MAX(x,y) (x>y)?x:y
 
 #define MOOB_INF 10E6
+#define INT_INF 100000
 
 #define EPSILON 10E-5
 struct Math {

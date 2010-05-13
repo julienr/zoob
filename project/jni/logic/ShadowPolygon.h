@@ -3,6 +3,7 @@
 
 #include "def.h"
 #include "logic/physics/AABBox.h"
+#include "lib/Line.h"
 
 class Tile;
 class Level;
@@ -21,6 +22,11 @@ class ShadowPolygon {
                      const AABBox* bbox,
                      const Vector2& bboxPos);
 
+    ~ShadowPolygon () {
+      for (int i=0; i<4; i++)
+        delete lines[i];
+    }
+
     enum eVert {
         NEAR_0 = 0,
         NEAR_1 = 1,
@@ -32,8 +38,12 @@ class ShadowPolygon {
     };
     const Vector2& getVert (eVert which) const { return verts[which]; }
 
+    bool inside (const Vector2& p) const ;
+
     //The vertices, returned in an order suitable for drawing (NEAR_0,FAR_0,FAR_1,NEAR_1)
     const Vector2* getVerts () const { return verts; }
+
+    const Line* const* getLines () const { return lines; }
 
   private:
     void _castShadow (const Vector2& lightSource,
@@ -46,6 +56,7 @@ class ShadowPolygon {
                                 const Vector2& bboxPos,
                                 eVert penum);
     Vector2 verts[6];
+    Line* lines[4]; //the four lines that delimit this shadow polygon
 };
 
 #endif /* SHADOWPOLYGON_H_ */

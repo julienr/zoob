@@ -69,7 +69,7 @@ class Game {
       return bombs.begin();
     }
 
-    const vector<ShadowPolygon>& getPlayerShadows () const {
+    const vector<ShadowPolygon*>& getPlayerShadows () const {
       return playerShadows;
     }
 
@@ -136,7 +136,7 @@ class Game {
     bool godMode;
 
     //shadows calculated using the player as a light source
-    vector<ShadowPolygon> playerShadows;
+    vector<ShadowPolygon*> playerShadows;
     //Shadow calculations might be disabled
     const bool calculateShadows;
 };

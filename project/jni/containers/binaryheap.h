@@ -48,6 +48,27 @@ class binaryheap {
       return false;
     }
 
+    //Call this function when an item has been updated (particularly, a property used to calculate
+    // the value of this item). The item might need to be reordered
+    void updateElement (const T& item) {
+      for (size_t i=0; i<array.length(); i++)
+        if (array[i] == item) {
+           size_t newItemPos = i;
+           //swap with parents until it is where it should
+           //or it reached the top
+           while (newItemPos != 0) {
+             const size_t parentPos = newItemPos/2;
+             if (!comp(array[newItemPos], array[parentPos]))
+               break;
+             swap(parentPos, newItemPos);
+             newItemPos = parentPos;
+           }
+           return;
+        }
+
+      ASSERT(false);
+    }
+
     size_t size () const {
       return array.length();
     }

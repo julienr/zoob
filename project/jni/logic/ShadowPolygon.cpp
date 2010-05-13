@@ -1,6 +1,7 @@
 #include "ShadowPolygon.h"
 #include "logic/physics/CollisionManager.h"
 #include "logic/Level.h"
+#include "lib/Line.h"
 
 //We're using a game screen resolution of 10/15, so 20 will just project our shadows out screen
 #define FARDIST 15
@@ -35,6 +36,14 @@ void ShadowPolygon::_castShadow (const Vector2& lightSource,
   }
   //Should never reach this point, should always find 2 vertices
   ASSERT(false);
+}
+
+bool ShadowPolygon::inside (const Vector2& p) const {
+  for (int i=0; i<4; i++) {
+    if (lines[i]->getRelativePosition(p) > 0)
+      return false;
+  }
+  return true;
 }
 
 void ShadowPolygon::_calculateFar (const Vector2& lightSource,
@@ -72,4 +81,20 @@ ShadowPolygon::ShadowPolygon (const Vector2& lightSource,
   _calculatePenumbra(lightSource, bboxPos, PENUMBRA_1);
   _calculateFar(lightSource, FAR_0);
   _calculateFar(lightSource, FAR_1);
+
+  lines[0] = new Line(verts[NEAR_0], verts[PENUMBRA_0]);
+  lines[1] = new Line(verts[PENUMBRA_0], verts[PENUMBRA_1]);
+  lines[2] = new Line(verts[PENUMBRA_1], verts[NEAR_1]);
+  lines[3] = new Line(verts[NEAR_1], verts[NEAR_0]);
+
+  //Make sure all line normals are pointing outwards the volume
+  //To check that, we construct the vector going from PENUMBRA_1 to the middle of (PENUMBRA_0,NEAR_0). This
+  //vector should have the same direction (angle between them > 0 and < M_PI) as the line normal.
+  //If this isn't the case, flip all normals
+  const Vector2 ctrl = ((verts[PENUMBRA_0] + verts[NEAR_0])/2.0f - verts[PENUMBRA_1]).getNormalized();
+  float angle = ctrl*lines[0]->getNormal();
+  if (angle < 0 || angle > M_PI) {
+    for (int i=0; i<4; i++)
+      lines[i]->flipNormal();
+  }
 }

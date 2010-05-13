@@ -48,6 +48,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
 Game::~Game () {
   LIST_FOREACH(EnemyTank*, enemies, i)
     delete *i;
+  for (size_t i=0; i<playerShadows.length(); i++)
+    delete playerShadows[i];
 }
 
 void Game::update () {
@@ -188,9 +190,22 @@ void Game::update () {
 
   if (calculateShadows)
     _calculatePlayerShadows();
+
+  /*LIST_FOREACH(EnemyTank*, enemies, i) {
+    EnemyTank* t = *i;
+    if (!t->isAlive())
+      continue;
+
+    for (size_t i=0; i<playerShadows.length(); i++) {
+      if (playerShadows[i]->inside(t->getPosition()))
+        LOGE("EnemyTank %p in shadow %i", t, i);
+    }
+  }*/
 }
 
 void Game::_calculatePlayerShadows () {
+  for (size_t i=0; i<playerShadows.length(); i++)
+    delete playerShadows[i];
   playerShadows.clear();
   const Vector2& lightSource = tank.getPosition();
   const unsigned w = level->getWidth();
@@ -216,7 +231,7 @@ void Game::_calculatePlayerShadows () {
       ASSERT(tile->getEntity()->getBVolume()->getType() == TYPE_AABBOX);
 
       const AABBox* bbox = static_cast<const AABBox*>(tile->getEntity()->getBVolume());
-      playerShadows.append(ShadowPolygon(lightSource, bbox, tile->getEntity()->getPosition()));
+      playerShadows.append(new ShadowPolygon(lightSource, bbox, tile->getEntity()->getPosition()));
     }
   }
 }

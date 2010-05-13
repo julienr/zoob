@@ -100,7 +100,7 @@ void GameView::_drawShadows() const {
   if (!game.hasShadows())
     return;
 
-  const vector<ShadowPolygon>& shadows = game.getPlayerShadows();
+  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
   if (shadows.length() != 0) {
     //Use scissor so shadows are clipped to the level area
     glEnable(GL_SCISSOR_TEST);
@@ -260,10 +260,10 @@ void drawGrid (const Grid& g) {
 
 void GameView::debugDraw () {
   const Tank& tank = game.getPlayerTank();
-  glDisable(GL_TEXTURE_2D);
+  GLW::disableTextures();
   game.getColManager().foreachEntity(drawColEntity);
   //Draw collision normal
-  //if (tank.collided) {
+  /*if (tank.collided) {
     MGL_DATATYPE verts[6] = {
         fX(tank.lastColNormal.x), fX(tank.lastColNormal.y), 0,
         0, 0, 0
@@ -275,7 +275,12 @@ void GameView::debugDraw () {
     glDrawArrays(GL_LINES, 0, 2);
     glPopMatrix();
     glLineWidth(1.0f);
-  //}
+  }*/
   drawGrid(game.getColManager().getGrid());
-  glEnable(GL_TEXTURE_2D);
+
+  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
+  for (unsigned i=0; i<shadows.length(); i++)
+    ShadowPolygonView::debugDraw(shadows[i]);
+
+  GLW::enableTextures();
 }
