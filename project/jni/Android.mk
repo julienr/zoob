@@ -47,7 +47,9 @@ LOCAL_SRC_FILES := \
     ai/shoot/RandomPolicy.cpp \
     ai/movement/PathPolicy.cpp \
     ai/movement/MovementPolicy.cpp \
+    ai/movement/SmartPolicy.cpp \
     ai/algorithms/AStar.cpp \
+    ai/algorithms/VisibilityGrid.cpp \
     input/AndroidInputManager.cpp \
     input/PlayerFormControl.cpp
 

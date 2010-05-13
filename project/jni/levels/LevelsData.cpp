@@ -19,8 +19,8 @@ namespace lvl0 {
       /*      0   1   2   3   4   5   6   7 */
       /* 0*/  E,  E,  E,  E,  E,  E,  E,  E,
       /* 1*/  E,  E,  E,  E,  E,  E,  E,  E,
-      /* 2*/  E,  E,  E,  E,  E,  E,  E,  E,
-      /* 3 */ E,  E,  R,  E,  E,  E,  E,  E,
+      /* 2*/  E,  E,  W,  E,  E,  E,  E,  E,
+      /* 3 */ E,  E,  W,  E,  E,  E,  E,  E,
       /* 4 */ E,  E,  E,  E,  E,  E,  E,  E,
       /* 5 */ E,  E,  E,  E,  E,  E,  E,  E,
       /* 6 */ E,  E,  E,  E,  E,  E,  E,  E,

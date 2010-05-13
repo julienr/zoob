@@ -53,14 +53,14 @@ class ShadowPolygonView {
 
     static void debugDraw (const ShadowPolygon* poly) {
       const Line* const* lines = poly->getLines();
-      glPointSize(5.0f);
+      /*glPointSize(5.0f);
       const Vector2* verts = poly->getVerts();
       GLW::color(BLACK);
       glBegin(GL_POINTS);
         glVertex3f(verts[ShadowPolygon::NEAR_0].x, verts[ShadowPolygon::NEAR_0].y, 0);
       glEnd();
       GLW::colorWhite();
-      glPointSize(1.0f);
+      glPointSize(1.0f);*/
       drawLine (poly, lines[0], ShadowPolygon::NEAR_0, ShadowPolygon::PENUMBRA_0);
       drawLine (poly, lines[1], ShadowPolygon::PENUMBRA_0, ShadowPolygon::PENUMBRA_1);
       drawLine (poly, lines[2], ShadowPolygon::PENUMBRA_1, ShadowPolygon::NEAR_1);

@@ -67,7 +67,7 @@ Path* VisibilityGrid::pathToClosestHidden () {
     return NULL;
   }
 
-  LOGE("closest hidden : [%i,%i]", coords[0], coords[1]);
+  //LOGE("closest hidden : [%i,%i]", coords[0], coords[1]);
 
   //calculate number of nodes in path
   int numNodes = 0;

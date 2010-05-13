@@ -17,7 +17,7 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
    VisibilityGrid vgrid(game->getColManager().getGrid());
    vgrid.calculateVisibility(game);
    vgrid.djikstra(tank->getPosition(), tank);
-   vgrid.print();
+   //vgrid.print();
 
    Path* shortestWay = vgrid.pathToClosestHidden();
    if (!shortestWay)

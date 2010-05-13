@@ -123,8 +123,10 @@ class Grid {
       return cellSize;
     }
 
+    //return the center of the cell [x][y], in world coordinates
     Vector2 gridToWorld (int x, int y) const {
-      return Vector2(x*cellSize - origin.x, y*cellSize - origin.y);
+      const float hcs = cellSize/2;
+      return Vector2(x*cellSize + origin.x + hcs, y*cellSize + origin.y + hcs);
     }
 
     void capToGrid (Vector2* v) const {
