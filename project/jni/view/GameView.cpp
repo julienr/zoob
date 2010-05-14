@@ -164,7 +164,8 @@ void GameView::draw () {
     GLW::colorWhite();
   }
 
-  _drawShadows();
+  //FIXME: re-enable
+  //_drawShadows();
   //FIXME: shadows should be gray
 
   //Manage explosions life
@@ -241,25 +242,38 @@ void drawColEntity (Entity* e) {
 
 void drawPlayerVisibility (const VisibilityGrid& vg) {
   const float cs = vg.getCellSize();
-    glPushMatrix();
-    GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
-    for (unsigned x=0; x<vg.getWidth(); x++) {
-      for (unsigned y=0; y<vg.getHeight(); y++) {
-        if (!vg.isWalkable(x,y)) {
-          glColor4f(0,0,0,0.5f);
-        } else {
-          const bool visible = vg.isVisible(x,y);
-          glColor4f(visible?1:0,0,visible?0:1,0.7f);
-        }
-        glPushMatrix();
-        GLW::scale(cs,cs,1);
-        GLW::translate(x, y, 0);
-        Square::draw(false);
-        glPopMatrix();
+  glPushMatrix();
+  GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
+  for (unsigned x = 0; x < vg.getWidth(); x++) {
+    for (unsigned y = 0; y < vg.getHeight(); y++) {
+      if (!vg.isWalkable(x, y)) {
+        glColor4f(0, 0, 0, 0.5f);
+      } else {
+        const bool visible = vg.isVisible(x, y);
+        glColor4f(visible ? 1 : 0, 0, visible ? 0 : 1, 0.7f);
       }
+      glPushMatrix();
+      GLW::scale(cs, cs, 1);
+      GLW::translate(x, y, 0);
+      Square::draw(false);
+      glPopMatrix();
     }
-    glPopMatrix();
-    glColor4f(1,1,1,1);
+  }
+  glPopMatrix();
+  glColor4f(1, 1, 1, 1);
+
+  //WAYPOINTS
+  /*for (unsigned x = 0; x < vg.getWidth(); x++) {
+    for (unsigned y = 0; y < vg.getHeight(); y++) {
+      glColor4f(1, 1, 1, 1);
+      glPointSize(3.0f);
+      glBegin(GL_POINTS);
+      const Vector2& p = vg.getWaypoint(x, y);
+      glVertex3f(p.x, p.y, 0);
+      glEnd();
+      glPointSize(1.0f);
+    }
+  }*/
 }
 
 void drawGrid (const Grid& g) {

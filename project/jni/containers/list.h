@@ -100,6 +100,13 @@ class list {
       return head == NULL;
     }
 
+    void removeFirst () {
+      ASSERT(head != NULL);
+      _Element* del = head;
+      DL_DELETE(head, del);
+      delete del;
+    }
+
     /** Remove element "pointer" by the iterator i
      * Invalidates i
      * Returns an iterator to i's next element

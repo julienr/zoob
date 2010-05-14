@@ -18,7 +18,11 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
    vgrid.djikstra(tank->getPosition(), tank);
    //vgrid.print();
 
-   Path* shortestWay = vgrid.pathToClosestHidden();
+   //Path* shortestWay = vgrid.pathToClosestHidden();
+   /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
+    * to the biggest (closest ?) hidden group
+    */
+   Path* shortestWay = vgrid.pathToCenterBiggestHidden();
    if (!shortestWay)
      return false;
 

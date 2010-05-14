@@ -14,14 +14,21 @@ struct VisCell {
   AbstractGrid<VisCell>::Cell* parent;
   bool closed;
   int dist;
+  /** This is is the waypoint (in game coords) in this cell a unit should target
+   * when passing through this cell. By default, the waypoint is the cell center, but
+   * for cells close to obstacles, it might be the vertex opposing the obstacle for example
+   */
+  Vector2 waypoint;
 
-  void reset () {
+  void reset (const Vector2& center) {
     parent = NULL;
     closed = false;
     dist = INT_INF;
+    waypoint = center;
   }
 };
 
+//FIXME: separate djikstra and visibility grid ? (create a new Djikstra class ?)
 class VisibilityGrid : public AbstractGrid<VisCell> {
   friend class Game;
   public:
@@ -33,10 +40,13 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
     //ASSUME djikstra has been called first (startPos is the one given to djikstra)
     Path* pathToClosestHidden () const;
 
+    //Returns path to the center of the biggest hidden cells group
+    Path* pathToCenterBiggestHidden () const;
+
     void print () const;
 
     bool isVisible (int x, int y) const {
-      assert(inside(x,y));
+      ASSERT(inside(x,y));
       return cells[x][y]->data.visible;
     }
 
@@ -44,11 +54,22 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
       return walkable(cells[x][y]);
     }
 
+    const Vector2& getWaypoint (int x, int y) const {
+      ASSERT(inside(x,y));
+      return cells[x][y]->data.waypoint;
+    }
+
   protected:
     void calculateVisibility (const Game* game);
 
+    //source is the source given in djikstra
+    Path* pathTo (const Cell* dest) const;
+
     bool walkable (const Cell* c) const;
     void _resetCells ();
+
+    void _adaptWaypoints (float unitSize);
+    void _adaptWaypoint (const Cell* c, float unitSize);
     static int neighDist (const Cell* c1, const Cell* c2);
 
     Cell* djikstraStart; //contains the last cell used to start a djikstra
