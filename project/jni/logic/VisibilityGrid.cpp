@@ -4,7 +4,7 @@
 #include "logic/Game.h"
 
 VisibilityGrid::VisibilityGrid(const Grid& grid)
-  : AbstractGrid<CellData>(grid), djikstraStart(NULL), djikstraSource(NULL) {
+  : AbstractGrid<VisCell>(grid), djikstraStart(NULL), djikstraSource(NULL) {
   _resetCells();
 }
 
@@ -13,9 +13,11 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
 
   //To speed up things a little, we use circle to approximate our cells
   const float r = grid.getCellSize()/2.0f;
-  for (unsigned i = 0; i < shadows.length(); i++) {
+
     for (int x = 0; x < gridW; x++) {
-      for (int y = 0; y < gridH; y++) {
+    for (int y = 0; y < gridH; y++) {
+      cells[x][y]->data.visible = true;
+      for (unsigned i = 0; i < shadows.length(); i++) {
         if (shadows[i]->fullyInside(grid.gridToWorld(x, y), r))
           cells[x][y]->data.visible = false;
         else
@@ -33,7 +35,7 @@ void VisibilityGrid::_resetCells () {
   }
 }
 
-void VisibilityGrid::print () {
+void VisibilityGrid::print () const {
   printf("\nvisibility...\n");
   for (int y=0; y<gridH; y++) {
     for (int x=0; x<gridW; x++) {
@@ -48,7 +50,7 @@ void VisibilityGrid::print () {
   }
 }
 
-Path* VisibilityGrid::pathToClosestHidden () {
+Path* VisibilityGrid::pathToClosestHidden () const {
   int coords[2] = {-1,-1};
   int closest = MOOB_INF;
 
@@ -67,7 +69,7 @@ Path* VisibilityGrid::pathToClosestHidden () {
     return NULL;
   }
 
-  //LOGE("closest hidden : [%i,%i]", coords[0], coords[1]);
+  LOGE("start[%i,%i], closest[%i,%i]", djikstraStart->x, djikstraStart->y, coords[0], coords[1]);
 
   //calculate number of nodes in path
   int numNodes = 0;
@@ -112,13 +114,13 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
   return d;
 }
 
-bool VisibilityGrid::walkable (const Cell* c) {
+bool VisibilityGrid::walkable (const Cell* c) const {
   return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET | ENTITY_TANK, djikstraSource);
 }
 
 struct cellDistCompare {
-  bool operator () (const AbstractGrid<CellData>::Cell* c1,
-                      const AbstractGrid<CellData>::Cell* c2) {
+  bool operator () (const AbstractGrid<VisCell>::Cell* c1,
+                      const AbstractGrid<VisCell>::Cell* c2) {
     return c1->data.dist < c2->data.dist;
   }
 };

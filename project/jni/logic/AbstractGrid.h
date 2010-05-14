@@ -40,6 +40,23 @@ class AbstractGrid {
         return x == other.x && y == other.y;
       }
     };
+
+    int getWidth () const {
+      return gridW;
+    }
+
+    int getHeight () const {
+      return gridH;
+    }
+
+    bool inside (int x, int y) const {
+      return grid.inside(x,y);
+    }
+
+    float getCellSize () const {
+      return grid.getCellSize();
+    }
+
   protected:
     const Grid& grid;
     const int gridW;

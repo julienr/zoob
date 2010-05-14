@@ -1,5 +1,5 @@
 #include "SmartPolicy.h"
-#include "ai/algorithms/VisibilityGrid.h"
+#include "logic/VisibilityGrid.h"
 #include "logic/EnemyTank.h"
 #include "logic/Game.h"
 
@@ -14,8 +14,7 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
      return false;*/
 
 
-   VisibilityGrid vgrid(game->getColManager().getGrid());
-   vgrid.calculateVisibility(game);
+   VisibilityGrid& vgrid = game->getPlayerVisibility();
    vgrid.djikstra(tank->getPosition(), tank);
    //vgrid.print();
 
@@ -27,6 +26,8 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
    outDir->set(dir.getNormalized());
 
    //FIXME: even if we shouldn't move, we should move to avoid rockets
+
+   delete shortestWay;
    return true;
 }
 

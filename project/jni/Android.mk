@@ -39,6 +39,7 @@ LOCAL_SRC_FILES := \
     view/menu/WonMenu.cpp \
     view/menu/EndMenu.cpp \
     view/menu/PausedMenu.cpp \
+    view/ShadowPolygonView.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
     logic/physics/Grid.cpp \
@@ -49,7 +50,7 @@ LOCAL_SRC_FILES := \
     ai/movement/MovementPolicy.cpp \
     ai/movement/SmartPolicy.cpp \
     ai/algorithms/AStar.cpp \
-    ai/algorithms/VisibilityGrid.cpp \
+    logic/VisibilityGrid.cpp \
     input/AndroidInputManager.cpp \
     input/PlayerFormControl.cpp
 

@@ -34,5 +34,6 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
   }
   Vector2 dir = shortestWay->get(0) - tank->getPosition();
   outDir->set(dir.getNormalized());
+  delete shortestWay;
   return true;
 }

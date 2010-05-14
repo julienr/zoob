@@ -12,6 +12,7 @@
 #include "lib/Utils.h"
 #include "containers/vector.h"
 #include "logic/ShadowPolygon.h"
+#include "logic/VisibilityGrid.h"
 
 #define TANK_MOVE_SPEED 1.5f
 #define ROCKET_MOVE_SPEED 2.0f
@@ -103,6 +104,14 @@ class Game {
       return calculateShadows;
     }
 
+    VisibilityGrid& getPlayerVisibility () {
+      return playerVisibility;
+    }
+
+    const VisibilityGrid& getPlayerVisibility () const {
+      return playerVisibility;
+    }
+
   private:
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);
@@ -139,6 +148,8 @@ class Game {
     vector<ShadowPolygon*> playerShadows;
     //Shadow calculations might be disabled
     const bool calculateShadows;
+
+    VisibilityGrid playerVisibility;
 };
 
 #endif /* GAME_H_ */

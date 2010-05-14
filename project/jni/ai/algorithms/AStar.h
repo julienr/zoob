@@ -4,14 +4,14 @@
 #include "logic/physics/Grid.h"
 #include "logic/Path.h"
 #include "containers/binaryheap.h"
-#include "ai/algorithms/AbstractGrid.h"
+#include "logic/AbstractGrid.h"
 
-struct CellData {
+struct AStarCell {
   int gCost; //cost from start to this cell
   int hCost; //ESTIMATE cost from this cell to end
   int getFCost () const { return gCost + hCost; } //total cost for path going through this cell
 
-  AbstractGrid<CellData>::Cell* parent;
+  AbstractGrid<AStarCell>::Cell* parent;
   bool closed;
 
   void reset () {
@@ -25,7 +25,7 @@ struct CellData {
 /**
  * Implementation of the A-star algorithm to work on the game grid
  */
-class AStar : public AbstractGrid<CellData> {
+class AStar : public AbstractGrid<AStarCell> {
   public:
     AStar (const Grid& grid);
 

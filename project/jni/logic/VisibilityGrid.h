@@ -4,14 +4,14 @@
 #include "logic/physics/Grid.h"
 #include "logic/Path.h"
 #include "containers/binaryheap.h"
-#include "ai/algorithms/AbstractGrid.h"
+#include "logic/AbstractGrid.h"
 class Game;
 
-struct CellData {
-  CellData () : visible(true) {}
+struct VisCell {
+  VisCell () : visible(true) {}
   bool visible;
 
-  AbstractGrid<CellData>::Cell* parent;
+  AbstractGrid<VisCell>::Cell* parent;
   bool closed;
   int dist;
 
@@ -22,22 +22,32 @@ struct CellData {
   }
 };
 
-class VisibilityGrid : public AbstractGrid<CellData> {
+class VisibilityGrid : public AbstractGrid<VisCell> {
+  friend class Game;
   public:
     VisibilityGrid(const Grid& grid);
 
     void djikstra (const Vector2& startPos, const Entity* source);
 
-    void calculateVisibility (const Game* game);
-
     //Returns the shortest path to the closest hidden cell
     //ASSUME djikstra has been called first (startPos is the one given to djikstra)
-    Path* pathToClosestHidden ();
+    Path* pathToClosestHidden () const;
 
-    void print ();
+    void print () const;
+
+    bool isVisible (int x, int y) const {
+      assert(inside(x,y));
+      return cells[x][y]->data.visible;
+    }
+
+    bool isWalkable (int x, int y) const {
+      return walkable(cells[x][y]);
+    }
 
   protected:
-    bool walkable (const Cell* c);
+    void calculateVisibility (const Game* game);
+
+    bool walkable (const Cell* c) const;
     void _resetCells ();
     static int neighDist (const Cell* c1, const Cell* c2);
 

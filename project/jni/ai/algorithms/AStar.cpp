@@ -2,7 +2,7 @@
 #include "string.h"
 
 AStar::AStar (const Grid& grid) 
-  : AbstractGrid<CellData>(grid), openset(10) {
+  : AbstractGrid<AStarCell>(grid), openset(10) {
   _resetCells();
 }
 

@@ -25,6 +25,7 @@ class GameView {
     void draw();
 
     void debugDraw();
+    void debugDrawAI();
   private:
     //Draw a lighting gradient around the player tank
     void _drawLighting() const;

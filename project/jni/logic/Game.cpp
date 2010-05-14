@@ -19,7 +19,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       gameState(GAME_RUNNING),
       godMode(false),
       playerShadows(10),
-      calculateShadows(true) {
+      calculateShadows(true),
+      playerVisibility(colManager.getGrid()) {
   level->addToColManager(colManager);
   tank.setPosition(level->getStartPosition());
   colManager.addEntity(&tank);
@@ -188,8 +189,10 @@ void Game::update () {
     doTankMove(&tank, dir, elapsedS);
   }
 
-  if (calculateShadows)
+  if (calculateShadows) {
     _calculatePlayerShadows();
+    playerVisibility.calculateVisibility(this);
+  }
 
   //FIXME: remove
   /*LIST_FOREACH(EnemyTank*, enemies, i) {

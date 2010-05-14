@@ -239,6 +239,29 @@ void drawColEntity (Entity* e) {
   glColor4f(1,1,1,1);
 }
 
+void drawPlayerVisibility (const VisibilityGrid& vg) {
+  const float cs = vg.getCellSize();
+    glPushMatrix();
+    GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
+    for (unsigned x=0; x<vg.getWidth(); x++) {
+      for (unsigned y=0; y<vg.getHeight(); y++) {
+        if (!vg.isWalkable(x,y)) {
+          glColor4f(0,0,0,0.5f);
+        } else {
+          const bool visible = vg.isVisible(x,y);
+          glColor4f(visible?1:0,0,visible?0:1,0.7f);
+        }
+        glPushMatrix();
+        GLW::scale(cs,cs,1);
+        GLW::translate(x, y, 0);
+        Square::draw(false);
+        glPopMatrix();
+      }
+    }
+    glPopMatrix();
+    glColor4f(1,1,1,1);
+}
+
 void drawGrid (const Grid& g) {
   const float cs = g.getCellSize();
   glPushMatrix();
@@ -256,6 +279,16 @@ void drawGrid (const Grid& g) {
   }
   glPopMatrix();
   glColor4f(1,1,1,1);
+}
+
+void GameView::debugDrawAI () {
+  GLW::disableTextures();
+  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
+  for (unsigned i=0; i<shadows.length(); i++)
+    ShadowPolygonView::debugDraw(shadows[i]);
+
+  drawPlayerVisibility(game.getPlayerVisibility());
+  GLW::enableTextures();
 }
 
 void GameView::debugDraw () {
@@ -277,10 +310,6 @@ void GameView::debugDraw () {
     glLineWidth(1.0f);
   }*/
   drawGrid(game.getColManager().getGrid());
-
-  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
-  for (unsigned i=0; i<shadows.length(); i++)
-    ShadowPolygonView::debugDraw(shadows[i]);
 
   GLW::enableTextures();
 }

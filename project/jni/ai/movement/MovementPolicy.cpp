@@ -5,11 +5,13 @@
 
 bool MovementPolicy::rocketNear (Game* game, EnemyTank* tank, float radius) {
   list<Entity*>* entities = game->getColManager().getGrid().entitiesIn(tank->getPosition(), radius);
+  bool res = false;
   LIST_FOREACH(Entity*, (*entities), iter) {
      if ((*iter)->getType() == ENTITY_ROCKET) {
-       return true;
+       res = true;
+       break;
      }
   }
-
-  return false;
+  delete entities;
+  return res;
 }
