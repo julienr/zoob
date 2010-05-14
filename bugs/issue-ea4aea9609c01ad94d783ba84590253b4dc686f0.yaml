@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: aimpolicy should try to fire to destroy rockets
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-14 16:37:09.310134 Z
+references: []
+
+id: ea4aea9609c01ad94d783ba84590253b4dc686f0
+log_events: 
+- - 2010-05-14 16:37:09.658739 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
