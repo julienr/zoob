@@ -68,14 +68,22 @@ Path* VisibilityGrid::pathTo (const Cell* dest) const {
     curr = curr->data.parent;
   }
 
-  if (numNodes == 0)
-    return NULL;
+  if (numNodes == 0) {
+    //We might be on the same logical cell as dest, but not be quite at dest yet
+    //FIXME: is this really the pathfinder job to do that ?
+    if (djikstraStartPos != dest->data.waypoint) {
+      Vector2* nodes = new Vector2[1];
+      nodes[0] = dest->data.waypoint;
+      return new Path(1, nodes);
+    } else {
+      return NULL;
+    }
+  }
 
   Vector2* nodes = new Vector2[numNodes];
 
   curr = dest;
   for (int i = numNodes - 1; i >= 0; i--) {
-    //nodes[i] = grid.gridToWorld(curr->x, curr->y);
     nodes[i] = curr->data.waypoint;
     curr = curr->data.parent;
   }
@@ -270,6 +278,7 @@ void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
     ASSERT(source->getBVolume()->getType() == TYPE_CIRCLE);
     _adaptWaypoints(source->getBVolume()->getWidth()/2.0f);
   }
+  djikstraStartPos = startPos;
   djikstraSource = source;
   djikstraStart = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];
   binaryheap<Cell*, cellDistCompare> openset(gridW*gridH);

@@ -9,11 +9,14 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   modeElapsedS += elapsedS;
 
   //FIXME: mode switch could be triggered by distance to the player
-  if (modeElapsedS > MAX_MODE_TIME - Utils::frand()) {
+  /*if (modeElapsedS > MAX_MODE_TIME - Utils::frand()) {
     modeElapsedS = 0;
     mode = (mode==AGGRESSIVE)?DEFENSIVE:AGGRESSIVE;
     LOGE("new mode %s", (mode==AGGRESSIVE)?"aggressive":"defensive");
-  }
+  }*/
+  mode = AGGRESSIVE;
+
+  //FIXME: first move should be to avoid rockets
 
   Path* p;
   if (mode == AGGRESSIVE)
@@ -21,13 +24,14 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   else
     p = _defensiveDir(elapsedS, outDir, game, tank);
 
-  //FIXME: shouldn't we alwasy move to avoid rockets ?
   if (!p)
     return false;
 
-  Vector2 dir = p->get(0) - tank->getPosition();
-  outDir->set(dir.getNormalized());
+  //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, tank->getPosition().x, tank->getPosition().y);
+  const Vector2 dir = (p->get(0) - tank->getPosition()).getNormalized();
+  outDir->set(dir);
   delete p;
+  return true;
 }
 
 Path* SmartPolicy::_aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {

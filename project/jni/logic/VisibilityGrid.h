@@ -80,6 +80,7 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
     void _adaptWaypoint (const Cell* c, float unitSize);
     static int neighDist (const Cell* c1, const Cell* c2);
 
+    Vector2 djikstraStartPos;
     Cell* djikstraStart; //contains the last cell used to start a djikstra
     const Entity* djikstraSource; //source entity for djikstra
 };

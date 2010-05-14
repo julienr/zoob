@@ -57,6 +57,10 @@ struct Vector2 {
             Math::epsilonEq(y, other.y);
   }
 
+  bool operator != (const Vector2& other) const {
+    return !(*this == other);
+  }
+
   float relativeOrientation (const Vector2& other) const {
     return Math::signum(x*other.y - y*other.x);
   }

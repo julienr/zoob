@@ -272,7 +272,7 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
   glColor4f(1, 1, 1, 1);
 
   //WAYPOINTS
-  /*for (unsigned x = 0; x < vg.getWidth(); x++) {
+  for (unsigned x = 0; x < vg.getWidth(); x++) {
     for (unsigned y = 0; y < vg.getHeight(); y++) {
       glColor4f(1, 1, 1, 1);
       glPointSize(3.0f);
@@ -282,7 +282,7 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
       glEnd();
       glPointSize(1.0f);
     }
-  }*/
+  }
 }
 
 void drawGrid (const Grid& g) {
@@ -306,6 +306,7 @@ void drawGrid (const Grid& g) {
 
 void GameView::debugDrawAI () {
   GLW::disableTextures();
+  //game.getColManager().foreachEntity(drawColEntity);
   const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
   for (unsigned i=0; i<shadows.length(); i++)
     ShadowPolygonView::debugDraw(shadows[i]);
