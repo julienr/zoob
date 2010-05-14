@@ -23,6 +23,11 @@ class SmartPolicy : public MovementPolicy {
       DEFENSIVE
     };
 
+    void switchMode (eMode m) {
+      mode = m;
+      modeElapsedS = 0;
+    }
+
     eMode mode;
     double modeElapsedS;
 };

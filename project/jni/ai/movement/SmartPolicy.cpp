@@ -5,30 +5,37 @@
 
 #define MAX_MODE_TIME 5
 
-bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* me) {
   modeElapsedS += elapsedS;
 
-  //FIXME: mode switch could be triggered by distance to the player
+  //This mode switching algorithms will maximize fire and the tank is hidding only when he can't fire
+  if (mode == AGGRESSIVE) {
+    if (!me->canFire())
+      switchMode(DEFENSIVE);
+  } else {
+    if (me->canFire())
+      switchMode(AGGRESSIVE);
+  }
   /*if (modeElapsedS > MAX_MODE_TIME - Utils::frand()) {
     modeElapsedS = 0;
     mode = (mode==AGGRESSIVE)?DEFENSIVE:AGGRESSIVE;
     LOGE("new mode %s", (mode==AGGRESSIVE)?"aggressive":"defensive");
   }*/
-  mode = AGGRESSIVE;
+  //mode = AGGRESSIVE;
 
   //FIXME: first move should be to avoid rockets
 
   Path* p;
   if (mode == AGGRESSIVE)
-    p = _aggressiveDir(elapsedS, outDir, game, tank);
+    p = _aggressiveDir(elapsedS, outDir, game, me);
   else
-    p = _defensiveDir(elapsedS, outDir, game, tank);
+    p = _defensiveDir(elapsedS, outDir, game, me);
 
   if (!p)
     return false;
 
   //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, tank->getPosition().x, tank->getPosition().y);
-  const Vector2 dir = (p->get(0) - tank->getPosition()).getNormalized();
+  const Vector2 dir = (p->get(0) - me->getPosition()).getNormalized();
   outDir->set(dir);
   delete p;
   return true;
