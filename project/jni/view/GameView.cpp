@@ -165,7 +165,8 @@ void GameView::draw () {
   }
 
   //FIXME: re-enable
-  //_drawShadows();
+  if (game.getLevel()->hasShadows())
+    _drawShadows();
   //FIXME: shadows should be gray
 
   //Manage explosions life
@@ -272,7 +273,7 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
   glColor4f(1, 1, 1, 1);
 
   //WAYPOINTS
-  for (unsigned x = 0; x < vg.getWidth(); x++) {
+  /*for (unsigned x = 0; x < vg.getWidth(); x++) {
     for (unsigned y = 0; y < vg.getHeight(); y++) {
       glColor4f(1, 1, 1, 1);
       glPointSize(3.0f);
@@ -282,7 +283,7 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
       glEnd();
       glPointSize(1.0f);
     }
-  }
+  }*/
 }
 
 void drawGrid (const Grid& g) {

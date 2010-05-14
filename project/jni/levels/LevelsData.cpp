@@ -1,9 +1,8 @@
 #include "LevelsData.h"
 
-
 #define DECLARE_LVL \
   Level* load() { \
-    return new Level(xdim,ydim,tiles,tanks,numTanks); \
+    return new Level(xdim,ydim,tiles,tanks,numTanks,shadows); \
   }
 
 
@@ -39,6 +38,7 @@ namespace lvl0 {
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };
 #endif
+  bool shadows = false;
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -67,6 +67,7 @@ namespace lvl1 {
     /* 7 */ W,  B,  B,  B,  B,  B,  B,  W
   };
 
+  bool shadows = false;
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -109,6 +110,7 @@ namespace lvl2 {
       Vector2(5, 6)
   };
 
+  bool shadows = false;
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -142,6 +144,7 @@ namespace lvl3 {
        Vector2(7, 6)
   };
 
+  bool shadows = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -177,6 +180,7 @@ namespace lvl4 {
        Vector2(7, 6)
   };
 
+  bool shadows = false;
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -212,6 +216,7 @@ namespace lvl5 {
        Vector2(6, 5)
   };
 
+  bool shadows = true;
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -249,6 +254,7 @@ namespace lvl6 {
       Vector2(7, 6)
   };
 
+  bool shadows = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),

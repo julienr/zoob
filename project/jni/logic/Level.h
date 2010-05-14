@@ -71,8 +71,8 @@ class Level {
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
     //and array subscripting is done our way then
     //The tanks array MUST contain the player tank description in its first index
-    Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks)
-      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)){
+    Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks, bool drawShadows=false)
+      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows){
       _initBoard(w,h,board, tanks, numTanks);
     }
 
@@ -102,6 +102,8 @@ class Level {
     const AABBox* getBounds () const { return bounds; }
     const Vector2 getCenter () const { return Vector2(width/2.0f, height/2.0f); }
 
+    bool hasShadows () const { return drawShadows; }
+
   private:
     void _initBoard (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks);
     unsigned width;
@@ -113,6 +115,7 @@ class Level {
     const size_t numTanks;
 
     AABBox* bounds;
+    bool drawShadows;
 };
 
 #endif /* LEVEL_H_ */
