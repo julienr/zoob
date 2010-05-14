@@ -46,12 +46,16 @@ bool ShadowPolygon::inside (const Vector2& p) const {
   return true;
 }
 
-bool ShadowPolygon::fullyInside (const Vector2& center, float r) const {
+eRelativePos ShadowPolygon::classifyCircle (const Vector2& center, float r) const {
+  bool inside = true;
   for (int i=0; i<4; i++) {
-    if (lines[i]->distance(center) > -r)
-      return false;
+    const float d = lines[i]->distance(center);
+    if (d > r)
+      return OUTSIDE;
+    else if (d > -r)
+      inside = false;
   }
-  return true;
+  return inside?INSIDE:INTERSECT;
 }
 
 void ShadowPolygon::_calculateFar (const Vector2& lightSource,

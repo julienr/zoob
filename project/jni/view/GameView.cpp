@@ -249,8 +249,17 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
       if (!vg.isWalkable(x, y)) {
         glColor4f(0, 0, 0, 0.5f);
       } else {
-        const bool visible = vg.isVisible(x, y);
-        glColor4f(visible ? 1 : 0, 0, visible ? 0 : 1, 0.7f);
+        switch (vg.getVisibility(x,y)) {
+          case VISIBLE:
+            glColor4f(1,0,0,0.7f);
+            break;
+          case HIDDEN:
+            glColor4f(0,0,1,0.7f);
+            break;
+          case PENUMBRA:
+            glColor4f(0,1,0,0.7f);
+            break;
+        }
       }
       glPushMatrix();
       GLW::scale(cs, cs, 1);

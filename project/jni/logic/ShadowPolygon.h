@@ -8,6 +8,12 @@
 class Tile;
 class Level;
 
+enum eRelativePos {
+    INSIDE = 0,
+    OUTSIDE,
+    INTERSECT
+};
+
 /**
  * This represent the shadow "volume" casted by a 2d-polygon.
  * A shadow polygon consist of 4 points. two are the "near" points (from which shadow is casted)
@@ -41,7 +47,7 @@ class ShadowPolygon {
     //Test if a point is inside this volume
     bool inside (const Vector2& p) const;
     //Test if a circle is FULLY inside this polygon
-    bool fullyInside (const Vector2& center, float r) const;
+    eRelativePos classifyCircle (const Vector2& center, float r) const;
 
     //The vertices, returned in an order suitable for drawing (NEAR_0,FAR_0,FAR_1,NEAR_1)
     const Vector2* getVerts () const { return verts; }

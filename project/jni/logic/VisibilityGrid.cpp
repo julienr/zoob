@@ -17,12 +17,20 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
   //FIXME: this doesn't work completely for the cells behind the intersection of two obstacles
   for (int x = 0; x < gridW; x++) {
     for (int y = 0; y < gridH; y++) {
-      cells[x][y]->data.visible = true;
+      cells[x][y]->data.visibility = VISIBLE;
       for (unsigned i = 0; i < shadows.length(); i++) {
-        if (shadows[i]->fullyInside(grid.gridToWorld(x, y), r))
+        eRelativePos relPos = shadows[i]->classifyCircle(grid.gridToWorld(x,y), r);
+        eVisibility& cellVis = cells[x][y]->data.visibility;
+        if (relPos == INSIDE)
+          cellVis = HIDDEN;
+        else if (relPos == INTERSECT && cellVis == VISIBLE)
+          cellVis = PENUMBRA;
+        else if (relPos == OUTSIDE && cellVis == VISIBLE)
+          cellVis = VISIBLE;
+        /*if (shadows[i]->fullyInside(grid.gridToWorld(x, y), r))
           cells[x][y]->data.visible = false;
         else
-          cells[x][y]->data.visible &= true;
+          cells[x][y]->data.visible &= true;*/
       }
     }
   }
@@ -45,7 +53,7 @@ void VisibilityGrid::print () const {
         //printf("#      ");
       else
         //printf("%i[%3i] ", cells[x][y]->data.visible, cells[x][y]->data.dist);
-        printf("%i ", cells[x][y]->data.visible);
+        printf("%i ", cells[x][y]->data.visibility);
     }
     printf("\n");
   }
@@ -91,7 +99,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
     coords[0] = coords[1] = -1;
     for (int x=0; x<gridW; x++) {
       for (int y=0; y<gridH; y++) {
-        if (!visited[x][y] && walkable(cells[x][y]) && !cells[x][y]->data.visible) {
+        if (!visited[x][y] && walkable(cells[x][y]) && (cells[x][y]->data.visibility == HIDDEN)) {
           coords[0] = x;
           coords[1] = y;
           break;
@@ -124,7 +132,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
             continue;
           if (!walkable(cells[x][y]))
             continue;
-          if (cells[x][y]->data.visible)
+          if (cells[x][y]->data.visibility != HIDDEN)
             continue;
           visited[x][y] = true;
           openlist.append(cells[x][y]);
@@ -151,7 +159,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   //LOGE("biggest size : %i, center(%f,%f)" , biggestGroup->length(), biggestCenter.x, biggestCenter.y);
   int minIdx;
   float minDist = MOOB_INF;
-  for (int i=0; i<biggestGroup->length(); i++) {
+  for (size_t i=0; i<biggestGroup->length(); i++) {
     float d = (biggestCenter-biggestGroup->get(i)->data.waypoint).length();
     if (d < minDist) {
       minDist = d;
@@ -161,13 +169,13 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   return pathTo(biggestGroup->get(minIdx));
 }
 
-Path* VisibilityGrid::pathToClosest (bool visibility) const {
+Path* VisibilityGrid::pathToClosest (bool vis) const {
   int coords[2] = {-1,-1};
   int closest = MOOB_INF;
 
   for (int x=0; x<gridW; x++) {
     for (int y=0; y<gridH; y++) {
-      if ((cells[x][y]->data.visible == visibility) && cells[x][y]->data.dist < closest) {
+      if ((cells[x][y]->data.visibility == vis) && cells[x][y]->data.dist < closest) {
         coords[0] = x;
         coords[1] = y;
         closest = cells[x][y]->data.dist;
@@ -201,7 +209,7 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
     d = 14;//diagonal
 
   //Penalty if the cell is visible
-  if (c1->data.visible)
+  if (c1->data.visibility != HIDDEN)
     d *= 2;
   return d;
 }

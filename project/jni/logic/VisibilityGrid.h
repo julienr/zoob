@@ -7,9 +7,15 @@
 #include "logic/AbstractGrid.h"
 class Game;
 
+enum eVisibility {
+    HIDDEN=0,
+    VISIBLE,
+    PENUMBRA //half-hidden
+};
+
 struct VisCell {
-  VisCell () : visible(true) {}
-  bool visible;
+  VisCell () : visibility(VISIBLE) {}
+  eVisibility visibility;
 
   AbstractGrid<VisCell>::Cell* parent;
   bool closed;
@@ -47,9 +53,9 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
 
     void print () const;
 
-    bool isVisible (int x, int y) const {
+    eVisibility getVisibility (int x, int y) const {
       ASSERT(inside(x,y));
-      return cells[x][y]->data.visible;
+      return cells[x][y]->data.visibility;
     }
 
     bool isWalkable (int x, int y) const {
