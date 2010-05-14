@@ -4,6 +4,7 @@
 #include "def.h"
 #include "Vector2.h"
 #include "sys/time.h"
+#include <stdlib.h>
 
 struct Utils {
   //Determine if point is inside the box determined by its top-left pos and width/height
@@ -31,6 +32,11 @@ struct Utils {
     timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_sec*1000 + tv.tv_usec/1000;
+  }
+
+  //rand in [0,1]
+  static float frand () {
+    return rand()/(float)RAND_MAX;
   }
 };
 

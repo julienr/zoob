@@ -31,6 +31,10 @@ class TankAI {
       return shootPolicy->decideFire(elapsedS, outDir, game, tank);
     }
 
+    bool confirmFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+      return shootPolicy->confirmFire(elapsedS, outDir, game, tank);
+    }
+
     bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
       return movementPolicy->decideDir(elapsedS, outDir, game, tank);
     }

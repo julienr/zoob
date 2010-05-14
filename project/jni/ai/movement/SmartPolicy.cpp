@@ -3,35 +3,59 @@
 #include "logic/EnemyTank.h"
 #include "logic/Game.h"
 
+#define MAX_MODE_TIME 5
+
 bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
-   //If a rocket is near the tank, cancel all firing and just run away
-   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
-   if (rocketNear(game, tank,2*GRID_CELL_SIZE))
-     tank->cancelFiring();
+  modeElapsedS += elapsedS;
 
-   //Stop moving while the tank is preparing to fire
-   /*if (tank->isPreparingFire())
-     return false;*/
+  //FIXME: mode switch could be triggered by distance to the player
+  if (modeElapsedS > MAX_MODE_TIME - Utils::frand()) {
+    modeElapsedS = 0;
+    mode = (mode==AGGRESSIVE)?DEFENSIVE:AGGRESSIVE;
+    LOGE("new mode %s", (mode==AGGRESSIVE)?"aggressive":"defensive");
+  }
 
+  Path* p;
+  if (mode == AGGRESSIVE)
+    p = _aggressiveDir(elapsedS, outDir, game, tank);
+  else
+    p = _defensiveDir(elapsedS, outDir, game, tank);
 
-   VisibilityGrid& vgrid = game->getPlayerVisibility();
-   vgrid.djikstra(tank->getPosition(), tank);
-   //vgrid.print();
+  //FIXME: shouldn't we alwasy move to avoid rockets ?
+  if (!p)
+    return false;
 
-   //Path* shortestWay = vgrid.pathToClosestHidden();
-   /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
-    * to the biggest (closest ?) hidden group
-    */
-   Path* shortestWay = vgrid.pathToCenterBiggestHidden();
-   if (!shortestWay)
-     return false;
+  Vector2 dir = p->get(0) - tank->getPosition();
+  outDir->set(dir.getNormalized());
+  delete p;
+}
 
-   Vector2 dir = shortestWay->get(0) - tank->getPosition();
-   outDir->set(dir.getNormalized());
+Path* SmartPolicy::_aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+  //Move to closest visible cell, this should trigger the firing policy to fire
 
-   //FIXME: even if we shouldn't move, we should move to avoid rockets
+  VisibilityGrid& vgrid = game->getPlayerVisibility();
+  vgrid.djikstra(tank->getPosition(), tank);
 
-   delete shortestWay;
-   return true;
+  return vgrid.pathToClosest(true);
+}
+
+Path* SmartPolicy::_defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+  //If a rocket is near the tank, cancel all firing and just run away
+  //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
+  if (rocketNear(game, tank, 2 * GRID_CELL_SIZE))
+    tank->cancelFiring();
+
+  //Stop moving while the tank is preparing to fire
+  /*if (tank->isPreparingFire())
+   return false;*/
+
+  VisibilityGrid& vgrid = game->getPlayerVisibility();
+  vgrid.djikstra(tank->getPosition(), tank);
+
+  //Path* shortestWay = vgrid.pathToClosest(false);
+  /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
+   * to the biggest (closest ?) hidden group
+   */
+  return vgrid.pathToCenterBiggestHidden();
 }
 

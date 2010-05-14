@@ -146,6 +146,7 @@ void toPauseState () {
 }
 
 void nativeInit (const char* apkPath) {
+  srand(Utils::getCurrentTimeMillis());
   loadAPK(apkPath);
 }
 

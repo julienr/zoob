@@ -161,13 +161,13 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   return pathTo(biggestGroup->get(minIdx));
 }
 
-Path* VisibilityGrid::pathToClosestHidden () const {
+Path* VisibilityGrid::pathToClosest (bool visibility) const {
   int coords[2] = {-1,-1};
   int closest = MOOB_INF;
 
   for (int x=0; x<gridW; x++) {
     for (int y=0; y<gridH; y++) {
-      if (!cells[x][y]->data.visible && cells[x][y]->data.dist < closest) {
+      if ((cells[x][y]->data.visible == visibility) && cells[x][y]->data.dist < closest) {
         coords[0] = x;
         coords[1] = y;
         closest = cells[x][y]->data.dist;
@@ -176,13 +176,14 @@ Path* VisibilityGrid::pathToClosestHidden () const {
   }
 
   if (coords[0] == -1) {
-    LOGE("No path to hidden cell");
+    LOGE("[pathToClosest] No path to cell");
     return NULL;
   }
 
   //LOGE("start[%i,%i], closest[%i,%i]", djikstraStart->x, djikstraStart->y, coords[0], coords[1]);
   return pathTo(cells[coords[0]][coords[1]]);
 }
+
 
 /**For all the distance calculation, we consider one cell to be 10 width. This means
  * that a horizontal or vertical move will cost 10. A diagonal move will cost sqrt(20) ~= 14.14 = 14
@@ -206,7 +207,7 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
 }
 
 bool VisibilityGrid::walkable (const Cell* c) const {
-  return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET /*| ENTITY_TANK*/, djikstraSource);
+  return !grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET | ENTITY_TANK, djikstraSource);
 }
 
 struct cellDistCompare {
