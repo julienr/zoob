@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "Merge Djikstra and hidden cell group determination "
+desc: since djikstra visits all the cells, at first create one group per cell and merge the groups of neighbouring cells
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-05-15 12:52:36.178410 Z
+references: []
+
+id: 9f44bafedd77d373f8025246585c36a79c6d8764
+log_events: 
+- - 2010-05-15 12:52:36.833947 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
