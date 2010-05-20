@@ -3,7 +3,7 @@ title: "Allow instanciation of multiple texture manager that can be deleted (for
 desc: These texture manager should be indexed by an id and the getinstance method should have a signature like TextureManager::getInstance(int id)
 type: :feature
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-03 08:33:23.861236 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-20 13:16:45.001369 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""

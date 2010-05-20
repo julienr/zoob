@@ -13,7 +13,7 @@ class Rocket : public ExplosiveEntity {
       setDir(dir);
     }
 
-    Tank* getOwner () {
+    Tank* getOwner () const {
       return owner;
     }
 

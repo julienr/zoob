@@ -14,3 +14,12 @@ releases:
     - Julien Rebetez <julien@fhtagn.net>
     - created
     - ""
+- !ditz.rubyforge.org,2008-03-06/release 
+  name: post-market
+  status: :unreleased
+  release_time: 
+  log_events: 
+  - - 2010-05-20 13:16:03.154211 Z
+    - Julien Rebetez <julien@fhtagn.net>
+    - created
+    - ""

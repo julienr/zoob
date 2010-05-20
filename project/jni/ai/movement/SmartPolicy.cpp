@@ -53,7 +53,7 @@ Path* SmartPolicy::_aggressiveDir(double elapsedS, Vector2* outDir, Game* game, 
 Path* SmartPolicy::_defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   //If a rocket is near the tank, cancel all firing and just run away
   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
-  if (rocketNear(game, tank, 2 * GRID_CELL_SIZE))
+  if (TankAI::rocketNear(game, tank, 2 * GRID_CELL_SIZE, NULL))
     tank->cancelFiring();
 
   //Stop moving while the tank is preparing to fire

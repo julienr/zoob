@@ -42,6 +42,10 @@ class TankAI {
     bool aim (double elapsedS, Game* game, EnemyTank* tank, Vector2* outDir) {
       return shootPolicy->aim(elapsedS, game, tank, outDir);
     }
+
+    //Utility function to determine if a rocket is near this tank. The given radius is the radius of
+    //the "near" area
+    static bool rocketNear (Game* game, EnemyTank* tank, float radius, Vector2* outRocketPos);
   private:
     ShootPolicy* shootPolicy;
     MovementPolicy* movementPolicy;

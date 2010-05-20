@@ -10,8 +10,8 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
 
   //If a rocket is near the tank, cancel all firing and just run away
   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
-  if (rocketNear(game, tank,2*GRID_CELL_SIZE))
-    tank->cancelFiring();
+  /*if (rocketNear(game, tank,2*GRID_CELL_SIZE))
+    tank->cancelFiring();*/
 
   //Stop moving while the tank is preparing to fire
   if (tank->isPreparingFire())
