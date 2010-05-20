@@ -5,8 +5,8 @@ type: :bugfix
 component: zoob
 release: android market
 reporter: Julien Rebetez <julien@fhtagn.net>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2010-05-04 05:53:15.393337 Z
 references: []
 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-04 05:53:15.741222 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-20 12:28:25.017202 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
   - ""

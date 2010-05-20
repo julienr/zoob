@@ -25,22 +25,14 @@ Bomb* Tank::dropBomb () {
   return new Bomb(this, getPosition());
 }
 
-void Tank::explode (Entity* e, const Vector2& dir) {
-  //Avoid a tank being exploded by his own rocket
-  //FIXME: really ?
-  /*if (e && e->getType() == ENTITY_ROCKET) {
-    Rocket* r = static_cast<Rocket*>(e);
-    if (r->getOwner() == this) {
-      LOGE("tank exploded by his own rocket => discards");
-      return;
-    }
-  }*/
+bool Tank::explode (Entity* e, const Vector2& dir) {
   numLives--;
   if (numLives > 0)
-    return;
+    return true;
 
   exploded = true;
   LOGE("OMG, got an explosion");
+  return true;
 }
 
 bool Tank::shieldBounce (Entity* e, const Vector2& colPoint) {

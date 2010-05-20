@@ -19,8 +19,9 @@ class ExplosiveEntity : public Entity {
     }
 
     //WARNING: this MIGHT be called multiple time during one frame (if an entity touch many other entities)
-    virtual void explode (Entity* e, const Vector2& colPoint) {
+    virtual bool explode (Entity* e, const Vector2& colPoint) {
       exploded = true;
+      return true;
     }
   private:
 

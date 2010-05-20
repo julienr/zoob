@@ -21,6 +21,19 @@
    inkscape:export-ydpi="299.86295">
   <defs
      id="defs4">
+    <inkscape:path-effect
+       effect="envelope"
+       id="path-effect5051"
+       is_visible="true"
+       yy="true"
+       xx="true"
+       bendpath1="m 2771.2811,1340.1043 44.1657,-13.435"
+       bendpath2="m 2815.4468,1326.6693 -0.7071,64.3354"
+       bendpath3="m 2764.21,1381.8123 51.2368,-15.5563"
+       bendpath4="m 2759.9674,1326.6693 0,39.5867"
+       bendpath1-nodetypes="cc"
+       bendpath2-nodetypes="cc"
+       bendpath3-nodetypes="cc" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient5004">
@@ -1639,6 +1652,48 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3354"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3390"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4967"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4967-3"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4967-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective5037"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1647,16 +1702,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.25"
-     inkscape:cx="278.70735"
-     inkscape:cy="-2033.0065"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="2703.4278"
+     inkscape:cy="-287.71433"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1321"
-     inkscape:window-height="939"
-     inkscape:window-x="1271"
-     inkscape:window-y="53"
+     inkscape:window-width="1474"
+     inkscape:window-height="979"
+     inkscape:window-x="1090"
+     inkscape:window-y="40"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -1668,7 +1723,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -3390,6 +3445,101 @@
        sodipodi:ry="220"
        d="m 268,3300.3623 a 220,220 0 1 1 -440,0 220,220 0 1 1 440,0 z"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/circle.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <g
+       transform="translate(789.71921,325.06925)"
+       id="g4380-7"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/project/assets/sprites/boom.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
+      <path
+         d="m 1788,983.36218 -71.8849,2.89375 -38.3689,60.85757 -24.9658,-67.4724 -69.7356,-17.68492 56.4552,-44.594 -4.7301,-71.78749 59.857,39.91182 66.8123,-26.68218 -19.4616,69.26086 46.0224,55.29699 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="1.0465429"
+         sodipodi:arg1="0.41822433"
+         sodipodi:r2="54.168716"
+         sodipodi:r1="108.33744"
+         sodipodi:cy="939.36218"
+         sodipodi:cx="1689"
+         sodipodi:sides="5"
+         id="path5082-6-8"
+         style="fill:#646464;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         sodipodi:type="star"
+         transform="matrix(1.2791677,0,0,1.2791677,-626.22171,-158.78041)" />
+      <path
+         transform="matrix(1.2791677,0,0,1.2791677,-631.94933,-165.19937)"
+         d="m 1788,983.36218 -71.8849,2.89375 -38.3689,60.85757 -24.9658,-67.4724 -69.7356,-17.68492 56.4552,-44.594 -4.7301,-71.78749 59.857,39.91182 66.8123,-26.68218 -19.4616,69.26086 46.0224,55.29699 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="1.0465429"
+         sodipodi:arg1="0.41822433"
+         sodipodi:r2="54.168716"
+         sodipodi:r1="108.33744"
+         sodipodi:cy="939.36218"
+         sodipodi:cx="1689"
+         sodipodi:sides="5"
+         id="path5082-5"
+         style="fill:#ff3f4e;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.90879154;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         sodipodi:type="star" />
+      <text
+         transform="matrix(0.9748397,-0.22290708,0.22290708,0.9748397,0,0)"
+         id="text5120-74"
+         y="1381.682"
+         x="1147.1478"
+         style="font-size:48.17210388px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:77.07537079px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie Bold"
+           y="1381.682"
+           x="1147.1478"
+           id="tspan5122-1"
+           sodipodi:role="line">BOUM !</tspan></text>
+    </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#cccccc;stroke-width:12.1366148;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 2654.7382,1324.1797 c 0,0 -13.5464,-2.1101 -29.0274,20.0589 -9.0464,32.2824 42.1876,40.8542 63.0158,25.4604 2.0811,7.8808 10.4195,13.0376 17.7075,12.8381 8.3888,-0.2282 19.5446,-15.8701 19.5446,-15.8701 0,0 42.0126,10.445 24.8686,-20.7101 23.4142,-22.4647 -6.2069,-38.1126 -34.3755,-29.1415 11.8519,-18.5807 -27.8659,-31.2972 -48.176,-30.3085 -24.9614,3.1633 -31.0324,26.3071 -13.5576,37.6728 z"
+       id="path4197-7-8"
+       sodipodi:nodetypes="cccaccccc"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/poof.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:50.24488068000000141px;font-style:normal;font-weight:normal;fill:#66ff3f;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans;stroke-linejoin:round;stroke-linecap:round"
+       x="2661.4253"
+       y="1400.4207"
+       id="text4951"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/poof.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4953"
+         x="2661.4253"
+         y="1400.4207"
+         style="font-size:94.20915222000000711px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie;stroke-linejoin:round;stroke-linecap:round">Po<tspan
+   style="font-size:60;fill:#66ff3f;fill-opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round;stroke-linecap:round;stroke:#ffffff;stroke-opacity:1"
+   id="tspan4955">o<tspan
+   style="font-size:40;fill:#66ff3f;fill-opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round;stroke-linecap:round;stroke:#ffffff;stroke-opacity:1"
+   id="tspan4957">f</tspan></tspan></tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#cccccc;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 2688.6557,1399.1113 c 0,0 -5.5808,-0.8693 -11.9586,8.2638 -3.7269,13.2996 17.3803,16.831 25.961,10.4891 0.8574,3.2467 4.2926,5.3712 7.2951,5.289 3.456,-0.094 8.0519,-6.5381 8.0519,-6.5381 0,0 17.3082,4.3031 10.2453,-8.5321 9.6461,-9.2549 -2.5571,-15.7015 -14.1619,-12.0056 4.8827,-7.6548 -11.4801,-12.8937 -19.8474,-12.4864 -10.2835,1.3032 -12.7846,10.8379 -5.5854,15.5203 z"
+       id="path4197-2"
+       sodipodi:nodetypes="cccaccccc"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/poof.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#cccccc;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 2771.9439,1345.6978 c 0,0 -0.379,-0.137 -1.0944,-0.2628 -0.7154,-0.1258 -1.7708,-0.2422 -3.1255,-0.2528 -1.3546,-0.011 -3.0157,0.077 -4.8607,0.3731 -1.8449,0.2962 -3.8774,0.7739 -5.795,1.7976 -0.4932,1.3699 -0.4089,3.0694 0.07,5.018 0.4784,1.9486 1.3489,4.1363 2.4556,6.3175 1.1067,2.1811 2.4497,4.3454 3.915,6.2418 1.4652,1.8964 3.0537,3.5195 4.6829,4.7346 1.6292,1.2151 3.3,2.0235 4.9469,2.4389 1.6469,0.4154 3.2703,0.4436 4.8109,0.1928 1.5406,-0.2507 2.9985,-0.7742 4.3169,-1.4607 1.3184,-0.6864 2.4973,-1.5331 3.4813,-2.5003 0.4668,1.7517 1.5326,2.997 2.8142,3.6107 1.2816,0.6137 2.7815,0.6188 4.1526,0.2849 0.7892,-0.1921 1.6257,-0.6645 2.4358,-1.2208 0.8101,-0.5564 1.5941,-1.2055 2.2816,-1.8406 0.6874,-0.6351 1.2789,-1.2616 1.6996,-1.742 0.4207,-0.4804 0.6702,-0.8107 0.6702,-0.8107 0,0 0.9849,0.3459 2.3594,0.8254 0.6872,0.2398 1.4721,0.5182 2.2813,0.8106 0.8091,0.2924 1.6427,0.6012 2.4271,0.864 0.7844,0.2627 1.5198,0.4808 2.131,0.5244 0.6113,0.044 1.0985,-0.089 1.3846,-0.5902 0.2861,-0.5007 0.3708,-1.377 0.1778,-2.8044 -0.193,-1.4275 -0.6654,-3.4181 -1.4789,-5.9805 1.133,-0.9881 1.9661,-2.1485 2.5219,-3.4561 0.5558,-1.3076 0.8337,-2.7567 0.8683,-4.2287 0.035,-1.4721 -0.1738,-2.9624 -0.5776,-4.3401 -0.4037,-1.3777 -1.0021,-2.6407 -1.743,-3.698 -0.7408,-1.0573 -1.6235,-1.9091 -2.6027,-2.5195 -0.9792,-0.6105 -2.0547,-0.9809 -3.1947,-1.1189 -2.2799,-0.2761 -4.8183,0.3711 -7.4546,1.7186 1.2919,-2.3443 1.4328,-4.3732 0.9071,-5.803 -0.5258,-1.4297 -1.7062,-2.245 -3.1924,-2.5914 -1.4863,-0.3463 -3.2878,-0.2601 -5.2389,-0.094 -1.9511,0.1661 -4.0785,0.3915 -6.0932,0.5891 -2.5916,0.3437 -5.2491,0.6809 -7.5856,1.1213 -2.3365,0.4404 -4.3221,0.9951 -5.5765,1.8244 -1.2545,0.8294 -1.7719,1.9523 -1.4571,3.3574 0.3148,1.4051 1.4494,3.0986 3.2793,4.6704 0,0 0,0 0,0 z"
+       id="path4197-7"
+       sodipodi:nodetypes="cccaccccc"
+       inkscape:path-effect="#path-effect5051"
+       inkscape:original-d="m 2772.3628,1342.2118 c 0,0 -5.5808,-0.8693 -11.9586,8.2638 -3.7269,13.2996 17.3803,16.831 25.961,10.4891 0.8574,3.2467 4.2926,5.3712 7.2951,5.289 3.456,-0.094 8.0519,-6.5381 8.0519,-6.5381 0,0 17.3082,4.3031 10.2453,-8.5321 9.6461,-9.2549 -2.5571,-15.7015 -14.1619,-12.0056 4.8827,-7.6548 -11.4801,-12.8937 -19.8474,-12.4864 -10.2835,1.3032 -12.7846,10.8379 -5.5854,15.5203 z"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/poof.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
   </g>

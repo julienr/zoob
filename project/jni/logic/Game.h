@@ -24,6 +24,17 @@ enum eGameState {
 
 typedef void (*game_callback_t) ();
 
+struct ExplosionLocation {
+    enum eType {
+        EXPLOSION_BOOM,
+        EXPLOSION_POOF
+    };
+    ExplosionLocation (const Vector2& p, eType t)
+      : position(p), type(t) {}
+    Vector2 position;
+    eType type;
+};
+
 class Game {
   public:
     //overCallback : the function to call when game is over
@@ -76,7 +87,7 @@ class Game {
 
     //Returns an iterator over the explosions location that happened
     //since last frame
-    const list<Vector2>::const_iterator getExplosions () const {
+    const list<ExplosionLocation>::const_iterator getExplosions () const {
       return explosions.begin();
     }
 
@@ -128,7 +139,7 @@ class Game {
     list<EnemyTank*> enemies;
     list<Rocket*> rockets;
     list<Bomb*> bombs;
-    list<Vector2> explosions;
+    list<ExplosionLocation> explosions;
     Level* level;
 
     //elapsed time for last calculated frame

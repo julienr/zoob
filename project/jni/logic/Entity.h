@@ -35,7 +35,9 @@ class Entity: public Moveable {
 
     //Callback when this entity is subject to an explosion
     //other is the entity responsible for the explosion, MIGHT be NULL
-    virtual void explode (Entity* other, const Vector2& colPoint) = 0;
+    //Should return true if the explosion has destroyed or affected this entity and false if it had no effect
+    //The value returned is used to give visual feedback on the explosion effects
+    virtual bool explode (Entity* other, const Vector2& colPoint) = 0;
 
     /**
      * This function is called before a touch/explode can occur on both entities.

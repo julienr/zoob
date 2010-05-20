@@ -3,6 +3,7 @@
 
 #include "Tank.h"
 #include "ProgressionManager.h"
+#include "logic/Rocket.h"
 
 #define PLAYER_FIRE_INTERVAL 1000
 #define PLAYER_BURST_INTERVAL 1500
@@ -24,6 +25,17 @@ class PlayerTank : public Tank {
      */
     ePlayerForm getCurrentForm () const {
       return currentForm;
+    }
+
+    bool explode (Entity* e, const Vector2& colPoint) {
+      //Avoid a tank being exploded by his friends rockets
+      if (e && e->getType() == ENTITY_ROCKET) {
+        Rocket* r = static_cast<Rocket*>(e);
+        //Player can only die of enemies rockets
+        if (r->getOwner()->getTankType() == TANK_PLAYER)
+          return false;
+      }
+      return Tank::explode(e, colPoint);
     }
 
     void changePlayerForm (ePlayerForm newForm);

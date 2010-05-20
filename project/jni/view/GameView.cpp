@@ -116,7 +116,7 @@ void GameView::_drawShadows() const {
 
 void GameView::draw () {
   //Create new explosions
-  for (list<Vector2>::const_iterator i = game.getExplosions(); i.hasNext(); i++) {
+  for (list<ExplosionLocation>::const_iterator i = game.getExplosions(); i.hasNext(); i++) {
     explosions.append(new Explosion(*i));
   }
 

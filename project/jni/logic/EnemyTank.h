@@ -4,6 +4,7 @@
 #include "Tank.h"
 #include "Difficulty.h"
 #include "ai/TankAI.h"
+#include "logic/Rocket.h"
 
 class EnemyTank: public Tank {
   public:
@@ -53,6 +54,17 @@ class EnemyTank: public Tank {
       if (r)
         prepareFiring = false;
       return r;
+    }
+
+    bool explode (Entity* e, const Vector2& colPoint) {
+      //Avoid a tank being exploded by his friends rockets
+      if (e && e->getType() == ENTITY_ROCKET) {
+        Rocket* r = static_cast<Rocket*>(e);
+        //Enemy tanks can only die because of player rockets
+        if (r->getOwner()->getTankType() != TANK_PLAYER)
+          return false;
+      }
+      return Tank::explode(e, colPoint);
     }
 
     //Returns NULL for the player's tank

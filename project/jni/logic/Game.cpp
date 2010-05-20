@@ -86,7 +86,7 @@ void Game::update () {
     Rocket* r = *i;
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
-      explosions.append(r->getPosition());
+      explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
@@ -111,7 +111,7 @@ void Game::update () {
 
       m->explode(NULL, m->getPosition());
       delete touchedEntities;
-      explosions.append(m->getPosition());
+      explosions.append(ExplosionLocation(m->getPosition(), ExplosionLocation::EXPLOSION_BOOM));
       //notify the owner
       m->getOwner()->bombExploded();
       delete m;
@@ -284,10 +284,15 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
       (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
     return;
 
-  e1->explode(e2, colPoint);
-  e2->explode(e1, colPoint);
+  //Notify entities about the explosion
+  const bool effect1 = e1->explode(e2, colPoint);
+  const bool effect2 = e2->explode(e1, colPoint);
 
-  explosions.append(colPoint);
+  //hasEffect is used to determine if the explosion had any effect.
+  //We don't take the effect on the rocket into account (otherwise we'll obviously always have effects).
+  const bool hasEffect = ((t1 != ENTITY_ROCKET) && effect1) || ((t2 != ENTITY_ROCKET) && effect2);
+
+  explosions.append(ExplosionLocation(colPoint, hasEffect?ExplosionLocation::EXPLOSION_BOOM:ExplosionLocation::EXPLOSION_POOF));
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
