@@ -15,8 +15,8 @@ Path* AStar::reconstructPath (const Cell* c) {
     curr = curr->data.parent;
   }
 
-  //FIXME: really ?
   if (numNodes == 0) {
+    //no path found (or already at dest)
     _resetCells();
     return NULL;
   }

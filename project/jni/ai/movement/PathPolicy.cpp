@@ -18,7 +18,7 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
     return false;
 
   //Did we arrive to the waypoint
-  if ((tank->getPosition() - path->get(current)).length() < 0.1) {
+  if (tank->getPosition() == path->get(current)) {
     current = (current+1)%path->length();
   }
 
@@ -29,8 +29,17 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
   Path* shortestWay = astar.shortestWay(tank->getPosition(), path->get(current));
   if (!shortestWay) {
     //cannot find a way, we're either on the waypoint or we cannot reach it => skip
-    current = (current+1)%path->length();
-    return false;
+
+    //We might be on the same logical cell as dest, but not be quite at dest yet
+    if ((tank->getPosition() - path->get(current)).length() > 0.1) {
+      Vector2* nodes = new Vector2[1];
+      nodes[0] = path->get(current);
+      shortestWay = new Path(1, nodes);
+    } else {
+      //skip to next
+      current = (current+1)%path->length();
+      return false;
+    }
   }
   Vector2 dir = shortestWay->get(0) - tank->getPosition();
   outDir->set(dir.getNormalized());
