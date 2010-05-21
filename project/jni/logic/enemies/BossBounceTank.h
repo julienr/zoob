@@ -3,16 +3,22 @@
 
 #include "BounceTank.h"
 
-class BossShieldTank : public BounceTank {
+
+class BossBounceTank : public EnemyTank {
   public:
-    BossShieldTank ()
-      : BounceTank(BOSS_BCIRCLE_R) {
+    BossBounceTank ()
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
       setLives(3);
+      setFirePolicy(new IntervalFirePolicy(1000));
     }
 
-    virtual eTankType getTankType () const { return BOSS_BOUNCE; }
+    eTankType getTankType () const { return BOSS_BOUNCE; }
 
     double getInitialFiringDelay () const { return Difficulty::getInstance()->getBossFiringDelay(); }
+
+    bool bounce (Entity* e, const Vector2& colPoint) {
+      return shieldBounce(e, colPoint);
+    }
 };
 
 #endif /* BOSSBOUNCETANK_H_ */

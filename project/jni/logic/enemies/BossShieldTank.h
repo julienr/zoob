@@ -3,14 +3,15 @@
 
 #include "ShieldTank.h"
 
-class BossShieldTank : public ShieldTank {
+class BossShieldTank : public EnemyTank {
   public:
     BossShieldTank ()
-      : ShieldTank(BOSS_BCIRCLE_R) {
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
       setLives(3);
+      setFirePolicy(new IntervalFirePolicy(1000));
     }
 
-    virtual eTankType getTankType () const { return BOSS_SHIELD; }
+    eTankType getTankType () const { return BOSS_SHIELD; }
 
     double getInitialFiringDelay () const { return Difficulty::getInstance()->getBossFiringDelay(); }
 };

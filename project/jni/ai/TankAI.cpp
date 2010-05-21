@@ -11,6 +11,11 @@ bool TankAI::rocketNear (Game* game, EnemyTank* tank, float radius, Vector2* out
        //We don't care about friendly rockets since they have no effect on us
        if (r->getOwner()->getTankType() != TANK_PLAYER)
          continue;
+
+       //Verifiy that the rocket is coming against us
+       float angle =(tank->getPosition()-r->getPosition()).getNormalized()*r->getDir().getNormalized();
+       if (angle < -M_PI_2 || angle > M_PI_2)
+         continue;
        if (outRocketPos != NULL)
          *outRocketPos = r->getPosition();
        res = true;
