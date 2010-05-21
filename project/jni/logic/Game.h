@@ -81,10 +81,10 @@ class Game {
       return playerShadows;
     }
 
-    //Returns an iterator over the explosions location that happened
-    //since last frame
-    const list<ExplosionLocation>::const_iterator getExplosions () const {
-      return explosions.begin();
+    //Returns the explosions that have to be displayed. The caller should delete the explosions
+    //hes has handled
+    list<ExplosionLocation>& getExplosions () {
+      return explosions;
     }
 
     double getLastFrameElapsed () const {
@@ -122,6 +122,8 @@ class Game {
   private:
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);
+
+    void doFireRocket (Tank* t, const Vector2& dir);
 
     //translate the given entity of <move>, sliding against collider
     void slideMove (Entity* e, Vector2 move);

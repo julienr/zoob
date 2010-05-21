@@ -91,12 +91,12 @@ class list {
       DL_APPEND(head, add);
     }
 
-    T firstElement () {
+    T firstElement () const {
       ASSERT(head != NULL);
       return head->data;
     }
 
-    bool empty () {
+    bool empty () const {
       return head == NULL;
     }
 

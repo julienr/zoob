@@ -9,7 +9,7 @@
 #include "app.h"
 
 
-GameView::GameView (const Game& g)
+GameView::GameView (Game& g)
   : game(g),
     playerTankView(g.getPlayerTank()),
     //cursorView(g.getCursor()),
@@ -116,8 +116,10 @@ void GameView::_drawShadows() const {
 
 void GameView::draw () {
   //Create new explosions
-  for (list<ExplosionLocation>::const_iterator i = game.getExplosions(); i.hasNext(); i++) {
-    explosions.append(new Explosion(*i));
+  list<ExplosionLocation>& gameExpls = game.getExplosions();
+  while (!gameExpls.empty()) {
+    explosions.append(new Explosion(gameExpls.firstElement()));
+    gameExpls.removeFirst();
   }
 
   levelView.drawBackground();

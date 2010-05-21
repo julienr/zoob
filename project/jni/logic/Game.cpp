@@ -74,7 +74,8 @@ void Game::update () {
   if (gameState == GAME_PAUSED)
     return;
 
-  explosions.clear();
+  //This is now cleared automatically by gameview
+  //explosions.clear();
 
   elapsedS = (now-lastTime)/1000.0;
   lastTime = now;
@@ -163,8 +164,8 @@ void Game::update () {
             t->prepareFire();
 
           //the enemy is ready to fire
-          if (t->fireReady() && ai->confirmFire(elapsedS, &rocketDir, this, t) && t->checkFireDir(rocketDir, colManager)) {
-            rockets.append(t->fireRocket(rocketDir));
+          if (t->fireReady() && ai->confirmFire(elapsedS, &rocketDir, this, t)) {
+            doFireRocket(t, rocketDir);
           }
         }
 
@@ -209,6 +210,19 @@ void Game::update () {
   }*/
 }
 
+void Game::doFireRocket (Tank* t, const Vector2& dir) {
+  Rocket* r = t->fireRocket(dir);
+  //if the rocket is fired into a wall, just display a poof
+  if (!t->checkFireDir(dir, colManager)) {
+    explosions.append(ExplosionLocation(r->getPosition(),
+        ExplosionLocation::EXPLOSION_POOF));
+    delete r;
+  } else {
+    rockets.append(r);
+    colManager.addEntity(r);
+  }
+}
+
 void Game::_calculatePlayerShadows () {
   for (size_t i=0; i<playerShadows.length(); i++)
     delete playerShadows[i];
@@ -246,10 +260,8 @@ void Game::playerFire (const Vector2& cursorPosition) {
   //Fire up rocket
   Vector2 dir = cursorPosition-playerTank->getPosition();
   dir.normalize();
-  if (playerTank->canFire() && playerTank->checkFireDir(dir, colManager)) {
-    Rocket* r = playerTank->fireRocket(dir);
-    colManager.addEntity(r);
-    rockets.append(r);
+  if (playerTank->canFire()) {
+    doFireRocket(playerTank, dir);
   }
 }
 

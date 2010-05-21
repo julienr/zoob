@@ -11,7 +11,7 @@
 
 class GameView {
   public:
-    GameView (const Game& g);
+    GameView (Game& g);
     ~GameView ();
 
     const PlayerTankView& getTankView () const {
@@ -31,7 +31,7 @@ class GameView {
     void _drawLighting() const;
     //Draw the shadows projected by the walls
     void _drawShadows() const;
-    const Game& game;
+    Game& game;
     PlayerTankView playerTankView;
     //CursorView cursorView;
     LevelView levelView;
