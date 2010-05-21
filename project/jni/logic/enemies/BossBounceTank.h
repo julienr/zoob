@@ -9,7 +9,7 @@ class BossBounceTank : public EnemyTank {
     BossBounceTank ()
       : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
       setLives(3);
-      setFirePolicy(new IntervalFirePolicy(1000));
+      setFirePolicy(new IntervalFirePolicy(2000));
     }
 
     eTankType getTankType () const { return BOSS_BOUNCE; }

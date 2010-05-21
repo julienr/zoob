@@ -20,7 +20,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       gameState(GAME_RUNNING),
       godMode(false),
       playerShadows(10),
-      calculateShadows(true),
+      calculateShadows(level->hasShadows()),
       playerVisibility(colManager.getGrid()) {
   level->addToColManager(colManager);
   playerTank->setPosition(level->getStartPosition());

@@ -22,6 +22,18 @@
   <defs
      id="defs4">
     <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4275">
+      <stop
+         style="stop-color:#bfbfbf;stop-opacity:1;"
+         offset="0"
+         id="stop4277" />
+      <stop
+         style="stop-color:#bfbfbf;stop-opacity:0;"
+         offset="1"
+         id="stop4279" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient4167">
       <stop
          id="stop4169"
@@ -2003,6 +2015,54 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3442"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3470"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7285-8-29"
+       id="radialGradient4183-4"
+       cx="3122.5835"
+       cy="1510.5674"
+       fx="3122.5835"
+       fy="1510.5674"
+       r="92.509666"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient7285-8-29">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop7287-8-6" />
+      <stop
+         id="stop4360-1"
+         offset="0.60000002"
+         style="stop-color:#ffffff;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop7289-6-0" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4275"
+       id="linearGradient4285"
+       x1="1091.8077"
+       y1="1742.1331"
+       x2="1091.8077"
+       y2="1342.5544"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2011,17 +2071,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="2515.9759"
-     inkscape:cy="-458.66642"
+     inkscape:zoom="0.50000001"
+     inkscape:cx="3244.2854"
+     inkscape:cy="-1529.7996"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1382"
-     inkscape:window-height="979"
-     inkscape:window-x="1047"
-     inkscape:window-y="30"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1680"
+     inkscape:window-height="1004"
+     inkscape:window-x="1022"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true" />
   <metadata
@@ -3939,6 +3999,39 @@
        id="path4197-7-8-6"
        sodipodi:nodetypes="cccaccccc"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/poof.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#linearGradient4285);stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       id="path3973-4"
+       sodipodi:cx="1067"
+       sodipodi:cy="1554.3622"
+       sodipodi:rx="172"
+       sodipodi:ry="172"
+       d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
+       transform="translate(2421.8648,1173.843)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.98865127999999913;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 3500.6345,2691.1046 -32.012,30.4849 c -26.6227,-16.537 -62.0002,-13.7723 -85.7522,8.8467 -28.1956,26.8504 -29.2859,71.4743 -2.4353,99.67 26.8504,28.1957 71.4745,29.2862 99.6703,2.4355 23.7518,-22.6188 28.2411,-57.8193 13.024,-85.2177 l 32.0121,-30.4849 -24.5069,-25.7345 z"
+       id="path4503-0-03-0-6"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path4661-7-2"
+       sodipodi:cx="1563.4131"
+       sodipodi:cy="593.44989"
+       sodipodi:rx="9.1923885"
+       sodipodi:ry="9.1923885"
+       d="m 1572.6055,593.44989 a 9.1923885,9.1923885 0 1 1 -18.3848,0 9.1923885,9.1923885 0 1 1 18.3848,0 z"
+       transform="translate(2003.8659,2062.5665)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
   </g>

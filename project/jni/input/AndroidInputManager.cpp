@@ -94,7 +94,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   } else if (formControl.inside(pNoTrans)) {
     if (_progMan()->hasForms())
       formControl.handleTouchDown(pNoTrans);
-  } else if (tapDist < 1 && elapsed <= 300) {
+  } else if (tapDist < 5 && elapsed <= 600) {
     getGame()->playerFire(p);
     startMoving(MOVING_TANK, p);
   } else {

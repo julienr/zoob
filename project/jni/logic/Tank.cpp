@@ -10,12 +10,12 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
   setRotationFromDir(dir);
   firePolicy->fire();
-  return new Rocket(this, getPosition()+trans*1.1, dir);
+  return new Rocket(this, getPosition()+trans*1.5, dir);
 }
 
 bool Tank::checkFireDir (const Vector2& dir, const CollisionManager& colManager, CollisionResult* r) {
   const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
-  return !colManager.traceCircle(this, getPosition(), trans*1.1, ROCKET_BCIRCLE_R, r, 0);
+  return !colManager.traceCircle(this, getPosition(), trans*1.5, ROCKET_BCIRCLE_R, r, 0);
 }
 
 Bomb* Tank::dropBomb () {
