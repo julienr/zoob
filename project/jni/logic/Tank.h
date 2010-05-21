@@ -7,6 +7,7 @@
 #include "lib/Utils.h"
 #include "Path.h"
 #include "FireRatePolicy.h"
+#include "logic/physics/CollisionResult.h"
 
 class Rocket;
 class Bomb;
@@ -89,7 +90,7 @@ class Tank: public Entity {
     bool canFire () { return firePolicy->canFire(); }
     bool canMine () { return (numMines < MAX_BOMBS_PER_TANK) && bombPolicy->canFire(); }
     //This function check that if the tank would fire now, the rocket wouldn't end up stuck in a wall
-    bool checkFireDir (const Vector2& dir, const CollisionManager& colManager);
+    bool checkFireDir (const Vector2& dir, const CollisionManager& colManager, CollisionResult* r);
 
     Rocket* fireRocket (Vector2 dir);
     Bomb* dropBomb ();

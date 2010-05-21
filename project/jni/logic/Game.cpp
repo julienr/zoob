@@ -152,8 +152,8 @@ void Game::update () {
         //- for some firing policy, the tank will then stay in "inFiring" mode (burst mode) for some time
         if (t->isFiring()) { //burst mode, let it fire without delay
           if (t->canFire()) {
-            if (ai->confirmFire(elapsedS, &rocketDir, this, t) && t->checkFireDir(rocketDir, colManager))
-              rockets.append(t->fireRocket(rocketDir));
+            if (ai->confirmFire(elapsedS, &rocketDir, this, t))
+              doFireRocket(t, rocketDir);
             else { //ai decided to stop firing, stop the burst
               LOGE("cancelFiring");
               t->cancelFiring();
@@ -213,9 +213,9 @@ void Game::update () {
 void Game::doFireRocket (Tank* t, const Vector2& dir) {
   Rocket* r = t->fireRocket(dir);
   //if the rocket is fired into a wall, just display a poof
-  if (!t->checkFireDir(dir, colManager)) {
-    explosions.append(ExplosionLocation(r->getPosition(),
-        ExplosionLocation::EXPLOSION_POOF));
+  CollisionResult res;
+  if (!t->checkFireDir(dir, colManager, &res)) {
+    touch(r, res.collidedEntity, res.colPoint);
     delete r;
   } else {
     rockets.append(r);
