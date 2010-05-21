@@ -332,7 +332,10 @@ void Game::slideMove (Entity* e, Vector2 move) {
 
   CollisionResult r;
   for (size_t bounces = 0; colManager.trace(e, move, &r) && (bounces < MAX_BOUNCES); bounces++) {
-    touch(e, r.collidedEntity, r.colPoint);
+    //If we are a bouncing tank, we shouldnt trigger a touch on the rocket we might bounce. Let the
+    //rocket movement code handle that
+    if (!e->bounce(r.collidedEntity, r.colPoint))
+      touch(e, r.collidedEntity, r.colPoint);
 
     //LOGE("position(%f,%f)\tmove(%f,%f)\ttFirst %f\ttLast %f", e->getPosition().x, e->getPosition().y, move.x, move.y, r.tFirst, r.tLast);
 
