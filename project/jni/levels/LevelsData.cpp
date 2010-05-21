@@ -103,19 +103,23 @@ namespace lvl2 {
        Vector2(3, 5)
   };
 
-  Vector2 wp2[4] = {
-      Vector2(7, 6),
-      Vector2(7, 4),
-      Vector2(5, 4),
-      Vector2(5, 6)
+  Vector2 wp2[2] = {
+      Vector2(7, 5),
+      Vector2(7, 1)
+  };
+
+  Vector2 wp3[2] = {
+        Vector2(6, 6),
+        Vector2(1, 6)
   };
 
   bool shadows = false;
-  const size_t numTanks = 3;
+  const size_t numTanks = 4;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
       TankDescription(3, 3, TANK_SIMPLE, new Path(4, wp1)),
-      TankDescription(7, 6, TANK_SIMPLE, new Path(4, wp2))
+      TankDescription(7, 5, TANK_SIMPLE, new Path(2, wp2)),
+      TankDescription(6, 6, TANK_SIMPLE, new Path(2, wp3))
   };
 
   DECLARE_LVL

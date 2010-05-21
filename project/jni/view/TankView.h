@@ -7,7 +7,7 @@
 
 class TankView {
   public:
-    TankView (const Tank& t) :
+    TankView (const Tank* t) :
       tank(t) {
       tankSprite[0] = new Sprite("assets/sprites/tank1.png");
       tankSprite[1] = new Sprite("assets/sprites/tank1_damaged_1.png");
@@ -40,10 +40,10 @@ class TankView {
     }
 
     virtual void draw () {
-      if (!tank.isAlive())
+      if (!tank->isAlive())
         return;
-      eTankType type = tank.getTankType();
-      const int state = abs(tank.getMaxLives()-tank.getLivesLeft());
+      eTankType type = tank->getTankType();
+      const int state = abs(tank->getMaxLives()-tank->getLivesLeft());
       GLW::color(getColor(type));
       switch(type) {
         case TANK_PLAYER:
@@ -52,11 +52,11 @@ class TankView {
         case TANK_BURST:
         case BOSS_SIMPLE:
         case BOSS_BURST:
-          tankSprite[state]->draw(tank, tank.getRotation(), getTankScale());
+          tankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
           break;
         case TANK_SHIELD:
         case BOSS_SHIELD:
-          shieldTankSprite[state]->draw(tank, tank.getRotation(), getTankScale());
+          shieldTankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
           break;
       }
       GLW::colorWhite();
@@ -65,17 +65,17 @@ class TankView {
     virtual float getTankScale () { return 1.0f; }
 
     Vector2 getCenter () {
-      return tankSprite[0]->getCenter(tank);
+      return tankSprite[0]->getCenter(*tank);
     }
 
     bool touchInside (const Vector2& p) const {
-      return tankSprite[0]->touchInside(tank, p);
+      return tankSprite[0]->touchInside(*tank, p);
     }
   protected:
     Sprite* getTankSprite () { return tankSprite[0]; }
     Sprite* getShieldTankSprite () { return shieldTankSprite[0]; }
   private:
-    const Tank& tank;
+    const Tank* tank;
     Sprite* tankSprite[3]; //0=undamaged, 1=damaged_1, 2=damaged_2
     Sprite* shieldTankSprite[3];//0=undamaged, 1_damaged_1, 2=damaged2
 

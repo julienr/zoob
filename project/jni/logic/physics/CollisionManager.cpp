@@ -205,7 +205,7 @@ bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
-  //We have 4 axis of separation => the box axis
+  //We have 4 axis of separation => the box axes
   //and the line direction plus an axis orthogonal to the line dir
   Vector2 axis[4];
   axis[0] = Vector2(1,0);

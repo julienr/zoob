@@ -11,7 +11,7 @@
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
-      tank(),
+      playerTank(new PlayerTank()),
       level(level),
       elapsedS(0),
       gameOverCallback(overCallback),
@@ -22,8 +22,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       calculateShadows(true),
       playerVisibility(colManager.getGrid()) {
   level->addToColManager(colManager);
-  tank.setPosition(level->getStartPosition());
-  colManager.addEntity(&tank);
+  playerTank->setPosition(level->getStartPosition());
+  colManager.addEntity(playerTank);
 
   const TankDescription* tanks = level->getTanks();
   for (size_t i=1; i<level->getNumTanks(); i++) {
@@ -47,6 +47,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
 }
 
 Game::~Game () {
+  delete playerTank;
   LIST_FOREACH(EnemyTank*, enemies, i)
     delete *i;
   for (size_t i=0; i<playerShadows.length(); i++)
@@ -177,15 +178,15 @@ void Game::update () {
     gameWonCallback();
   }
 
-  if (!godMode && tank.hasExploded()) {
-    tank.unmarkExploded();
+  if (!godMode && playerTank->hasExploded()) {
+    playerTank->unmarkExploded();
     gameOverCallback();
   }
 
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;
-    doTankMove(&tank, dir, elapsedS);
+    doTankMove(playerTank, dir, elapsedS);
   }
 
   if (calculateShadows) {
@@ -210,7 +211,7 @@ void Game::_calculatePlayerShadows () {
   for (size_t i=0; i<playerShadows.length(); i++)
     delete playerShadows[i];
   playerShadows.clear();
-  const Vector2& lightSource = tank.getPosition();
+  const Vector2& lightSource = playerTank->getPosition();
   const unsigned w = level->getWidth();
   const unsigned h = level->getHeight();
   for (unsigned x=0; x<w; x++) {
@@ -241,10 +242,10 @@ void Game::_calculatePlayerShadows () {
 
 void Game::playerFire (const Vector2& cursorPosition) {
   //Fire up rocket
-  Vector2 dir = cursorPosition-tank.getPosition();
+  Vector2 dir = cursorPosition-playerTank->getPosition();
   dir.normalize();
-  if (tank.canFire() && tank.checkFireDir(dir, colManager)) {
-    Rocket* r = tank.fireRocket(dir);
+  if (playerTank->canFire() && playerTank->checkFireDir(dir, colManager)) {
+    Rocket* r = playerTank->fireRocket(dir);
     colManager.addEntity(r);
     rockets.append(r);
   }
@@ -253,10 +254,10 @@ void Game::playerFire (const Vector2& cursorPosition) {
 void Game::playerDropBomb()
 {
   //Fire mine
-  if (tank.canMine()) {
+  if (playerTank->canMine()) {
     //FIXME: check that there isn't already a mine here ?
     LOGE("drop bomb");
-    Bomb* m = tank.dropBomb();
+    Bomb* m = playerTank->dropBomb();
     bombs.append(m);
   }
 }

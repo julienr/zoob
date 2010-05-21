@@ -15,7 +15,7 @@ class Explosion {
     Explosion (const ExplosionLocation& loc) :
       timeLeft(EXPLOSION_LIFE),
       boomSprite("assets/sprites/boom.png"),
-      poofSprite("assets/sprites/poof.png"),
+      poofSprite("assets/sprites/rocket.png"),
       location(loc) {}
 
     void draw ();

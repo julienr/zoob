@@ -10,9 +10,9 @@
 
 class EnemyTankView : public TankView {
   public:
-    EnemyTankView (const EnemyTank& t)
+    EnemyTankView (const EnemyTank* t)
       : TankView(t),
-        eTank(&t) {}
+        eTank(t) {}
 
     float getTankScale () {
       if (eTank->isFiring())

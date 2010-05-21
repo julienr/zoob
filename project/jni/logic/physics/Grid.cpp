@@ -52,6 +52,8 @@ void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
     return;
   }
 
+  //LOGE("[findTouchedCells] starting at (%i,%i)", x, y);
+
   const int stepX = Math::signum(move.x);
   const int stepY = Math::signum(move.y);
   //LOGE("(x,y) : (%i,%i)\t(stepX,stepY) : (%i,%i)\t(endX,endY) : (%i,%i)", x, y, stepX, stepY, endX, endY);
@@ -68,7 +70,7 @@ void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
   } else {
     if (stepX > 0) tMaxX = (cellSize - cx)/nm.x;
     else tMaxX = -cx/nm.x;
-    tDeltaX = 1/fabs(nm.x);
+    tDeltaX = cellSize/fabs(nm.x);
   }
 
   if (Math::epsilonEq(nm.y, 0)) {
@@ -77,7 +79,7 @@ void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
   } else {
     if (stepY > 0) tMaxY = (cellSize - cy)/nm.y;
     else tMaxY = -cy/nm.y;
-    tDeltaY = 1/fabs(nm.y);
+    tDeltaY = cellSize/fabs(nm.y);
   }
   //LOGE("(tMaxX,tMaxY) : (%f,%f)\t(tDeltaX,tDeltaY) : (%f,%f)", tMaxX, tMaxY, tDeltaX, tDeltaY);
 
@@ -91,9 +93,6 @@ void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
       break;
 
     _addTouched(grid[x][y]);
-    //We got into a solid cell, no need to go further => Fixme: sure ?
-    /*if (grid[x][y]->solid)
-      return count;*/
 
     //LOGE("loop (x,y) : (%i,%i), (endX, endY) : (%i,%i)", x, y, endX, endY);
     if (tMaxX < tMaxY) {
@@ -120,10 +119,9 @@ bool collideAgainstCell (GridCell* cell,
                             const Vector2& move,
                             CollisionResult* result,
                             int entityMask=0) {
-  //Touched cell is solid, check collision against its aabb
   CollisionResult r;
 
-  //Check collision against touchedCells entities list
+  //Check collision against cell entities list
   for (list<Entity*>::iterator iter = cell->entities.begin(); iter.hasNext(); iter++) {
     Entity* otherEnt = *iter;
     if (otherEnt == sourceEntity)
@@ -277,6 +275,13 @@ bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& 
   return collided;
 }
 
+#undef DEBUG_TRACE
+#ifdef DEBUG_TRACE_CIRCLE
+//FIXME: just for debug
+vector<Vector2> debugPoints(2);
+vector<Vector2> debugMoves(2);
+#endif
+
 bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const {
   ASSERT(2*radius < cellSize);
   // We are tracing through the grid with a circle
@@ -292,25 +297,47 @@ bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& mov
   points[0] = start + perpAxis*radius;
   points[1] = start - perpAxis*radius;
 
-
   result->tFirst = MOOB_INF;
-  bool collided = false;
   BCircle circle(radius);
-  for (int i=0; i<2; i++) {
-    tmpTouched->clear();
+  tmpTouched->clear();
+  for (int i = 0; i<2; i++) {
+    //LOGE("points[%i] (%f,%f)", i, points[i].x, points[i].y);
     findTouchedCells(points[i], move);
-    for (unsigned j=0; j<tmpTouched->length(); j++) {
-      tmpTouched->get(j)->touched = true;
-      collided |= collideAgainstCell(tmpTouched->get(j),
-                                     source,
-                                     start,
-                                     &circle,
-                                     move,
-                                     result,
-                                     entityMask);
-    }
+#ifdef DEBUG_TRACE_CIRCLE
+    debugPoints.append(points[i]);
+    debugMoves.append(move);
+#endif
+  }
+
+  bool collided = false;
+  for (unsigned j = 0; j < tmpTouched->length(); j++) {
+    tmpTouched->get(j)->touched = true;
+    collided |= collideAgainstCell(tmpTouched->get(j), source, start, &circle,
+                                   move, result, entityMask);
   }
   return collided;
+}
+
+void Grid::debugDraw () const {
+#ifdef DEBUG_TRACE_CIRCLE
+  glPointSize(3.0f);
+  glColor4f(1,1,1,1);
+  glBegin(GL_POINTS);
+  for (int i=0; i<debugPoints.length(); i++) {
+    glVertex3f(debugPoints[i].x, debugPoints[i].y, 0);
+  }
+  glEnd();
+  glPointSize(1.0f);
+  glBegin(GL_LINES);
+  for (int i=0; i<debugPoints.length(); i++) {
+    const Vector2& end = debugPoints[i]+debugMoves[i];
+    glVertex3f(debugPoints[i].x, debugPoints[i].y, 0);
+    glVertex3f(end.x, end.y, 0);
+  }
+  glEnd();
+  debugMoves.clear();
+  debugPoints.clear();
+#endif
 }
 
 /*

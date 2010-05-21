@@ -32,7 +32,7 @@ GameView::GameView (const Game& g)
   
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
-    enemiesView.append(new EnemyTankView(**i));
+    enemiesView.append(new EnemyTankView(*i));
 }
 
 GameView::~GameView () {
@@ -46,8 +46,8 @@ GameView::~GameView () {
 }
 
 void GameView::drawHearts () {
-  const unsigned currentLife = game.getPlayerTank().getLivesLeft();
-  for (unsigned i=0; i<game.getPlayerTank().getMaxLives(); i++) {
+  const unsigned currentLife = game.getPlayerTank()->getLivesLeft();
+  for (unsigned i=0; i<game.getPlayerTank()->getMaxLives(); i++) {
     if (i >= currentLife)
       hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
     else
@@ -72,7 +72,7 @@ void GameView::_drawLighting() const {
    const float radius = 10.0f;
    MGL_DATATYPE lightingVerts[3 * numVerts];
    MGL_DATATYPE lightingCoords[2 * numVerts];
-   const Vector2& center = game.getPlayerTank().getPosition();
+   const Vector2& center = game.getPlayerTank()->getPosition();
    lightingVerts[0] = fX(center.x);
    lightingVerts[1] = fX(center.y);
    lightingVerts[2] = 0;
@@ -150,7 +150,7 @@ void GameView::draw () {
     numbers[timeLeft]->draw(m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
-  playerTankView.draw();
+  playerTankView.draw(game.getLastFrameElapsed());
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
@@ -160,7 +160,8 @@ void GameView::draw () {
   for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
     Rocket* r = *i;
     GLW::color(TankView::getColor(r->getOwner()->getTankType()));
-    rocket.draw(*r);
+    const int numBounces = r->getNumBounces();
+    rocket.draw(*r, 0, 0.7f+numBounces*0.3f);
     GLW::colorWhite();
   }
 
@@ -317,7 +318,7 @@ void GameView::debugDrawAI () {
 }
 
 void GameView::debugDraw () {
-  const Tank& tank = game.getPlayerTank();
+  const Tank* tank = game.getPlayerTank();
   GLW::disableTextures();
   game.getColManager().foreachEntity(drawColEntity);
   //Draw collision normal
@@ -335,6 +336,7 @@ void GameView::debugDraw () {
     glLineWidth(1.0f);
   }*/
   drawGrid(game.getColManager().getGrid());
+  game.getColManager().getGrid().debugDraw();
 
   GLW::enableTextures();
 }

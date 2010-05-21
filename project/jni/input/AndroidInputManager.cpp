@@ -49,7 +49,7 @@ void AndroidInputManager::draw () {
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
     case MOVING_TANK:
-      getGame()->setTankMoveDir(touchPosition-getGame()->getPlayerTank().getPosition());
+      getGame()->setTankMoveDir(touchPosition-getGame()->getPlayerTank()->getPosition());
       break;
     default:
       getGame()->setTankMoveDir(Vector2::ZERO);

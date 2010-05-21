@@ -154,6 +154,7 @@ class Grid {
 
     const Vector2& getOrigin () const { return origin; }
 
+    void debugDraw () const;
   private:
     GridCell*** grid;
     const Vector2 origin;

@@ -53,12 +53,8 @@ class Game {
       gameState = GAME_PAUSED;
     }
 
-    PlayerTank& getPlayerTank () {
-      return tank;
-    }
-
-    const PlayerTank& getPlayerTank () const {
-      return tank;
+    PlayerTank* getPlayerTank () const {
+      return playerTank;
     }
 
     const list<EnemyTank*>* getEnemies () const {
@@ -135,7 +131,7 @@ class Game {
     void _calculatePlayerShadows ();
 
     CollisionManager colManager;
-    PlayerTank tank;
+    PlayerTank* playerTank;
     list<EnemyTank*> enemies;
     list<Rocket*> rockets;
     list<Bomb*> bombs;
