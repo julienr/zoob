@@ -43,7 +43,6 @@ class GameView {
     Sprite circle;
     vector<TankView*> enemiesView;
     list<Explosion*> explosions;
-    Sprite* numbers[6];
 
     Sprite shadow;
     Sprite light;

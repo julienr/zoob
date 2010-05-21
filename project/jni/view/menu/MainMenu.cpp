@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "view/GameManager.h"
+#include "view/NumberView.h"
 
 #define MENU_ITEM_START 0
 #define MENU_ITEM_OPTIONS 1
@@ -21,21 +22,10 @@ MainMenu::MainMenu (GameManager* gm)
    addItem(new MenuItem("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
                                MENU_ITEM_PREV));
-
-   numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
-   numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
-   numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
-   numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
-   numbers[4] = new Sprite("assets/sprites/menuitems/4.png");
-   numbers[5] = new Sprite("assets/sprites/menuitems/5.png");
-   numbers[6] = new Sprite("assets/sprites/menuitems/6.png");
-
    _initItems();
 }
 
 MainMenu::~MainMenu () {
-  for (int i=0; i<3; i++)
-    delete numbers[i];
 }
 
 void MainMenu::draw () {
@@ -48,7 +38,7 @@ void MainMenu::draw () {
       continue;
     item->draw();
   }
-  numbers[gameManager->getCurrentLevel()]->draw(numberPos, numberSize);
+  NumberView::getInstance()->drawInt(gameManager->getCurrentLevel(), numberPos, numberSize);
   //font->print("1234", Vector2(1,3), 1.5);
 }
 
@@ -85,7 +75,7 @@ void MainMenu::_initItems () {
   logoPos = Vector2(3,5);
   logoSize = Vector2(8,8);
 
-  numberPos = Vector2(9, 2);
+  numberPos = Vector2(8.5, 2);
   numberSize = Vector2(3,3);
 
   for (size_t i=0; i<numItems(); i++) {

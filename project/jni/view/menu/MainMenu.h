@@ -17,7 +17,6 @@ class MainMenu : public Menu {
     void _actionNext ();
     void _actionPrev ();
 
-    Sprite* numbers[7];
     Sprite logo;
     Vector2 logoPos, logoSize;
     Vector2 numberPos, numberSize;

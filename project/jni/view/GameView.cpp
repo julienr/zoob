@@ -7,6 +7,7 @@
 #include "logic/ShadowPolygon.h"
 #include "view/ShadowPolygonView.h"
 #include "app.h"
+#include "NumberView.h"
 
 
 GameView::GameView (Game& g)
@@ -23,13 +24,6 @@ GameView::GameView (Game& g)
     enemiesView(5),
     shadow("assets/sprites/shadow.png"),
     light("assets/sprites/light.png") {
-  numbers[0] = new Sprite("assets/sprites/menuitems/0.png");
-  numbers[1] = new Sprite("assets/sprites/menuitems/1.png");
-  numbers[2] = new Sprite("assets/sprites/menuitems/2.png");
-  numbers[3] = new Sprite("assets/sprites/menuitems/3.png");
-  numbers[4] = new Sprite("assets/sprites/menuitems/4.png");
-  numbers[5] = new Sprite("assets/sprites/menuitems/5.png");
-  
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.append(new EnemyTankView(*i));
@@ -40,9 +34,6 @@ GameView::~GameView () {
     delete enemiesView[i];
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
-
-  for (int i=0; i<6; i++)
-    delete numbers[i];
 }
 
 void GameView::drawHearts () {
@@ -56,9 +47,6 @@ void GameView::drawHearts () {
 }
 
 void GameView::_drawLighting() const {
-  if (!game.hasShadows())
-    return;
-
   //Use scissor so shadows are clipped to the level area
    glEnable(GL_SCISSOR_TEST);
    glScissor(XGS(0), YGS(0), game.getLevel()->getWidth() / xScreenToGame,
@@ -69,7 +57,7 @@ void GameView::_drawLighting() const {
    const int numVerts = numSubdiv + 2;
    const float angleIncr = 2.0f * M_PI / (float) numSubdiv;
    //FIXME: this is somehow ugly, but this is to cover the whole level
-   const float radius = 10.0f;
+   const float radius = 15.0f;
    MGL_DATATYPE lightingVerts[3 * numVerts];
    MGL_DATATYPE lightingCoords[2 * numVerts];
    const Vector2& center = game.getPlayerTank()->getPosition();
@@ -97,9 +85,6 @@ void GameView::_drawLighting() const {
 }
 
 void GameView::_drawShadows() const {
-  if (!game.hasShadows())
-    return;
-
   const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
   if (shadows.length() != 0) {
     //Use scissor so shadows are clipped to the level area
@@ -149,7 +134,7 @@ void GameView::draw () {
     GLW::colorWhite();
 
     ASSERT(timeLeft < 6);
-    numbers[timeLeft]->draw(m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
+    NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
   playerTankView.draw(game.getLastFrameElapsed());

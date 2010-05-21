@@ -31,6 +31,7 @@ LOCAL_SRC_FILES := \
     view/GameView.cpp \
     view/Explosion.cpp \
     view/GameManager.cpp \
+    view/NumberView.cpp \
     view/menu/Font.cpp \
     view/menu/MenuItem.cpp \
     view/menu/Menu.cpp \
