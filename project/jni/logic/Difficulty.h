@@ -25,6 +25,9 @@ class Difficulty {
     virtual double getFiringDelay () = 0;
     virtual double getBossFiringDelay () = 0;
 
+    //Number of times a rocket should bounce before destroying a tank shield
+    virtual int getShieldResistance () = 0;
+
   private:
     static Difficulty* difficulty;
 };
@@ -34,6 +37,7 @@ class DifficultyEasy : public Difficulty {
   public:
     double getFiringDelay () { return 2.0; }
     double getBossFiringDelay () { return 0.5f; }
+    int getShieldResistance () { return 1; }
 };
 
 #endif /* DIFFICULTY_H_ */

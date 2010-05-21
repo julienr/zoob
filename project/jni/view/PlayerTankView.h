@@ -9,8 +9,7 @@ class PlayerTankView : public TankView {
   public:
     PlayerTankView (const PlayerTank* t)
       : TankView(t),
-        tank(t),
-        shieldSprite("assets/sprites/shield_1.png") {}
+        tank(t) {}
 
     void draw (double elapsedS) {
       if (!tank->isAlive())
@@ -22,16 +21,14 @@ class PlayerTankView : public TankView {
         case FORM_BURST:
           getTankSprite()->draw(*tank, tank->getRotation());
           break;
-        case FORM_SHIELD:
-          getShieldTankSprite()->draw(*tank, tank->getRotation());
+        case FORM_BOUNCE:
+          getBounceTankSprite()->draw(*tank, tank->getRotation());
           break;
       }
       GLW::colorWhite();
-      shieldSprite.draw(*tank, 0, 1.1f);
     }
   private:
     const PlayerTank* tank;
-    const Sprite shieldSprite;
 };
 
 #endif /* PLAYERTANKVIEW_H_ */

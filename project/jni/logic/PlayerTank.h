@@ -41,7 +41,7 @@ class PlayerTank : public Tank {
     void changePlayerForm (ePlayerForm newForm);
 
     bool bounce (Entity* e, const Vector2& colPoint) {
-      if (currentForm == FORM_SHIELD)
+      if (currentForm == FORM_BOUNCE)
         return shieldBounce(e, colPoint);
       else
         return false;

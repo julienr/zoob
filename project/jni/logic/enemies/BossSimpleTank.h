@@ -5,9 +5,8 @@
 
 class BossSimpleTank : public EnemyTank {
   public:
-    BossSimpleTank (Path* p)
+    BossSimpleTank ()
       : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
-      setPath(p);
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(1000));
     }

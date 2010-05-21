@@ -25,7 +25,7 @@ void ProgressionManager::changedLevel () {
   AV_FORM(FORM_SIMPLE);
   if (_level() <= 5) {
   } else {
-    AV_FORM(FORM_SHIELD);
+    AV_FORM(FORM_BOUNCE);
     AV_FORM(FORM_BURST);
   }
 }

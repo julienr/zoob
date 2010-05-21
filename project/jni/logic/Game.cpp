@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "lib/Math.h"
-#include "logic/enemies/ShieldTank.h"
+#include "logic/enemies/BounceTank.h"
 #include "logic/enemies/SimpleTank.h"
 #include "logic/enemies/StaticTank.h"
 #include "logic/enemies/BurstTank.h"
@@ -31,11 +31,13 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     EnemyTank* t = NULL;
     switch (desc.tankType) {
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
+      case TANK_BOUNCE: t = desc.path?new BounceTank(desc.path):new BounceTank(); break;
       case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
       case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
       case TANK_STATIC: ASSERT(!desc.path); t = new StaticTank(); break;
+      case BOSS_BOUNCE: ASSERT(!desc.path); t = new BossShieldTank(); break;
+      case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
       case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
-      case BOSS_SIMPLE: ASSERT(desc.path); t = new BossSimpleTank(desc.path); break;
       case BOSS_BURST: ASSERT(false);
       default: ASSERT(false); break;
     }

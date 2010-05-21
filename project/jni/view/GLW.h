@@ -62,6 +62,7 @@ struct GLW {
         case TRANSPARENT_GREY: glColor4f(0.63, 0.63, 0.63, 0.8); break;
         case LIGHT_GREY: glColor4f(0,0,0,0.1f); break;
         case VIOLET: glColor4f(0.97, 0.18, 1, 1); break;
+        case YELLOW: glColor4f(1, 0.97f, 0.18f, 1); break;
       }
     }
 

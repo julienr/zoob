@@ -10,7 +10,8 @@ enum eColor {
     ORANGE,
     TRANSPARENT_GREY,
     LIGHT_GREY,
-    VIOLET
+    VIOLET,
+    YELLOW
 };
 
 #endif /* COLOR_H_ */

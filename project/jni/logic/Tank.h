@@ -16,6 +16,8 @@ enum eTankType {
     TANK_STATIC,
     TANK_SIMPLE,
     BOSS_SIMPLE,
+    TANK_BOUNCE,
+    BOSS_BOUNCE,
     TANK_SHIELD,
     BOSS_SHIELD,
     TANK_BURST,

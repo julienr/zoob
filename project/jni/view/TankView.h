@@ -8,19 +8,20 @@
 class TankView {
   public:
     TankView (const Tank* t) :
-      tank(t) {
+      tank(t),
+      shieldSprite("assets/sprites/shield_1.png") {
       tankSprite[0] = new Sprite("assets/sprites/tank1.png");
       tankSprite[1] = new Sprite("assets/sprites/tank1_damaged_1.png");
       tankSprite[2] = new Sprite("assets/sprites/tank1_damaged_2.png");
-      shieldTankSprite[0] = new Sprite("assets/sprites/tank_shield.png");
-      shieldTankSprite[1] = new Sprite("assets/sprites/tank_shield_damaged_1.png");
-      shieldTankSprite[2] = new Sprite("assets/sprites/tank_shield_damaged_1.png");
+      bounceTankSprite[0] = new Sprite("assets/sprites/tank_bounce.png");
+      bounceTankSprite[1] = new Sprite("assets/sprites/tank_bounce_damaged_1.png");
+      bounceTankSprite[2] = new Sprite("assets/sprites/tank_bounce_damaged_1.png");
     }
 
     ~TankView () {
       for (int i=0; i<3; i++) {
         delete tankSprite[i];
-        delete shieldTankSprite[i];
+        delete bounceTankSprite[i];
       }
     }
 
@@ -30,11 +31,13 @@ class TankView {
         case TANK_PLAYER: return GREEN;
         case BOSS_SIMPLE:
         case TANK_SIMPLE: return RED;
-        case BOSS_SHIELD:
-        case TANK_SHIELD: return ORANGE;
+        case BOSS_BOUNCE:
+        case TANK_BOUNCE: return ORANGE;
         case TANK_STATIC: return GREY;
         case BOSS_BURST:
         case TANK_BURST: return VIOLET;
+        case BOSS_SHIELD:
+        case TANK_SHIELD: return YELLOW;
         default: LOGE("Unhandled tank type : %i", type); return WHITE;
       }
     }
@@ -56,7 +59,12 @@ class TankView {
           break;
         case TANK_SHIELD:
         case BOSS_SHIELD:
-          shieldTankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
+          tankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
+          shieldSprite.draw(*tank, 0, 1.1f);
+          break;
+        case TANK_BOUNCE:
+        case BOSS_BOUNCE:
+          bounceTankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
           break;
       }
       GLW::colorWhite();
@@ -73,11 +81,12 @@ class TankView {
     }
   protected:
     Sprite* getTankSprite () { return tankSprite[0]; }
-    Sprite* getShieldTankSprite () { return shieldTankSprite[0]; }
+    Sprite* getBounceTankSprite () { return bounceTankSprite[0]; }
   private:
     const Tank* tank;
     Sprite* tankSprite[3]; //0=undamaged, 1=damaged_1, 2=damaged_2
-    Sprite* shieldTankSprite[3];//0=undamaged, 1_damaged_1, 2=damaged2
+    Sprite* bounceTankSprite[3];//0=undamaged, 1_damaged_1, 2=damaged2
+    Sprite shieldSprite;
 
 };
 

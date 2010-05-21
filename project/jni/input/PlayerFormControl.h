@@ -17,7 +17,7 @@ class PlayerFormControl : public Menu {
     void _actionNext();
     void _actionPrev();
     Sprite tankSprite;
-    Sprite shieldTankSprite;
+    Sprite bounceTankSprite;
     size_t currentFormIdx;
 };
 

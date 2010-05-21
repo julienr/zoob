@@ -8,7 +8,7 @@
 PlayerFormControl::PlayerFormControl ()
   : Menu(NULL),
     tankSprite("assets/sprites/tank1.png"),
-    shieldTankSprite("assets/sprites/tank_shield.png"),
+    bounceTankSprite("assets/sprites/tank_bounce.png"),
     currentFormIdx(0){
   MenuItem* next = new MenuItem("assets/sprites/menuitems/next.png",
                                 "assets/sprites/menuitems/next_h.png",
@@ -90,8 +90,8 @@ void PlayerFormControl::draw () {
     case FORM_BURST:
       tankSprite.draw(tankPos, tankSize);
       break;
-    case FORM_SHIELD:
-      shieldTankSprite.draw(tankPos, tankSize);
+    case FORM_BOUNCE:
+      bounceTankSprite.draw(tankPos, tankSize);
       break;
   }
   GLW::colorWhite();
