@@ -1,4 +1,4 @@
-package net.fhtagn.moob;
+package net.fhtagn.zoob;
 
 import java.io.IOException;
 
@@ -19,17 +19,17 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 
-public class Moob extends Activity {
-	private MoobGLSurface mGLView;
+public class Zoob extends Activity {
+	private ZoobGLSurface mGLView;
 
 	static {
-		System.loadLibrary("moob");
+		System.loadLibrary("zoob");
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mGLView = new MoobGLSurface(this);
+		mGLView = new ZoobGLSurface(this);
 		setContentView(mGLView);
 		
     //Force landscape
@@ -65,8 +65,8 @@ public class Moob extends Activity {
 
 }
 
-class MoobGLSurface extends GLSurfaceView {
-	MoobRenderer mRenderer;
+class ZoobGLSurface extends GLSurfaceView {
+	ZoobRenderer mRenderer;
 	
 	//FIXME: use GestureDetector.SimpleOnGestureListener to listen to tap/double-tap, multitouch ?
 	
@@ -82,9 +82,9 @@ class MoobGLSurface extends GLSurfaceView {
 	private static native void touchEventUp (float x, float y);
 	private static native void touchEventOther (float x, float y);
 	
-	public MoobGLSurface(Context context) {
+	public ZoobGLSurface(Context context) {
 		super(context);
-		mRenderer = new MoobRenderer(context);
+		mRenderer = new ZoobRenderer(context);
 		setRenderer(mRenderer);
 	}
 	
@@ -123,16 +123,16 @@ class MoobGLSurface extends GLSurfaceView {
 	}
 }
 
-class MoobRenderer implements GLSurfaceView.Renderer {
+class ZoobRenderer implements GLSurfaceView.Renderer {
 	private Context context;
-	public MoobRenderer (Context context) {
+	public ZoobRenderer (Context context) {
 		this.context = context;
 		// return apk file path (or null on error)
 		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = context.getPackageManager();
 		try {
-	    appInfo = packMgmr.getApplicationInfo("net.fhtagn.moob", 0);
+	    appInfo = packMgmr.getApplicationInfo("net.fhtagn.zoob", 0);
     } catch (NameNotFoundException e) {
 	    e.printStackTrace();
 	    throw new RuntimeException("Unable to locate assets, aborting...");
