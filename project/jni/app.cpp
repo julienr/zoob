@@ -138,7 +138,7 @@ void toWonState () {
     toMenuState(STATE_END);
   else {
     toMenuState(STATE_WON);
-    saveProgress(GameManager::getInstance()->getCurrentLevel());
+    saveProgress(GameManager::getInstance()->getCurrentLevel()+1);
   }
 }
 

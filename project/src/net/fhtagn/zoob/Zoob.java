@@ -1,18 +1,18 @@
 package net.fhtagn.zoob;
 
-import java.io.IOException;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,17 +30,13 @@ public class Zoob extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mGLView = new ZoobGLSurface(this);
+		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication());
 		setContentView(mGLView);
 		
     //Force landscape
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);    
 	}
 	
-	public static void saveProgress (int level) {
-		Log.e("Zoob", "Java : level="+level);
-	}
-    
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -66,7 +62,12 @@ public class Zoob extends Activity {
       return true;
     }
     return super.onKeyDown(keyCode, event);
-}
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 
 }
 
@@ -87,9 +88,9 @@ class ZoobGLSurface extends GLSurfaceView {
 	private static native void touchEventUp (float x, float y);
 	private static native void touchEventOther (float x, float y);
 	
-	public ZoobGLSurface(Context context) {
+	public ZoobGLSurface(Context context, ZoobApplication app) {
 		super(context);
-		mRenderer = new ZoobRenderer(context);
+		mRenderer = new ZoobRenderer(context, app);
 		setRenderer(mRenderer);
 	}
 	
@@ -130,7 +131,8 @@ class ZoobGLSurface extends GLSurfaceView {
 
 class ZoobRenderer implements GLSurfaceView.Renderer {
 	private Context context;
-	public ZoobRenderer (Context context) {
+
+	public ZoobRenderer (Context context, ZoobApplication app) {
 		this.context = context;
 		// return apk file path (or null on error)
 		String apkFilePath = null;
@@ -144,7 +146,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
     }
 		apkFilePath = appInfo.sourceDir;
 		Log.i("ZoobRenderer", "Calling nativeInit");
-		nativeInit(apkFilePath);
+		nativeInit(apkFilePath, app);
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -161,7 +163,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 
   private static native void nativeInitGL();
-	private static native void nativeInit(String apkPath);
+	private static native void nativeInit(String apkPath, ZoobApplication app);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 }
