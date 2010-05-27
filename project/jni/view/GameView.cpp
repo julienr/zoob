@@ -24,7 +24,10 @@ GameView::GameView (Game& g)
     circle("assets/sprites/circle.png"),
     enemiesView(5),
     shadow("assets/sprites/shadow.png"),
-    light("assets/sprites/light.png") {
+    light("assets/sprites/light.png"),
+    wtf("assets/sprites/wtf.png"),
+    lastLightToggle(BOSS_INTRO_TIME),
+    lightOn(true) {
   const list<EnemyTank*>* enemies = g.getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.append(new EnemyTankView(*i));
@@ -63,6 +66,7 @@ void GameView::_drawLighting() const {
    const float angleIncr = 2.0f * M_PI / (float) numSubdiv;
    //FIXME: this is somehow ugly, but this is to cover the whole level
    const float radius = 15.0f;
+   //FIXME: make the lighting circle static (like Square) and simply move it around to foolow player's tank
    MGL_DATATYPE lightingVerts[3 * numVerts];
    MGL_DATATYPE lightingCoords[2 * numVerts];
    const Vector2& center = game.getPlayerTank()->getPosition();
@@ -104,7 +108,27 @@ void GameView::_drawShadows() const {
   }
 }
 
-void GameView::draw () {
+#define INTRO_LIGHT_TOGGLE_TIME 0.5f
+void GameView::_drawBossIntro () {
+  levelView.drawBackground();
+  const double timeLeft = game.getIntroTimeLeft();
+  if (lastLightToggle - timeLeft> INTRO_LIGHT_TOGGLE_TIME) {
+    lastLightToggle = timeLeft;
+    lightOn = !lightOn;
+  }
+
+  _drawLighting();
+  levelView.drawWalls();
+  playerTankView.draw(game.getLastFrameElapsed());
+  wtf.draw(game.getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
+
+  GLW::colorWhite();
+  if (!lightOn)
+    _drawShadows();
+
+}
+
+void GameView::_drawGame () {
   //Create new explosions
   list<ExplosionLocation>& gameExpls = game.getExplosions();
   while (!gameExpls.empty()) {

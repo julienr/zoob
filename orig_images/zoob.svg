@@ -2063,6 +2063,20 @@
        x2="1091.8077"
        y2="1342.5544"
        gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective3456"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3493"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2071,9 +2085,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.25000001"
-     inkscape:cx="1209.4663"
-     inkscape:cy="-1212.9077"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="4031.6582"
+     inkscape:cy="-1793.1858"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -3430,14 +3444,14 @@
        sodipodi:ry="172"
        d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
        transform="translate(-113.41421,-99.811183)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_rocket.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <path
        style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.98865128;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 965.35554,1417.4504 -32.01207,30.4849 c -26.62265,-16.537 -62.00015,-13.7723 -85.75216,8.8467 -28.19565,26.8504 -29.28591,71.4743 -2.4353,99.67 26.85044,28.1957 71.47447,29.2862 99.6703,2.4355 23.75175,-22.6188 28.24111,-57.8193 13.02404,-85.2177 l 32.01206,-30.4849 -24.50687,-25.7345 z"
        id="path4503-0-03-0"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_rocket.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <path
@@ -3450,7 +3464,7 @@
        sodipodi:ry="9.1923885"
        d="m 1572.6055,593.44989 a 9.1923885,9.1923885 0 1 1 -18.3848,0 9.1923885,9.1923885 0 1 1 18.3848,0 z"
        transform="translate(-531.41309,788.91229)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_rocket.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3459,7 +3473,7 @@
        x="780.64587"
        y="1668.0022"
        id="text4088"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_rocket.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -3469,7 +3483,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">rocket</tspan></text>
     <g
        id="g4225"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn_clicked.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_rocket_clicked.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295">
       <path
@@ -3537,7 +3551,7 @@
        sodipodi:ry="172"
        d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
        transform="translate(-1674.2114,-164.0667)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3546,7 +3560,7 @@
        x="-752.25934"
        y="1595.9685"
        id="text4088-9"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -3561,7 +3575,10 @@
     <path
        style="fill:#68ff3f;fill-opacity:1;fill-rule:nonzero;stroke:none"
        d="m -645.33627,1292.544 c -0.70194,-2e-4 -27.75568,63.9249 -28.36372,64.2757 -0.60823,0.3508 -69.4085,-8.2736 -69.75969,-7.666 -0.35118,0.6078 41.45497,55.9666 41.45476,56.6686 -2.2e-4,0.702 -41.86451,56.0607 -41.51375,56.6686 0.35076,0.6081 69.21066,-7.958 69.81868,-7.6067 0.60782,0.3511 27.60278,64.2752 28.30474,64.2754 0.70215,2e-4 27.6967,-63.8657 28.30493,-64.2165 0.60804,-0.3507 69.46729,8.2147 69.81869,7.6069 0.35098,-0.6079 -41.45518,-55.9667 -41.45496,-56.6687 2.1e-4,-0.7019 41.80551,-56.0016 41.45496,-56.6097 -0.35097,-0.6079 -69.15209,7.8993 -69.7599,7.5481 -0.60761,-0.3512 -27.60278,-64.2753 -28.30474,-64.2757 z m -0.0596,63.9218 c 27.26586,0 49.41534,22.1497 49.41534,49.4155 0,27.2659 -22.14948,49.3565 -49.41534,49.3565 -27.26586,0 -49.35656,-22.0906 -49.35656,-49.3565 0,-27.2658 22.0907,-49.4155 49.35656,-49.4155 z"
-       id="path3385-4" />
+       id="path3385-4"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#ffffff;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
@@ -3572,7 +3589,7 @@
        sodipodi:ry="172"
        d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
        transform="translate(-1194.2793,-167.08081)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb_clicked.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3581,7 +3598,7 @@
        x="-272.32727"
        y="1592.9545"
        id="text4088-9-2"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/fire_btn.png"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb_clicked.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -3592,7 +3609,10 @@
     <path
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-opacity:1"
        d="m -165.40412,1289.5299 c -0.70194,-2e-4 -27.75568,63.9249 -28.36372,64.2757 -0.60823,0.3508 -69.4085,-8.2736 -69.75969,-7.666 -0.35118,0.6078 41.45497,55.9666 41.45476,56.6686 -2.2e-4,0.702 -41.86451,56.0607 -41.51375,56.6686 0.35076,0.6081 69.21066,-7.958 69.81868,-7.6067 0.60782,0.3511 27.60278,64.2752 28.30474,64.2754 0.70215,2e-4 27.6967,-63.8657 28.30493,-64.2165 0.60804,-0.3507 69.467295,8.2147 69.818695,7.6069 0.35098,-0.6079 -41.455185,-55.9667 -41.454965,-56.6687 2.1e-4,-0.7019 41.805515,-56.0016 41.454965,-56.6097 -0.35097,-0.6079 -69.152095,7.8993 -69.759905,7.5481 -0.60761,-0.3512 -27.60278,-64.2753 -28.30474,-64.2757 z m -0.0596,63.9218 c 27.26586,0 49.41534,22.1497 49.41534,49.4155 0,27.2659 -22.14948,49.3565 -49.41534,49.3565 -27.26586,0 -49.35656,-22.0906 -49.35656,-49.3565 0,-27.2658 22.0907,-49.4155 49.35656,-49.4155 z"
-       id="path3385-4-1" />
+       id="path3385-4-1"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/fire_bomb_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
     <rect
        style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="rect4161-9-7-7-4"
@@ -4034,5 +4054,83 @@
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:1086.80395508px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+       x="2763.6233"
+       y="4676.5557"
+       id="text3550-2"
+       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"
+       transform="matrix(0.75143507,-0.65980705,0.65980705,0.75143507,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3552-1"
+         x="2763.6233"
+         y="4676.5557"
+         style="font-size:301.88998413px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">z</tspan></text>
+    <path
+       style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 5367.8963,1528.9071 -22.9703,-17.4449 c 7.8793,-18.8708 2.4139,-41.3705 -14.6295,-54.3141 -20.2318,-15.3652 -49.0889,-11.4199 -64.4541,8.812 -15.3652,20.2318 -11.42,49.089 8.812,64.4543 17.0432,12.9435 40.1844,12.169 56.2477,-0.4863 l 22.9703,17.4449 14.0239,-18.4659 z"
+       id="path4503-0-03-2"
+       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:301.89001465px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
+       x="3215.4089"
+       y="4685.9146"
+       id="text3585-0-0"
+       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"
+       transform="matrix(0.75143507,-0.65980705,0.65980705,0.75143507,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3587-0-7"
+         x="3215.4089"
+         y="4685.9146"
+         style="font-size:301.89001465px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">b</tspan></text>
+    <path
+       style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 5345.0383,1442.4148 28.8402,-0.4498 c 5.4464,19.711 23.6326,34.0418 45.0311,33.7081 25.4021,-0.3962 45.6733,-21.3099 45.2771,-46.7119 -0.3962,-25.4019 -21.3098,-45.6732 -46.7118,-45.277 -21.3985,0.3338 -39.129,15.2249 -43.958,35.0961 l -28.8403,0.4499 0.3617,23.1846 z"
+       id="path4503-2-4-3"
+       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <g
+       id="g5086-0"
+       transform="matrix(2.0370721,0,0,2.0370721,110.89936,1217.9629)">
+      <path
+         sodipodi:nodetypes="csscsssc"
+         id="path5049-2-9"
+         d="m 2070.1665,746.98699 c 0,35.92824 -43.0552,65.05383 -96.1665,65.05383 -13.2778,0 -25.9271,-1.82035 -37.4323,-5.11225 -11.5053,-3.2919 -23.3762,8.28013 -55.4932,8.86262 19.383,-21.41748 9.1825,-35.69938 4.3162,-43.48231 -4.8663,-7.78293 -7.5572,-16.33983 -7.5572,-25.32189 0,-35.92823 43.0552,-65.05382 96.1665,-65.05382 53.1113,0 96.1665,29.12559 96.1665,65.05382 z"
+         style="fill:#0f0909;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      <path
+         sodipodi:nodetypes="csscsssc"
+         id="path5049-6"
+         d="m 2067.3376,741.99257 c 0,35.92824 -43.0552,65.05383 -96.1665,65.05383 -13.2778,0 -25.9271,-1.82035 -37.4323,-5.11225 -11.5053,-3.2919 -23.3762,8.28013 -55.4932,8.86262 19.383,-21.41748 9.1825,-35.69938 4.3162,-43.48231 -4.8663,-7.78293 -7.5572,-16.33983 -7.5572,-25.32189 0,-35.92823 43.0552,-65.05382 96.1665,-65.05382 53.1113,0 96.1665,29.12559 96.1665,65.05382 z"
+         style="fill:#d4d4d4;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:268.18804932px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
+       x="3996.4231"
+       y="2834.5718"
+       id="text5228-1-7"><tspan
+         sodipodi:role="line"
+         id="tspan5230-6-2"
+         x="3996.4231"
+         y="2834.5718">?!</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:268.18804932000000463px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ff6600;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
+       x="3984.5723"
+       y="2822.3931"
+       id="text5228-14"><tspan
+         sodipodi:role="line"
+         id="tspan5230-4"
+         x="3984.5723"
+         y="2822.3931">?!</tspan></text>
   </g>
 </svg>

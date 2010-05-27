@@ -17,6 +17,9 @@
 #define TANK_MOVE_SPEED 1.5f
 #define ROCKET_MOVE_SPEED 2.0f
 
+//Each boss level start with an intro. This is the duration of the intro
+#define BOSS_INTRO_TIME 3
+
 enum eGameState {
   GAME_RUNNING,
   GAME_PAUSED
@@ -119,7 +122,20 @@ class Game {
       return playerVisibility;
     }
 
+    bool inIntro () const {
+      return !introDone;
+    }
+
+    double getIntroTimeLeft () const {
+      return introTimeLeft;
+    }
+
   private:
+    void _updateRockets (double elapsedS);
+    void _updateBombs (double elapsedS);
+    int _updateEnemies (double elapsedS);
+    void _updatePlayer (double elapsedS);
+
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);
 
@@ -159,6 +175,9 @@ class Game {
     const bool calculateShadows;
 
     VisibilityGrid playerVisibility;
+
+    double introTimeLeft;
+    bool introDone;
 };
 
 #endif /* GAME_H_ */

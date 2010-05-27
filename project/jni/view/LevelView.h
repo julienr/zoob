@@ -11,7 +11,7 @@ class LevelView {
     LevelView (const Level* lvl)
       : level(lvl),
         wallSprite("assets/sprites/crate.png"),
-        spawnSprite("assets/sprites/earth.png") {}
+        spawnSprite("assets/sprites/earth.png"){}
 
     void drawWalls ();
     void drawBackground ();
@@ -24,6 +24,7 @@ class LevelView {
       const Vector2 extents(level->getWidth(), level->getHeight());
       return Utils::insideTL(Vector2(0,0), extents.x, extents.y, p);
     }
+
   private:
     const Level* level;
     const Sprite wallSprite;

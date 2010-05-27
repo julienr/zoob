@@ -21,7 +21,9 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       godMode(false),
       playerShadows(10),
       calculateShadows(level->hasShadows()),
-      playerVisibility(colManager.getGrid()) {
+      playerVisibility(colManager.getGrid()),
+      introTimeLeft(BOSS_INTRO_TIME),
+      introDone(!level->isBoss()) {
   level->addToColManager(colManager);
   playerTank->setPosition(level->getStartPosition());
   colManager.addEntity(playerTank);
@@ -79,13 +81,51 @@ void Game::update () {
   //explosions.clear();
 
   elapsedS = (now-lastTime)/1000.0;
-  lastTime = now;
-
   if (Math::epsilonEq(elapsedS, 0))
     return;
+  lastTime = now;
+
+  if (!introDone) {
+    introTimeLeft -= elapsedS;
+    if (introTimeLeft <= 0)
+      introDone = true;
+  }
 
   colManager.unmarkCollided();
+  if (introDone) {
+    _updateRockets(elapsedS);
+    _updateBombs(elapsedS);
+    const int numAlives = _updateEnemies(elapsedS);
+    if (numAlives == 0)
+      gameWonCallback();
+  }
 
+  if (!godMode && playerTank->hasExploded()) {
+    playerTank->unmarkExploded();
+    gameOverCallback();
+  }
+
+  _updatePlayer(elapsedS);
+
+  if (calculateShadows) {
+    _calculatePlayerShadows();
+    playerVisibility.calculateVisibility(this);
+  }
+
+  //FIXME: remove
+  /*LIST_FOREACH(EnemyTank*, enemies, i) {
+    EnemyTank* t = *i;
+    if (!t->isAlive())
+      continue;
+
+    for (size_t i=0; i<playerShadows.length(); i++) {
+      if (playerShadows[i]->fullyInside(t->getPosition(), t->getBVolume()->getWidth()/2.0f))
+        LOGE("EnemyTank %p in shadow %i", t, i);
+    }
+  }*/
+}
+
+void Game::_updateRockets (double elapsedS) {
   //Rockets
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
@@ -103,7 +143,9 @@ void Game::update () {
       i++;
     }
   }
-  
+}
+
+void Game::_updateBombs (double elapsedS) {
   //Bombs
   for (list<Bomb*>::iterator i = bombs.begin(); i.hasNext(); ) {
     Bomb* m = *i;
@@ -124,7 +166,9 @@ void Game::update () {
     } else
       i++;
   }
+}
 
+int Game::_updateEnemies (double elapsedS) {
   //Enemies
   int numAlive = 0;
   LIST_FOREACH(EnemyTank*, enemies, i) {
@@ -161,7 +205,8 @@ void Game::update () {
             }
           }
         } else { //normal mode or between burst mode
-          if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS, &rocketDir, this, t))
+          if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS,
+              &rocketDir, this, t))
             t->prepareFire();
 
           //the enemy is ready to fire
@@ -176,39 +221,15 @@ void Game::update () {
       }
     }
   }
+  return numAlive;
+}
 
-  //End of game ?
-  if (numAlive == 0) {
-    gameWonCallback();
-  }
-
-  if (!godMode && playerTank->hasExploded()) {
-    playerTank->unmarkExploded();
-    gameOverCallback();
-  }
-
+void Game::_updatePlayer (double elapsedS) {
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;
     doTankMove(playerTank, dir, elapsedS);
   }
-
-  if (calculateShadows) {
-    _calculatePlayerShadows();
-    playerVisibility.calculateVisibility(this);
-  }
-
-  //FIXME: remove
-  /*LIST_FOREACH(EnemyTank*, enemies, i) {
-    EnemyTank* t = *i;
-    if (!t->isAlive())
-      continue;
-
-    for (size_t i=0; i<playerShadows.length(); i++) {
-      if (playerShadows[i]->fullyInside(t->getPosition(), t->getBVolume()->getWidth()/2.0f))
-        LOGE("EnemyTank %p in shadow %i", t, i);
-    }
-  }*/
 }
 
 void Game::doFireRocket (Tank* t, const Vector2& dir) {

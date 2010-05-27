@@ -2,7 +2,7 @@
 
 #define DECLARE_LVL \
   Level* load() { \
-    return new Level(xdim,ydim,tiles,tanks,numTanks,shadows); \
+    return new Level(xdim,ydim,tiles,tanks,numTanks,shadows,boss); \
   }
 
 
@@ -39,6 +39,7 @@ namespace lvl0 {
   };
 #endif
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -68,6 +69,7 @@ namespace lvl1 {
   };
 
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -114,6 +116,7 @@ namespace lvl2 {
   };
 
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 4;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -149,6 +152,7 @@ namespace lvl3 {
   };
 
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -185,6 +189,7 @@ namespace lvl4 {
   };
 
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -221,6 +226,7 @@ namespace lvl5 {
   };
 
   bool shadows = true;
+  bool boss = true;
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -259,6 +265,7 @@ namespace lvl6 {
   };
 
   bool shadows = false;
+  bool boss = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -290,6 +297,7 @@ namespace lvl7 {
   };
 
   bool shadows=false;
+  bool boss = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -332,6 +340,7 @@ namespace lvl8 {
   };
 
   bool shadows=false;
+  bool boss = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -387,6 +396,7 @@ namespace lvl9 {
   };
 
   bool shadows=false;
+  bool boss = false;
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
@@ -418,6 +428,7 @@ namespace lvl10 {
   };
 
   bool shadows=true;
+  bool boss = true;
   const size_t numTanks = 2;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
