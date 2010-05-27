@@ -3,7 +3,7 @@ title: Boss with funny emotes
 desc: ""
 type: :feature
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-09 11:16:40.926557 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-27 13:12:37.234447 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""

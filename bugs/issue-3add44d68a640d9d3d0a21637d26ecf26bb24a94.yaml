@@ -3,7 +3,7 @@ title: One-strip comic between levels to make fun out of the game ?
 desc: ""
 type: :feature
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-09 11:16:26.949493 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-27 13:12:58.106166 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""

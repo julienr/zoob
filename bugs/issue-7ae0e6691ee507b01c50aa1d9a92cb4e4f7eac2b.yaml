@@ -3,7 +3,7 @@ title: should enemy rockets bounce against each other ?
 desc: ""
 type: :feature
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-21 12:30:22.938191 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-05-27 13:13:06.974192 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""
