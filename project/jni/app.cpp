@@ -13,6 +13,9 @@
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
 
+
+extern void saveProgress (int level);
+
 zip* APKArchive;
 
 static void printGLString(const char *name, GLenum s) {
@@ -133,8 +136,10 @@ void toLostState () {
 void toWonState () {
   if (GameManager::getInstance()->isAtLastLevel())
     toMenuState(STATE_END);
-  else
+  else {
     toMenuState(STATE_WON);
+    saveProgress(GameManager::getInstance()->getCurrentLevel());
+  }
 }
 
 void toEndState () {
@@ -187,6 +192,9 @@ void nativeInitGL() {
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
+
+  //FIXME: just for debug
+  saveProgress(0);
 }
 
 void nativeQuit () {

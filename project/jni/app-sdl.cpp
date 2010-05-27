@@ -5,6 +5,10 @@
 #define SCREEN_WIDTH 640//480
 #define SCREEN_HEIGHT 320//279
 
+void saveProgress (int level) {
+  LOGE("SDL saveProgress : level %i", level);
+}
+
 int main (int argc, char** argv) {
   if (argc < 2) {
     LOGE("Usage : <apk path>");

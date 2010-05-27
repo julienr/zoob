@@ -15,6 +15,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -34,6 +35,10 @@ public class Zoob extends Activity {
 		
     //Force landscape
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	}
+	
+	public static void saveProgress (int level) {
+		Log.e("Zoob", "Java : level="+level);
 	}
     
 	@Override
@@ -138,6 +143,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	    throw new RuntimeException("Unable to locate assets, aborting...");
     }
 		apkFilePath = appInfo.sourceDir;
+		Log.i("ZoobRenderer", "Calling nativeInit");
 		nativeInit(apkFilePath);
 	}
 	
