@@ -56,6 +56,7 @@ class GameView {
     Sprite shadow;
     Sprite light;
 
+    Sprite levelTxt;
     Sprite wtf;
 
     //Used for boss intro

@@ -25,6 +25,7 @@ GameView::GameView (Game& g)
     enemiesView(5),
     shadow("assets/sprites/shadow.png"),
     light("assets/sprites/light.png"),
+    levelTxt("assets/sprites/level.png"),
     wtf("assets/sprites/wtf.png"),
     lastLightToggle(BOSS_INTRO_TIME),
     lightOn(true) {
@@ -51,7 +52,8 @@ void GameView::drawHearts () const {
 }
 
 void GameView::drawLevelIndicator () const {
-  NumberView::getInstance()->drawInt(GameManager::getInstance()->getCurrentLevel(), Vector2(0,0), Vector2(1.5,1.5));
+  levelTxt.draw(Vector2(1.3,0), Vector2(2.6, 1.3));
+  NumberView::getInstance()->drawInt(GameManager::getInstance()->getCurrentLevel(), Vector2(2.6,0), Vector2(1.5,1.5));
 }
 
 void GameView::_drawLighting() const {
