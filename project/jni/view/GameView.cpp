@@ -8,6 +8,7 @@
 #include "view/ShadowPolygonView.h"
 #include "app.h"
 #include "NumberView.h"
+#include "view/GameManager.h"
 
 
 GameView::GameView (Game& g)
@@ -36,7 +37,7 @@ GameView::~GameView () {
     delete *i;
 }
 
-void GameView::drawHearts () {
+void GameView::drawHearts () const {
   const unsigned currentLife = game.getPlayerTank()->getLivesLeft();
   for (unsigned i=0; i<game.getPlayerTank()->getMaxLives(); i++) {
     if (i >= currentLife)
@@ -44,6 +45,10 @@ void GameView::drawHearts () {
     else
       hearthFull.draw(Vector2(i,0), Vector2(1,1));
   }
+}
+
+void GameView::drawLevelIndicator () const {
+  NumberView::getInstance()->drawInt(GameManager::getInstance()->getCurrentLevel(), Vector2(0,0), Vector2(1.5,1.5));
 }
 
 void GameView::_drawLighting() const {

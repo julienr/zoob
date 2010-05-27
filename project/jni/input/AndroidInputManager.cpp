@@ -2,8 +2,8 @@
 #include "app.h"
 
 
-const Vector2 rocketButtonPos(13.8f, 4.0f);
-const Vector2 rocketButtonSize(2.5,1.25);
+const Vector2 rocketButtonPos(13.8f, 3.0f);
+const Vector2 rocketButtonSize(2.5,2.5);
 const Vector2 mineButtonPos(rocketButtonPos.x, 6.0f);
 const Vector2 mineButtonSize(rocketButtonSize);
 
@@ -125,7 +125,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         getGame()->setTankMoveDir(Vector2::ZERO);
       } else {
         rocketButton.setPressed(false);
-        if (_progMan()->hasBombs() && bombButton.inside(pNoTrans))
+        if (_progMan()->hasBombs() && bombButton.isPressed() &&  bombButton.inside(pNoTrans))
           getGame()->playerDropBomb();
         else if (_progMan()->hasForms() && formControl.inside(pNoTrans))
           formControl.handleTouchUp(pNoTrans);

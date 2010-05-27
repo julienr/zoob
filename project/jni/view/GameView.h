@@ -19,7 +19,9 @@ class GameView {
     }
 
     //Only draw the hearts representing the life
-    void drawHearts ();
+    void drawHearts () const;
+
+    void drawLevelIndicator () const;
 
     //Draw main game area
     void draw();

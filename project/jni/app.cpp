@@ -11,6 +11,7 @@
 #include "view/GameManager.h"
 #include "input/AndroidInputManager.h"
 #include "logic/Difficulty.h"
+#include "view/NumberView.h"
 
 zip* APKArchive;
 
@@ -378,6 +379,11 @@ void nativeRender () {
       game->update();
 
     inputManager->draw();
+
+    glPushMatrix();
+    GLW::translate(0.5f, 0.55f, 0);
+    gameView->drawLevelIndicator();
+    glPopMatrix();
 
     glPushMatrix();
     GLW::translate(10.0f, 0.55f, 0);
