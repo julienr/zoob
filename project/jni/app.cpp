@@ -167,12 +167,11 @@ bool initialised = false;
 void nativeInitGL(int level, int difficulty) {
   if (!initialised) {
     initialised = true;
+    Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
     GameManager::create(startGame, nativeMenu, gameUnPauseCallback, level);
     inputManager = new AndroidInputManager();
-
-    Difficulty::setDifficulty(difficulty);
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -194,9 +193,6 @@ void nativeInitGL(int level, int difficulty) {
   glColor4f(1,1,1,1);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
-
-  //FIXME: just for debug
-  saveProgress(0);
 }
 
 void nativeQuit () {

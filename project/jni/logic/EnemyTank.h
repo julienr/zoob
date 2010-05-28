@@ -8,7 +8,7 @@
 
 class EnemyTank: public Tank {
   public:
-    EnemyTank(float radius, TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(2000))
+    EnemyTank(float radius, TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()))
       : Tank(radius, firePol),
         ai(ai),
         prepareFiring(false) {
@@ -70,7 +70,7 @@ class EnemyTank: public Tank {
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
 
-    virtual double getInitialFiringDelay () const { return Difficulty::getInstance()->getFiringDelay(); }
+    virtual double getInitialFiringDelay () const { return Difficulty::getInstance()->getEnemiesFiringDelay(); }
   private:
     TankAI* ai;
     /**

@@ -64,7 +64,7 @@ class GameManager {
         menuCB(menuCb),
         continueCB(continueCb),
         state(STATE_MAINMENU),
-        currentLevel(0),
+        currentLevel(levelLimit),
         levelLimit(levelLimit) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);

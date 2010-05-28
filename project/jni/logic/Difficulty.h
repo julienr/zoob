@@ -22,8 +22,13 @@ class Difficulty {
   /** Difficulty settings **/
     //Enemy tanks will observe this delay between the moment they decide to fire and the moment the
     //rocket is actually launched. During this time, they'll visually grow
-    virtual double getFiringDelay () const = 0;
+    virtual double getEnemiesFiringDelay () const = 0;
     virtual double getBossFiringDelay () const = 0;
+
+    //FIXME: harmonize all time to double
+
+    //time between two rockets (in millis)
+    virtual uint64_t getEnemiesFireInterval () const = 0;
 
     //Number of times a rocket should bounce before destroying a tank shield
     virtual unsigned getShieldResistance () const = 0;
@@ -37,7 +42,8 @@ class Difficulty {
 
 class DifficultyEasy : public Difficulty {
   public:
-    double getFiringDelay () const { return 2.0; }
+    uint64_t getEnemiesFireInterval () const { return 2000; }
+    double getEnemiesFiringDelay () const { return 2.0; }
     double getBossFiringDelay () const { return 0.5f; }
     unsigned getShieldResistance () const { return 1; }
   protected:
@@ -46,7 +52,8 @@ class DifficultyEasy : public Difficulty {
 
 class DifficultyMedium : public Difficulty {
   public:
-    double getFiringDelay () const { return 1.5; }
+    uint64_t getEnemiesFireInterval () const { return 1500; }
+    double getEnemiesFiringDelay () const { return 1.5; }
     double getBossFiringDelay () const { return 0.5f; }
     unsigned getShieldResistance () const { return 1; }
   protected:
@@ -55,7 +62,8 @@ class DifficultyMedium : public Difficulty {
 
 class DifficultyHard : public Difficulty {
   public:
-    double getFiringDelay () const { return 0.7; }
+    uint64_t getEnemiesFireInterval () const { return 800; }
+    double getEnemiesFiringDelay () const { return 0.2; }
     double getBossFiringDelay () const { return 0.4f; }
     unsigned getShieldResistance () const { return 2; }
   protected:

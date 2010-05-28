@@ -38,6 +38,7 @@ class Tank: public Entity {
         exploded(false),
         alive(true),
         firePolicy(pol),
+        //FIXME: move the whole bomb stuff to PlayerTank
         bombPolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
         path(NULL),
         numMines(0) {
