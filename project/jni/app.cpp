@@ -33,7 +33,7 @@ static void loadAPK (const char* apkPath) {
   }
 
   //Just for debug, print APK contents
-  int numFiles = zip_get_num_files(APKArchive);
+  /*int numFiles = zip_get_num_files(APKArchive);
   for (int i=0; i<numFiles; i++) {
     const char* name = zip_get_name(APKArchive, i, 0);
     if (name == NULL) {
@@ -41,7 +41,7 @@ static void loadAPK (const char* apkPath) {
       return;
     }
     LOGI("File %i : %s\n", i, name);
-  }
+  }*/
 }
 
 void centerGameInViewport ();
