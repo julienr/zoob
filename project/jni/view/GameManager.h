@@ -109,8 +109,9 @@ class GameManager {
     }
 
     void nextGame () {
-      ASSERT(!isAtLastLevel());
-      nextLevel();
+      ASSERT(hasMoreLevels());
+      currentLevel++;
+      levelLimit++;
       newGameCB(this);
     }
 
@@ -135,7 +136,7 @@ class GameManager {
 
     inline
     bool isAtLastLevel () {
-      return hasMoreLevels() && isAtLevelLimit();
+      return !hasMoreLevels() || isAtLevelLimit();
       //return currentLevel == numLevels-1;
     }
 

@@ -136,7 +136,7 @@ void toLostState () {
 }
 
 void toWonState () {
-  if (GameManager::getInstance()->isAtLastLevel())
+  if (!GameManager::getInstance()->hasMoreLevels())
     toMenuState(STATE_END);
   else {
     toMenuState(STATE_WON);
