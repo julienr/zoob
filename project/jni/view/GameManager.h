@@ -111,6 +111,7 @@ class GameManager {
     void nextGame () {
       ASSERT(hasMoreLevels());
       currentLevel++;
+      LOGE("next Game");
       levelLimit++;
       newGameCB(this);
     }
