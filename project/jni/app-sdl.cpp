@@ -9,17 +9,29 @@ void saveProgress (int level) {
   LOGE("SDL saveProgress : level %i", level);
 }
 
+void saveDifficulty (int diff) {
+  LOGE("SDL saveDifficulty : diff %i", diff);
+}
+
 int main (int argc, char** argv) {
   if (argc < 2) {
     LOGE("Usage : <apk path>");
     return -1;
   }
+  int level = 0;
+  if (argc >= 3)
+    level = atoi(argv[2]);
+  int difficulty = 0;
+  if (argc >= 4)
+    difficulty = atoi(argv[3]);
+
+
   SDL_Init(SDL_INIT_VIDEO);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   /*SDL_Surface* screen =*/ SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_OPENGL);
 
   nativeInit (argv[1]);
-  nativeInitGL();
+  nativeInitGL(level, difficulty);
   nativeResize(SCREEN_WIDTH,SCREEN_HEIGHT);
 
   bool leftBtnClicked = false;

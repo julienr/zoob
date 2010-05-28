@@ -4,7 +4,7 @@
 //performs all non-gl initialisation
 void nativeInit (const char* apkPath);
 
-void nativeInitGL ();
+void nativeInitGL (int level, int difficulty);
 void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();

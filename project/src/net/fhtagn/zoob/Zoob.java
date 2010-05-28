@@ -131,6 +131,7 @@ class ZoobGLSurface extends GLSurfaceView {
 
 class ZoobRenderer implements GLSurfaceView.Renderer {
 	private Context context;
+	private ZoobApplication app;
 
 	public ZoobRenderer (Context context, ZoobApplication app) {
 		this.context = context;
@@ -146,11 +147,12 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
     }
 		apkFilePath = appInfo.sourceDir;
 		Log.i("ZoobRenderer", "Calling nativeInit");
+		this.app = app;
 		nativeInit(apkFilePath, app);
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    nativeInitGL();
+    nativeInitGL(app.getLevel(), app.getDifficulty());
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -162,7 +164,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		nativeRender();
 	}
 
-  private static native void nativeInitGL();
+  private static native void nativeInitGL(int level, int difficulty);
 	private static native void nativeInit(String apkPath, ZoobApplication app);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();

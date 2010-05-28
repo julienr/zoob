@@ -11,9 +11,6 @@ public class ZoobApplication extends Application {
 	
 	private SharedPreferences settings;
 	
-	private int level;
-	private int difficulty;
-	
 	@Override
 	public void onCreate () {
 		super.onCreate();
@@ -22,8 +19,14 @@ public class ZoobApplication extends Application {
 		
     //Fetch level from preferences
     settings = getSharedPreferences(PREFS_NAME, 0);
-    level = settings.getInt(PREF_KEY_LEVEL, 0);
-    level = settings.getInt(PREF_KEY_DIFFICULTY, 1);
+	}
+	
+	public int getLevel () {
+		return settings.getInt(PREF_KEY_LEVEL, 0);
+	}
+	
+	public int getDifficulty () {
+		return settings.getInt(PREF_KEY_DIFFICULTY, 0);
 	}
 	
 	private void saveIntPref (String key, int val) {

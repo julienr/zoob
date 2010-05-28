@@ -23,6 +23,10 @@ class MenuItem {
       this->pos = pos;
     }
 
+    const Vector2& getPosition () {
+      return pos;
+    }
+
     void setSize (const Vector2& size) {
       this->size = size;
     }

@@ -10,17 +10,14 @@ static jmethodID java_saveProgress;
 static jmethodID java_saveDifficulty;
 
 void saveProgress (int level) {
-  LOGE("upcall saveProgress");
   jniEnv->CallVoidMethod(zoobAppObj, java_saveProgress, level);
-  //jniEnv->CallStaticVoidMethod(zoobClass, java_saveProgress, level);
 }
 
 void saveDifficulty (int diff) {
   jniEnv->CallVoidMethod(zoobAppObj, java_saveDifficulty, diff);
-  //jniEnv->CallStaticVoidMethod(zoobClass, java_saveDifficulty, diff);
 }
 
-#define JNI_GET_STATIC_METHOD(var,name,type) \
+#define JNI_GET_METHOD(var,name,type) \
   var = jniEnv->GetMethodID(zoobClass,name,type); \
     if (var == NULL) \
       LOGE("Unable to get method id for "name" from JNI");
@@ -37,8 +34,8 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
   if (!jniEnv->IsInstanceOf(zoobAppObj, zoobClass))
     LOGE("Zoob app not instance of ZoobApplication");
 
-  JNI_GET_STATIC_METHOD(java_saveProgress, "saveProgress", "(I)V");
-  JNI_GET_STATIC_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
+  JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
+  JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
@@ -52,8 +49,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInitGL
-  (JNIEnv *, jclass) {
-    nativeInitGL();
+  (JNIEnv *, jclass, int level, int difficulty) {
+    nativeInitGL(level, difficulty);
 }
 
 

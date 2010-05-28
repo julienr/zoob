@@ -35,8 +35,9 @@ class GameManager {
   public:
     static void create (startGameCallback_t gameCb,
                           callback_t menuCb,
-                          callback_t continueCb) {
-      instance = new GameManager(gameCb, menuCb, continueCb);
+                          callback_t continueCb,
+                          int levelLimit) {
+      instance = new GameManager(gameCb, menuCb, continueCb, levelLimit);
     }
 
     inline
@@ -57,12 +58,14 @@ class GameManager {
 
     GameManager (startGameCallback_t gameCb, 
                  callback_t menuCb,
-                 callback_t continueCb)
+                 callback_t continueCb,
+                 int levelLimit)
       : newGameCB(gameCb),
         menuCB(menuCb),
         continueCB(continueCb),
         state(STATE_MAINMENU),
-        currentLevel(0) {
+        currentLevel(0),
+        levelLimit(levelLimit) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
       menus[STATE_LOST] = new LostMenu(this);
@@ -115,9 +118,25 @@ class GameManager {
       continueCB();
     }
 
+    //Based on this player's progress, the biggest completed level to date
+    void setLevelLimit (size_t level) {
+      levelLimit = level;
+    }
+
+    inline
+    bool isAtLevelLimit () {
+      return currentLevel >= levelLimit;
+    }
+
+    inline
+    bool hasMoreLevels () {
+      return currentLevel < numLevels-1;
+    }
+
     inline
     bool isAtLastLevel () {
-      return currentLevel == numLevels-1;
+      return hasMoreLevels() && isAtLevelLimit();
+      //return currentLevel == numLevels-1;
     }
 
     inline
@@ -154,8 +173,10 @@ class GameManager {
 
     Menu* menus[MAX_STATE];
 
-    //poitner to the current game, NULL if not in game
+    //pointer to the current game, NULL if not in game
     Game* currentGame;
+
+    size_t levelLimit;
 };
 
 #endif /* GAMEMANAGER_H_ */

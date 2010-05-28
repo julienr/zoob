@@ -13,13 +13,16 @@ class MainMenu : public Menu {
   private:
     void _initItems ();
     void _actionStart ();
-    void _actionOptions ();
-    void _actionNext ();
-    void _actionPrev ();
+    void _actionNextLvl ();
+    void _actionPrevLvl ();
+    void _actionNextDiff ();
+    void _actionPrevDiff ();
 
     Sprite logo;
+    Sprite easy, normal, hard;
     Vector2 logoPos, logoSize;
     Vector2 numberPos, numberSize;
+    Vector2 diffPos, diffSize;
 };
 
 #endif /* MAINMENU_H_ */

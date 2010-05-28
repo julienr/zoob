@@ -2106,7 +2106,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4100,7 +4100,10 @@
        inkscape:export-ydpi="299.86295" />
     <g
        id="g5086-0"
-       transform="matrix(2.0370721,0,0,2.0370721,110.89936,1217.9629)">
+       transform="matrix(2.0370721,0,0,2.0370721,110.89936,1217.9629)"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/wtf.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
       <path
          sodipodi:nodetypes="csscsssc"
          id="path5049-2-9"
@@ -4117,7 +4120,10 @@
        style="font-size:268.18804932px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
        x="3996.4231"
        y="2834.5718"
-       id="text5228-1-7"><tspan
+       id="text5228-1-7"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/wtf.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan5230-6-2"
          x="3996.4231"
@@ -4127,7 +4133,10 @@
        style="font-size:268.18804932000000463px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#ff6600;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
        x="3984.5723"
        y="2822.3931"
-       id="text5228-14"><tspan
+       id="text5228-14"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/wtf.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan5230-4"
          x="3984.5723"

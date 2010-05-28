@@ -264,8 +264,8 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
   const float cs = vg.getCellSize();
   glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
-  for (unsigned x = 0; x < vg.getWidth(); x++) {
-    for (unsigned y = 0; y < vg.getHeight(); y++) {
+  for (int x = 0; x < vg.getWidth(); x++) {
+    for (int y = 0; y < vg.getHeight(); y++) {
       if (!vg.isWalkable(x, y)) {
         glColor4f(0, 0, 0, 0.5f);
       } else {
@@ -336,11 +336,12 @@ void GameView::debugDrawAI () {
 }
 
 void GameView::debugDraw () {
-  const Tank* tank = game.getPlayerTank();
   GLW::disableTextures();
   game.getColManager().foreachEntity(drawColEntity);
   //Draw collision normal
-  /*if (tank.collided) {
+  /*
+    const Tank* tank = game.getPlayerTank();
+    if (tank.collided) {
     MGL_DATATYPE verts[6] = {
         fX(tank.lastColNormal.x), fX(tank.lastColNormal.y), 0,
         0, 0, 0

@@ -10,7 +10,7 @@ extern "C" {
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer
  * Method:    nativeInit
- * Signature: (S, L/net.fhtagn.zoob/Zoob)V
+ * Signature: (S, L/net.fhtagn.zoob/ZoobApplication)V
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
   (JNIEnv *, jclass, jstring, jobject);
@@ -18,10 +18,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer
  * Method:    nativeInitGL
- * Signature: ()V
+ * Signature: (I,I)V
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInitGL
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, int, int);
 
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer

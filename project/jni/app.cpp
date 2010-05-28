@@ -15,6 +15,7 @@
 
 
 extern void saveProgress (int level);
+extern void saveDifficulty (int diff);
 
 zip* APKArchive;
 
@@ -109,6 +110,7 @@ void toPlayingState () {
     inputManager->reset();
 
     centerGameInViewport();
+    saveDifficulty(Difficulty::getInstance()->currentDifficulty());
   }
   GameManager::getInstance()->setState(STATE_PLAYING);
 }
@@ -162,15 +164,15 @@ void nativeInit (const char* apkPath) {
 bool initialised = false;
 
 
-void nativeInitGL() {
+void nativeInitGL(int level, int difficulty) {
   if (!initialised) {
     initialised = true;
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGame, nativeMenu, gameUnPauseCallback);
+    GameManager::create(startGame, nativeMenu, gameUnPauseCallback, level);
     inputManager = new AndroidInputManager();
 
-    Difficulty::setDifficulty(new DifficultyEasy());
+    Difficulty::setDifficulty(difficulty);
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -277,7 +279,7 @@ Vector2 viewportScreenDim;
 void centerGameInViewport () {
   //Center game area on screen
   const int levelH = game->getLevel()->getHeight();
-  const int levelW = game->getLevel()->getWidth();
+  //const int levelW = game->getLevel()->getWidth();
 
   //FIXME
   //if (showGamePad) {
