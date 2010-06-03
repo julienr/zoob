@@ -1,73 +1,33 @@
-#include "TextureManager.h"
+#include "Texture.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define TEXTURE_LOAD_ERROR 0
 GLuint loadTextureFromPNG(const char* filename, int* width, int* height);
 
-TextureManager* TextureManager::instance = NULL;
-
-TextureManager::TextureManager() :
-  cache(NULL) {
+Texture::Texture (const char* name) : status(UNLOADED) {
+  filename = strdup(name);
+  //FIXME: remove ?
+  load();
 }
 
-TextureManager::~TextureManager() {
-  _TextureRecord *rec;
-  while(cache) {
-    rec = cache;
-    HASH_DEL(cache, rec); //cache automatically advanced to next
-    delete rec;
-  }
+Texture::~Texture () {
+  unload();
+  free(filename);
 }
 
-void TextureManager::clear() {
-  _TextureRecord *rec;
-  while(cache) {
-    rec = cache;
-    HASH_DEL(cache, rec); //cache automatically advanced to next
-    delete rec;
-  }
+void Texture::load () {
+  glTexID = loadTextureFromPNG(filename, &width, &height);
+  if (glTexID == TEXTURE_LOAD_ERROR)
+    LOGE("Error loading texture %s", filename);
+  status = LOADED;
 }
 
-void TextureManager::destroy() {
-  delete instance;
-  instance = NULL;
+void Texture::unload () {
+  glDeleteTextures(1, &glTexID);
+  GLW::checkError("glDeleteTextures");
+  status = UNLOADED;
 }
-
-TextureManager* TextureManager::getInstance () {
-  if (instance == NULL)
-    instance = new TextureManager();
-  return instance;
-}
-
-GLuint TextureManager::get (const char* filename, int* width, int* height) {
-  _TextureRecord* r = NULL;
-  HASH_FIND_STR(cache, filename, r);
-  if (r == NULL) { //not found
-    r = _load(filename);
-    if (r == NULL)
-      LOGE("Error loading texture : %s", filename);
-  }
-  if (width != NULL)
-    *width = r->width;
-  if (height != NULL)
-    *height = r->height;
-  return r->glTexID;
-}
-
-TextureManager::_TextureRecord* TextureManager::_load (const char* filename) {
-  LOGE("TextureManager : loading %s", filename);
-  _TextureRecord* r = new _TextureRecord();
-  r->filename = strdup(filename);
-
-  GLuint texID = loadTextureFromPNG(filename, &r->width, &r->height);
-  if (texID != TEXTURE_LOAD_ERROR) {
-    r->glTexID = texID;
-    HASH_ADD_KEYPTR(hh, cache, r->filename, strlen(r->filename), r);
-    return r;
-  } else
-    return NULL;
-}
-
 
 #include <stdio.h>
 #include "def.h"
@@ -223,4 +183,3 @@ GLuint loadTextureFromPNG(const char* filename, int* width, int* height) {
 
   return texture;
 }
-

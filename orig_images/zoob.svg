@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47pre4 r22446"
+   inkscape:version="0.47 r22583"
    sodipodi:docname="zoob.svg"
    inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
    inkscape:export-xdpi="299.86295"
@@ -2077,6 +2077,41 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3471"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4310"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4360"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4392"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4432"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2085,15 +2120,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="4031.6582"
-     inkscape:cy="-1793.1858"
+     inkscape:zoom="0.25000001"
+     inkscape:cx="4028.3674"
+     inkscape:cy="-1357.7853"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="1004"
-     inkscape:window-x="-2"
+     inkscape:window-width="1280"
+     inkscape:window-height="748"
+     inkscape:window-x="-3"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
      showguides="true"
@@ -2925,7 +2960,7 @@
        x="1310.6156"
        y="1517.8137"
        id="text3550"
-       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-filename="/home/julien/public_html/zoob/images/logo.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -2937,7 +2972,7 @@
        style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 1571.8343,1531.9082 -5.7504,-28.2647 c 18.3718,-8.9814 29.1104,-29.4946 24.8437,-50.4662 -5.0648,-24.895 -29.3522,-40.9705 -54.2473,-35.9056 -24.895,5.0648 -40.9707,29.3522 -35.9058,54.2474 4.2667,20.9714 22.1668,35.6582 42.5874,36.7472 l 5.7504,28.2647 22.722,-4.6228 z"
        id="path4503-0-03"
-       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-filename="/home/julien/public_html/zoob/images/logo.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -2946,7 +2981,7 @@
        x="1762.4015"
        y="1527.1724"
        id="text3585-0"
-       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-filename="/home/julien/public_html/zoob/images/logo.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -2958,7 +2993,7 @@
        style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 1611.7262,1451.8329 21.9684,18.691 c -8.9129,18.4051 -4.7027,41.1732 11.5971,55.0413 19.3494,16.4627 48.3809,14.1226 64.8436,-5.2268 16.4626,-19.3493 14.1226,-48.3808 -5.2268,-64.8435 -16.2998,-13.8681 -39.4484,-14.3771 -56.1882,-2.6314 l -21.9685,-18.691 -15.0256,17.6604 z"
        id="path4503-2-4"
-       inkscape:export-filename="/home/silver/images/moob/logo.png"
+       inkscape:export-filename="/home/julien/public_html/zoob/images/logo.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3322,7 +3357,7 @@
        id="rect4161-2"
        width="871.15558"
        height="642.05298"
-       x="3303.6028"
+       x="3301.3025"
        y="1707.1429"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
@@ -3339,15 +3374,15 @@
          sodipodi:role="line"
          x="3684.0264"
          y="1796.2385"
-         style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
-         id="tspan4170"><tspan
-   style="fill:#66ff3f;fill-opacity:1"
-   id="tspan4393">touch</tspan> the screen</tspan><tspan
+         style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+         id="tspan4276">touch <tspan
+   style="fill:#ffffff;fill-opacity:1"
+   id="tspan4284">anywhere </tspan></tspan><tspan
          sodipodi:role="line"
          x="3684.0264"
          y="1871.2385"
          style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
-         id="tspan4391">borders to move</tspan></text>
+         id="tspan4282">to move</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -4057,8 +4092,8 @@
     <text
        xml:space="preserve"
        style="font-size:1086.80395508px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
-       x="2763.6233"
-       y="4676.5557"
+       x="2656.8372"
+       y="4420.9375"
        id="text3550-2"
        inkscape:export-filename="/home/silver/images/moob/logo.png"
        inkscape:export-xdpi="299.86295"
@@ -4066,12 +4101,12 @@
        transform="matrix(0.75143507,-0.65980705,0.65980705,0.75143507,0,0)"><tspan
          sodipodi:role="line"
          id="tspan3552-1"
-         x="2763.6233"
-         y="4676.5557"
+         x="2656.8372"
+         y="4420.9375"
          style="font-size:301.88998413px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">z</tspan></text>
     <path
        style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 5367.8963,1528.9071 -22.9703,-17.4449 c 7.8793,-18.8708 2.4139,-41.3705 -14.6295,-54.3141 -20.2318,-15.3652 -49.0889,-11.4199 -64.4541,8.812 -15.3652,20.2318 -11.42,49.089 8.812,64.4543 17.0432,12.9435 40.1844,12.169 56.2477,-0.4863 l 22.9703,17.4449 14.0239,-18.4659 z"
+       d="m 5118.9947,1407.2847 -22.9703,-17.4449 c 7.8793,-18.8708 2.4139,-41.3705 -14.6295,-54.3141 -20.2318,-15.3652 -49.0889,-11.4199 -64.4541,8.812 -15.3652,20.2318 -11.42,49.089 8.812,64.4543 17.0432,12.9435 40.1844,12.169 56.2477,-0.4863 l 22.9703,17.4449 14.0239,-18.4659 z"
        id="path4503-0-03-2"
        inkscape:export-filename="/home/silver/images/moob/logo.png"
        inkscape:export-xdpi="299.86295"
@@ -4079,8 +4114,8 @@
     <text
        xml:space="preserve"
        style="font-size:301.89001465px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Bitstream Vera Sans"
-       x="3215.4089"
-       y="4685.9146"
+       x="3108.6228"
+       y="4430.2964"
        id="text3585-0-0"
        inkscape:export-filename="/home/silver/images/moob/logo.png"
        inkscape:export-xdpi="299.86295"
@@ -4088,12 +4123,12 @@
        transform="matrix(0.75143507,-0.65980705,0.65980705,0.75143507,0,0)"><tspan
          sodipodi:role="line"
          id="tspan3587-0-7"
-         x="3215.4089"
-         y="4685.9146"
+         x="3108.6228"
+         y="4430.2964"
          style="font-size:301.89001465px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">b</tspan></text>
     <path
        style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 5345.0383,1442.4148 28.8402,-0.4498 c 5.4464,19.711 23.6326,34.0418 45.0311,33.7081 25.4021,-0.3962 45.6733,-21.3099 45.2771,-46.7119 -0.3962,-25.4019 -21.3098,-45.6732 -46.7118,-45.277 -21.3985,0.3338 -39.129,15.2249 -43.958,35.0961 l -28.8403,0.4499 0.3617,23.1846 z"
+       d="m 5096.1367,1320.7924 28.8402,-0.4498 c 5.4464,19.711 23.6326,34.0418 45.0311,33.7081 25.4021,-0.3962 45.6733,-21.3099 45.2771,-46.7119 -0.3962,-25.4019 -21.3098,-45.6732 -46.7118,-45.277 -21.3985,0.3338 -39.129,15.2249 -43.958,35.0961 l -28.8403,0.4499 0.3617,23.1846 z"
        id="path4503-2-4-3"
        inkscape:export-filename="/home/silver/images/moob/logo.png"
        inkscape:export-xdpi="299.86295"
@@ -4141,5 +4176,173 @@
          id="tspan5230-4"
          x="3984.5723"
          y="2822.3931">?!</tspan></text>
+    <rect
+       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4161-2-8"
+       width="871.15558"
+       height="642.05298"
+       x="4369.9199"
+       y="1709.9714"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4415.1748"
+       y="1827.3512"
+       id="text4286"><tspan
+         sodipodi:role="line"
+         id="tspan4288"
+         x="4415.1748"
+         y="1827.3512"
+         style="fill:#ffffff;fill-opacity:1">get the <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4302">full</tspan> version now ! </tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4304"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:32"><flowRegion
+         id="flowRegion4306"><rect
+           id="rect4308"
+           width="0"
+           height="45.254833"
+           x="2610.6382"
+           y="896.79871" /></flowRegion><flowPara
+         id="flowPara4310" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4474.5718"
+       y="1951.802"
+       id="text4312"><tspan
+         sodipodi:role="line"
+         x="4474.5718"
+         y="1951.802"
+         id="tspan4316">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4260">more</tspan> levels</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4474.5718"
+       y="2040.6313"
+       id="text4320"><tspan
+         sodipodi:role="line"
+         x="4474.5718"
+         y="2040.6313"
+         id="tspan4324">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4258">various</tspan> enemies types</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#fff6f6;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4474.5718"
+       y="2146.0205"
+       id="text4328"><tspan
+         sodipodi:role="line"
+         id="tspan4330"
+         x="4474.5718"
+         y="2146.0205">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4256">new</tspan> abilities</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="4474.5718"
+       y="2243.1299"
+       id="text4250"><tspan
+         sodipodi:role="line"
+         id="tspan4252"
+         x="4474.5718"
+         y="2243.1299"
+         style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">- regular <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4254">updates</tspan></tspan></text>
+    <rect
+       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4161-2-8-4"
+       width="871.15558"
+       height="642.05298"
+       x="4548.1104"
+       y="2408.593"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4582.5186"
+       y="2525.4805"
+       id="text4286-5"><tspan
+         sodipodi:role="line"
+         id="tspan4288-9"
+         x="4582.5186"
+         y="2525.4805"
+         style="fill:#ffffff;fill-opacity:1">get the <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4302-0">full</tspan> version now ! </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="4615.9927"
+       y="2981.3494"
+       id="text4380"><tspan
+         sodipodi:role="line"
+         id="tspan4382"
+         x="4615.9927"
+         y="2981.3494"
+         style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">Yes</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="4935.605"
+       y="2902.1533"
+       id="text4409"><tspan
+         sodipodi:role="line"
+         id="tspan4412"
+         x="4935.605"
+         y="2902.1533"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">No, continue</tspan><tspan
+         sodipodi:role="line"
+         x="4935.605"
+         y="3002.1533"
+         style="font-size:80px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+         id="tspan4414"> to demo</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4653.2041"
+       y="2603.6614"
+       id="text4312-6"><tspan
+         sodipodi:role="line"
+         x="4653.2041"
+         y="2603.6614"
+         id="tspan4316-6">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4260-8">more</tspan> levels</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4653.2041"
+       y="2692.4907"
+       id="text4320-8"><tspan
+         sodipodi:role="line"
+         x="4653.2041"
+         y="2692.4907"
+         id="tspan4324-2">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4258-1">various</tspan> enemies types</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#fff6f6;fill-opacity:1;stroke:none;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
+       x="4653.2041"
+       y="2797.8799"
+       id="text4328-1"><tspan
+         sodipodi:role="line"
+         id="tspan4330-8"
+         x="4653.2041"
+         y="2797.8799">- <tspan
+   style="fill:#66ff3f;fill-opacity:1"
+   id="tspan4256-3">new</tspan> abilities</tspan></text>
   </g>
 </svg>

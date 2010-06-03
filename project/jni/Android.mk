@@ -55,8 +55,8 @@ LOCAL_SRC_FILES := \
     input/AndroidInputManager.cpp \
     input/PlayerFormControl.cpp
 
-LIBPNG_PATH := /home/silver/programs/android-ndk-r3/out/apps/libpng/armeabi/
-LIBZIP_PATH := /home/silver/programs/android-ndk-r3/out/apps/libzip/armeabi
+LIBPNG_PATH := /home/julien/programs/android-ndk-r3/out/apps/libpng/armeabi/
+LIBZIP_PATH := /home/julien/programs/android-ndk-r3/out/apps/libzip/armeabi
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip
 
 include $(BUILD_SHARED_LIBRARY)

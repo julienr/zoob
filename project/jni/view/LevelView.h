@@ -1,7 +1,6 @@
 #ifndef LEVELVIEW_H_
 #define LEVELVIEW_H_
 
-#include "TextureManager.h"
 #include "lib/Utils.h"
 #include "logic/Level.h"
 #include "Sprite.h"

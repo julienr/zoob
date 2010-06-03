@@ -3,7 +3,6 @@
 
 #include "def.h"
 #include "lib/Vector2.h"
-#include "TextureManager.h"
 #include "Sprite.h"
 #include "logic/Game.h"
 

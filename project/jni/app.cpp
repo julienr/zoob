@@ -1,5 +1,5 @@
 #include "def.h"
-#include "view/TextureManager.h"
+#include "view/textures/TextureManager.h"
 #include "logic/Entity.h"
 #include "view/TankView.h"
 #include "logic/Tank.h"

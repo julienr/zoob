@@ -12,8 +12,7 @@ void Sprite::reloadAllSprites () {
 }
 
 void Sprite::draw (const Viewable& viewable, float rotation, float scale) const {
-  //FIXME: do something if textureID = NO_TEXTURE
-  glBindTexture(GL_TEXTURE_2D, textureID);
+  bind();
   glPushMatrix();
   GLW::translate(viewable.getPosition().x, viewable.getPosition().y, 0);
   GLW::rotate(RAD_TO_DEG(rotation), 0, 0, 1);
@@ -23,8 +22,7 @@ void Sprite::draw (const Viewable& viewable, float rotation, float scale) const 
 }
 
 void Sprite::draw (const Vector2& pos, const Vector2& size, float rotation) const {
-  //FIXME: do something if textureID = NO_TEXTURE
-  glBindTexture(GL_TEXTURE_2D, textureID);
+  bind();
   glPushMatrix();
   GLW::translate(pos.x, pos.y, 0);
   GLW::rotate(RAD_TO_DEG(rotation), 0, 0, 1);

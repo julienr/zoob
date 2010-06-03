@@ -27,7 +27,7 @@ void saveDifficulty (int diff) {
 static void init_for_upcall (JNIEnv* env, jobject zoob) {
   jniEnv = env;
   zoobAppObj = zoob;
-  zoobClass = jniEnv->FindClass("net.fhtagn.zoob/ZoobApplication");
+  zoobClass = jniEnv->FindClass("net.fhtagn.zoob.ZoobApplication");
   if (zoobClass == NULL)
     LOGE("Unable to find net.fhtagn.Zoob Java class from JNI");
 

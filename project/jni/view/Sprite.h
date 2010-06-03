@@ -1,7 +1,7 @@
 #ifndef SPRITE_H_
 #define SPRITE_H_
 
-#include "TextureManager.h"
+#include "textures/TextureManager.h"
 #include "logic/Viewable.h"
 #include "lib/Utils.h"
 #include "containers/list.h"
@@ -11,6 +11,7 @@ class Sprite {
    * resources (such as textures) must be reloaded. To handle this, we need a way to tell all sprites
    * that they should reload their textureID. This is done by maintaning a list of all the sprites objects
    */
+  //FIXME: this should now be handled by texture group => remove this
   private:
     static list<Sprite*> globalSpritesList;
   public:
@@ -28,7 +29,7 @@ class Sprite {
     }
 
     void reloadTexture () {
-      textureID = TextureManager::getInstance()->get(file);
+      texture = TextureManager::getInstance()->getGroup(0)->get(file);
     }
 
     void draw (const Viewable& viewable, float rotation=0, float scale=1) const;
@@ -47,11 +48,11 @@ class Sprite {
 
     inline
     void bind () const {
-      glBindTexture(GL_TEXTURE_2D, textureID);
+      texture->bind();
     }
   private:
     const char* file;
-    GLuint textureID;
+    Texture* texture;
 };
 
 #endif /* SPRITE_H_ */
