@@ -13,7 +13,7 @@ PlayerFormControl::PlayerFormControl ()
   MenuItem* next = new MenuItem("assets/sprites/menuitems/next.png",
                                 "assets/sprites/menuitems/next_h.png",
                                 BTN_NEXT,
-                                TEX_GROUP_MENU);
+                                TEX_GROUP_UTILS);
 
   const Vector2 nextPos(14.5, 0.5f);
   const Vector2 btnSize(1,1);
@@ -25,7 +25,7 @@ PlayerFormControl::PlayerFormControl ()
   MenuItem* prev = new MenuItem("assets/sprites/menuitems/prev.png",
                                 "assets/sprites/menuitems/prev_h.png",
                                 BTN_PREV,
-                                TEX_GROUP_MENU);
+                                TEX_GROUP_UTILS);
 
   const Vector2 prevPos(12.5, 0.5f);
   prev->setPosition(prevPos);
