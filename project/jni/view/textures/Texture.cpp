@@ -17,6 +17,7 @@ Texture::~Texture () {
 }
 
 void Texture::load () {
+  ASSERT(status == UNLOADED);
   glTexID = loadTextureFromPNG(filename, &width, &height);
   if (glTexID == TEXTURE_LOAD_ERROR)
     LOGE("Error loading texture %s", filename);
@@ -24,6 +25,7 @@ void Texture::load () {
 }
 
 void Texture::unload () {
+  ASSERT(status == LOADED);
   glDeleteTextures(1, &glTexID);
   GLW::checkError("glDeleteTextures");
   status = UNLOADED;

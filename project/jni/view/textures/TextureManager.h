@@ -13,17 +13,21 @@ public:
   static TextureManager* getInstance ();
   static void destroy();
 
-  TextureGroup* getGroup (int id);
+  /** On android, when the application goes to sleep mode, the OpenGL context is lost and all
+   * resources (such as textures) must be reloaded. This function will reload all the locked TextureGroup
+   */
+  void reloadAll ();
 
-  //After OpenGL context is lost (after a pause), need to reload
-  //all textures => this will clear the texture cache
-  void clear ();
+  TextureGroup* getGroup (int id);
 private:
   TextureManager();
   ~TextureManager();
   static TextureManager* instance;
 
   struct _GroupRecord {
+      ~_GroupRecord () {
+        delete group;
+      }
       int id;
       TextureGroup* group;
       UT_hash_handle hh;

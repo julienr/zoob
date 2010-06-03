@@ -25,7 +25,6 @@ int main (int argc, char** argv) {
   if (argc >= 4)
     difficulty = atoi(argv[3]);
 
-
   SDL_Init(SDL_INIT_VIDEO);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   /*SDL_Surface* screen =*/ SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_OPENGL);

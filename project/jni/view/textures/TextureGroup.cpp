@@ -13,12 +13,24 @@ TextureGroup::~TextureGroup () {
    }
 }
 
-void TextureGroup::clear () {
+void TextureGroup::clearCache () {
   _TextureRecord *rec;
   while(cache) {
     rec = cache;
     HASH_DEL(cache, rec); //cache automatically advanced to next
     delete rec;
+  }
+}
+
+void TextureGroup::load () {
+  for (_TextureRecord* r = cache; r != NULL; r = static_cast<_TextureRecord*>(r->hh.next)) {
+    r->tex->load();
+  }
+}
+
+void TextureGroup::unload () {
+  for (_TextureRecord* r = cache; r != NULL; r = static_cast<_TextureRecord*>(r->hh.next)) {
+    r->tex->unload();
   }
 }
 

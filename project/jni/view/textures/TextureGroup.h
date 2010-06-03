@@ -21,7 +21,10 @@ class TextureGroup {
 
     //After OpenGL context is lost (after a pause), need to reload
     //all textures => this will clear the texture cache
-    void clear ();
+    void clearCache ();
+
+    void load ();
+    void unload ();
 
     //Returns texture id or TEXTURE_BLANK if an error
     //occured while loading the texture
@@ -30,6 +33,7 @@ class TextureGroup {
     struct _TextureRecord {
       ~_TextureRecord () {
         free(filename);
+        delete tex;
       }
       char* filename;
       Texture* tex;

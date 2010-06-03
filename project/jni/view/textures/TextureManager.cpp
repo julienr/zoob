@@ -1,9 +1,6 @@
 #include "TextureManager.h"
 #include <string.h>
 
-#define TEXTURE_LOAD_ERROR 0
-GLuint loadTextureFromPNG(const char* filename, int* width, int* height);
-
 TextureManager* TextureManager::instance = NULL;
 
 TextureManager::TextureManager() :
@@ -11,11 +8,19 @@ TextureManager::TextureManager() :
 }
 
 TextureManager::~TextureManager() {
-
+  _GroupRecord *rec;
+  while (groups) {
+    rec = groups;
+    HASH_DEL(groups, rec); //cache automatically advanced to next
+    delete rec;
+  }
 }
 
-void TextureManager::clear() {
-  //TODO
+void TextureManager::reloadAll() {
+  for (_GroupRecord* r = groups; r != NULL; r = static_cast<_GroupRecord*>(r->hh.next)) {
+    r->group->clearCache();
+    r->group->load();
+  }
 }
 
 void TextureManager::destroy() {

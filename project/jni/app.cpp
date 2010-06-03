@@ -179,8 +179,7 @@ void nativeInitGL(int level, int difficulty) {
     printGLString("Extensions", GL_EXTENSIONS);
   } else {
     //In case we're coming back from sleep
-    TextureManager::getInstance()->clear();
-    Sprite::reloadAllSprites();
+    TextureManager::getInstance()->reloadAll();
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -196,6 +195,7 @@ void nativeInitGL(int level, int difficulty) {
 }
 
 void nativeQuit () {
+  zip_close(APKArchive);
   TextureManager::destroy();
   delete lvl;
   delete game;
