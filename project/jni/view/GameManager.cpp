@@ -36,6 +36,13 @@ void applyLocks (eAppState s) {
     case STATE_MAINMENU:
       TEX_LOCK(TEX_GROUP_MENU);
       break;
+    case STATE_TUTORIAL:
+      TEX_LOCK(TEX_GROUP_GAME); //tutorial is simply a pause
+      TEX_LOCK(TEX_GROUP_TUTORIAL);
+      break;
+    case STATE_BUY_FULL:
+      TEX_LOCK(TEX_GROUP_GET_FULL_VERSION);
+      break;
     default:
       ASSERT(false);
   }

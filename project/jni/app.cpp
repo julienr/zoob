@@ -94,8 +94,11 @@ void gameUnPauseCallback () {
 AndroidInputManager* inputManager = NULL;
 
 void toPlayingState () {
-  if (GameManager::getInstance()->getState() == STATE_PAUSED) {
+  GameManager* gm = GameManager::getInstance();
+  //Special case : when starting lvl 0, display tutorial
+  if (gm->getState() == STATE_PAUSED) {
     game->unpause(); 
+    gm->setState(STATE_PLAYING);
   } else {
     delete lvl;
     delete game;
@@ -111,8 +114,15 @@ void toPlayingState () {
 
     centerGameInViewport();
     saveDifficulty(Difficulty::getInstance()->currentDifficulty());
+
+    //Display the tutorial before starting level 0
+    if (gm->getState () != STATE_TUTORIAL && gm->getCurrentLevel() == 0) {
+      game->pause();
+      gm->setState(STATE_TUTORIAL);
+    } else {
+      gm->setState(STATE_PLAYING);
+    }
   }
-  GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
 void toMenuState (eAppState state) {

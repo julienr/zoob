@@ -13,6 +13,8 @@
 #include "menu/WonMenu.h"
 #include "menu/EndMenu.h"
 #include "menu/PausedMenu.h"
+#include "menu/BuyFullMenu.h"
+#include "menu/TutorialMenu.h"
 #include "levels/LevelsData.h"
 #include "logic/Game.h"
 
@@ -23,6 +25,8 @@ enum eAppState {
   STATE_WON,
   STATE_END,
   STATE_PAUSED,
+  STATE_TUTORIAL,
+  STATE_BUY_FULL,
   MAX_STATE
 };
 
@@ -71,7 +75,10 @@ class GameManager {
       menus[STATE_WON] = new WonMenu(this);
       menus[STATE_END] = new EndMenu(this);
       menus[STATE_PAUSED] = new PausedMenu(this);
-      setState(STATE_MAINMENU);
+      menus[STATE_TUTORIAL] = new TutorialMenu(this);
+      menus[STATE_BUY_FULL] = new BuyFullMenu(this);
+      //setState(STATE_MAINMENU);
+      setState(STATE_BUY_FULL);
     }
 
     ~GameManager () {

@@ -24,7 +24,9 @@ LOCAL_SRC_FILES := \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \
     levels/LevelsData.cpp \
-    view/TextureManager.cpp \
+    view/textures/TextureManager.cpp \
+    view/textures/TextureGroup.cpp \
+    view/textures/Texture.cpp \
     view/Sprite.cpp \
     view/Square.cpp \
     view/LevelView.cpp \
@@ -40,6 +42,8 @@ LOCAL_SRC_FILES := \
     view/menu/WonMenu.cpp \
     view/menu/EndMenu.cpp \
     view/menu/PausedMenu.cpp \
+    view/menu/TutorialMenu.cpp \
+    view/menu/BuyFullMenu.cpp \
     view/ShadowPolygonView.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \
