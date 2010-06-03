@@ -7,10 +7,10 @@
 
 class MenuItem {
   public:
-    MenuItem(const char* tex, const char* hoverTex, short id) :
+    MenuItem(const char* tex, const char* hoverTex, short id, int groupID) :
       id(id),
-      normalSprite(tex),
-      hoverSprite(hoverTex),
+      normalSprite(tex, groupID),
+      hoverSprite(hoverTex, groupID),
       pressed(false) {}
 
     short getID () const {

@@ -5,8 +5,8 @@
 
 PausedMenu::PausedMenu (GameManager* gm)
   : Menu (gm),
-    paused("assets/sprites/menuitems/paused.png"),
-    spriteContinue("assets/sprites/menuitems/continue.png") {
+    paused("assets/sprites/menuitems/paused.png", TEX_GROUP_GAME),
+    spriteContinue("assets/sprites/menuitems/continue.png", TEX_GROUP_GAME) {
 }
 
 void PausedMenu::draw () {

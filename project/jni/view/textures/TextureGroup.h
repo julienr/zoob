@@ -19,17 +19,20 @@ class TextureGroup {
     TextureGroup ();
     ~TextureGroup ();
 
-    //After OpenGL context is lost (after a pause), need to reload
-    //all textures => this will clear the texture cache
-    void clearCache ();
-
     void load ();
     void unload ();
 
     //Returns texture id or TEXTURE_BLANK if an error
     //occured while loading the texture
     Texture* get (const char* filename);
+
+    void lock () { locked = true; }
+    void unlock () { locked = false; }
+
+    bool isLocked () { return locked; }
   private:
+    bool locked;
+
     struct _TextureRecord {
       ~_TextureRecord () {
         free(filename);

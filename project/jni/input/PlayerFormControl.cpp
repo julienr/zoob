@@ -7,12 +7,13 @@
 
 PlayerFormControl::PlayerFormControl ()
   : Menu(NULL),
-    tankSprite("assets/sprites/tank1.png"),
-    bounceTankSprite("assets/sprites/tank_bounce.png"),
+    tankSprite("assets/sprites/tank1.png", TEX_GROUP_GAME),
+    bounceTankSprite("assets/sprites/tank_bounce.png", TEX_GROUP_GAME),
     currentFormIdx(0){
   MenuItem* next = new MenuItem("assets/sprites/menuitems/next.png",
                                 "assets/sprites/menuitems/next_h.png",
-                                BTN_NEXT);
+                                BTN_NEXT,
+                                TEX_GROUP_MENU);
 
   const Vector2 nextPos(14.5, 0.5f);
   const Vector2 btnSize(1,1);
@@ -23,7 +24,8 @@ PlayerFormControl::PlayerFormControl ()
 
   MenuItem* prev = new MenuItem("assets/sprites/menuitems/prev.png",
                                 "assets/sprites/menuitems/prev_h.png",
-                                BTN_PREV);
+                                BTN_PREV,
+                                TEX_GROUP_MENU);
 
   const Vector2 prevPos(12.5, 0.5f);
   prev->setPosition(prevPos);

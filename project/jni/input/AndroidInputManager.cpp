@@ -18,10 +18,12 @@ AndroidInputManager::AndroidInputManager ()
     state(STATE_DEFAULT),
     rocketButton("assets/sprites/fire_rocket.png",
                  "assets/sprites/fire_rocket_clicked.png",
-                 ROCKET_BUTTON_ID),
+                 ROCKET_BUTTON_ID,
+                 TEX_GROUP_GAME),
     bombButton("assets/sprites/fire_bomb.png",
                "assets/sprites/fire_bomb_clicked.png",
-               MINE_BUTTON_ID),
+               MINE_BUTTON_ID,
+               TEX_GROUP_GAME),
     lastTouchDownTime(0) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);

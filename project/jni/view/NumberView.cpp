@@ -3,16 +3,16 @@
 NumberView* NumberView::instance = NULL;
 
 NumberView::NumberView () {
-  numbers[0] = new Sprite("assets/sprites/menuitems/digits/0.png");
-  numbers[1] = new Sprite("assets/sprites/menuitems/digits/1.png");
-  numbers[2] = new Sprite("assets/sprites/menuitems/digits/2.png");
-  numbers[3] = new Sprite("assets/sprites/menuitems/digits/3.png");
-  numbers[4] = new Sprite("assets/sprites/menuitems/digits/4.png");
-  numbers[5] = new Sprite("assets/sprites/menuitems/digits/5.png");
-  numbers[6] = new Sprite("assets/sprites/menuitems/digits/6.png");
-  numbers[7] = new Sprite("assets/sprites/menuitems/digits/7.png");
-  numbers[8] = new Sprite("assets/sprites/menuitems/digits/8.png");
-  numbers[9] = new Sprite("assets/sprites/menuitems/digits/9.png");
+  numbers[0] = new Sprite("assets/sprites/menuitems/digits/0.png", TEX_GROUP_UTILS);
+  numbers[1] = new Sprite("assets/sprites/menuitems/digits/1.png", TEX_GROUP_UTILS);
+  numbers[2] = new Sprite("assets/sprites/menuitems/digits/2.png", TEX_GROUP_UTILS);
+  numbers[3] = new Sprite("assets/sprites/menuitems/digits/3.png", TEX_GROUP_UTILS);
+  numbers[4] = new Sprite("assets/sprites/menuitems/digits/4.png", TEX_GROUP_UTILS);
+  numbers[5] = new Sprite("assets/sprites/menuitems/digits/5.png", TEX_GROUP_UTILS);
+  numbers[6] = new Sprite("assets/sprites/menuitems/digits/6.png", TEX_GROUP_UTILS);
+  numbers[7] = new Sprite("assets/sprites/menuitems/digits/7.png", TEX_GROUP_UTILS);
+  numbers[8] = new Sprite("assets/sprites/menuitems/digits/8.png", TEX_GROUP_UTILS);
+  numbers[9] = new Sprite("assets/sprites/menuitems/digits/9.png", TEX_GROUP_UTILS);
 }
 
 NumberView::~NumberView () {

@@ -3,9 +3,9 @@
 
 LostMenu::LostMenu (GameManager* gm)
   : Menu (gm),
-    gameOver("assets/sprites/menuitems/gameover.png"),
-    smiley("assets/sprites/menuitems/smiley_unhappy.png"),
-    retry("assets/sprites/menuitems/retry.png") {
+    gameOver("assets/sprites/menuitems/gameover.png", TEX_GROUP_GAME),
+    smiley("assets/sprites/menuitems/smiley_unhappy.png", TEX_GROUP_GAME),
+    retry("assets/sprites/menuitems/retry.png", TEX_GROUP_GAME) {
 }
 
 void LostMenu::draw () {

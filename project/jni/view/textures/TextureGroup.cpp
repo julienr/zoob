@@ -1,6 +1,6 @@
 #include "TextureGroup.h"
 
-TextureGroup::TextureGroup () : cache(NULL) {
+TextureGroup::TextureGroup () : locked(false), cache(NULL) {
 
 }
 
@@ -11,15 +11,6 @@ TextureGroup::~TextureGroup () {
      HASH_DEL(cache, rec); //cache automatically advanced to next
      delete rec;
    }
-}
-
-void TextureGroup::clearCache () {
-  _TextureRecord *rec;
-  while(cache) {
-    rec = cache;
-    HASH_DEL(cache, rec); //cache automatically advanced to next
-    delete rec;
-  }
 }
 
 void TextureGroup::load () {
@@ -40,7 +31,7 @@ Texture* TextureGroup::get (const char* filename) {
   if (r == NULL) { //not found
     r = new _TextureRecord();
     r->filename = strdup(filename);
-    r->tex = new Texture(filename);
+    r->tex = new Texture(filename, locked);
     HASH_ADD_KEYPTR(hh, cache, r->filename, strlen(r->filename), r);
   }
   return r->tex;

@@ -5,10 +5,10 @@
 #define TEXTURE_LOAD_ERROR 0
 GLuint loadTextureFromPNG(const char* filename, int* width, int* height);
 
-Texture::Texture (const char* name) : status(UNLOADED) {
+Texture::Texture (const char* name, bool loadNow) : status(UNLOADED) {
   filename = strdup(name);
-  //FIXME: remove ?
-  load();
+  if (loadNow)
+    load();
 }
 
 Texture::~Texture () {
@@ -17,7 +17,9 @@ Texture::~Texture () {
 }
 
 void Texture::load () {
-  ASSERT(status == UNLOADED);
+  if (status == LOADED)
+    return;
+  //LOGE("loading %s", filename);
   glTexID = loadTextureFromPNG(filename, &width, &height);
   if (glTexID == TEXTURE_LOAD_ERROR)
     LOGE("Error loading texture %s", filename);
@@ -25,7 +27,9 @@ void Texture::load () {
 }
 
 void Texture::unload () {
-  ASSERT(status == LOADED);
+  if (status == UNLOADED)
+    return;
+  //LOGE("unloading %s", filename);
   glDeleteTextures(1, &glTexID);
   GLW::checkError("glDeleteTextures");
   status = UNLOADED;

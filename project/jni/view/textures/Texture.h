@@ -6,14 +6,16 @@
 
 class Texture {
   public:
-    Texture (const char* filename);
+    Texture (const char* filename, bool loadNow);
     ~Texture ();
     void load ();
     void unload ();
 
     void bind () {
-      ASSERT(status == LOADED);
-      glBindTexture(GL_TEXTURE_2D, glTexID);
+      if (status != LOADED)
+        LOGE("trying to bind texture %s, but not loaded", filename);
+      else
+        glBindTexture(GL_TEXTURE_2D, glTexID);
     }
 
     int getWidth () {

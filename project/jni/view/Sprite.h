@@ -7,8 +7,8 @@
 
 class Sprite {
   public:
-    Sprite (const char* filename) {
-      texture = TextureManager::getInstance()->getGroup(0)->get(filename);
+    Sprite (const char* filename, int groupID) {
+      texture = TextureManager::getInstance()->getGroup(groupID)->get(filename);
     }
 
     void draw (const Viewable& viewable, float rotation=0, float scale=1) const;

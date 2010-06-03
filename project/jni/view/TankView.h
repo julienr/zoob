@@ -9,13 +9,13 @@ class TankView {
   public:
     TankView (const Tank* t) :
       tank(t),
-      shieldSprite("assets/sprites/shield_1.png") {
-      tankSprite[0] = new Sprite("assets/sprites/tank1.png");
-      tankSprite[1] = new Sprite("assets/sprites/tank1_damaged_1.png");
-      tankSprite[2] = new Sprite("assets/sprites/tank1_damaged_2.png");
-      bounceTankSprite[0] = new Sprite("assets/sprites/tank_bounce.png");
-      bounceTankSprite[1] = new Sprite("assets/sprites/tank_bounce_damaged_1.png");
-      bounceTankSprite[2] = new Sprite("assets/sprites/tank_bounce_damaged_1.png");
+      shieldSprite("assets/sprites/shield_1.png", TEX_GROUP_GAME) {
+      tankSprite[0] = new Sprite("assets/sprites/tank1.png", TEX_GROUP_GAME);
+      tankSprite[1] = new Sprite("assets/sprites/tank1_damaged_1.png", TEX_GROUP_GAME);
+      tankSprite[2] = new Sprite("assets/sprites/tank1_damaged_2.png", TEX_GROUP_GAME);
+      bounceTankSprite[0] = new Sprite("assets/sprites/tank_bounce.png", TEX_GROUP_GAME);
+      bounceTankSprite[1] = new Sprite("assets/sprites/tank_bounce_damaged_1.png", TEX_GROUP_GAME);
+      bounceTankSprite[2] = new Sprite("assets/sprites/tank_bounce_damaged_1.png", TEX_GROUP_GAME);
     }
 
     ~TankView () {

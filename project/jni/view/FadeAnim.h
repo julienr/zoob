@@ -9,8 +9,8 @@ class FadeAnim {
      * pauseTime is the time for which the animation is paused (for sprite1 and sprite 2)
      */
     FadeAnim (char* sprite1, char* sprite2, double fadingTime, double pause1, double pause2)
-      : sprite1(sprite1),
-        sprite2(sprite2),
+      : sprite1(sprite1, TEX_GROUP_GAME),
+        sprite2(sprite2, TEX_GROUP_GAME),
         fadingTime(fadingTime),
         pause1(pause1),
         pause2(pause2),

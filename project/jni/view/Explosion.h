@@ -13,8 +13,8 @@ class Explosion {
   public:
     Explosion (const ExplosionLocation& loc) :
       timeLeft(EXPLOSION_LIFE),
-      boomSprite("assets/sprites/boom.png"),
-      poofSprite("assets/sprites/rocket.png"),
+      boomSprite("assets/sprites/boom.png", TEX_GROUP_GAME),
+      poofSprite("assets/sprites/rocket.png", TEX_GROUP_GAME),
       location(loc) {}
 
     void draw ();

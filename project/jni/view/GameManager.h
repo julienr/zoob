@@ -63,7 +63,6 @@ class GameManager {
       : newGameCB(gameCb),
         menuCB(menuCb),
         continueCB(continueCb),
-        state(STATE_MAINMENU),
         currentLevel(levelLimit),
         levelLimit(levelLimit) {
       menus[STATE_PLAYING] = NULL;
@@ -72,6 +71,7 @@ class GameManager {
       menus[STATE_WON] = new WonMenu(this);
       menus[STATE_END] = new EndMenu(this);
       menus[STATE_PAUSED] = new PausedMenu(this);
+      setState(STATE_MAINMENU);
     }
 
     ~GameManager () {
@@ -79,10 +79,9 @@ class GameManager {
           delete menus[i];
     }
   public:
-
     eAppState getState () { return state; }
 
-    void setState (eAppState s) { state = s; }
+    void setState (eAppState s);
 
     size_t getCurrentLevel () {
       return currentLevel;

@@ -26,7 +26,7 @@ size_t* createCharLookup () {
   return lookup;
 }
 
-Font::Font(const char* filename) : sprite(filename) {}
+Font::Font(const char* filename) : sprite(filename, TEX_GROUP_UTILS) {}
 
 void Font::print (const char* str, const Vector2& position, float size) {
   glPushMatrix();

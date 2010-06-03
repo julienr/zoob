@@ -7,7 +7,7 @@
 class CursorView {
   public:
     CursorView (const Cursor& c)
-      : cursor(c), sprite("assets/sprites/cursor.png") {}
+      : cursor(c), sprite("assets/sprites/cursor.png", TEX_GROUP_GAME) {}
 
     Vector2 getCenter () {
       return sprite.getCenter(cursor);

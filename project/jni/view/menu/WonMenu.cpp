@@ -3,9 +3,9 @@
 
 WonMenu::WonMenu (GameManager* gm)
   : Menu (gm),
-    complete("assets/sprites/menuitems/complete.png"),
-    smiley("assets/sprites/menuitems/smiley_happy.png"),
-    nextlvl("assets/sprites/menuitems/continue.png") {
+    complete("assets/sprites/menuitems/complete.png", TEX_GROUP_GAME),
+    smiley("assets/sprites/menuitems/smiley_happy.png", TEX_GROUP_GAME),
+    nextlvl("assets/sprites/menuitems/continue.png", TEX_GROUP_GAME) {
 }
 
 void WonMenu::draw () {

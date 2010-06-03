@@ -3,9 +3,9 @@
 
 EndMenu::EndMenu (GameManager* gm)
   : Menu (gm),
-    complete("assets/sprites/menuitems/all_complete.png"),
-    starSprite("assets/sprites/menuitems/star.png"),
-    thx("assets/sprites/menuitems/thx_playing.png") {
+    complete("assets/sprites/menuitems/all_complete.png", TEX_GROUP_GAME),
+    starSprite("assets/sprites/menuitems/star.png", TEX_GROUP_GAME),
+    thx("assets/sprites/menuitems/thx_playing.png", TEX_GROUP_GAME) {
   stars[0] = new _Star(Vector2(13,2), Vector2(2,2), 0, 0);
   stars[1] = new _Star(Vector2(8, 5), Vector2(2.5, 2.5), 0, 0.2);
   stars[2] = new _Star(Vector2(3, 6), Vector2(2,2), 0, 0);

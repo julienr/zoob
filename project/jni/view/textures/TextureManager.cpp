@@ -16,11 +16,29 @@ TextureManager::~TextureManager() {
   }
 }
 
-void TextureManager::reloadAll() {
+void TextureManager::startLock () {
   for (_GroupRecord* r = groups; r != NULL; r = static_cast<_GroupRecord*>(r->hh.next)) {
-    r->group->clearCache();
-    r->group->load();
+    r->group->unlock();
   }
+}
+
+void TextureManager::lockGroup (int id) {
+  getGroup(id)->lock();
+}
+
+void TextureManager::commitLock () {
+  LOGE("committing lock");
+  for (_GroupRecord* r = groups; r != NULL; r = static_cast<_GroupRecord*>(r->hh.next)) {
+    if (r->group->isLocked()) {
+      LOGE("group %i locked", r->id);
+      r->group->load();
+    } else
+      r->group->unload();
+  }
+}
+
+void TextureManager::reloadAll() {
+  commitLock();
 }
 
 void TextureManager::destroy() {

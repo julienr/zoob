@@ -19,6 +19,14 @@ public:
   void reloadAll ();
 
   TextureGroup* getGroup (int id);
+
+  //Group locking. A locked texture group will retain all its texture in video memory, while
+  //an unlocked group might free some of them
+
+  //Before changing locking, startLock should be called, then lock any number of groups and then call commitLock to apply
+  void startLock();
+  void commitLock (); //load all locked groups, unload all unlocked
+  void lockGroup (int id);
 private:
   TextureManager();
   ~TextureManager();

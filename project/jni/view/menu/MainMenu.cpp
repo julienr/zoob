@@ -10,25 +10,30 @@
 
 MainMenu::MainMenu (GameManager* gm)
   : Menu (gm),
-    logo("assets/sprites/logo.png"),
-    easy("assets/sprites/menuitems/easy.png"),
-    normal("assets/sprites/menuitems/normal.png"),
-    hard("assets/sprites/menuitems/hard.png") {
+    logo("assets/sprites/logo.png", TEX_GROUP_MENU),
+    easy("assets/sprites/menuitems/easy.png", TEX_GROUP_MENU),
+    normal("assets/sprites/menuitems/normal.png", TEX_GROUP_MENU),
+    hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU) {
    addItem(new MenuItem("assets/sprites/menuitems/start.png",
                               "assets/sprites/menuitems/start_h.png",
-                              MENU_ITEM_START));
+                              MENU_ITEM_START,
+                              TEX_GROUP_MENU));
    addItem(new MenuItem("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
-                               MENU_ITEM_LVL_NEXT));
+                               MENU_ITEM_LVL_NEXT,
+                               TEX_GROUP_MENU));
    addItem(new MenuItem("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
-                               MENU_ITEM_LVL_PREV));
+                               MENU_ITEM_LVL_PREV,
+                               TEX_GROUP_MENU));
    addItem(new MenuItem("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
-                               MENU_ITEM_DIFF_NEXT));
+                               MENU_ITEM_DIFF_NEXT,
+                               TEX_GROUP_MENU));
    addItem(new MenuItem("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
-                               MENU_ITEM_DIFF_PREV));
+                               MENU_ITEM_DIFF_PREV,
+                               TEX_GROUP_MENU));
    _initItems();
 }
 

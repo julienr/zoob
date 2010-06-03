@@ -58,4 +58,13 @@ extern zip* APKArchive;
 #define BOMB_LIFETIME 5
 #define BOMB_EXPLOSION_RADIUS 1.5f
 
+//texture groups
+enum {
+    TEX_GROUP_UTILS, //always present
+    TEX_GROUP_GAME, //game related textures
+    TEX_GROUP_MENU, //main menu
+    TEX_GROUP_TUTORIAL,
+    TEX_GROUP_GET_FULL_VERSION,
+};
+
 #endif /* DEF_H_ */

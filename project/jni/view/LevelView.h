@@ -9,8 +9,8 @@ class LevelView {
   public:
     LevelView (const Level* lvl)
       : level(lvl),
-        wallSprite("assets/sprites/crate.png"),
-        spawnSprite("assets/sprites/earth.png"){}
+        wallSprite("assets/sprites/crate.png", TEX_GROUP_GAME),
+        spawnSprite("assets/sprites/earth.png", TEX_GROUP_GAME){}
 
     void drawWalls ();
     void drawBackground ();
