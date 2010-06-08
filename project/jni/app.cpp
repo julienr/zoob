@@ -50,55 +50,35 @@ Level* lvl = NULL;
 Game* game = NULL;
 GameView* gameView = NULL;
 
-//Since startGame/nativeMenu cannot call openGL, this is used to defer state change
-//If this variable is not set to -1, then a state transition to (eAppState)stateTransition
-//must be made before next rendering
-int stateTransition = -1;
 
-//by setting stateTransition and transitionDelay to something non-null, one can put a small delay on the state transition
-//There is no guarantee that the state transition won't be overrided during this delay though
-int transitionDelay = 0; 
 #define WON_LOST_DELAY 500
 
 void startGame (GameManager* manager) {
-  transitionDelay = 0;
-  stateTransition = STATE_PLAYING;
+  manager->setState(STATE_PLAYING);
 }
 
 void nativeMenu () {
-  transitionDelay = 0;
-  stateTransition = STATE_MAINMENU;
+  GameManager::getInstance()->setState(STATE_MAINMENU);
 }
 
 void gameOverCallback () {
-  //Since we're using a delay, this will be called multiple times, just discard
-  if (stateTransition == STATE_LOST)
-    return;
-  transitionDelay = WON_LOST_DELAY;
-  stateTransition = STATE_LOST;
+  GameManager::getInstance()->setState(STATE_LOST, WON_LOST_DELAY);
 }
 
 void gameWonCallback () {
-  //we're using a delay => this function will be called multiple times, just discard
-  if (stateTransition == STATE_WON)
-    return;
-  transitionDelay = WON_LOST_DELAY;
-  stateTransition = STATE_WON;
+  GameManager::getInstance()->setState(STATE_WON, WON_LOST_DELAY);
 }
 
 void gameUnPauseCallback () {
-  transitionDelay = 0;
-  stateTransition = STATE_PLAYING;
+  GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
 AndroidInputManager* inputManager = NULL;
 
 void toPlayingState () {
   GameManager* gm = GameManager::getInstance();
-  //Special case : when starting lvl 0, display tutorial
-  if (gm->getState() == STATE_PAUSED) {
+  if (game && game->isPaused()) {
     game->unpause(); 
-    gm->setState(STATE_PLAYING);
   } else {
     delete lvl;
     delete game;
@@ -116,16 +96,14 @@ void toPlayingState () {
     saveDifficulty(Difficulty::getInstance()->currentDifficulty());
 
     //Display the tutorial before starting level 0
-    if (gm->getState () != STATE_TUTORIAL && gm->getCurrentLevel() == 0) {
+    if (gm->getCurrentLevel() == 0) {
       game->pause();
       gm->setState(STATE_TUTORIAL);
-    } else {
-      gm->setState(STATE_PLAYING);
     }
   }
 }
 
-void toMenuState (eAppState state) {
+void toMenuState () {
   delete lvl;
   lvl = NULL;
   delete game;
@@ -133,34 +111,20 @@ void toMenuState (eAppState state) {
   GameManager::getInstance()->setGame(NULL);
   delete gameView;
   gameView = NULL;
-  GameManager::getInstance()->setState(state);
 }
 
-void toMainMenuState () {
-  //FIXME: shouldn't we "pause" the game ?
-  toMenuState(STATE_MAINMENU);
-}
-
-void toLostState () {
-  toMenuState(STATE_LOST);
-}
 
 void toWonState () {
-  if (!GameManager::getInstance()->hasMoreLevels())
-    toMenuState(STATE_END);
-  else {
-    toMenuState(STATE_WON);
+  if (!GameManager::getInstance()->hasMoreLevels()) {
+    GameManager::getInstance()->setState(STATE_END);
+  } else {
+    toMenuState();
     saveProgress(GameManager::getInstance()->getCurrentLevel()+1);
   }
 }
 
-void toEndState () {
-  toMenuState(STATE_END);
-}
-
 void toPauseState () {
   game->pause();
-  GameManager::getInstance()->setState(STATE_PAUSED);
 }
 
 void nativeInit (const char* apkPath) {
@@ -181,6 +145,13 @@ void nativeInitGL(int level, int difficulty) {
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
     GameManager::create(startGame, nativeMenu, gameUnPauseCallback, level);
+    GameManager* gm = GameManager::getInstance();
+    gm->setStateCallback(STATE_WON, toWonState);
+    gm->setStateCallback(STATE_LOST, toMenuState);
+    gm->setStateCallback(STATE_END, toMenuState);
+    gm->setStateCallback(STATE_MAINMENU, toMenuState);
+    gm->setStateCallback(STATE_PLAYING, toPlayingState);
+    gm->setStateCallback(STATE_PAUSED, toPauseState);
     inputManager = new AndroidInputManager();
 
     printGLString("Version", GL_VERSION);
@@ -233,7 +204,7 @@ float transY = 0;
 #define VIEWPORT_HEIGHT 10
 
 /**
- * The screen is divied as follow :
+ * The screen is divided as follow :
  * - the biggest are is the window
  * - then comes the viewport that contains EVERYTHING that we ever render. it is
  *   COMPLETELY FORBIDDEN to render outside the viewport since it won't be visible on some devices
@@ -361,32 +332,12 @@ void nativePause () {
     return;
 
   if (GameManager::getInstance()->getState() == STATE_PLAYING) {
-    transitionDelay = 0;
-    stateTransition = STATE_PAUSED;
+    GameManager::getInstance()->setState(STATE_PAUSED);
   }
 }
 
-static uint64_t last = Utils::getCurrentTimeMillis();
-
 void nativeRender () {
-  uint64_t now = Utils::getCurrentTimeMillis();
-  if (stateTransition != -1) {
-    transitionDelay -= (int)(now-last);
-    if (transitionDelay <= 0) {
-      switch (stateTransition) {
-        case STATE_PLAYING: toPlayingState(); break;
-        case STATE_MAINMENU: toMainMenuState(); break;
-        case STATE_LOST: toLostState(); break;
-        case STATE_WON: toWonState(); break;
-        case STATE_END: toEndState(); break;
-        case STATE_PAUSED: toPauseState(); break;
-      }
-      stateTransition = -1;
-      transitionDelay = 0;
-    }
-  }
-  last = now;
-
+  GameManager::getInstance()->applyTransition();
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 

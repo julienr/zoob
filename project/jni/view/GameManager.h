@@ -68,7 +68,9 @@ class GameManager {
         menuCB(menuCb),
         continueCB(continueCb),
         currentLevel(levelLimit),
-        levelLimit(levelLimit) {
+        levelLimit(levelLimit),
+        stateTransition(-1),
+        transitionDelay(0) {
       menus[STATE_PLAYING] = NULL;
       menus[STATE_MAINMENU] = new MainMenu(this);
       menus[STATE_LOST] = new LostMenu(this);
@@ -77,8 +79,12 @@ class GameManager {
       menus[STATE_PAUSED] = new PausedMenu(this);
       menus[STATE_TUTORIAL] = new TutorialMenu(this);
       menus[STATE_BUY_FULL] = new BuyFullMenu(this);
+
+      for (int i=0; i<MAX_STATE; i++)
+        stateCallbacks[i] = NULL;
       //setState(STATE_MAINMENU);
-      setState(STATE_BUY_FULL);
+      state = STATE_BUY_FULL;
+      applyLocks();
     }
 
     ~GameManager () {
@@ -88,7 +94,26 @@ class GameManager {
   public:
     eAppState getState () { return state; }
 
-    void setState (eAppState s);
+    void setState (eAppState s, int delay=0) {
+      //If we're already transitioning to this state, discards. This is needed otherwise, when applying
+      //a dely, we might run in an infinite loop if setState is called multiple time with the same state
+      //and delay
+      if (stateTransition == s)
+        return;
+      stateTransition = s;
+      transitionDelay = delay;
+    }
+
+    //MUST be called by the RENDERING thread. Apply the state transition if any
+    void applyTransition ();
+
+    void setStateCallback (eAppState state, callback_t cb) {
+      stateCallbacks[state] = cb;
+    }
+
+    int getCurrentTransition () const {
+      return stateTransition;
+    }
 
     size_t getCurrentLevel () {
       return currentLevel;
@@ -169,6 +194,9 @@ class GameManager {
     }
 
   private:
+    //apply texture locks required by state s
+    void applyLocks ();
+
     const startGameCallback_t newGameCB;
     const callback_t menuCB;
     const callback_t continueCB;
@@ -185,6 +213,16 @@ class GameManager {
     Game* currentGame;
 
     size_t levelLimit;
+
+    //When input is threaded (as it is on Android), it shouldn't try to change states directly, because
+    //they might involve openGL related calls (loading/unloading texture groups).
+    int stateTransition;
+    //by setting stateTransition and transitionDelay to something non-null, one can put a small delay on the state transition
+    //There is no guarantee that the state transition won't be overrided during this delay though
+    int transitionDelay;
+
+    //Callbacks called when entering a new state. Nothing called if NULL
+    callback_t stateCallbacks[MAX_STATE];
 };
 
 #endif /* GAMEMANAGER_H_ */

@@ -56,6 +56,10 @@ class Game {
       gameState = GAME_PAUSED;
     }
 
+    bool isPaused () {
+      return gameState == GAME_PAUSED;
+    }
+
     PlayerTank* getPlayerTank () const {
       return playerTank;
     }

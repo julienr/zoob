@@ -20,12 +20,29 @@ void GameManager::handleTouchUp (const Vector2& p) {
     menus[state]->handleTouchUp(p);
 }
 
+void GameManager::applyTransition () {
+  static uint64_t last = Utils::getCurrentTimeMillis();
+  const uint64_t now = Utils::getCurrentTimeMillis();
+  if (stateTransition != -1) {
+    transitionDelay -= (int)(now-last);
+    if (transitionDelay <= 0) {
+      state = (eAppState)stateTransition;
+      applyLocks();
+      stateTransition = -1;
+      transitionDelay = 0;
+      if (stateCallbacks[state] != NULL)
+        stateCallbacks[state]();
+    }
+  }
+  last = now;
+}
+
 #define TEX_LOCK(i) TextureManager::getInstance()->lockGroup(i)
 
-void applyLocks (eAppState s) {
+void GameManager::applyLocks () {
   TextureManager::getInstance()->startLock();
   TEX_LOCK(TEX_GROUP_UTILS);
-  switch (s) {
+  switch (state) {
     case STATE_PAUSED:
     case STATE_PLAYING:
     case STATE_LOST:
@@ -49,7 +66,3 @@ void applyLocks (eAppState s) {
   TextureManager::getInstance()->commitLock();
 }
 
-void GameManager::setState (eAppState s) {
-  state = s;
-  applyLocks(state);
-}

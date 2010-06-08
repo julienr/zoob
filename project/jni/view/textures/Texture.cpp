@@ -21,8 +21,10 @@ void Texture::load () {
     return;
   //LOGE("loading %s", filename);
   glTexID = loadTextureFromPNG(filename, &width, &height);
-  if (glTexID == TEXTURE_LOAD_ERROR)
+  if (glTexID == TEXTURE_LOAD_ERROR) {
     LOGE("Error loading texture %s", filename);
+  }
+  //LOGE("successful load of %s", filename);
   status = LOADED;
 }
 
