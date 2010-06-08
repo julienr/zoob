@@ -7,6 +7,7 @@
 #include "logic/enemies/BossSimpleTank.h"
 #include "logic/enemies/BossShieldTank.h"
 #include "logic/enemies/BossBounceTank.h"
+#include "logic/enemies/BossBurstTank.h"
 #include "ai/algorithms/AStar.h"
 #include "Bomb.h"
 
@@ -41,7 +42,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case BOSS_BOUNCE: ASSERT(!desc.path); t = new BossBounceTank(); break;
       case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
       case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
-      case BOSS_BURST: ASSERT(false);
+      case BOSS_BURST: ASSERT(!desc.path); t = new BossBurstTank(); break;
       default: LOGE("unknown tank type : %i", desc.tankType); ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));

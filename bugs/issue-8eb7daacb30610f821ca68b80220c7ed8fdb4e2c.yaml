@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: burst tank eat their own rockets when they move right after fire
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-06-08 19:48:34.702405 Z
+references: []
+
+id: 8eb7daacb30610f821ca68b80220c7ed8fdb4e2c
+log_events: 
+- - 2010-06-08 19:48:35.410307 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
