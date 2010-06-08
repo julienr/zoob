@@ -8,10 +8,12 @@
 
 class EnemyTank: public Tank {
   public:
-    EnemyTank(float radius, TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()))
+    EnemyTank(float radius, TankAI* ai, FireRatePolicy* firePol=new IntervalFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()),
+              double initialFiringDelay=Difficulty::getInstance()->getEnemiesFiringDelay())
       : Tank(radius, firePol),
         ai(ai),
-        prepareFiring(false) {
+        prepareFiring(false),
+        initialFiringDelay(initialFiringDelay){
     }
 
     virtual ~EnemyTank () {
@@ -20,7 +22,7 @@ class EnemyTank: public Tank {
 
     void prepareFire () {
       prepareFiring = true;
-      firingDelay = getInitialFiringDelay();
+      firingDelay = initialFiringDelay;
     }
 
     void think (double elapsedS) {
@@ -70,7 +72,7 @@ class EnemyTank: public Tank {
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
 
-    virtual double getInitialFiringDelay () const { return Difficulty::getInstance()->getEnemiesFiringDelay(); }
+    double getInitialFiringDelay () const { return initialFiringDelay; }
   private:
     TankAI* ai;
     /**
@@ -78,8 +80,10 @@ class EnemyTank: public Tank {
      * be in the firing state and provide some visual feedback (ie: growing) to the player so he
      * can react.
      */
+    //FIXME: move that to a policy
     bool prepareFiring;
     double firingDelay;
+    const double initialFiringDelay;
 };
 
 #endif /* ENEMYTANK_H_ */
