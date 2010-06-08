@@ -42,7 +42,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
       case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
       case BOSS_BURST: ASSERT(false);
-      default: ASSERT(false); break;
+      default: LOGE("unknown tank type : %i", desc.tankType); ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));
     enemies.append(t);

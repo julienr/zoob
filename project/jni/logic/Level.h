@@ -38,7 +38,15 @@ class WallEntity : public Entity {
  * R: right (right half of cell)
  * M: only small block in the middle
  */
-enum eTileType {E, W, T, L, B, R, M};
+enum eTileType {
+    E=1<<0,
+    W=1<<1,
+    T=1<<2,
+    L=1<<3,
+    B=1<<4,
+    R=1<<5,
+    M=1<<6
+};
 
 class Tile {
   public:
@@ -59,6 +67,8 @@ class Tile {
 /* This structure is used to provide some "advanced" description for tanks such as
  * path to be followed */
 struct TankDescription {
+  TankDescription ()
+    : x(-1), y(-1), tankType(TANK_PLAYER), path(NULL) {}
   TankDescription (int x, int y, eTankType t, Path* path)
     : x(x), y(y), tankType(t), path(path) {}
   int x, y; //tank start position

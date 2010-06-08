@@ -443,8 +443,44 @@ namespace lvl11 {
   DECLARE_LVL
 }
 
+#include "levelgen.h"
+#include "containers/pair.h"
+
+namespace lvl12 {
+  const int width = 12;
+  const int height = 8;
+
+  Level* load() {
+    eTileType* tiles = generateLevel(width, height);
+    vector<pair<int,int> > starting(2);
+    size_t c = 0;
+    for (int x=0; x<width; x++) {
+      for (int y=0; y<height; y++) {
+        if (tiles[y*width+x] == E) {
+          if (c < 2) {
+            starting.append(pair<int,int>(x,y));
+            c++;
+          } else
+            break;
+        }
+      }
+      if (c == 2)
+        break;
+    }
+    ASSERT(c==2);
+    LOGE("starting 1 (%i,%i)", starting[0].first, starting[0].second);
+    LOGE("starting 2 (%i,%i)", starting[1].first, starting[1].second);
+    const size_t numTanks = 2;
+
+    TankDescription* tanks = new TankDescription[numTanks];
+    tanks[0] = TankDescription(starting[0].first, starting[0].second, TANK_PLAYER, NULL);
+    tanks[1] = TankDescription(starting[1].first, starting[1].second, TANK_STATIC, NULL);
+    return new Level(width,height,generateLevel (width, height),tanks,numTanks,false,false);
+  }
+}
+
 //Array fill
-const size_t numLevels = 12;
+const size_t numLevels = 13;
 lvl_callback_t levelsLoadFns[numLevels] = {
   lvl0::load,
   lvl1::load,
@@ -457,5 +493,6 @@ lvl_callback_t levelsLoadFns[numLevels] = {
   lvl8::load,
   lvl9::load,
   lvl10::load,
-  lvl11::load
+  lvl11::load,
+  lvl12::load
 };

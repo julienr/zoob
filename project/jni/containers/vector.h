@@ -36,13 +36,27 @@ class vector {
       data[used++] = elem;
     }
 
-    void removeLast () {
-      ASSERT(used > 0);
+    T removeLast () {
+      ASSERT(!empty());
       used--;
+      return data[used];
+    }
+
+    T last () {
+      ASSERT(!empty());
+      return data[used-1];
     }
 
     size_t length () const {
       return used;
+    }
+
+    size_t size() const {
+      return used;
+    }
+
+    bool empty () const {
+      return used == 0;
     }
 
     bool contains (const T& elem) const {
