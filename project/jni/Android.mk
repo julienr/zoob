@@ -24,6 +24,7 @@ LOCAL_SRC_FILES := \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \
     levels/LevelsData.cpp \
+    levels/levelgen.cpp \
     view/textures/TextureManager.cpp \
     view/textures/TextureGroup.cpp \
     view/textures/Texture.cpp \

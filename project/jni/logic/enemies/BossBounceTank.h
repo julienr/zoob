@@ -3,7 +3,6 @@
 
 #include "BounceTank.h"
 
-
 class BossBounceTank : public EnemyTank {
   public:
     BossBounceTank ()
