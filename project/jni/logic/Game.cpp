@@ -4,10 +4,12 @@
 #include "logic/enemies/SimpleTank.h"
 #include "logic/enemies/StaticTank.h"
 #include "logic/enemies/BurstTank.h"
+#include "logic/enemies/SmartTank.h"
 #include "logic/enemies/BossSimpleTank.h"
 #include "logic/enemies/BossShieldTank.h"
 #include "logic/enemies/BossBounceTank.h"
 #include "logic/enemies/BossBurstTank.h"
+#include "logic/enemies/BossSmartTank.h"
 #include "ai/algorithms/AStar.h"
 #include "Bomb.h"
 
@@ -38,11 +40,13 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case TANK_BOUNCE: t = desc.path?new BounceTank(desc.path):new BounceTank(); break;
       case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
       case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
+      case TANK_SMART: t = desc.path?new SmartTank(desc.path):new SmartTank(); break;
       case TANK_STATIC: ASSERT(!desc.path); t = new StaticTank(); break;
       case BOSS_BOUNCE: ASSERT(!desc.path); t = new BossBounceTank(); break;
       case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
       case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
       case BOSS_BURST: ASSERT(!desc.path); t = new BossBurstTank(); break;
+      case BOSS_SMART: ASSERT(!desc.path); t = new BossSmartTank(); break;
       default: LOGE("unknown tank type : %i", desc.tankType); ASSERT(false); break;
     }
     t->setPosition(Vector2(desc.x, desc.y));

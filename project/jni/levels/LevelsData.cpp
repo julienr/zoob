@@ -436,37 +436,21 @@ namespace lvl11 {
      /* 3*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
      /* 4*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
      /* 5*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 6*/  L,  E,  E,  W,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 6*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
      /* 7*/  W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
-  };
-
-  Vector2 wp1[4] = {
-     Vector2(4,2),
-     Vector2(4,5),
-     Vector2(6,5),
-     Vector2(6,2)
-  };
-
-  Vector2 wp2[4] = {
-     Vector2(7,2),
-     Vector2(7,5),
-     Vector2(9,5),
-     Vector2(9,2)
-  };
-
-  Vector2 wp3[2] = {
-     Vector2(4,6),
-     Vector2(7,6)
   };
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 4;
+  const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(4, 2, TANK_BOUNCE, new Path(4, wp1)),
-     TankDescription(7, 2, TANK_BOUNCE, new Path(4, wp2)),
-     TankDescription(4, 6, TANK_SIMPLE, new Path(2, wp3))
+     TankDescription(6, 1, TANK_BOUNCE, NULL),
+     TankDescription(6, 6, TANK_BOUNCE, NULL),
+     TankDescription(7, 3, TANK_SIMPLE, NULL),
+     TankDescription(7, 4, TANK_SIMPLE, NULL),
+     TankDescription(10, 1, TANK_BOUNCE, NULL),
+     TankDescription(8, 6, TANK_BOUNCE, NULL),
   };
 
   DECLARE_LVL
@@ -479,41 +463,59 @@ namespace lvl12 {
      /*      0   1   2   3   4   5   6   7   8   9  10  11 */
      /* 0*/  W,  T,  W,  T,  T,  T,  T,  T,  T,  T,  T,  W,
      /* 1*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 2*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 3*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 4*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 5*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 6*/  L,  E,  E,  W,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 2*/  W,  E,  R,  E,  R,  E,  E,  R,  E,  E,  E,  R,
+     /* 3*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 4*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 5*/  L,  E,  E,  E,  R,  E,  E,  R,  E,  E,  E,  R,
+     /* 6*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
      /* 7*/  W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
   };
 
   Vector2 wp1[4] = {
-     Vector2(4,2),
-     Vector2(4,5),
-     Vector2(6,5),
-     Vector2(6,2)
+     Vector2(5,2),
+     Vector2(5,3),
+     Vector2(4,3),
+     Vector2(5,3)
   };
 
   Vector2 wp2[4] = {
-     Vector2(7,2),
-     Vector2(7,5),
-     Vector2(9,5),
-     Vector2(9,2)
+     Vector2(5,5),
+     Vector2(5,4),
+     Vector2(4,4),
+     Vector2(5,4)
   };
 
-  Vector2 wp3[2] = {
-     Vector2(4,6),
-     Vector2(7,6)
+  Vector2 wp3[4] = {
+     Vector2(8,2),
+     Vector2(8,3),
+     Vector2(7,3),
+     Vector2(8,3)
+  };
+
+  Vector2 wp4[4] = {
+     Vector2(8,5),
+     Vector2(8,4),
+     Vector2(7,4),
+     Vector2(8,4)
+  };
+
+  Vector2 wp5[4] = {
+     Vector2(3,1),
+     Vector2(10,1),
+     Vector2(10,6),
+     Vector2(3,6)
   };
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 4;
+  const size_t numTanks = 6;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(4, 2, TANK_BOUNCE, new Path(4, wp1)),
-     TankDescription(7, 2, TANK_BOUNCE, new Path(4, wp2)),
-     TankDescription(4, 6, TANK_SIMPLE, new Path(2, wp3))
+     TankDescription(5, 2, TANK_BOUNCE, new Path(4, wp1)),
+     TankDescription(5, 5, TANK_BOUNCE, new Path(4, wp2)),
+     TankDescription(8, 2, TANK_SIMPLE, new Path(4, wp3)),
+     TankDescription(8, 5, TANK_SIMPLE, new Path(4, wp4)),
+     TankDescription(3, 1, TANK_BOUNCE, new Path(4, wp5))
   };
 
   DECLARE_LVL
@@ -524,43 +526,27 @@ namespace lvl13 {
   const int ydim = 8;
   eTileType tiles[xdim*ydim] = {
      /*      0   1   2   3   4   5   6   7   8   9  10  11 */
-     /* 0*/  W,  T,  W,  T,  T,  T,  T,  T,  T,  T,  T,  W,
-     /* 1*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 2*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 3*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 4*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 5*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 6*/  L,  E,  E,  W,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 7*/  W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
-  };
-
-  Vector2 wp1[4] = {
-     Vector2(4,2),
-     Vector2(4,5),
-     Vector2(6,5),
-     Vector2(6,2)
-  };
-
-  Vector2 wp2[4] = {
-     Vector2(7,2),
-     Vector2(7,5),
-     Vector2(9,5),
-     Vector2(9,2)
-  };
-
-  Vector2 wp3[2] = {
-     Vector2(4,6),
-     Vector2(7,6)
+     /* 0*/  W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+     /* 1*/  L,  E,  E,  E,  R,  E,  E,  E,  E,  E,  E,  R,
+     /* 2*/  L,  E,  R,  E,  W,  B,  B,  E,  E,  E,  E,  R,
+     /* 3*/  L,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 4*/  L,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
+     /* 5*/  L,  E,  R,  E,  W,  T,  T,  E,  E,  E,  E,  R,
+     /* 6*/  L,  E,  E,  E,  R,  E,  E,  E,  E,  E,  E,  R,
+     /* 7*/  W,  B,  B,  B,  W,  B,  B,  B,  B,  B,  B,  W,
   };
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 4;
+  const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
-     TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(4, 2, TANK_BOUNCE, new Path(4, wp1)),
-     TankDescription(7, 2, TANK_BOUNCE, new Path(4, wp2)),
-     TankDescription(4, 6, TANK_SIMPLE, new Path(2, wp3))
+     TankDescription(1, 3, TANK_PLAYER, NULL),
+     TankDescription(10, 1, TANK_SIMPLE, NULL),
+     TankDescription(10, 6, TANK_SIMPLE, NULL),
+     TankDescription(8, 3, TANK_SIMPLE, NULL),
+     TankDescription(8, 4, TANK_SIMPLE, NULL),
+     TankDescription(5, 1, TANK_BOUNCE, NULL),
+     TankDescription(5, 6, TANK_BOUNCE, NULL),
   };
 
   DECLARE_LVL
@@ -571,43 +557,37 @@ namespace lvl14 {
   const int ydim = 8;
   eTileType tiles[xdim*ydim] = {
      /*      0   1   2   3   4   5   6   7   8   9  10  11 */
-     /* 0*/  W,  T,  W,  T,  T,  T,  T,  T,  T,  T,  T,  W,
-     /* 1*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 2*/  W,  E,  R,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 3*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 4*/  L,  E,  E,  E,  E,  R,  E,  E,  L,  E,  E,  R,
-     /* 5*/  L,  E,  E,  E,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 6*/  L,  E,  E,  W,  E,  E,  E,  E,  E,  E,  E,  R,
-     /* 7*/  W,  B,  B,  B,  B,  B,  B,  B,  B,  B,  B,  W,
+     /* 0*/  W,  T,  T,  T,  W,  T,  T,  T,  T,  T,  T,  W,
+     /* 1*/  L,  E,  E,  E,  R,  E,  E,  E,  E,  E,  E,  R,
+     /* 2*/  L,  E,  R,  E,  W,  E,  E,  B,  W,  E,  E,  R,
+     /* 3*/  L,  E,  R,  E,  E,  E,  E,  E,  R,  E,  E,  R,
+     /* 4*/  L,  E,  R,  E,  E,  E,  E,  E,  R,  E,  E,  R,
+     /* 5*/  L,  E,  R,  E,  W,  E,  E,  T,  W,  E,  E,  R,
+     /* 6*/  L,  E,  E,  E,  R,  E,  E,  E,  E,  E,  E,  R,
+     /* 7*/  W,  B,  B,  B,  W,  B,  B,  B,  B,  B,  B,  W,
   };
 
-  Vector2 wp1[4] = {
-     Vector2(4,2),
-     Vector2(4,5),
-     Vector2(6,5),
-     Vector2(6,2)
+  Vector2 wp1[2] = {
+     Vector2(5,1),
+     Vector2(9,1)
   };
 
-  Vector2 wp2[4] = {
-     Vector2(7,2),
-     Vector2(7,5),
-     Vector2(9,5),
-     Vector2(9,2)
-  };
-
-  Vector2 wp3[2] = {
-     Vector2(4,6),
-     Vector2(7,6)
+  Vector2 wp2[2] = {
+     Vector2(5,6),
+     Vector2(9,6)
   };
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 4;
+  const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(4, 2, TANK_BOUNCE, new Path(4, wp1)),
-     TankDescription(7, 2, TANK_BOUNCE, new Path(4, wp2)),
-     TankDescription(4, 6, TANK_SIMPLE, new Path(2, wp3))
+     TankDescription(7, 3, TANK_SIMPLE, NULL),
+     TankDescription(7, 4, TANK_SIMPLE, NULL),
+     TankDescription(3, 2, TANK_SIMPLE, NULL),
+     TankDescription(3, 5, TANK_SIMPLE, NULL),
+     TankDescription(5, 1, TANK_BOUNCE, new Path(2, wp1)),
+     TankDescription(5, 6, TANK_BOUNCE, new Path(2, wp2))
   };
 
   DECLARE_LVL

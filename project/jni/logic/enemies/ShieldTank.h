@@ -21,7 +21,7 @@ class ShieldTank : public EnemyTank {
 
     virtual eTankType getTankType () const { return TANK_SHIELD; }
 
-    virtual bool explode (Entity* e, const Vector2& colPoint) {
+    bool explode (Entity* e, const Vector2& colPoint) {
       if (e->getType() == ENTITY_ROCKET) {
         Rocket* r = static_cast<Rocket*>(e);
         if (r->getNumBounces() < Difficulty::getInstance()->getShieldResistance())
@@ -29,6 +29,11 @@ class ShieldTank : public EnemyTank {
       }
       return EnemyTank::explode(e, colPoint);
     }
+
+  protected:
+    //For subclasses
+    ShieldTank (float radius, TankAI* ai)
+          : EnemyTank(radius, ai) {}
 };
 
 #endif /* SHIELDTANK_H_ */

@@ -38,8 +38,11 @@ class TankView {
         case TANK_BURST: return VIOLET;
         case BOSS_SHIELD:
         case TANK_SHIELD: return YELLOW;
-        default: LOGE("Unhandled tank type : %i", type); return WHITE;
+        case TANK_SMART:
+        case BOSS_SMART: return BLUE;
       }
+      ASSERT(false);
+      return WHITE;
     }
 
     virtual void draw () {
@@ -65,6 +68,11 @@ class TankView {
         case TANK_BOUNCE:
         case BOSS_BOUNCE:
           bounceTankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
+          break;
+        case TANK_SMART:
+        case BOSS_SMART:
+          tankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
+          shieldSprite.draw(*tank, 0, 1.1f);
           break;
       }
       GLW::colorWhite();

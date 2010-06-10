@@ -11,7 +11,8 @@ enum eColor {
     TRANSPARENT_GREY,
     LIGHT_GREY,
     VIOLET,
-    YELLOW
+    YELLOW,
+    BLUE
 };
 
 #endif /* COLOR_H_ */

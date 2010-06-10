@@ -22,7 +22,9 @@ enum eTankType {
     TANK_SHIELD,
     BOSS_SHIELD,
     TANK_BURST,
-    BOSS_BURST
+    BOSS_BURST,
+    TANK_SMART,
+    BOSS_SMART
 };
 
 class CollisionManager;
