@@ -20,15 +20,22 @@ NumberView::~NumberView () {
     delete numbers[i];
 }
 
-void NumberView::drawInt (int val, const Vector2& pos, const Vector2& size) {
-  int numDigits = 1 + val/10;
+void NumberView::drawInt (const int v, const Vector2& pos, const Vector2& size) {
+  int val = v;
+  int numDigits = 0;
+  do {
+    numDigits++;
+    val /= 10;
+  } while (val != 0);
+
   //numWidth is the visible width of the number (since most of the texture is transparent. 0.35f is
-  //a hardcoded empirical constante
+  //a hardcoded empirical constant
   float digitWidth = 0.35f*size.x;
   //pos is center, startX is rightmost digit position
   float x = pos.x+(numDigits*digitWidth)/2.0f;
   //LOGE("numDigits : %i, digitWidth %f => x %f", numDigits, digitWidth, x);
   //draw digits, right to left
+  val = v;
   do {
     const int digit = val%10;
     //LOGE("digit : %i", digit);
