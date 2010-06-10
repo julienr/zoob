@@ -12,6 +12,7 @@
 #include "logic/enemies/BossSmartTank.h"
 #include "ai/algorithms/AStar.h"
 #include "Bomb.h"
+#include "lib/TimerManager.h"
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
@@ -89,6 +90,8 @@ void Game::update () {
   if (Math::epsilonEq(elapsedS, 0))
     return;
   lastTime = now;
+
+  TimerManager::getInstance()->tick(elapsedS);
 
   if (!introDone) {
     introTimeLeft -= elapsedS;
@@ -230,7 +233,6 @@ int Game::_updateEnemies (double elapsedS) {
 }
 
 void Game::_updatePlayer (double elapsedS) {
-  playerTank->think(elapsedS);
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;

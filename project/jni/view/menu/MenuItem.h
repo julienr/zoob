@@ -4,6 +4,7 @@
 #include "lib/Utils.h"
 #include "def.h"
 #include "view/Sprite.h"
+#include "view/Color.h"
 
 class MenuItem {
   public:
@@ -18,6 +19,7 @@ class MenuItem {
     }
 
     void draw () const;
+    void drawPressed () const;
 
     void setPosition (const Vector2& pos) {
       this->pos = pos;

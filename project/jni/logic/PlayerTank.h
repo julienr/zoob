@@ -4,6 +4,8 @@
 #include "Tank.h"
 #include "ProgressionManager.h"
 #include "logic/Rocket.h"
+#include "lib/Timer.h"
+#include "Difficulty.h"
 
 #define PLAYER_FIRE_INTERVAL 1000
 #define PLAYER_BURST_INTERVAL 1500
@@ -16,7 +18,8 @@ class PlayerTank : public Tank {
   public:
     PlayerTank ()
       : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
-        currentForm (FORM_SIMPLE) {
+        currentForm (FORM_SIMPLE),
+        shieldTimer(PLAYER_SHIELD_TIME) {
       setLives(3);
     }
 
@@ -30,28 +33,30 @@ class PlayerTank : public Tank {
     }
 
     bool explode (Entity* e, const Vector2& colPoint) {
-      //Avoid a tank being exploded by his friends rockets
-      if (e && e->getType() == ENTITY_ROCKET) {
-        Rocket* r = static_cast<Rocket*>(e);
-        //Player can only die of enemies rockets
-        if (r->getOwner()->getTankType() == TANK_PLAYER)
-          return false;
+      if (shieldTimer.isActive()) {
+        if (e->getType() == ENTITY_ROCKET) {
+          Rocket* r = static_cast<Rocket*>(e);
+          if (r->getNumBounces() < Difficulty::getInstance()->getPlayerShieldResistance())
+            return false;
+        }
+      } else {
+        //Avoid a tank being exploded by his friends rockets
+        if (e && e->getType() == ENTITY_ROCKET) {
+          Rocket* r = static_cast<Rocket*>(e);
+          //Player can only die of enemies rockets
+          if (r->getOwner()->getTankType() == TANK_PLAYER)
+            return false;
+        }
       }
       return Tank::explode(e, colPoint);
     }
 
     void startShield () {
-      shieldTimeLeft = PLAYER_SHIELD_TIME;
+      shieldTimer.start();
     }
 
     double getShieldTimeLeft () const {
-      return shieldTimeLeft;
-    }
-
-    void think (double elapsedS) {
-      shieldTimeLeft -= elapsedS;
-      if (shieldTimeLeft < 0)
-        shieldTimeLeft = 0;
+      return shieldTimer.getTimeLeft();
     }
 
     void changePlayerForm (ePlayerForm newForm);
@@ -65,8 +70,7 @@ class PlayerTank : public Tank {
   private:
     ePlayerForm currentForm;
 
-    //When > 0, this means the tank is currently in shield mode
-    double shieldTimeLeft;
+    Timer shieldTimer;
 
 };
 

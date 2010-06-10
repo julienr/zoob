@@ -4,6 +4,7 @@
 #include "view/menu/MenuItem.h"
 #include "InputManager.h"
 #include "PlayerFormControl.h"
+#include "lib/Timer.h"
 
 /**
  * See important comment in Moob.java regarding native event-handling methods.
@@ -15,7 +16,6 @@
 class AndroidInputManager : public InputManager {
   public:
     AndroidInputManager ();
-    void tick ();
     void draw ();
 
     void touchEventDown (float x, float y);
@@ -50,6 +50,8 @@ class AndroidInputManager : public InputManager {
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;
+
+    Timer shieldButtonTimer;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */

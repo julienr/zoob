@@ -32,7 +32,7 @@ void NumberView::drawInt (const int v, const Vector2& pos, const Vector2& size) 
   //a hardcoded empirical constant
   float digitWidth = 0.35f*size.x;
   //pos is center, startX is rightmost digit position
-  float x = pos.x+(numDigits*digitWidth)/2.0f;
+  float x = pos.x+(numDigits*digitWidth)/2.0f - digitWidth/2.0f; //-digitWidth/2.0f because we want the center of the last digit
   //LOGE("numDigits : %i, digitWidth %f => x %f", numDigits, digitWidth, x);
   //draw digits, right to left
   val = v;

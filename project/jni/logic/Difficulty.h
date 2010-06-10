@@ -32,6 +32,7 @@ class Difficulty {
 
     //Number of times a rocket should bounce before destroying a tank shield
     virtual unsigned getShieldResistance () const = 0;
+    virtual unsigned getPlayerShieldResistance () const = 0;
 
   protected:
     virtual int getID () const = 0;
@@ -46,6 +47,7 @@ class DifficultyEasy : public Difficulty {
     double getEnemiesFiringDelay () const { return 2.0; }
     double getBossFiringDelay () const { return 0.5f; }
     unsigned getShieldResistance () const { return 1; }
+    unsigned getPlayerShieldResistance () const { return 1; }
   protected:
     int getID () const { return 0; }
 };
@@ -56,6 +58,7 @@ class DifficultyMedium : public Difficulty {
     double getEnemiesFiringDelay () const { return 1.5; }
     double getBossFiringDelay () const { return 0.5f; }
     unsigned getShieldResistance () const { return 1; }
+    unsigned getPlayerShieldResistance () const { return 1; }
   protected:
     int getID () const { return 1; }
 };
@@ -66,6 +69,7 @@ class DifficultyHard : public Difficulty {
     double getEnemiesFiringDelay () const { return 0.2; }
     double getBossFiringDelay () const { return 0.4f; }
     unsigned getShieldResistance () const { return 2; }
+    unsigned getPlayerShieldResistance () const { return 1; }
   protected:
     int getID () const { return 2; }
 };

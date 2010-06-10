@@ -20,6 +20,9 @@ void MenuItem::draw () const {
     hoverSprite.draw(pos, size);
   else
     normalSprite.draw(pos, size);
-
   //drawBB(bbPos, bbSize);
+}
+
+void MenuItem::drawPressed () const {
+  hoverSprite.draw(pos, size);
 }

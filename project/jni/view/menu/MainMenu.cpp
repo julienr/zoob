@@ -108,7 +108,7 @@ void MainMenu::_initItems () {
   logoPos = Vector2(3,5);
   logoSize = Vector2(8,8);
 
-  numberPos = Vector2(8.5, 2);
+  numberPos = Vector2(9, 2);
   numberSize = Vector2(3,3);
 
   diffPos = Vector2(9.5, 7.2f);
