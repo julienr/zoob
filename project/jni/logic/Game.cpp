@@ -230,6 +230,7 @@ int Game::_updateEnemies (double elapsedS) {
 }
 
 void Game::_updatePlayer (double elapsedS) {
+  playerTank->think(elapsedS);
   //Player Tank movement
   if (!tankMoveDir.isZero()) {
     Vector2 dir = tankMoveDir;

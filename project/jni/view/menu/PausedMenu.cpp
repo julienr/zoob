@@ -13,7 +13,7 @@ void PausedMenu::draw () {
   glPushMatrix();
   GLW::translate(7.5f, 5.0f, 0.0f);
   GLW::scale(15.0f, 10.0f, 0.0f);
-  GLW::color(TRANSPARENT_GREY);
+  GLW::color(GREY, 0.8f);
   GLW::disableTextures();
   Square::draw(false);
   GLW::enableTextures();

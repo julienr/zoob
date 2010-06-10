@@ -147,7 +147,7 @@ void GameView::_drawGame () {
   //bombs radius
   for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
     Bomb* m = *i;
-    GLW::color(LIGHT_GREY);
+    GLW::color(BLACK,0.1f);
     circle.draw(m->getPosition(), Vector2(BOMB_EXPLOSION_RADIUS, BOMB_EXPLOSION_RADIUS));
     GLW::colorWhite();
   }

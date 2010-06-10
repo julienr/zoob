@@ -10,6 +10,8 @@
 #define PLAYER_IN_BURST_INTERVAL 200
 #define PLAYER_NUM_BURSTS 3
 
+#define PLAYER_SHIELD_TIME 10
+
 class PlayerTank : public Tank {
   public:
     PlayerTank ()
@@ -38,6 +40,20 @@ class PlayerTank : public Tank {
       return Tank::explode(e, colPoint);
     }
 
+    void startShield () {
+      shieldTimeLeft = PLAYER_SHIELD_TIME;
+    }
+
+    double getShieldTimeLeft () const {
+      return shieldTimeLeft;
+    }
+
+    void think (double elapsedS) {
+      shieldTimeLeft -= elapsedS;
+      if (shieldTimeLeft < 0)
+        shieldTimeLeft = 0;
+    }
+
     void changePlayerForm (ePlayerForm newForm);
 
     bool bounce (Entity* e, const Vector2& colPoint) {
@@ -48,6 +64,9 @@ class PlayerTank : public Tank {
     }
   private:
     ePlayerForm currentForm;
+
+    //When > 0, this means the tank is currently in shield mode
+    double shieldTimeLeft;
 
 };
 

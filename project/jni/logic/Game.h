@@ -105,6 +105,10 @@ class Game {
     void playerFire (const Vector2& cursorPosition);
     void playerDropBomb ();
 
+    void playerActivateShield () {
+      playerTank->startShield();
+    }
+
     //Set tank movement direction. Set to (0,0) for now move
     void setTankMoveDir (const Vector2& dir) {
       tankMoveDir.set(dir.x,dir.y);

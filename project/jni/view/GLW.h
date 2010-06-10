@@ -51,19 +51,17 @@ struct GLW {
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     }
 
-    static void color (eColor c) {
+    static void color (eColor c, float a=1.0f) {
       switch(c) {
-        case WHITE: glColor4f(1,1,1,1); break;
-        case BLACK: glColor4f(0,0,0,1); break;
-        case GREEN: glColor4f(0.4,1,0.24,1); break;
-        case RED: glColor4f(1,0.18,0.18,1); break;
-        case GREY: glColor4f(0.63,0.63,0.63,1); break;
-        case ORANGE: glColor4f(1, 0.51, 0.18, 1); break;
-        case TRANSPARENT_GREY: glColor4f(0.63, 0.63, 0.63, 0.8); break;
-        case LIGHT_GREY: glColor4f(0,0,0,0.1f); break;
-        case VIOLET: glColor4f(0.97, 0.18, 1, 1); break;
-        case YELLOW: glColor4f(1, 0.97f, 0.18f, 1); break;
-        case BLUE: glColor4f(0.23f, 0.30f, 1, 1); break;
+        case WHITE: glColor4f(1,1,1,a); break;
+        case BLACK: glColor4f(0,0,0,a); break;
+        case GREEN: glColor4f(0.4,1,0.24,a); break;
+        case RED: glColor4f(1,0.18,0.18,a); break;
+        case GREY: glColor4f(0.63,0.63,0.63,a); break;
+        case ORANGE: glColor4f(1, 0.51, 0.18, a); break;
+        case VIOLET: glColor4f(0.97, 0.18, 1, a); break;
+        case YELLOW: glColor4f(1, 0.97f, 0.18f, a); break;
+        case BLUE: glColor4f(0.23f, 0.30f, 1, a); break;
       }
     }
 

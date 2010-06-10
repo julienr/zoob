@@ -2126,18 +2126,6 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
-    <filter
-       inkscape:collect="always"
-       id="filter4370"
-       x="-0.11075474"
-       width="1.2215095"
-       y="-0.37911706"
-       height="1.7582341">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="14.330625"
-         id="feGaussianBlur4372" />
-    </filter>
     <inkscape:perspective
        id="perspective4382"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
@@ -2283,6 +2271,97 @@
        fx="3122.5835"
        fy="1510.5674"
        r="92.509666" />
+    <inkscape:perspective
+       id="perspective3565"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3611"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7285-8-66-3"
+       id="radialGradient4778-0"
+       gradientUnits="userSpaceOnUse"
+       cx="3122.5835"
+       cy="1510.5674"
+       fx="3122.5835"
+       fy="1510.5674"
+       r="92.509666" />
+    <linearGradient
+       id="linearGradient7285-8-66-3">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop7287-8-85-0" />
+      <stop
+         id="stop4360-09-4"
+         offset="0.60000002"
+         style="stop-color:#ffffff;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop7289-6-7-4" />
+    </linearGradient>
+    <radialGradient
+       r="92.509666"
+       fy="1510.5674"
+       fx="3122.5835"
+       cy="1510.5674"
+       cx="3122.5835"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3623"
+       xlink:href="#linearGradient7285-8-66-3"
+       inkscape:collect="always" />
+    <inkscape:perspective
+       id="perspective3658"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <radialGradient
+       r="92.509666"
+       fy="1510.5674"
+       fx="3122.5835"
+       cy="1510.5674"
+       cx="3122.5835"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3623-9"
+       xlink:href="#linearGradient7285-8-66-3-0"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient7285-8-66-3-0">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop7287-8-85-0-2" />
+      <stop
+         id="stop4360-09-4-8"
+         offset="0.60000002"
+         style="stop-color:#ffffff;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop7289-6-7-4-3" />
+    </linearGradient>
+    <radialGradient
+       r="92.509666"
+       fy="1510.5674"
+       fx="3122.5835"
+       cy="1510.5674"
+       cx="3122.5835"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3672"
+       xlink:href="#linearGradient7285-8-66-3-0"
+       inkscape:collect="always" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2292,14 +2371,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.25000001"
-     inkscape:cx="4916.3674"
-     inkscape:cy="-2328.9351"
+     inkscape:cx="-1183.6324"
+     inkscape:cy="-696.93517"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="748"
-     inkscape:window-x="1277"
+     inkscape:window-x="-3"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
      showguides="true"
@@ -4729,5 +4808,87 @@
          style="fill:url(#radialGradient4778);fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
          sodipodi:type="arc" />
     </g>
+    <rect
+       style="fill:#666666;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4161-9-7-7-7-6"
+       width="978.6358"
+       height="661.85199"
+       x="-1981.3179"
+       y="1081.4362" />
+    <g
+       id="g4774-4"
+       transform="matrix(-0.54034841,0.84144138,-0.84144138,-0.54034841,4940.3158,-2397.2137)"
+       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/shield_button.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295">
+      <path
+         inkscape:export-ydpi="299.86295"
+         inkscape:export-xdpi="299.86295"
+         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/project/assets/sprites/tank2.png"
+         id="path4503-4-4"
+         d="m 6781.0933,3694.9037 -1.1109,-65.3538 c 44.6499,-12.4045 77.0676,-53.662 76.2434,-102.1525 -0.9783,-57.5624 -48.4352,-103.4329 -105.9976,-102.4543 -57.5623,0.9782 -103.4332,48.435 -102.4546,105.9974 0.8241,48.4905 34.6252,88.6225 79.671,99.5025 l 1.1109,65.3538 52.5378,-0.8931 z"
+         style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.66113091;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="299.86295"
+         inkscape:export-xdpi="299.86295"
+         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/shield_1.png"
+         transform="matrix(-1.2467141,1.4443748,-1.4443748,-1.2467141,12826.794,933.42701)"
+         d="m 3213.0932,1510.5674 c 0,49.9871 -40.5226,90.5096 -90.5097,90.5096 -49.9871,0 -90.5097,-40.5225 -90.5097,-90.5096 0,-49.9871 40.5226,-90.5097 90.5097,-90.5097 49.9871,0 90.5097,40.5226 90.5097,90.5097 z"
+         sodipodi:ry="90.509666"
+         sodipodi:rx="90.509666"
+         sodipodi:cy="1510.5674"
+         sodipodi:cx="3122.5835"
+         id="path4146-0-7"
+         style="fill:url(#radialGradient3623);fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         sodipodi:type="arc" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:117.19049835px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-1865.594"
+       y="1571.1603"
+       id="text4088-9-3"
+       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/shield_button.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4090-1-65"
+         x="-1865.594"
+         y="1571.1603"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#66ff3f;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">shield</tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.66113091000000068;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m -1372.9294,1320.7953 55.5917,34.379 c -13.6888,44.2731 3.5101,93.8441 44.7574,119.3523 48.964,30.2806 113.2046,15.1344 143.4849,-33.8297 30.2806,-48.9639 15.1347,-113.2048 -33.8294,-143.4851 -41.2473,-25.5083 -93.2804,-18.7519 -126.7757,13.2725 l -55.5916,-34.3791 -27.6373,44.6901 z"
+       id="path4503-4-4-0"
+       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/shield_button_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient3672);fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path4146-0-7-4"
+       sodipodi:cx="3122.5835"
+       sodipodi:cy="1510.5674"
+       sodipodi:rx="90.509666"
+       sodipodi:ry="90.509666"
+       d="m 3213.0932,1510.5674 a 90.509666,90.509666 0 1 1 -181.0194,0 90.509666,90.509666 0 1 1 181.0194,0 z"
+       transform="matrix(-0.54169674,-1.8295025,1.8295025,-0.54169674,-2316.0934,7900.0575)"
+       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/shield_button_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:117.19049834999999860px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-1405.6414"
+       y="1579.812"
+       id="text4088-9-3-0"
+       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/shield_button_clicked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
+         sodipodi:role="line"
+         id="tspan4090-1-65-9"
+         x="-1405.6414"
+         y="1579.812"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">shield</tspan></text>
   </g>
 </svg>

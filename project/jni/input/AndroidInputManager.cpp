@@ -146,7 +146,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         if (_progMan()->hasBombs() && bombButton.isPressed() &&  bombButton.inside(pNoTrans))
           getGame()->playerDropBomb();
         else if (_progMan()->hasShield() && shieldButton.isPressed() && shieldButton.inside(pNoTrans))
-          LOGE("shield");
+          getGame()->playerActivateShield();
         else if (_progMan()->hasForms() && formControl.inside(pNoTrans))
           formControl.handleTouchUp(pNoTrans);
         else
