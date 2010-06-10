@@ -97,6 +97,7 @@ class CollisionManager {
     bool trace (Entity* mover, const Vector2& move, CollisionResult* result, int entityMask=0) const;
     bool traceRay (Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask=0) const;
     bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask=0) const;
+    bool traceBounceCircle (Entity* source, const Vector2& start, const Vector2& initialMove, float radius, CollisionResult* result, int entityMask=0, int maxBounces=ROCKET_MAX_BOUNCES) const;
 
   private:
     //FIXME: use grid to store entities

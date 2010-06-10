@@ -29,8 +29,7 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
 
   //If we reach this point,no approaching rockets, try to fire to player
   const Vector2 dirToTank = game->getPlayerTank()->getPosition()-tP;
-  if (game->getColManager().traceCircle(myTank, tP, dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)
-      && r.collidedEntity != game->getPlayerTank()) {
+  if (doTraceCircle(game, myTank, tP, dirToTank, &r) && r.collidedEntity != game->getPlayerTank()) {
     //Cannot see, don't fire
     return false;
   } else {
@@ -40,6 +39,13 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
   }
 }
 
+bool AimPolicy::doTraceCircle (Game* game, Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result) {
+  if (useBounceTrace)
+    return game->getColManager().traceBounceCircle(source, start, move, ROCKET_BCIRCLE_R, result, ENTITY_ROCKET, ROCKET_MAX_BOUNCES);
+  else
+    return game->getColManager().traceCircle(source, start, move, ROCKET_BCIRCLE_R, result, ENTITY_ROCKET);
+}
+
 bool AimPolicy::confirmFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   //First, fire to approaching rockets
   Vector2 nearRocketPos;
@@ -47,7 +53,7 @@ bool AimPolicy::confirmFire (double elapsedS, Vector2* outDir, Game* game, Enemy
     //LOGE("confirm rocket near");
     const Vector2 dirToRocket = nearRocketPos-tank->getPosition();
     CollisionResult r;
-    if (!game->getColManager().traceCircle(tank, tank->getPosition(), dirToRocket, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)) {
+    if (!doTraceCircle(game, tank, tank->getPosition(), dirToRocket, &r)) {
       outDir->set(dirToRocket.getNormalized());
       return true;
     }

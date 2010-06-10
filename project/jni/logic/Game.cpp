@@ -334,6 +334,7 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
+  //FIXME: replace by CollisionManagre::traceBounceCircle ?
   CollisionResult r;
   if (colManager.trace(rocket, move, &r)) {
     if (!r.collidedEntity->bounce(rocket, r.colPoint))
