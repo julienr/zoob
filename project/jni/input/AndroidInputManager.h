@@ -44,6 +44,7 @@ class AndroidInputManager : public InputManager {
 
     MenuItem rocketButton;
     MenuItem bombButton;
+    MenuItem shieldButton;
 
     PlayerFormControl formControl;
 

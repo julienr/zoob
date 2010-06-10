@@ -40,6 +40,8 @@ class ProgressionManager {
     void changedLevel ();
 
     bool hasBombs ();
+
+    bool hasShield ();
   private:
     size_t _level();
     vector<ePlayerForm> availablePlayerForms;

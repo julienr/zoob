@@ -19,6 +19,13 @@ bool ProgressionManager::hasBombs () {
     return true;
 }
 
+bool ProgressionManager::hasShield () {
+  if (_level() <= 25)
+    return false;
+  else
+    return true;
+}
+
 #define AV_FORM(f) availablePlayerForms.append(f)
 void ProgressionManager::changedLevel () {
   availablePlayerForms.clear();
