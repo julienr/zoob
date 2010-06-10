@@ -108,6 +108,8 @@ class Tank: public Entity {
     unsigned getMaxLives () const { return maxLives; }
 
   protected:
+    virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir);
+
     FireRatePolicy* getFireRatePolicy () const { return firePolicy; }
 
     //This function simulate a 90-degrees shield on the front of the tank and returns

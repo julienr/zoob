@@ -362,17 +362,3 @@ bool CollisionManager::traceRay (Entity* source, const Vector2& start, const Vec
 bool CollisionManager::traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const {
   return grid.traceCircle(source, start, move, radius, result, entityMask);
 }
-
-bool CollisionManager::traceBounceCircle (Entity* source, const Vector2& start, const Vector2& initialMove, float radius, CollisionResult* result, int entityMask, int maxBounces) const {
-  Vector2 move = initialMove;
-  CollisionResult r;
-  int bounceCount = 0;
-  if (trace(source, move, &r)) {
-    if (!r.collidedEntity->bounce(source, r.colPoint))
-      return true;
-
-    bounceCount++;
-    move = -2.0f*(move*r.normal)*r.normal + move;
-  }
-  return false;
-}

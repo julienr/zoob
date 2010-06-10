@@ -52,7 +52,7 @@ void PlayerFormControl::actionPerformed (short touchedItem) {
 }
 
 void changeForm (ePlayerForm f) {
-  GameManager::getInstance()->getGame()->getPlayerTank()->changePlayerForm(f);
+  Game::getInstance()->getPlayerTank()->changePlayerForm(f);
 }
 
 void PlayerFormControl::_actionNext () {
@@ -84,7 +84,7 @@ void PlayerFormControl::draw () {
 
   static const Vector2 tankPos(13.5, 0.5f);
   static const Vector2 tankSize(1,1);
-  const PlayerTank* playerTank = GameManager::getInstance()->getGame()->getPlayerTank();
+  const PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
   //GLW::color(TankView::getColor(playerTank.getTankType()));
   GLW::color(TankView::getColor((eTankType)playerTank->getCurrentForm()));
   switch (playerTank->getCurrentForm()) {

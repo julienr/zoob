@@ -185,14 +185,6 @@ class GameManager {
     inline bool inGame () { return state == STATE_PLAYING; }
     inline bool paused () { return state == STATE_PAUSED; }
 
-    Game* getGame () {
-      return currentGame;
-    }
-
-    void setGame (Game* g) {
-      currentGame = g;
-    }
-
   private:
     //apply texture locks required by state s
     void applyLocks ();
@@ -208,10 +200,6 @@ class GameManager {
     eAppState stateAtTouchDown;
 
     Menu* menus[MAX_STATE];
-
-    //pointer to the current game, NULL if not in game
-    Game* currentGame;
-
     size_t levelLimit;
 
     //When input is threaded (as it is on Android), it shouldn't try to change states directly, because

@@ -47,7 +47,6 @@ static void loadAPK (const char* apkPath) {
 void centerGameInViewport ();
 #include "levels/LevelsData.h"
 Level* lvl = NULL;
-Game* game = NULL;
 GameView* gameView = NULL;
 
 
@@ -77,17 +76,16 @@ AndroidInputManager* inputManager = NULL;
 
 void toPlayingState () {
   GameManager* gm = GameManager::getInstance();
-  if (game && game->isPaused()) {
-    game->unpause(); 
+  if (Game::getInstance() && Game::getInstance()->isPaused()) {
+    Game::getInstance()->unpause();
   } else {
     delete lvl;
-    delete game;
+    Game::destroy();
     delete gameView;
 
     lvl = levelsLoadFns[GameManager::getInstance()->getCurrentLevel()]();
-    game = new Game(gameOverCallback, gameWonCallback, lvl);
-    GameManager::getInstance()->setGame(game);
-    gameView = new GameView(*game);
+    Game::create(gameOverCallback, gameWonCallback, lvl);
+    gameView = new GameView();
     ProgressionManager::getInstance()->changedLevel();
 
     inputManager->reset();
@@ -97,7 +95,7 @@ void toPlayingState () {
 
     //Display the tutorial before starting level 0
     if (gm->getCurrentLevel() == 0) {
-      game->pause();
+      Game::getInstance()->pause();
       gm->setState(STATE_TUTORIAL);
     }
   }
@@ -106,9 +104,7 @@ void toPlayingState () {
 void toMenuState () {
   delete lvl;
   lvl = NULL;
-  delete game;
-  game = NULL;
-  GameManager::getInstance()->setGame(NULL);
+  Game::destroy();
   delete gameView;
   gameView = NULL;
 }
@@ -124,7 +120,7 @@ void toWonState () {
 }
 
 void toPauseState () {
-  game->pause();
+  Game::getInstance()->pause();
 }
 
 void nativeInit (const char* apkPath) {
@@ -179,13 +175,13 @@ void nativeQuit () {
   zip_close(APKArchive);
   TextureManager::destroy();
   delete lvl;
-  delete game;
+  Game::destroy();
   delete gameView;
 }
 
 void toggleGodMode () {
-  if (game)
-    game->toggleGodMode();
+  if (Game::getInstance())
+    Game::getInstance()->toggleGodMode();
 }
 
 /** OpenGL ES doesn't necessarily support retrieving current projection/viewport matrix
@@ -255,7 +251,7 @@ Vector2 viewportScreenDim;
 
 void centerGameInViewport () {
   //Center game area on screen
-  const int levelH = game->getLevel()->getHeight();
+  const int levelH = Game::getInstance()->getLevel()->getHeight();
   //const int levelW = game->getLevel()->getWidth();
 
   //FIXME
@@ -343,7 +339,7 @@ void nativeRender () {
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
     if (!GameManager::getInstance()->paused())
-      game->update();
+      Game::getInstance()->update();
 
     inputManager->draw();
 

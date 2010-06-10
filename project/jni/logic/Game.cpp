@@ -14,6 +14,8 @@
 #include "Bomb.h"
 #include "lib/TimerManager.h"
 
+Game* Game::instance = NULL;
+
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
     : colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
       playerTank(new PlayerTank()),
@@ -137,6 +139,7 @@ void Game::_updateRockets (double elapsedS) {
   //Rockets
   for (list<Rocket*>::iterator i = rockets.begin(); i.hasNext(); ) {
     Rocket* r = *i;
+    r->think(elapsedS);
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
       explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
@@ -341,10 +344,10 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {
-  //FIXME: replace by CollisionManagre::traceBounceCircle ?
   CollisionResult r;
+  //FIXME: Split rockets should split instead of bouncing
   if (colManager.trace(rocket, move, &r)) {
-    if (!r.collidedEntity->bounce(rocket, r.colPoint))
+    if (!rocket->canBounce() || !r.collidedEntity->bounce(rocket, r.colPoint))
       touch(rocket, r.collidedEntity, r.colPoint);
     rocket->addBounce();
     move = -2.0f*(move*r.normal)*r.normal + move;

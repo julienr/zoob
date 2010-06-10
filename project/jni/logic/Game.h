@@ -39,13 +39,32 @@ struct ExplosionLocation {
 };
 
 class Game {
+  private:
+    static Game* instance;
+    Game (game_callback_t overCallback,
+          game_callback_t wonCallback,
+          Level* level);
+    ~Game ();
   public:
+    static Game* getInstance() {
+      return instance;
+    }
+
     //overCallback : the function to call when game is over
     //wonCallback : the function to call when game is won
-    Game (game_callback_t overCallback, 
-          game_callback_t wonCallback, 
-          Level* level); //gamePadPos is in game space
-    ~Game ();
+    static void create (game_callback_t overCallback,
+                        game_callback_t wonCallback,
+                        Level* level) {
+      ASSERT(!instance);
+      instance = new Game(overCallback, wonCallback, level);
+    }
+
+    static void destroy () {
+      delete instance;
+      instance = NULL;
+    }
+
+
 
     void unpause () {
       gameState = GAME_RUNNING;

@@ -64,7 +64,7 @@ void AndroidInputManager::draw () {
   if (_progMan()->hasShield()) {
     if (shieldButtonTimer.isActive()) {
       shieldButton.drawPressed();
-      NumberView::getInstance()->drawInt((int)shieldButtonTimer.getTimeLeft(), shieldButtonPos, shieldButtonSize);
+      NumberView::getInstance()->drawInt((int)ceil(shieldButtonTimer.getTimeLeft()), shieldButtonPos, shieldButtonSize);
     } else
       shieldButton.draw();
   }

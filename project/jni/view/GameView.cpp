@@ -11,11 +11,10 @@
 #include "view/GameManager.h"
 
 
-GameView::GameView (Game& g)
-  : game(g),
-    playerTankView(g.getPlayerTank()),
+GameView::GameView ()
+  : playerTankView(Game::getInstance()->getPlayerTank()),
     //cursorView(g.getCursor()),
-    levelView(g.getLevel()),
+    levelView(Game::getInstance()->getLevel()),
     arrowEnd("assets/sprites/arrow_end.png", TEX_GROUP_GAME),
     rocket("assets/sprites/rocket.png", TEX_GROUP_GAME),
     bomb("assets/sprites/bomb.png", TEX_GROUP_GAME),
@@ -29,7 +28,7 @@ GameView::GameView (Game& g)
     wtf("assets/sprites/wtf.png", TEX_GROUP_GAME),
     lastLightToggle(BOSS_INTRO_TIME),
     lightOn(true) {
-  const list<EnemyTank*>* enemies = g.getEnemies();
+  const list<EnemyTank*>* enemies = Game::getInstance()->getEnemies();
   for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
     enemiesView.append(new EnemyTankView(*i));
 }
@@ -42,8 +41,8 @@ GameView::~GameView () {
 }
 
 void GameView::drawHearts () const {
-  const unsigned currentLife = game.getPlayerTank()->getLivesLeft();
-  for (unsigned i=0; i<game.getPlayerTank()->getMaxLives(); i++) {
+  const unsigned currentLife = Game::getInstance()->getPlayerTank()->getLivesLeft();
+  for (unsigned i=0; i<Game::getInstance()->getPlayerTank()->getMaxLives(); i++) {
     if (i >= currentLife)
       hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
     else
@@ -59,8 +58,8 @@ void GameView::drawLevelIndicator () const {
 void GameView::_drawLighting() const {
   //Use scissor so shadows are clipped to the level area
    glEnable(GL_SCISSOR_TEST);
-   glScissor(XGS(0), YGS(0), game.getLevel()->getWidth() / xScreenToGame,
-                             game.getLevel()->getHeight() / yScreenToGame);
+   glScissor(XGS(0), YGS(0), Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
+                             Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
 
    //Lighting
    const int numSubdiv = 20;
@@ -71,7 +70,7 @@ void GameView::_drawLighting() const {
    //FIXME: make the lighting circle static (like Square) and simply move it around to foolow player's tank
    MGL_DATATYPE lightingVerts[3 * numVerts];
    MGL_DATATYPE lightingCoords[2 * numVerts];
-   const Vector2& center = game.getPlayerTank()->getPosition();
+   const Vector2& center = Game::getInstance()->getPlayerTank()->getPosition();
    lightingVerts[0] = fX(center.x);
    lightingVerts[1] = fX(center.y);
    lightingVerts[2] = 0;
@@ -96,12 +95,12 @@ void GameView::_drawLighting() const {
 }
 
 void GameView::_drawShadows() const {
-  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
+  const vector<ShadowPolygon*>& shadows = Game::getInstance()->getPlayerShadows();
   if (shadows.length() != 0) {
     //Use scissor so shadows are clipped to the level area
     glEnable(GL_SCISSOR_TEST);
-    glScissor(XGS(0), YGS(0), game.getLevel()->getWidth() / xScreenToGame,
-                               game.getLevel()->getHeight() / yScreenToGame);
+    glScissor(XGS(0), YGS(0), Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
+                              Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
     //Shadows
     shadow.bind();
     for (unsigned i = 0; i < shadows.length(); i++)
@@ -113,7 +112,7 @@ void GameView::_drawShadows() const {
 #define INTRO_LIGHT_TOGGLE_TIME 0.5f
 void GameView::_drawBossIntro () {
   levelView.drawBackground();
-  const double timeLeft = game.getIntroTimeLeft();
+  const double timeLeft = Game::getInstance()->getIntroTimeLeft();
   if (lastLightToggle - timeLeft> INTRO_LIGHT_TOGGLE_TIME) {
     lastLightToggle = timeLeft;
     lightOn = !lightOn;
@@ -121,8 +120,8 @@ void GameView::_drawBossIntro () {
 
   _drawLighting();
   levelView.drawWalls();
-  playerTankView.draw(game.getLastFrameElapsed());
-  wtf.draw(game.getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
+  playerTankView.draw(Game::getInstance()->getLastFrameElapsed());
+  wtf.draw(Game::getInstance()->getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
 
   GLW::colorWhite();
   if (!lightOn)
@@ -131,8 +130,9 @@ void GameView::_drawBossIntro () {
 }
 
 void GameView::_drawGame () {
+  Game* game = Game::getInstance();
   //Create new explosions
-  list<ExplosionLocation>& gameExpls = game.getExplosions();
+  list<ExplosionLocation>& gameExpls = game->getExplosions();
   while (!gameExpls.empty()) {
     explosions.append(new Explosion(gameExpls.firstElement()));
     gameExpls.removeFirst();
@@ -145,7 +145,7 @@ void GameView::_drawGame () {
   levelView.drawWalls();
 
   //bombs radius
-  for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
+  for (list<Bomb*>::const_iterator i = game->getMines(); i.hasNext(); i++) {
     Bomb* m = *i;
     GLW::color(BLACK,0.1f);
     circle.draw(m->getPosition(), Vector2(BOMB_EXPLOSION_RADIUS, BOMB_EXPLOSION_RADIUS));
@@ -153,7 +153,7 @@ void GameView::_drawGame () {
   }
   
   //bombs
-  for (list<Bomb*>::const_iterator i = game.getMines(); i.hasNext(); i++) {
+  for (list<Bomb*>::const_iterator i = game->getMines(); i.hasNext(); i++) {
     Bomb* m = *i;
     const int timeLeft = (int)floor(m->getTimeLeft());
     if (timeLeft == 0)
@@ -168,14 +168,14 @@ void GameView::_drawGame () {
     NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
-  playerTankView.draw(game.getLastFrameElapsed());
+  playerTankView.draw(game->getLastFrameElapsed());
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
 
 
   //rockets
-  for (list<Rocket*>::const_iterator i = game.getRockets(); i.hasNext(); i++) {
+  for (list<Rocket*>::const_iterator i = game->getRockets(); i.hasNext(); i++) {
     Rocket* r = *i;
     GLW::color(TankView::getColor(r->getOwner()->getTankType()));
     const int numBounces = r->getNumBounces();
@@ -184,14 +184,14 @@ void GameView::_drawGame () {
   }
 
   //FIXME: re-enable
-  if (game.getLevel()->hasShadows())
+  if (game->getLevel()->hasShadows())
     _drawShadows();
   //FIXME: shadows should be gray
 
   //Manage explosions life
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
     Explosion* e = *i;
-    e->think(game.getLastFrameElapsed());
+    e->think(game->getLastFrameElapsed());
     if (e->getTimeLeft() <= 0)
       i = explosions.remove(i);
     else {
@@ -200,13 +200,13 @@ void GameView::_drawGame () {
     }
   }
 
-  /*if (game.isMovingCursor())
+  /*if (game->isMovingCursor())
     cursorView.draw();
 
-  if (game.isMovingTank()) {
-    const Vector2 touchPoint = game.getTankMoveTouchPoint();
+  if (game->isMovingTank()) {
+    const Vector2 touchPoint = game->getTankMoveTouchPoint();
     const Vector2 cursorSize = Vector2(1.0f, 1.0f);
-    Vector2 dir = game.getTankMoveDir();
+    Vector2 dir = game->getTankMoveDir();
     dir.normalize();
 
 
@@ -326,21 +326,21 @@ void drawGrid (const Grid& g) {
 
 void GameView::debugDrawAI () {
   GLW::disableTextures();
-  //game.getColManager().foreachEntity(drawColEntity);
-  const vector<ShadowPolygon*>& shadows = game.getPlayerShadows();
+  //game->getColManager().foreachEntity(drawColEntity);
+  const vector<ShadowPolygon*>& shadows = Game::getInstance()->getPlayerShadows();
   for (unsigned i=0; i<shadows.length(); i++)
     ShadowPolygonView::debugDraw(shadows[i]);
 
-  drawPlayerVisibility(game.getPlayerVisibility());
+  drawPlayerVisibility(Game::getInstance()->getPlayerVisibility());
   GLW::enableTextures();
 }
 
 void GameView::debugDraw () {
   GLW::disableTextures();
-  game.getColManager().foreachEntity(drawColEntity);
+  Game::getInstance()->getColManager().foreachEntity(drawColEntity);
   //Draw collision normal
   /*
-    const Tank* tank = game.getPlayerTank();
+    const Tank* tank = game->getPlayerTank();
     if (tank.collided) {
     MGL_DATATYPE verts[6] = {
         fX(tank.lastColNormal.x), fX(tank.lastColNormal.y), 0,
@@ -354,8 +354,8 @@ void GameView::debugDraw () {
     glPopMatrix();
     glLineWidth(1.0f);
   }*/
-  drawGrid(game.getColManager().getGrid());
-  game.getColManager().getGrid().debugDraw();
+  drawGrid(Game::getInstance()->getColManager().getGrid());
+  Game::getInstance()->getColManager().getGrid().debugDraw();
 
   GLW::enableTextures();
 }

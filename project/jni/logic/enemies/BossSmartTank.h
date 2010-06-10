@@ -6,7 +6,7 @@
 class BossSmartTank : public ShieldTank {
   public:
     BossSmartTank ()
-      : ShieldTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(true), new SmartPolicy())) {
+      : ShieldTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(1000));
     }

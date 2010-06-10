@@ -11,7 +11,7 @@
 
 class GameView {
   public:
-    GameView (Game& g);
+    GameView ();
     ~GameView ();
 
     const PlayerTankView& getTankView () const {
@@ -25,7 +25,7 @@ class GameView {
 
     //Draw main game area
     void draw() {
-      if (game.inIntro())
+      if (Game::getInstance()->inIntro())
         _drawBossIntro();
       else
         _drawGame();
@@ -40,7 +40,7 @@ class GameView {
     void _drawLighting() const;
     //Draw the shadows projected by the walls
     void _drawShadows() const;
-    Game& game;
+
     PlayerTankView playerTankView;
     //CursorView cursorView;
     LevelView levelView;
