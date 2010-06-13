@@ -56,7 +56,6 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     enemies.append(t);
     colManager.addEntity(t);
   }
-  lastTime = Utils::getCurrentTimeMillis();
 }
 
 Game::~Game () {
@@ -67,33 +66,10 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
-void Game::update () {
-  uint64_t now = Utils::getCurrentTimeMillis();
-  //Do nothing if lastTime is in the future
-  //This allows the game start (and unpause) to delay
-  //the start of the physics by 100ms or whatever
-  if (lastTime > now) {
-    //LOGE("lastTime(%lu) > now(%lu)", (unsigned long)lastTime, (unsigned long)now);
-    return;
-  }
-
-  //FIXME: we don't really need max refresh rate..
-  //FIXME: AI could be refreshed much less often
-  if (lastTime - now < 50)
-    return;
-
+void Game::update (const double elapsedS) {
+  this->elapsedS = elapsedS;
   if (gameState == GAME_PAUSED)
     return;
-
-  //This is now cleared automatically by gameview
-  //explosions.clear();
-
-  elapsedS = (now-lastTime)/1000.0;
-  if (Math::epsilonEq(elapsedS, 0))
-    return;
-  lastTime = now;
-
-  TimerManager::getInstance()->tick(elapsedS);
 
   if (!introDone) {
     introTimeLeft -= elapsedS;

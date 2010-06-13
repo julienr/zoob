@@ -333,13 +333,32 @@ void nativePause () {
 }
 
 void nativeRender () {
+  static uint64_t lastTime = Utils::getCurrentTimeMillis();
+
   GameManager::getInstance()->applyTransition();
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
+  //BEGIN time management
+  uint64_t now = Utils::getCurrentTimeMillis();
+
+  //FIXME: we don't really need max refresh rate..
+  //FIXME: AI could be refreshed much less often
+  if (lastTime - now < 50)
+    return;
+
+  double elapsedS = (now-lastTime)/1000.0;
+  if (Math::epsilonEq(elapsedS, 0))
+    return;
+  lastTime = now;
+
+  //END time management
+  TimerManager::getInstance()->tick(elapsedS);
+
+
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
     if (!GameManager::getInstance()->paused())
-      Game::getInstance()->update();
+      Game::getInstance()->update(elapsedS);
 
     inputManager->draw();
 

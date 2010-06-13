@@ -67,7 +67,6 @@ class Game {
 
     void unpause () {
       gameState = GAME_RUNNING;
-      lastTime = Utils::getCurrentTimeMillis() + 100;
     }
 
     void pause () {
@@ -118,7 +117,7 @@ class Game {
 
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
-    void update();
+    void update(const double elapsedS);
 
     void playerFire (const Vector2& cursorPosition);
     void playerDropBomb ();
@@ -187,7 +186,6 @@ class Game {
 
     Vector2 tankMoveDir;
 
-    uint64_t lastTime;
     game_callback_t gameOverCallback;
     game_callback_t gameWonCallback;
 
