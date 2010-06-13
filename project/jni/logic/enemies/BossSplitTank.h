@@ -1,17 +1,17 @@
-#ifndef BOSSSMARTTANK_H_
-#define BOSSSMARTTANK_H_
+#ifndef BOSSSPLITTANK_H
+#define BOSSSPLITTANK_H
 
 #include "logic/EnemyTank.h"
 
-class BossSmartTank : public ShieldTank {
+class BossSplitTank : public ShieldTank {
   public:
-    BossSmartTank ()
+    BossSplitTank ()
       : ShieldTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(1000));
     }
 
-    eTankType getTankType () const { return BOSS_SMART; }
+    eTankType getTankType () const { return BOSS_SPLIT; }
 
     double getInitialFiringDelay () const { return Difficulty::getInstance()->getBossFiringDelay(); }
 
@@ -20,4 +20,4 @@ class BossSmartTank : public ShieldTank {
     }
 };
 
-#endif /* BOSSSMARTTANK_H_ */
+#endif /* BOSSSPLITTANK_H */

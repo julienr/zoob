@@ -38,8 +38,8 @@ class TankView {
         case TANK_BURST: return VIOLET;
         case BOSS_SHIELD:
         case TANK_SHIELD: return YELLOW;
-        case TANK_SMART:
-        case BOSS_SMART: return BLUE;
+        case TANK_SPLIT:
+        case BOSS_SPLIT: return BLUE;
       }
       ASSERT(false);
       return WHITE;
@@ -69,8 +69,8 @@ class TankView {
         case BOSS_BOUNCE:
           bounceTankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
           break;
-        case TANK_SMART:
-        case BOSS_SMART:
+        case TANK_SPLIT:
+        case BOSS_SPLIT:
           tankSprite[state]->draw(*tank, tank->getRotation(), getTankScale());
           shieldSprite.draw(*tank, 0, 1.1f);
           break;
