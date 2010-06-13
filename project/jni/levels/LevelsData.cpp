@@ -1443,12 +1443,12 @@ namespace lvl36 {
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 2;
+  const size_t numTanks = 4;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     //TankDescription(4, 2, TANK_BURST, new Path(4, wp1)),
+     TankDescription(4, 2, TANK_BURST, new Path(4, wp1)),
      TankDescription(7, 2, TANK_SMART, new Path(4, wp2)),
-     //TankDescription(4, 6, TANK_SHIELD, new Path(2, wp3))
+     TankDescription(4, 6, TANK_SHIELD, new Path(2, wp3))
   };
 
   DECLARE_LVL
