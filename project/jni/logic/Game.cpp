@@ -150,7 +150,7 @@ void Game::_updateRockets (double elapsedS) {
       delete r;
       i = rockets.remove(i);
     } else {
-      bounceMove(r, r->getDir()*ROCKET_MOVE_SPEED*elapsedS);
+      bounceMove(r, r->getDir()*r->getSpeed()*elapsedS);
       i++;
     }
   }

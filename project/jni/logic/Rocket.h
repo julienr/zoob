@@ -14,11 +14,12 @@ enum BouncePolicy {
 
 class Rocket : public ExplosiveEntity {
   public:
-    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir, BouncePolicy bouncePol=BOUNCE)
+    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir, BouncePolicy bouncePol=BOUNCE, float speed=2.0f)
       : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(owner),
         numBounces(0),
-        bouncePolicy(bouncePol) {
+        bouncePolicy(bouncePol),
+        speed(speed) {
       setPosition(pos);
       setDir(dir);
     }
@@ -27,7 +28,8 @@ class Rocket : public ExplosiveEntity {
       : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(other->getOwner()),
         numBounces(other->getNumBounces()),
-        bouncePolicy(other->getBouncePolicy()) {
+        bouncePolicy(other->getBouncePolicy()),
+        speed(other->getSpeed()){
       setPosition(other->getPosition());
       setDir(other->getDir());
     }
@@ -66,11 +68,16 @@ class Rocket : public ExplosiveEntity {
       return numBounces;
     }
 
+    float getSpeed () const {
+      return speed;
+    }
+
   private:
     Tank* owner;
     Vector2 dir;
     unsigned numBounces;
     const BouncePolicy bouncePolicy;
+    float speed;
 };
 
 #endif /* ROCKET_H_ */

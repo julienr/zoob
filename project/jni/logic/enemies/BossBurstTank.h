@@ -18,6 +18,10 @@ class BossBurstTank : public EnemyTank {
     bool bounce (Entity* e, const Vector2& colPoint) {
       return shieldBounce(e, colPoint);
     }
+
+    Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
+      return new Rocket(owner, pos, dir, BOUNCE, BURST_ROCKET_SPEED);
+    }
 };
 
 

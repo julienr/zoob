@@ -15,7 +15,6 @@
 #include "logic/VisibilityGrid.h"
 
 #define TANK_MOVE_SPEED 1.5f
-#define ROCKET_MOVE_SPEED 2.0f
 
 //Each boss level start with an intro. This is the duration of the intro
 #define BOSS_INTRO_TIME 3
