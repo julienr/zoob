@@ -1471,15 +1471,15 @@ namespace lvl37 {
 
   bool shadows=false;
   bool boss = false;
-  const size_t numTanks = 2;
+  const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(6, 1, TANK_SPLIT, NULL)/*,
+     TankDescription(6, 1, TANK_SPLIT, NULL),
      TankDescription(6, 6, TANK_BOUNCE, NULL),
-     TankDescription(7, 3, TANK_SIMPLE, NULL),
-     TankDescription(7, 4, TANK_SIMPLE, NULL),
+     TankDescription(7, 3, TANK_SPLIT, NULL),
+     TankDescription(7, 4, TANK_SPLIT, NULL),
      TankDescription(10, 1, TANK_BOUNCE, NULL),
-     TankDescription(8, 6, TANK_BOUNCE, NULL),*/
+     TankDescription(8, 6, TANK_BOUNCE, NULL),
   };
 
   DECLARE_LVL
@@ -1542,8 +1542,8 @@ namespace lvl38 {
      TankDescription(1, 1, TANK_PLAYER, NULL),
      TankDescription(5, 2, TANK_BOUNCE, new Path(4, wp1)),
      TankDescription(5, 5, TANK_BOUNCE, new Path(4, wp2)),
-     TankDescription(8, 2, TANK_SIMPLE, new Path(4, wp3)),
-     TankDescription(8, 5, TANK_SIMPLE, new Path(4, wp4)),
+     TankDescription(8, 2, TANK_SPLIT, new Path(4, wp3)),
+     TankDescription(8, 5, TANK_SPLIT, new Path(4, wp4)),
      TankDescription(3, 1, TANK_BOUNCE, new Path(4, wp5))
   };
 
@@ -1570,10 +1570,10 @@ namespace lvl39 {
   const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 3, TANK_PLAYER, NULL),
-     TankDescription(10, 1, TANK_SIMPLE, NULL),
-     TankDescription(10, 6, TANK_SIMPLE, NULL),
-     TankDescription(8, 3, TANK_SIMPLE, NULL),
-     TankDescription(8, 4, TANK_SIMPLE, NULL),
+     TankDescription(10, 1, TANK_SPLIT, NULL),
+     TankDescription(10, 6, TANK_SPLIT, NULL),
+     TankDescription(8, 3, TANK_SHIELD, NULL),
+     TankDescription(8, 4, TANK_SHIELD, NULL),
      TankDescription(5, 1, TANK_BOUNCE, NULL),
      TankDescription(5, 6, TANK_BOUNCE, NULL),
   };
@@ -1611,10 +1611,10 @@ namespace lvl40 {
   const size_t numTanks = 7;
   TankDescription tanks[numTanks] = {
      TankDescription(1, 1, TANK_PLAYER, NULL),
-     TankDescription(7, 3, TANK_SIMPLE, NULL),
-     TankDescription(7, 4, TANK_SIMPLE, NULL),
-     TankDescription(3, 2, TANK_SIMPLE, NULL),
-     TankDescription(3, 5, TANK_SIMPLE, NULL),
+     TankDescription(7, 3, TANK_SPLIT, NULL),
+     TankDescription(7, 4, TANK_SPLIT, NULL),
+     TankDescription(3, 2, TANK_SHIELD, NULL),
+     TankDescription(3, 5, TANK_SHIELD, NULL),
      TankDescription(5, 1, TANK_BOUNCE, new Path(2, wp1)),
      TankDescription(5, 6, TANK_BOUNCE, new Path(2, wp2))
   };
@@ -1659,9 +1659,9 @@ namespace lvl41 {
   const size_t numTanks = 4;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(3, 3, TANK_SIMPLE, new Path(4, wp1)),
-      TankDescription(7, 5, TANK_SIMPLE, new Path(2, wp2)),
-      TankDescription(6, 6, TANK_SIMPLE, new Path(2, wp3))
+      TankDescription(3, 3, TANK_SPLIT, new Path(4, wp1)),
+      TankDescription(7, 5, TANK_SPLIT, new Path(2, wp2)),
+      TankDescription(6, 6, TANK_SPLIT, new Path(2, wp3))
   };
 
   DECLARE_LVL
@@ -1692,10 +1692,10 @@ namespace lvl42 {
   const size_t numTanks = 5;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(5, 2, TANK_SIMPLE, NULL),
-      TankDescription(5, 4, TANK_SIMPLE, NULL),
-      TankDescription(5, 6, TANK_SIMPLE, NULL),
-      TankDescription(7, 1, TANK_SIMPLE, new Path(2, wp1)),
+      TankDescription(5, 2, TANK_SPLIT, NULL),
+      TankDescription(5, 4, TANK_SPLIT, NULL),
+      TankDescription(5, 6, TANK_SPLIT, NULL),
+      TankDescription(7, 1, TANK_SPLIT, new Path(2, wp1)),
   };
 
   DECLARE_LVL
@@ -1726,8 +1726,8 @@ namespace lvl43 {
   const size_t numTanks = 3;
   TankDescription tanks[numTanks] = {
       TankDescription(1, 1, TANK_PLAYER, NULL),
-      TankDescription(5, 3, TANK_SIMPLE, NULL),
-      TankDescription(7, 1, TANK_SIMPLE, new Path(2, wp1)),
+      TankDescription(5, 3, TANK_SPLIT, NULL),
+      TankDescription(7, 1, TANK_SPLIT, new Path(2, wp1)),
   };
 
   DECLARE_LVL
@@ -1770,8 +1770,8 @@ namespace lvl44 {
    const size_t numTanks = 6;
    TankDescription tanks[numTanks] = {
        TankDescription(1, 1, TANK_PLAYER, NULL),
-       TankDescription(3, 1, TANK_BOUNCE, NULL),
-       TankDescription(5, 6, TANK_BOUNCE, NULL),
+       TankDescription(3, 1, TANK_SPLIT, NULL),
+       TankDescription(5, 6, TANK_SPLIT, NULL),
        TankDescription(6, 2, TANK_SHIELD, new Path(2, wp1)),
        TankDescription(7, 4, TANK_BURST, new Path(4, wp2)),
        TankDescription(9, 1, TANK_BURST, new Path(2, wp3)),

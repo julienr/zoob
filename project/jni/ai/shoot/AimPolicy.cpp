@@ -5,11 +5,25 @@
 
 bool AimPolicy::aim (double elapsedS, Game* game, EnemyTank* myTank, Vector2* outDir) {
   //FIXME: remove 3 lines
-  CollisionResult r;
+  /*CollisionResult r;
   const Vector2 dirToTank = game->getPlayerTank()->getPosition()-myTank->getPosition();
-  game->getColManager().traceCircle(myTank, myTank->getPosition(), dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET);
-  *outDir = game->getPlayerTank()->getPosition() - myTank->getPosition();
-  return true;
+  game->getColManager().traceCircle(myTank, myTank->getPosition(), dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET);*/
+
+  //First, look at approaching rockets
+  Vector2 nearRocketPos;
+  if (TankAI::rocketNear(game, myTank, 4 * GRID_CELL_SIZE, &nearRocketPos)) {
+    //LOGE("rocket near");
+    const Vector2 dirToRocket = nearRocketPos - myTank->getPosition();
+    CollisionResult r;
+    //FIXME: could probably get rid of this trace ?
+    if (!game->getColManager().traceCircle(myTank, myTank->getPosition(), dirToRocket, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)) {
+      outDir->set(dirToRocket.getNormalized());
+      return true;
+    }
+  } else { //otherwise, look at player
+    *outDir = game->getPlayerTank()->getPosition() - myTank->getPosition();
+    return true;
+   }
 }
 
 bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* myTank) {
