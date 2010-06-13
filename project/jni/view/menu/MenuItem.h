@@ -8,11 +8,12 @@
 
 class MenuItem {
   public:
-    MenuItem(const char* tex, const char* hoverTex, short id, int groupID) :
+    MenuItem(const char* tex, const char* hoverTex, short id, int groupID, bool repeatable=false) :
       id(id),
       normalSprite(tex, groupID),
       hoverSprite(hoverTex, groupID),
-      pressed(false) {}
+      pressed(false),
+      repeatable(repeatable) {}
 
     short getID () const {
       return id;
@@ -48,8 +49,12 @@ class MenuItem {
       pressed = p;
     }
 
-    bool isPressed () {
+    bool isPressed () const {
       return pressed;
+    }
+
+    bool isRepeatable () const {
+      return repeatable;
     }
   private:
     short id;
@@ -61,6 +66,7 @@ class MenuItem {
     Sprite hoverSprite;
 
     bool pressed;
+    bool repeatable;
 };
 
 #endif /* MENUITEM_H_ */

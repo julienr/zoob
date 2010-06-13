@@ -5,8 +5,10 @@
 GameManager* GameManager::instance = NULL;
 
 void GameManager::drawMenu () {
-  if (menus[state])
+  if (menus[state]) {
+    menus[state]->think();
     menus[state]->draw();
+  }
 }
 
 void GameManager::handleTouchDown (const Vector2& p) {

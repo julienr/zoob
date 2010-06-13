@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := \
 		app.cpp \
     app-android.cpp \
     lib/Vector2.cpp \
+    lib/TimerManager.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
@@ -52,6 +53,7 @@ LOCAL_SRC_FILES := \
     logic/Difficulty.cpp \
     ai/shoot/AimPolicy.cpp \
     ai/shoot/RandomPolicy.cpp \
+    ai/shoot/AlwaysPolicy.cpp \
     ai/movement/PathPolicy.cpp \
     ai/movement/SmartPolicy.cpp \
     ai/TankAI.cpp \

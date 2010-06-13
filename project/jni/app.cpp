@@ -340,6 +340,7 @@ void nativeRender () {
   glLoadIdentity();
 
   //BEGIN time management
+  //FIXME: should move this whole timing stuff to timer or similar
   uint64_t now = Utils::getCurrentTimeMillis();
 
   //FIXME: we don't really need max refresh rate..

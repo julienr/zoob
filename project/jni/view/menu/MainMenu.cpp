@@ -21,11 +21,13 @@ MainMenu::MainMenu (GameManager* gm)
    addItem(new MenuItem("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
                                MENU_ITEM_LVL_NEXT,
-                               TEX_GROUP_MENU));
+                               TEX_GROUP_MENU,
+                               true));
    addItem(new MenuItem("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
                                MENU_ITEM_LVL_PREV,
-                               TEX_GROUP_MENU));
+                               TEX_GROUP_MENU,
+                               true));
    addItem(new MenuItem("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
                                MENU_ITEM_DIFF_NEXT,
