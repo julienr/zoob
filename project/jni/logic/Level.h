@@ -21,6 +21,14 @@ class WallEntity : public Entity {
     float getHeight() const {
       return height;
     }
+
+    bool bounce (Entity* other, const Vector2& colPoint) {
+      if (other->getType() == ENTITY_ROCKET)
+        return true;
+      else
+        return false;
+    }
+
   private:
     //We store our own width/height (used for display) separate from the width/height used for aabbox
     //The bbox will be an EPSILON smaller than the displayed box just to avoid that when the level is added

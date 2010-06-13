@@ -347,11 +347,48 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
   CollisionResult r;
   //FIXME: Split rockets should split instead of bouncing
   if (colManager.trace(rocket, move, &r)) {
-    if (!rocket->canBounce() || !r.collidedEntity->bounce(rocket, r.colPoint))
+    if (!rocket->canBounce() || !r.collidedEntity->bounce(rocket, r.colPoint)) {
+      //No bounce, this rocket will gets destroyed
       touch(rocket, r.collidedEntity, r.colPoint);
-    rocket->addBounce();
-    move = -2.0f*(move*r.normal)*r.normal + move;
-    rocket->setDir(move);
+      return;
+    } else {
+      //Bounce, check what to do based on the rocket's bounce policy
+      if (rocket->getBouncePolicy() == BOUNCE) {
+        rocket->addBounce();
+        move = -2.0f*(move*r.normal)*r.normal + move;
+        rocket->setDir(move);
+      } else { //SPLIT
+        rocket->addBounce();
+        Rocket* newRocket = new Rocket(rocket);
+        rockets.append(newRocket);
+        colManager.addEntity(newRocket);
+        //Now, the idea is to have the two rockets going in opposite directions each
+        //30 degrees away from the normal bounce direction
+        const Vector2 bounceDir = -2.0f*(move*r.normal)*r.normal + move;
+        //Calculate our two new rockets movements
+        move = bounceDir.getRotated(DEG_TO_RAD(30));
+        Vector2 newMove = bounceDir.getRotated(DEG_TO_RAD(-30));
+        //Now, to await direct collision after split, we have to move the new rockets slightly
+        //away from each other. We'll therefore move them orthogonaly to the collision normal
+        Vector2 normalOrtho(r.normal.y, -r.normal.x);
+
+        //When moving the 2 rockets away from each other, just make sure they won't collide because
+        //their next moves will cross
+        const float t1 = normalOrtho*move;
+        const float t2 = normalOrtho*newMove;
+        if (t1 > t2) {
+          colManager.translate(rocket, ROCKET_BCIRCLE_R*normalOrtho);
+          colManager.translate(newRocket, -ROCKET_BCIRCLE_R*normalOrtho);
+        } else {
+          colManager.translate(rocket, -ROCKET_BCIRCLE_R*normalOrtho);
+          colManager.translate(newRocket, ROCKET_BCIRCLE_R*normalOrtho);
+        }
+
+        rocket->setDir(move);
+        newRocket->setDir(newMove);
+        colManager.translate(newRocket, newMove);
+      }
+    }
   }
   colManager.translate(rocket, move);
 }

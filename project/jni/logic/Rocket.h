@@ -23,6 +23,15 @@ class Rocket : public ExplosiveEntity {
       setDir(dir);
     }
 
+    Rocket (const Rocket* other)
+      : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
+        owner(other->getOwner()),
+        numBounces(other->getNumBounces()),
+        bouncePolicy(other->getBouncePolicy()) {
+      setPosition(other->getPosition());
+      setDir(other->getDir());
+    }
+
     Tank* getOwner () const {
       return owner;
     }
@@ -33,7 +42,7 @@ class Rocket : public ExplosiveEntity {
 
     virtual void think (double elapsedS) {}
 
-    BouncePolicy getBouncePolicy () {
+    BouncePolicy getBouncePolicy () const {
       return bouncePolicy;
     }
 
@@ -53,7 +62,7 @@ class Rocket : public ExplosiveEntity {
       return ENTITY_ROCKET;
     }
 
-    unsigned getNumBounces () {
+    unsigned getNumBounces () const {
       return numBounces;
     }
 

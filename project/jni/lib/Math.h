@@ -4,6 +4,7 @@
 #include <math.h>
 
 #define RAD_TO_DEG(x) (x*180.0f/M_PI)
+#define DEG_TO_RAD(x) (x*M_PI/180.0f)
 #define MIN(x,y) (x<y)?x:y
 #define MAX(x,y) (x>y)?x:y
 
@@ -31,8 +32,14 @@ struct Math {
       return (rightAngle <= currentAngle && currentAngle <= leftAngle);
     else
       return ( !(leftAngle < currentAngle && currentAngle < rightAngle) );
+  }
 
+  static float sin (float angle) {
+    return sinf(angle);
+  }
 
+  static float cos (float angle) {
+    return cosf(angle);
   }
 };
 

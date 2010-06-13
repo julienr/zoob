@@ -85,12 +85,23 @@ struct Vector2 {
     y += o.y;
   }
 
+  void operator *= (float f) {
+    x *= f;
+    y *= f;
+  }
+
   Vector2 operator - (const Vector2& o) const {
     return Vector2(x-o.x, y-o.y);
   }
 
   Vector2 operator - () const {
     return Vector2(-x,-y);
+  }
+
+  //Rotation of given angle (using expanded matrix notation)
+  Vector2 getRotated (float angle) const {
+    return Vector2(Math::cos(angle)*x + Math::sin(angle)*y,
+                  -Math::sin(angle)*x + Math::cos(angle)*y);
   }
 };
 
