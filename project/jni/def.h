@@ -67,6 +67,7 @@ enum {
     TEX_GROUP_MENU, //main menu
     TEX_GROUP_TUTORIAL,
     TEX_GROUP_GET_FULL_VERSION,
+    TEX_GROUP_REWARD
 };
 
 #endif /* DEF_H_ */

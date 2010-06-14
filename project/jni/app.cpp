@@ -116,6 +116,8 @@ void toWonState () {
   } else {
     toMenuState();
     saveProgress(GameManager::getInstance()->getCurrentLevel()+1);
+    if (ProgressionManager::getInstance()->getLastReward() != REWARD_NONE)
+       GameManager::getInstance()->setState(STATE_REWARD);
   }
 }
 

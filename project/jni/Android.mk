@@ -46,6 +46,7 @@ LOCAL_SRC_FILES := \
     view/menu/PausedMenu.cpp \
     view/menu/TutorialMenu.cpp \
     view/menu/BuyFullMenu.cpp \
+    view/menu/RewardMenu.cpp \
     view/ShadowPolygonView.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \

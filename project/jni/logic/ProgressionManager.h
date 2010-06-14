@@ -10,6 +10,14 @@ enum ePlayerForm {
   FORM_BURST=TANK_BURST
 };
 
+enum eReward {
+    REWARD_NONE,
+    REWARD_BOMB,
+    REWARD_SHIELD,
+    REWARD_BOUNCE,
+    REWARD_FIRING
+};
+
 /**
  * This class handle all the informations relative to the player progress through the game
  * (num levels completed, available forms)
@@ -32,18 +40,23 @@ class ProgressionManager {
       return availablePlayerForms;
     }
 
-    bool hasForms () {
+    bool hasForms () const {
       return availablePlayerForms.length() > 1;
     }
 
     //called when the level has changed
     void changedLevel ();
 
-    bool hasBombs ();
+    bool hasBombs () const;
 
-    bool hasShield ();
+    bool hasShield () const;
+
+    //Return the reward awarded by the last completed level,
+    //REWARD_NONE if nothing
+    eReward getLastReward () const;
+
   private:
-    size_t _level();
+    size_t _level() const;
     vector<ePlayerForm> availablePlayerForms;
 };
 

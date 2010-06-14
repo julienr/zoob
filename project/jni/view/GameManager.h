@@ -27,6 +27,7 @@ enum eAppState {
   STATE_PAUSED,
   STATE_TUTORIAL,
   STATE_BUY_FULL,
+  STATE_REWARD,
   MAX_STATE
 };
 
@@ -63,29 +64,7 @@ class GameManager {
     GameManager (startGameCallback_t gameCb, 
                  callback_t menuCb,
                  callback_t continueCb,
-                 int levelLimit)
-      : newGameCB(gameCb),
-        menuCB(menuCb),
-        continueCB(continueCb),
-        currentLevel(levelLimit),
-        levelLimit(levelLimit),
-        stateTransition(-1),
-        transitionDelay(0) {
-      menus[STATE_PLAYING] = NULL;
-      menus[STATE_MAINMENU] = new MainMenu(this);
-      menus[STATE_LOST] = new LostMenu(this);
-      menus[STATE_WON] = new WonMenu(this);
-      menus[STATE_END] = new EndMenu(this);
-      menus[STATE_PAUSED] = new PausedMenu(this);
-      menus[STATE_TUTORIAL] = new TutorialMenu(this);
-      menus[STATE_BUY_FULL] = new BuyFullMenu(this);
-
-      for (int i=0; i<MAX_STATE; i++)
-        stateCallbacks[i] = NULL;
-      //setState(STATE_MAINMENU);
-      state = STATE_BUY_FULL;
-      applyLocks();
-    }
+                 int levelLimit);
 
     ~GameManager () {
       for (int i=0; i<MAX_STATE; i++)
