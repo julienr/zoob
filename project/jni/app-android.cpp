@@ -4,40 +4,48 @@
 
 static JNIEnv* jniEnv = NULL;
 
-static jclass zoobClass;
-static jobject zoobAppObj;
+static jclass zoobRendererClass;
+static jobject zoobRenderer;
 static jmethodID java_saveProgress;
 static jmethodID java_saveDifficulty;
 
 void saveProgress (int level) {
-  jniEnv->CallVoidMethod(zoobAppObj, java_saveProgress, level);
+  LOGE("saveProgress : %i", level);
+  jniEnv->CallVoidMethod(zoobRenderer, java_saveProgress, level);
 }
 
 void saveDifficulty (int diff) {
-  jniEnv->CallVoidMethod(zoobAppObj, java_saveDifficulty, diff);
+  LOGE("saveDifficulty : %i", diff);
+  jniEnv->CallVoidMethod(zoobRenderer, java_saveDifficulty, diff);
 }
 
 #define JNI_GET_METHOD(var,name,type) \
-  var = jniEnv->GetMethodID(zoobClass,name,type); \
+  var = jniEnv->GetMethodID(zoobRendererClass,name,type); \
     if (var == NULL) \
       LOGE("Unable to get method id for "name" from JNI");
 
 
 //performs necessary initialization for upcalls (c->java) to work
 static void init_for_upcall (JNIEnv* env, jobject zoob) {
+  LOGE("got jniEnv=0x%p and zoobRenderer object=0x%p", env, zoob);
   jniEnv = env;
-  zoobAppObj = zoob;
-  zoobClass = jniEnv->FindClass("net.fhtagn.zoob.ZoobApplication");
-  if (zoobClass == NULL)
+  zoobRenderer = env->NewGlobalRef(zoob);
+  //zoobClass = jniEnv->FindClass("net.fhtagn.zoob.ZoobApplication");
+  zoobRendererClass = jniEnv->FindClass("net/fhtagn/zoob/ZoobRenderer");
+  if (zoobRendererClass == NULL)
     LOGE("Unable to find net.fhtagn.Zoob Java class from JNI");
 
-  if (!jniEnv->IsInstanceOf(zoobAppObj, zoobClass))
-    LOGE("Zoob app not instance of ZoobApplication");
+  if (!jniEnv->IsInstanceOf(zoobRenderer, zoobRendererClass))
+    LOGE("zoob is not an instance of ZoobRenderer");
 
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
 }
 
+/**
+ * VERY IMPORTANT: the JNIEnv obtained here is thread specific (render-thread specific in our case).
+ * We SHOULDN'T use it to make upcall to stuff outside the rendering thread
+ */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
   (JNIEnv * env, jclass cls, jstring apkPath, jobject zoob) {
   ASSERT(jniEnv == NULL);
@@ -50,7 +58,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInitGL
   (JNIEnv *, jclass, int level, int difficulty) {
-    nativeInitGL(level, difficulty);
+  nativeInitGL(level, difficulty);
 }
 
 

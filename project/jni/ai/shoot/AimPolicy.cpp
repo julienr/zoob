@@ -11,7 +11,7 @@ bool AimPolicy::aim (double elapsedS, Game* game, EnemyTank* myTank, Vector2* ou
 
   //First, look at approaching rockets
   Vector2 nearRocketPos;
-  if (TankAI::rocketNear(game, myTank, 4 * GRID_CELL_SIZE, &nearRocketPos)) {
+  if (aimRockets && TankAI::rocketNear(game, myTank, 4 * GRID_CELL_SIZE, &nearRocketPos)) {
     //LOGE("rocket near");
     const Vector2 dirToRocket = nearRocketPos - myTank->getPosition();
     CollisionResult r;
@@ -32,7 +32,7 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
 
   //First, fire to approaching rockets
   Vector2 nearRocketPos;
-  if (TankAI::rocketNear(game, myTank,4*GRID_CELL_SIZE, &nearRocketPos)) {
+  if (aimRockets && TankAI::rocketNear(game, myTank,4*GRID_CELL_SIZE, &nearRocketPos)) {
     //LOGE("rocket near");
     const Vector2 dirToRocket = nearRocketPos-tP;
     if (!game->getColManager().traceCircle(myTank, tP, dirToRocket, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)) {
@@ -56,7 +56,7 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
 bool AimPolicy::confirmFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   //First, fire to approaching rockets
   Vector2 nearRocketPos;
-  if (TankAI::rocketNear(game, tank,4*GRID_CELL_SIZE, &nearRocketPos)) {
+  if (aimRockets && TankAI::rocketNear(game, tank,4*GRID_CELL_SIZE, &nearRocketPos)) {
     //LOGE("confirm rocket near");
     const Vector2 dirToRocket = nearRocketPos-tank->getPosition();
     CollisionResult r;

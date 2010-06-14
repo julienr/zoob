@@ -36,11 +36,11 @@ public class ZoobApplication extends Application {
 		Log.i("Zoob", "saveIntPref : "+key+" = "+ val);
 	}
 	
-	public void saveProgress (int level) {
+	public synchronized void saveProgress (int level) {
 		saveIntPref(PREF_KEY_LEVEL, level);
 	}
 	
-	public void saveDifficulty (int difficulty) {
+	public synchronized void saveDifficulty (int difficulty) {
 		saveIntPref(PREF_KEY_DIFFICULTY, difficulty);
 	}
 }

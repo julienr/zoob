@@ -101,7 +101,12 @@ void AndroidInputManager::setMoveTouchPoint (const Vector2& pos) {
 }
 
 void AndroidInputManager::stopMoving () {
-  getGame()->setTankMoveDir(Vector2::ZERO);
+  Game* game = getGame();
+  if (!game) {
+    LOGE("stopMoving with game = NULL");
+    return;
+  }
+  game->setTankMoveDir(Vector2::ZERO);
   state = STATE_DEFAULT;
 }
 

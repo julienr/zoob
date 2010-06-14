@@ -6,7 +6,7 @@
 class BossBounceTank : public EnemyTank {
   public:
     BossBounceTank ()
-      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(false), new SmartPolicy())) {
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(2000));
     }

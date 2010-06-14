@@ -73,9 +73,6 @@ public class Zoob extends Activity {
 
 class ZoobGLSurface extends GLSurfaceView {
 	ZoobRenderer mRenderer;
-	
-	//FIXME: use GestureDetector.SimpleOnGestureListener to listen to tap/double-tap, multitouch ?
-	
 	/**
 	 * These native methods MUST NOT CALL OPENGL. OpenGL/mRenderer is run in a separate
 	 * thread and calling opengl from these native methods will result in errors
@@ -132,11 +129,13 @@ class ZoobGLSurface extends GLSurfaceView {
 class ZoobRenderer implements GLSurfaceView.Renderer {
 	private Context context;
 	private ZoobApplication app;
+	private String apkFilePath;
 
+	//This constructor is not ran in the rendering thread (but in the surface thread)
 	public ZoobRenderer (Context context, ZoobApplication app) {
+		Log.e("ZoobRenderer", "Creating a new ZoobRenderer");
 		this.context = context;
 		// return apk file path (or null on error)
-		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = context.getPackageManager();
 		try {
@@ -146,12 +145,14 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	    throw new RuntimeException("Unable to locate assets, aborting...");
     }
 		apkFilePath = appInfo.sourceDir;
-		Log.i("ZoobRenderer", "Calling nativeInit");
 		this.app = app;
-		nativeInit(apkFilePath, app);
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		//Call ALL nativeInit methods here, because we want the JNIEnv of the rendering thread
+		//(see comments in app-android.cpp)
+		Log.i("ZoobRenderer", "Calling nativeInit");
+		nativeInit(apkFilePath, this);
     nativeInitGL(app.getLevel(), app.getDifficulty());
 	}
 
@@ -165,7 +166,17 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 
   private static native void nativeInitGL(int level, int difficulty);
-	private static native void nativeInit(String apkPath, ZoobApplication app);
+	private static native void nativeInit(String apkPath, ZoobRenderer app);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
+	
+	//These are stubs for upcall from JNI because the Application object isn't in the 
+	//same thread as the JNI stuff (nativeRender) and this can lead to random crashes
+	public void saveProgress (int level) {
+		app.saveProgress(level);
+	}
+		
+	public void saveDifficulty (int level) {
+		app.saveDifficulty(level);
+	}
 }

@@ -10,11 +10,11 @@
 class BounceTank : public EnemyTank {
   public:
     BounceTank (float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy())) {
+      : EnemyTank (radius, new TankAI(new AimPolicy(false), new StillPolicy())) {
     }
 
     BounceTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy())) {
+      : EnemyTank (radius, new TankAI(new AimPolicy(false), new PathPolicy())) {
       this->setPath(p);
     }
 
