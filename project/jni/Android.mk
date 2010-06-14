@@ -67,4 +67,7 @@ LIBPNG_PATH := /home/julien/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/julien/programs/android-ndk-r3/out/apps/libzip/armeabi
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip
 
+#To generate a map file in case of segfault
+#see : http://stackoverflow.com/questions/2314273/get-function-names-from-call-stack
+#LOCAL_LDFLAGS := -Wl,-Map=app.map
 include $(BUILD_SHARED_LIBRARY)

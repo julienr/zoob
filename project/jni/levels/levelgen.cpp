@@ -13,6 +13,7 @@ char tile2char (eTileType t) {
     case M: return 'M';
   }
   ASSERT(false);
+  return ' ';
 }
 
 struct levelData_t {

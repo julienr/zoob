@@ -191,9 +191,10 @@ void GameView::_drawGame () {
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
     Explosion* e = *i;
     e->think(game->getLastFrameElapsed());
-    if (e->getTimeLeft() <= 0)
+    if (e->getTimeLeft() <= 0) {
+      delete *i;
       i = explosions.remove(i);
-    else {
+    } else {
       e->draw();
       i++;
     }

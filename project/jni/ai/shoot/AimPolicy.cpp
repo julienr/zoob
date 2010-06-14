@@ -20,10 +20,10 @@ bool AimPolicy::aim (double elapsedS, Game* game, EnemyTank* myTank, Vector2* ou
       outDir->set(dirToRocket.getNormalized());
       return true;
     }
-  } else { //otherwise, look at player
-    *outDir = game->getPlayerTank()->getPosition() - myTank->getPosition();
-    return true;
-   }
+  }
+  //otherwise, look at player
+  *outDir = game->getPlayerTank()->getPosition() - myTank->getPosition();
+  return true;
 }
 
 bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* myTank) {

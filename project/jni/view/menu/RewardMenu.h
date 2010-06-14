@@ -14,9 +14,9 @@ class RewardMenu : public Menu {
   private:
     Sprite rewardText;
     Sprite rewardBomb;
+    Sprite rewardShield;
     Sprite rewardBounce;
     Sprite rewardFiring;
-    Sprite rewardShield;
     Sprite nextlvl;
 };
 
