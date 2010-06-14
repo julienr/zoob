@@ -5,8 +5,8 @@
 
 const Vector2 rocketButtonPos(13.8f, 3.0f);
 const Vector2 rocketButtonSize(2.5,2.5);
-const Vector2 mineButtonPos(rocketButtonPos.x, 5.5f);
-const Vector2 mineButtonSize(rocketButtonSize);
+const Vector2 bombButtonPos(rocketButtonPos.x, 5.5f);
+const Vector2 bombButtonSize(rocketButtonSize);
 const Vector2 shieldButtonPos(rocketButtonPos.x, 8.0f);
 const Vector2 shieldButtonSize(rocketButtonSize);
 
@@ -15,6 +15,7 @@ const Vector2 shieldButtonSize(rocketButtonSize);
 #define SHIELD_BUTTON_ID 2
 
 #define SHIELD_BUTTON_COOLDOWN 20
+#define MINE_BUTTON_COOLDOWN 20
 
 //shortcut
 ProgressionManager* _progMan () { return ProgressionManager::getInstance(); }
@@ -35,13 +36,14 @@ AndroidInputManager::AndroidInputManager ()
                  SHIELD_BUTTON_ID,
                  TEX_GROUP_GAME),
     lastTouchDownTime(0),
-    shieldButtonTimer(SHIELD_BUTTON_COOLDOWN){
+    shieldButtonTimer(SHIELD_BUTTON_COOLDOWN),
+    bombButtonTimer(MINE_BUTTON_COOLDOWN) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);
   rocketButton.setBB(rocketButtonPos, 1.5f*rocketButtonSize);
-  bombButton.setPosition(mineButtonPos);
-  bombButton.setSize(mineButtonSize);
-  bombButton.setBB(mineButtonPos, 1.5f*mineButtonSize);
+  bombButton.setPosition(bombButtonPos);
+  bombButton.setSize(bombButtonSize);
+  bombButton.setBB(bombButtonPos, 1.5f*bombButtonSize);
   shieldButton.setPosition(shieldButtonPos);
   shieldButton.setSize(shieldButtonSize);
   shieldButton.setBB(shieldButtonPos, 1.5f*shieldButtonSize);
@@ -53,14 +55,20 @@ void AndroidInputManager::reset () {
   bombButton.setPressed(false);
   shieldButton.setPressed(false);
   shieldButtonTimer.stop();
+  bombButtonTimer.stop();
   state = STATE_DEFAULT;
 }
 
 
 void AndroidInputManager::draw () {
   rocketButton.draw();
-  if (_progMan()->hasBombs())
-    bombButton.draw();
+  if (_progMan()->hasBombs()) {
+    if (bombButtonTimer.isActive()) {
+      bombButton.drawPressed();
+      NumberView::getInstance()->drawInt((int)ceil(bombButtonTimer.getTimeLeft()), bombButtonPos, bombButtonSize);
+    } else
+      bombButton.draw();
+  }
   if (_progMan()->hasShield()) {
     if (shieldButtonTimer.isActive()) {
       shieldButton.drawPressed();
@@ -115,7 +123,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
   } else if (bombButton.inside(pNoTrans)) {
-    if (_progMan()->hasBombs())
+    if (!bombButtonTimer.isActive() && _progMan()->hasBombs())
       bombButton.setPressed(true);
   } else if (formControl.inside(pNoTrans)) {
     if (_progMan()->hasForms())
@@ -154,9 +162,10 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         getGame()->setTankMoveDir(Vector2::ZERO);
       } else {
         rocketButton.setPressed(false);
-        if (_progMan()->hasBombs() && bombButton.isPressed() &&  bombButton.inside(pNoTrans))
+        if (_progMan()->hasBombs() && bombButton.isPressed() &&  bombButton.inside(pNoTrans)) {
           getGame()->playerDropBomb();
-        else if (_progMan()->hasShield() && shieldButton.isPressed() && shieldButton.inside(pNoTrans)) {
+          bombButtonTimer.start();
+        } else if (_progMan()->hasShield() && shieldButton.isPressed() && shieldButton.inside(pNoTrans)) {
           getGame()->playerActivateShield();
           shieldButtonTimer.start();
         } else if (_progMan()->hasForms() && formControl.inside(pNoTrans))

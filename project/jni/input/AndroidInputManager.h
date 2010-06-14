@@ -52,6 +52,7 @@ class AndroidInputManager : public InputManager {
     Vector2 lastTouchDownLocation;
 
     Timer shieldButtonTimer;
+    Timer bombButtonTimer;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */

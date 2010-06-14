@@ -4,7 +4,7 @@
 #include "ExplosiveEntity.h"
 #include "Tank.h"
 
-//TODO: Let the mines have cooldown before explosion => A mine exploded when you pass on it OR after its delay
+//A mine explodes when an enemy pass on it OR after its delay
 class Bomb : public ExplosiveEntity {
   public:
     Bomb (Tank* owner, const Vector2& pos)
@@ -15,17 +15,17 @@ class Bomb : public ExplosiveEntity {
     }
 
     eEntityType getType () const {
-      return ENTITY_MINE;
+      return ENTITY_BOMB;
     }
     
     Tank* getOwner () {
       return owner;
     }
-    
+
     void think (double elapsedS) {
       timeLeft -= elapsedS;
     }
-    
+
     double getTimeLeft () const {
       return timeLeft;
     }

@@ -57,7 +57,7 @@ extern zip* APKArchive;
 
 #define MAX_BOMBS_PER_TANK 3
 
-#define BOMB_LIFETIME 5
+#define BOMB_LIFETIME 10
 #define BOMB_EXPLOSION_RADIUS 1.5f
 
 //texture groups

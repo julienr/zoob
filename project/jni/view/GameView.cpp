@@ -164,7 +164,6 @@ void GameView::_drawGame () {
     bomb.draw(*m);
     GLW::colorWhite();
 
-    ASSERT(timeLeft < 6);
     NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   

@@ -11,7 +11,7 @@ enum eEntityType {
   ENTITY_TANK=1<<0,
   ENTITY_ROCKET=1<<1,
   ENTITY_WALL=1<<2,
-  ENTITY_MINE=1<<3
+  ENTITY_BOMB=1<<3
 };
 
 class GridCell;

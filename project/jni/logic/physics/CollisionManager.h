@@ -52,6 +52,16 @@ class CollisionManager {
                                        const Vector2& lineMove,
                                        CollisionResult* r);
 
+    static bool AABBIntersectCircle (const Vector2& boxPos,
+                                     const AABBox* box,
+                                     const Vector2& circlePos,
+                                     const BCircle* circle);
+
+    static bool CircleIntersectCircle (const Vector2& c1Pos,
+                                       const BCircle* c1,
+                                       const Vector2& c2Pos,
+                                       const BCircle* c2);
+
     CollisionManager (int width, int height, float cellSize)
       : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}
 

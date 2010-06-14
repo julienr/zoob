@@ -140,7 +140,7 @@ class Grid {
 
     //Return a list of entities that are touched by a circle.
     //A newly allocated list is returned, freeing it is the caller's resposibility
-    list<Entity*>* entitiesIn (const Vector2& center, float radius) const;
+    list<Entity*>* entitiesIn (const Vector2& center, float radius, const Entity* source=NULL, int entityMask=0) const;
 
     //Returns if the given grid cell contains at least one entity of type. "source" isn't taken into account
     bool containsEntity (int x, int y, int entityMask, const Entity* source=NULL) const {

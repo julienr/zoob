@@ -276,6 +276,37 @@ bool CollisionManager::MovingCircleAgainstCircle (const Vector2& stillPos,
   }
 }
 
+//http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+bool CollisionManager::AABBIntersectCircle (const Vector2& boxPos,
+                                            const AABBox* box,
+                                            const Vector2& circlePos,
+                                            const BCircle* circle) {
+  const float circDistX = fabs(circlePos.x - boxPos.x - box->getWidth()/2);
+  const float circDistY = fabs(circlePos.y - boxPos.y - box->getHeight()/2);
+  if (circDistX > (box->getWidth()/2 + circle->getRadius()))
+    return false;
+  if (circDistY > (box->getHeight()/2 + circle->getRadius()))
+    return false;
+
+  if (circDistX <= (box->getWidth()/2))
+    return true;
+  if (circDistY <= (box->getHeight()/2))
+    return true;
+
+  const float cdx = circDistX - box->getWidth()/2;
+  const float cdy = circDistY - box->getHeight()/2;
+  const float cornerDist = cdx*cdx + cdy*cdy;
+  return cornerDist <= circle->getRadius()*circle->getRadius();
+}
+
+bool CollisionManager::CircleIntersectCircle (const Vector2& c1Pos,
+                                              const BCircle* c1,
+                                              const Vector2& c2Pos,
+                                              const BCircle* c2) {
+   const float dist = (c1Pos-c2Pos).length();
+   return (dist < c1->getRadius() || dist < c2->getRadius());
+}
+
 bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
                                                       const AABBox* still,
                                                       const Vector2& movingPos,

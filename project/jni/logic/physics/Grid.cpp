@@ -211,7 +211,7 @@ void Grid::removeEntity (Entity* e) {
   e->touchedCells.clear();
 }
 
-list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
+list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius, const Entity* source, int entityMask) const {
   list<Entity*>* touchedList = new list<Entity*>();
   BCircle circ(radius);
   tmpTouched->clear();
@@ -219,8 +219,17 @@ list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius) const {
   for (unsigned i=0; i<tmpTouched->length(); i++) {
     for (list<Entity*>::iterator iter = tmpTouched->get(i)->entities.begin(); iter.hasNext(); iter++) {
        Entity* entity = *iter;
+       if (entity == source)
+         continue;
+       if (entity->getType() & entityMask)
+         continue;
        //FIXME: should use entity bounding box
-       if (Utils::inCircle(center, radius, entity->getPosition()))
+       const BoundingVolume* bv = entity->getBVolume();
+       if (bv->getType() == TYPE_AABBOX && CollisionManager::AABBIntersectCircle(entity->getPosition(), static_cast<const AABBox*>(bv),
+                                                                                 center, &circ))
+         touchedList->append(entity);
+       else if (bv->getType() == TYPE_CIRCLE && CollisionManager::CircleIntersectCircle(entity->getPosition(), static_cast<const BCircle*>(bv),
+                                                                                         center, &circ))
          touchedList->append(entity);
     }
   }
