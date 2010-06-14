@@ -60,8 +60,12 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
 
 Game::~Game () {
   delete playerTank;
-  LIST_FOREACH(EnemyTank*, enemies, i)
+  LIST_FOREACH(EnemyTank*, enemies, i) {
     delete *i;
+  }
+  LIST_FOREACH(Rocket*, rockets, r) {
+    delete *r;
+  }
   for (size_t i=0; i<playerShadows.length(); i++)
     delete playerShadows[i];
 }
