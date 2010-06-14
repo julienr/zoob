@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: In grid, instead of using entityMask, create a Condition class that would check if an entity should be taken into account
+desc: |-
+  Such a condition class would somehow act like an SQL select, where you can exclude/inlude a particular entity or a generic entity type
+  Methods such as condition::considerEntity(Entity*), condition::ignoreentity(Entity*), condition::considerType(EntityType), condition::ignoreType(EntityType)
+type: :feature
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-06-14 09:37:59.043793 Z
+references: []
+
+id: e5f7968f9f1510c83ab62001d31fc38137d116e9
+log_events: 
+- - 2010-06-14 09:38:00.339792 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
