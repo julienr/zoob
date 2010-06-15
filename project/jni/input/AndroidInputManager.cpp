@@ -151,10 +151,10 @@ void AndroidInputManager::think (double elapsedS) {
 void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pNoTrans) {
   if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
     _setPressedItem(BOMB_BUTTON_ID);
-    LOGE("bomb");
+    //LOGE("bomb");
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
-    LOGE("shield");
+    //LOGE("shield");
   } else {
     _setPressedItem(-1);
     startMoving(MOVING_TANK, p);
@@ -182,7 +182,8 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   } else if ((tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME)) {
     getGame()->playerFire(p);
     //startMoving(MOVING_TANK, p);
-    _setPressedItem(-1);
+    //_setPressedItem(-1);
+    updatePressedItem(p, pNoTrans);
   } else {
     updatePressedItem(p, pNoTrans);
   }
@@ -223,7 +224,7 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 
   const Vector2 p(XSG(x), YSG(y));
   const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-  updatePressedItem(pNoTrans, p);
+  updatePressedItem(p, pNoTrans);
 
   setMoveTouchPoint(p);
 }
