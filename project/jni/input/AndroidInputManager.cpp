@@ -3,9 +3,9 @@
 #include "view/NumberView.h"
 
 
-const Vector2 rocketButtonPos(13.8f, 3.0f);
+const Vector2 rocketButtonPos(13.8f, 2.5f);
 const Vector2 rocketButtonSize(2.5,2.5);
-const Vector2 bombButtonPos(rocketButtonPos.x, 5.5f);
+const Vector2 bombButtonPos(rocketButtonPos.x, 5.25f);
 const Vector2 bombButtonSize(rocketButtonSize);
 const Vector2 shieldButtonPos(rocketButtonPos.x, 8.0f);
 const Vector2 shieldButtonSize(rocketButtonSize);
@@ -44,13 +44,13 @@ AndroidInputManager::AndroidInputManager ()
     pressedItem(-1) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);
-  rocketButton.setBB(rocketButtonPos, 1.5f*rocketButtonSize);
+  rocketButton.setBB(rocketButtonPos, rocketButtonSize);
   bombButton.setPosition(bombButtonPos);
   bombButton.setSize(bombButtonSize);
-  bombButton.setBB(bombButtonPos, 1.5f*bombButtonSize);
+  bombButton.setBB(bombButtonPos, bombButtonSize);
   shieldButton.setPosition(shieldButtonPos);
   shieldButton.setSize(shieldButtonSize);
-  shieldButton.setBB(shieldButtonPos, 1.5f*shieldButtonSize);
+  shieldButton.setBB(shieldButtonPos, shieldButtonSize);
 }
 
 void AndroidInputManager::reset () {
@@ -74,7 +74,7 @@ void AndroidInputManager::draw () {
       bombButton.drawPressed();
       NumberView::getInstance()->drawInt((int)ceil(bombButtonTimer.getTimeLeft()), bombButtonPos, bombButtonSize);
     } else if (pressedItem == BOMB_BUTTON_ID) {
-      GLW::color(DARK_GREY, (now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
+      GLW::color(WHITE, 1-(now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
       bombButton.drawPressed();
       GLW::colorWhite();
     } else
@@ -85,7 +85,7 @@ void AndroidInputManager::draw () {
       shieldButton.drawPressed();
       NumberView::getInstance()->drawInt((int)ceil(shieldButtonTimer.getTimeLeft()), shieldButtonPos, shieldButtonSize);
     } else if (pressedItem == SHIELD_BUTTON_ID) {
-      GLW::color(DARK_GREY, (now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
+      GLW::color(WHITE, 1-(now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
       shieldButton.drawPressed();
       GLW::colorWhite();
     } else
@@ -151,8 +151,10 @@ void AndroidInputManager::think (double elapsedS) {
 void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pNoTrans) {
   if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
     _setPressedItem(BOMB_BUTTON_ID);
+    LOGE("bomb");
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
+    LOGE("shield");
   } else {
     _setPressedItem(-1);
     startMoving(MOVING_TANK, p);
@@ -177,15 +179,12 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   //For buttons, we only consider events that couldn't be double tap
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
-  } else if ((tapDist > DOUBLETAP_DIST) || (elapsed > DOUBLETAP_TIME)) {
-    updatePressedItem(p, pNoTrans);
   } else if ((tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME)) {
     getGame()->playerFire(p);
-    startMoving(MOVING_TANK, p);
+    //startMoving(MOVING_TANK, p);
     _setPressedItem(-1);
   } else {
-    _setPressedItem(-1);
-    startMoving(MOVING_TANK, p);
+    updatePressedItem(p, pNoTrans);
   }
 
   //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
@@ -245,10 +244,12 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         rocketButton.setPressed(false);
         if ((pressedItem == BOMB_BUTTON_ID && bombButton.inside(pNoTrans)) ||
             (pressedItem == SHIELD_BUTTON_ID && shieldButton.inside(pNoTrans))) {
-          //nothing to do
+          const uint64_t now = Utils::getCurrentTimeMillis();
+          if ((now-lastButtonPressTime) < DOUBLETAP_TIME)
+            _setPressedItem(-1);
         } else {
           stopMoving();
-          pressedItem = -1;
+          _setPressedItem(-1);
         }
       }
     }

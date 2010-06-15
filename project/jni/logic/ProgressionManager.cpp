@@ -20,12 +20,11 @@ size_t ProgressionManager::_level() const {
 }
 
 bool ProgressionManager::hasBombs () const {
-  return _level() > REWARD_BOMB;
+  return _level() > BOMB_LVL;
 }
 
 bool ProgressionManager::hasShield () const {
-  LOGE("level : %i, reward_shield : %i", _level(), REWARD_SHIELD);
-  return _level() > REWARD_SHIELD;
+  return _level() > SHIELD_LVL;
 }
 
 void ProgressionManager::setPlayerForm (PlayerTank* player) const {

@@ -233,6 +233,7 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
   CollisionResult res;
   if (!t->checkFireDir(dir, colManager, &res)) {
     touch(r, res.collidedEntity, res.colPoint);
+    explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
     delete r;
   } else {
     rockets.append(r);
