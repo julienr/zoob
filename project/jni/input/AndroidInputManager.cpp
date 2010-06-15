@@ -17,6 +17,9 @@ const Vector2 shieldButtonSize(rocketButtonSize);
 #define SHIELD_BUTTON_COOLDOWN 20
 #define MINE_BUTTON_COOLDOWN 20
 
+#define DOUBLETAP_TIME 600
+#define DOUBLETAP_DIST 5
+
 //shortcut
 ProgressionManager* _progMan () { return ProgressionManager::getInstance(); }
 
@@ -64,11 +67,16 @@ void AndroidInputManager::reset () {
 
 
 void AndroidInputManager::draw () {
+  const uint64_t now = Utils::getCurrentTimeMillis();
   rocketButton.draw();
   if (_progMan()->hasBombs()) {
     if (bombButtonTimer.isActive()) {
       bombButton.drawPressed();
       NumberView::getInstance()->drawInt((int)ceil(bombButtonTimer.getTimeLeft()), bombButtonPos, bombButtonSize);
+    } else if (pressedItem == BOMB_BUTTON_ID) {
+      GLW::color(DARK_GREY, (now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
+      bombButton.drawPressed();
+      GLW::colorWhite();
     } else
       bombButton.draw();
   }
@@ -76,6 +84,10 @@ void AndroidInputManager::draw () {
     if (shieldButtonTimer.isActive()) {
       shieldButton.drawPressed();
       NumberView::getInstance()->drawInt((int)ceil(shieldButtonTimer.getTimeLeft()), shieldButtonPos, shieldButtonSize);
+    } else if (pressedItem == SHIELD_BUTTON_ID) {
+      GLW::color(DARK_GREY, (now-lastButtonPressTime)/(float)DOUBLETAP_TIME);
+      shieldButton.drawPressed();
+      GLW::colorWhite();
     } else
       shieldButton.draw();
   }
@@ -115,12 +127,9 @@ void AndroidInputManager::stopMoving () {
   state = STATE_DEFAULT;
 }
 
-#define DOUBLETAP_TIME 600
-#define DOUBLETAP_DIST 5
-
 void AndroidInputManager::think (double elapsedS) {
   const uint64_t now = Utils::getCurrentTimeMillis();
-  const uint64_t elapsed = now - lastTouchDownTime;
+  const uint64_t elapsed = now - lastButtonPressTime;
 
   /*if (pressedItem != -1)
     LOGE("elapsed : %llu, pressedItem : %i, pressedItemUp: %i", elapsed, pressedItem, pressedItemUp);*/
@@ -135,19 +144,17 @@ void AndroidInputManager::think (double elapsedS) {
     }
     bombButton.setPressed(false);
     shieldButton.setPressed(false);
-    pressedItem = -1;
+    _setPressedItem(-1);
   }
 }
 
 void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pNoTrans) {
   if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
-    //bombButton.setPressed(true);
-    pressedItem = BOMB_BUTTON_ID;
+    _setPressedItem(BOMB_BUTTON_ID);
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
-    //shieldButton.setPressed(true);
-    pressedItem = SHIELD_BUTTON_ID;
+    _setPressedItem(SHIELD_BUTTON_ID);
   } else {
-    pressedItem = -1;
+    _setPressedItem(-1);
     startMoving(MOVING_TANK, p);
   }
 }
@@ -175,9 +182,9 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   } else if ((tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME)) {
     getGame()->playerFire(p);
     startMoving(MOVING_TANK, p);
-    pressedItem = -1;
+    _setPressedItem(-1);
   } else {
-    pressedItem = -1;
+    _setPressedItem(-1);
     startMoving(MOVING_TANK, p);
   }
 

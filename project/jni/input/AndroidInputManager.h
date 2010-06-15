@@ -43,6 +43,12 @@ class AndroidInputManager : public InputManager {
 
     void updateTankDir(const Vector2& touchPosition);
 
+    void _setPressedItem (int item) {
+      if (item != pressedItem)
+        lastButtonPressTime = Utils::getCurrentTimeMillis();
+      pressedItem = item;
+    }
+
     eState state;
 
     Vector2 tankMoveEnd;
@@ -61,6 +67,7 @@ class AndroidInputManager : public InputManager {
     Timer bombButtonTimer;
 
     int pressedItem;
+    uint64_t lastButtonPressTime;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */

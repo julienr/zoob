@@ -24,6 +24,7 @@ bool ProgressionManager::hasBombs () const {
 }
 
 bool ProgressionManager::hasShield () const {
+  LOGE("level : %i, reward_shield : %i", _level(), REWARD_SHIELD);
   return _level() > REWARD_SHIELD;
 }
 
