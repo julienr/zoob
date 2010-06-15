@@ -55,6 +55,9 @@ class ProgressionManager {
 
     void setPlayerForm (PlayerTank* player) const;
 
+    uint64_t getPlayerFireInterval () const;
+    float getPlayerRocketsSpeed () const;
+
     //Return the reward awarded by the last completed level,
     //REWARD_NONE if nothing
     eReward getLastReward () const;

@@ -32,6 +32,21 @@ void ProgressionManager::setPlayerForm (PlayerTank* player) const {
     player->changePlayerForm(FORM_BOUNCE);
 }
 
+uint64_t ProgressionManager::getPlayerFireInterval () const {
+  /*if (_level() <= FIRING_LVL)
+    return 1000;
+  else
+    return 700;*/
+  return 1000;
+}
+
+float ProgressionManager::getPlayerRocketsSpeed () const {
+  if (_level() <= FIRING_LVL)
+    return ROCKET_DEFAULT_SPEED;
+  else
+    return ROCKET_DEFAULT_SPEED*1.5f;
+}
+
 eReward ProgressionManager::getLastReward () const {
   const size_t l = _level();
   if (l == BOMB_LVL)

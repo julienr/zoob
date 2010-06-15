@@ -7,7 +7,7 @@
 #include "lib/Timer.h"
 #include "Difficulty.h"
 
-#define PLAYER_FIRE_INTERVAL 1000
+/*#define PLAYER_FIRE_INTERVAL 1000*/
 #define PLAYER_BURST_INTERVAL 1500
 #define PLAYER_IN_BURST_INTERVAL 200
 #define PLAYER_NUM_BURSTS 3
@@ -17,7 +17,7 @@
 class PlayerTank : public Tank {
   public:
     PlayerTank ()
-      : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(PLAYER_FIRE_INTERVAL)),
+      : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(ProgressionManager::getInstance()->getPlayerFireInterval())),
         currentForm (FORM_SIMPLE),
         shieldTimer(PLAYER_SHIELD_TIME) {
       setLives(3);
@@ -66,6 +66,10 @@ class PlayerTank : public Tank {
         return shieldBounce(e, colPoint);
       else
         return false;
+    }
+
+    Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
+      return new Rocket(owner, pos, dir, BOUNCE, ProgressionManager::getInstance()->getPlayerRocketsSpeed());
     }
   private:
     ePlayerForm currentForm;
