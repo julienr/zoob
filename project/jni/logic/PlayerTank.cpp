@@ -1,7 +1,7 @@
 #include "PlayerTank.h"
 
 void PlayerTank::changePlayerForm(ePlayerForm newForm) {
-  ASSERT(ProgressionManager::getInstance()->getAvailablePlayerForms().contains(newForm));
+  //ASSERT(ProgressionManager::getInstance()->getAvailablePlayerForms().contains(newForm));
   currentForm = newForm;
   switch (newForm) {
     case FORM_SIMPLE:

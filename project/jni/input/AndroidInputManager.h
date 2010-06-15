@@ -12,6 +12,7 @@
  * thread than the rendering thread.
  */
 
+#undef FORM_CONTROL
 
 class AndroidInputManager : public InputManager {
   public:
@@ -45,8 +46,9 @@ class AndroidInputManager : public InputManager {
     MenuItem rocketButton;
     MenuItem bombButton;
     MenuItem shieldButton;
-
+#ifdef FORM_CONTROL
     PlayerFormControl formControl;
+#endif
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;

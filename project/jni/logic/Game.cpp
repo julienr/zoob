@@ -32,6 +32,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       introDone(!level->isBoss()) {
   level->addToColManager(colManager);
   playerTank->setPosition(level->getStartPosition());
+  ProgressionManager::getInstance()->setPlayerForm(playerTank);
   colManager.addEntity(playerTank);
 
   const TankDescription* tanks = level->getTanks();

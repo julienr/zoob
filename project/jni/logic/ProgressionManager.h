@@ -18,6 +18,8 @@ enum eReward {
     REWARD_FIRING
 };
 
+class PlayerTank;
+
 /**
  * This class handle all the informations relative to the player progress through the game
  * (num levels completed, available forms)
@@ -50,6 +52,8 @@ class ProgressionManager {
     bool hasBombs () const;
 
     bool hasShield () const;
+
+    void setPlayerForm (PlayerTank* player) const;
 
     //Return the reward awarded by the last completed level,
     //REWARD_NONE if nothing

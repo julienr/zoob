@@ -50,7 +50,9 @@ AndroidInputManager::AndroidInputManager ()
 }
 
 void AndroidInputManager::reset () {
+#ifdef FORM_CONTROL
   formControl.reset();
+#endif
   rocketButton.setPressed(false);
   bombButton.setPressed(false);
   shieldButton.setPressed(false);
@@ -76,8 +78,10 @@ void AndroidInputManager::draw () {
     } else
       shieldButton.draw();
   }
+#ifdef FORM_CONTROL
   if (_progMan()->hasForms())
     formControl.draw();
+#endif
 }
 
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
@@ -130,10 +134,14 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   } else if (bombButton.inside(pNoTrans)) {
     if (!bombButtonTimer.isActive() && _progMan()->hasBombs())
       bombButton.setPressed(true);
-  } else if (formControl.inside(pNoTrans)) {
+  }
+#ifdef FORM_CONTROL
+  else if (formControl.inside(pNoTrans)) {
     if (_progMan()->hasForms())
       formControl.handleTouchDown(pNoTrans);
-  } else if (shieldButton.inside(pNoTrans)) {
+  }
+#endif
+  else if (shieldButton.inside(pNoTrans)) {
     if (!shieldButtonTimer.isActive() && _progMan()->hasShield())
       shieldButton.setPressed(true);
   } else if (tapDist < 5 && elapsed <= 600) {
@@ -173,8 +181,11 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         } else if (_progMan()->hasShield() && shieldButton.isPressed() && shieldButton.inside(pNoTrans)) {
           getGame()->playerActivateShield();
           shieldButtonTimer.start();
-        } else if (_progMan()->hasForms() && formControl.inside(pNoTrans))
+        }
+#ifdef FORM_CONTROL
+        else if (_progMan()->hasForms() && formControl.inside(pNoTrans))
           formControl.handleTouchUp(pNoTrans);
+#endif
         else
            stopMoving();
         bombButton.setPressed(false);

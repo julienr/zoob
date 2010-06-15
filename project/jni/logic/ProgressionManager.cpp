@@ -1,5 +1,12 @@
 #include "ProgressionManager.h"
 #include "view/GameManager.h"
+#include "logic/PlayerTank.h"
+
+//the levels at which the different rewards are given
+#define BOMB_LVL 5
+#define BOUNCE_LVL 15
+#define SHIELD_LVL 25
+#define FIRING_LVL 35
 
 ProgressionManager* ProgressionManager::instance = NULL;
 
@@ -13,28 +20,27 @@ size_t ProgressionManager::_level() const {
 }
 
 bool ProgressionManager::hasBombs () const {
-  if (_level() <= 5)
-    return false;
-  else
-    return true;
+  return _level() > REWARD_BOMB;
 }
 
 bool ProgressionManager::hasShield () const {
-  if (_level() <= 25)
-    return false;
-  else
-    return true;
+  return _level() > REWARD_SHIELD;
+}
+
+void ProgressionManager::setPlayerForm (PlayerTank* player) const {
+  if (_level() > BOUNCE_LVL)
+    player->changePlayerForm(FORM_BOUNCE);
 }
 
 eReward ProgressionManager::getLastReward () const {
   const size_t l = _level();
-  if (l == 5)
+  if (l == BOMB_LVL)
     return REWARD_BOMB;
-  if (l == 15)
+  if (l == BOUNCE_LVL)
     return REWARD_BOUNCE;
-  if (l == 25)
+  if (l == SHIELD_LVL)
     return REWARD_SHIELD;
-  if (l == 35)
+  if (l == FIRING_LVL)
     return REWARD_FIRING;
   else
     return REWARD_NONE;
@@ -44,9 +50,6 @@ eReward ProgressionManager::getLastReward () const {
 void ProgressionManager::changedLevel () {
   availablePlayerForms.clear();
   AV_FORM(FORM_SIMPLE);
-  if (_level() <= 5) {
-  } else {
+  if (_level() > BOUNCE_LVL)
     AV_FORM(FORM_BOUNCE);
-    AV_FORM(FORM_BURST);
-  }
 }
