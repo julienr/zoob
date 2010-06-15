@@ -24,12 +24,7 @@ class GameView {
     void drawLevelIndicator () const;
 
     //Draw main game area
-    void draw() {
-      if (Game::getInstance()->inIntro())
-        _drawBossIntro();
-      else
-        _drawGame();
-    }
+    void draw();
 
     void debugDraw();
     void debugDrawAI();

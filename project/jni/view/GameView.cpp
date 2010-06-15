@@ -129,6 +129,14 @@ void GameView::_drawBossIntro () {
 
 }
 
+void GameView::draw() {
+ if (Game::getInstance()->inIntro())
+   _drawBossIntro();
+ else {
+   _drawGame();
+ }
+}
+
 void GameView::_drawGame () {
   Game* game = Game::getInstance();
   //Create new explosions

@@ -4,6 +4,7 @@
 #include <zip.h>
 #include <assert.h>
 #include <stdint.h>
+#include <string.h>
 
 extern zip* APKArchive;
 

@@ -3,6 +3,7 @@
 
 #include "lib/Vector2.h"
 #include "Color.h"
+#include "def.h"
 
 struct GLW {
     static void translate (float x, float y, float z) {
@@ -58,6 +59,7 @@ struct GLW {
         case GREEN: glColor4f(0.4,1,0.24,a); break;
         case RED: glColor4f(1,0.18,0.18,a); break;
         case GREY: glColor4f(0.63,0.63,0.63,a); break;
+        case DARK_GREY: glColor4f(0.4f,0.4f,0.4f,a); break;
         case ORANGE: glColor4f(1, 0.51, 0.18, a); break;
         case VIOLET: glColor4f(0.97, 0.18, 1, a); break;
         case YELLOW: glColor4f(1, 0.97f, 0.18f, a); break;
@@ -74,6 +76,9 @@ struct GLW {
             LOGE("after %s() glError (0x%x)\n", op, error);
         }
     }
+
+  private:
+    static bool isExtensionSupported(const char *extension);
 };
 
 #endif /* GLW_H_ */

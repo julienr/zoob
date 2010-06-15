@@ -12,6 +12,7 @@
 #include "input/AndroidInputManager.h"
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
+#include "view/Square.h"
 
 
 extern void saveProgress (int level);
@@ -50,7 +51,7 @@ Level* lvl = NULL;
 GameView* gameView = NULL;
 
 
-#define WON_LOST_DELAY 500
+#define WON_LOST_DELAY 1000
 
 void startGame (GameManager* manager) {
   manager->setState(STATE_PLAYING);
@@ -377,11 +378,26 @@ void nativeRender () {
 
     glPushMatrix();
     GLW::translate(transX, transY, 0);
+
+
+
     gameView->draw();
     //gameView->debugDraw();
     //gameView->debugDrawAI();
     glPopMatrix();
     
+    if (GameManager::getInstance()->inTransition()) {
+      const float timeleft = GameManager::getInstance()->getTransitionDelay();
+      glPushMatrix();
+      GLW::translate(7.5f, 5.0f, 0.0f);
+      GLW::scale(15.0f, 10.0f, 0.0f);
+      GLW::color(DARK_GREY, 1-timeleft/GameManager::getInstance()->getInitialDelay());
+      GLW::disableTextures();
+      Square::draw(false);
+      GLW::enableTextures();
+      GLW::colorWhite();
+      glPopMatrix();
+    }
     if (GameManager::getInstance()->paused())
       GameManager::getInstance()->drawMenu(); //draw the pause menu
   } else {

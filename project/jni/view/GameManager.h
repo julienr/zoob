@@ -81,10 +81,24 @@ class GameManager {
         return;
       stateTransition = s;
       transitionDelay = delay;
+      initialDelay = transitionDelay;
     }
 
     //MUST be called by the RENDERING thread. Apply the state transition if any
     void applyTransition ();
+
+    bool inTransition () {
+      return stateTransition != -1;
+    }
+
+    //result is undefined if !isInTransition()
+    float getTransitionDelay () {
+      return transitionDelay/1000.0f;
+    }
+
+    float getInitialDelay () {
+      return initialDelay/1000.0f;
+    }
 
     void setStateCallback (eAppState state, callback_t cb) {
       stateCallbacks[state] = cb;
@@ -187,6 +201,7 @@ class GameManager {
     //by setting stateTransition and transitionDelay to something non-null, one can put a small delay on the state transition
     //There is no guarantee that the state transition won't be overrided during this delay though
     int transitionDelay;
+    int initialDelay;
 
     //Callbacks called when entering a new state. Nothing called if NULL
     callback_t stateCallbacks[MAX_STATE];

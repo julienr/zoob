@@ -115,7 +115,7 @@ void AndroidInputManager::stopMoving () {
 }
 
 void AndroidInputManager::touchEventDown (float x, float y) {
-  if (!GameManager::getInstance()->inGame()) {
+  if (!GameManager::getInstance()->inGame() || GameManager::getInstance()->inTransition()) {
     //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     GameManager::getInstance()->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
     return;
