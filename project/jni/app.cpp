@@ -358,6 +358,7 @@ void nativeRender () {
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
+  inputManager->think(elapsedS);
 
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {

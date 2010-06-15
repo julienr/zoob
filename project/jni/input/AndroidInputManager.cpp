@@ -11,7 +11,7 @@ const Vector2 shieldButtonPos(rocketButtonPos.x, 8.0f);
 const Vector2 shieldButtonSize(rocketButtonSize);
 
 #define ROCKET_BUTTON_ID 0 //just used for button creation
-#define MINE_BUTTON_ID 1 //just used for button creation
+#define BOMB_BUTTON_ID 1 //just used for button creation
 #define SHIELD_BUTTON_ID 2
 
 #define SHIELD_BUTTON_COOLDOWN 20
@@ -29,7 +29,7 @@ AndroidInputManager::AndroidInputManager ()
                  TEX_GROUP_GAME),
     bombButton("assets/sprites/fire_bomb.png",
                "assets/sprites/fire_bomb_clicked.png",
-               MINE_BUTTON_ID,
+               BOMB_BUTTON_ID,
                TEX_GROUP_GAME),
     shieldButton("assets/sprites/shield_button.png",
                  "assets/sprites/shield_button_clicked.png",
@@ -37,7 +37,8 @@ AndroidInputManager::AndroidInputManager ()
                  TEX_GROUP_GAME),
     lastTouchDownTime(0),
     shieldButtonTimer(SHIELD_BUTTON_COOLDOWN),
-    bombButtonTimer(MINE_BUTTON_COOLDOWN) {
+    bombButtonTimer(MINE_BUTTON_COOLDOWN),
+    pressedItem(-1) {
   rocketButton.setPosition(rocketButtonPos);
   rocketButton.setSize(rocketButtonSize);
   rocketButton.setBB(rocketButtonPos, 1.5f*rocketButtonSize);
@@ -114,6 +115,43 @@ void AndroidInputManager::stopMoving () {
   state = STATE_DEFAULT;
 }
 
+#define DOUBLETAP_TIME 600
+#define DOUBLETAP_DIST 5
+
+void AndroidInputManager::think (double elapsedS) {
+  const uint64_t now = Utils::getCurrentTimeMillis();
+  const uint64_t elapsed = now - lastTouchDownTime;
+
+  /*if (pressedItem != -1)
+    LOGE("elapsed : %llu, pressedItem : %i, pressedItemUp: %i", elapsed, pressedItem, pressedItemUp);*/
+
+  if ((elapsed > DOUBLETAP_TIME) && pressedItem != -1) {
+    if (pressedItem == BOMB_BUTTON_ID) {
+      getGame()->playerDropBomb();
+      bombButtonTimer.start();
+    } else if (pressedItem == SHIELD_BUTTON_ID) {
+      getGame()->playerActivateShield();
+      shieldButtonTimer.start();
+    }
+    bombButton.setPressed(false);
+    shieldButton.setPressed(false);
+    pressedItem = -1;
+  }
+}
+
+void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pNoTrans) {
+  if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
+    //bombButton.setPressed(true);
+    pressedItem = BOMB_BUTTON_ID;
+  } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
+    //shieldButton.setPressed(true);
+    pressedItem = SHIELD_BUTTON_ID;
+  } else {
+    pressedItem = -1;
+    startMoving(MOVING_TANK, p);
+  }
+}
+
 void AndroidInputManager::touchEventDown (float x, float y) {
   if (!GameManager::getInstance()->inGame() || GameManager::getInstance()->inTransition()) {
     //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
@@ -128,8 +166,23 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   const uint64_t now = Utils::getCurrentTimeMillis();
   const float tapDist = (p-lastTouchDownLocation).length();
   const uint64_t elapsed = now - lastTouchDownTime;
-  //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
+
+  //For buttons, we only consider events that couldn't be double tap
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
+    rocketButton.setPressed(true);
+  } else if ((tapDist > DOUBLETAP_DIST) || (elapsed > DOUBLETAP_TIME)) {
+    updatePressedItem(p, pNoTrans);
+  } else if ((tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME)) {
+    getGame()->playerFire(p);
+    startMoving(MOVING_TANK, p);
+    pressedItem = -1;
+  } else {
+    pressedItem = -1;
+    startMoving(MOVING_TANK, p);
+  }
+
+  //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
+  /*if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
   } else if (bombButton.inside(pNoTrans)) {
     if (!bombButtonTimer.isActive() && _progMan()->hasBombs())
@@ -149,7 +202,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
     startMoving(MOVING_TANK, p);
   } else {
     startMoving(MOVING_TANK, p);
-  }
+  }*/
   lastTouchDownTime = now;
   lastTouchDownLocation = p;
   return;
@@ -158,7 +211,14 @@ void AndroidInputManager::touchEventDown (float x, float y) {
 void AndroidInputManager::touchEventMove (float x, float y) {
   if (!GameManager::getInstance()->inGame())
     return;
+
+  if (state == FIRING_MODE)
+    return;
+
   const Vector2 p(XSG(x), YSG(y));
+  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+  updatePressedItem(pNoTrans, p);
+
   setMoveTouchPoint(p);
 }
 
@@ -166,6 +226,26 @@ void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     if (state == FIRING_MODE) {
+      getGame()->playerFire(Vector2(XSG(x),YSG(y)));
+      rocketButton.setPressed(false);
+      state = STATE_DEFAULT;
+    } else {
+      if (rocketButton.inside(pNoTrans)) {
+        state = FIRING_MODE;
+        LOGE("switching to firing mode");
+        getGame()->setTankMoveDir(Vector2::ZERO);
+      } else {
+        rocketButton.setPressed(false);
+        if ((pressedItem == BOMB_BUTTON_ID && bombButton.inside(pNoTrans)) ||
+            (pressedItem == SHIELD_BUTTON_ID && shieldButton.inside(pNoTrans))) {
+          //nothing to do
+        } else {
+          stopMoving();
+          pressedItem = -1;
+        }
+      }
+    }
+    /*if (state == FIRING_MODE) {
       getGame()->playerFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
@@ -191,7 +271,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         bombButton.setPressed(false);
         shieldButton.setPressed(false);
       }
-    }
+    }*/
   } else
     GameManager::getInstance()->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
 }

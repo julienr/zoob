@@ -26,6 +26,8 @@ class AndroidInputManager : public InputManager {
 
     //reset all states
     void reset ();
+
+    void think (double elapsedS);
   protected:
     enum eState {
       STATE_DEFAULT=0,
@@ -36,6 +38,8 @@ class AndroidInputManager : public InputManager {
     void startMoving (eState what, const Vector2& touchPosition);
     void setMoveTouchPoint (const Vector2& pos);
     void stopMoving ();
+
+    void updatePressedItem (const Vector2& p, const Vector2& pNoTrans);
 
     void updateTankDir(const Vector2& touchPosition);
 
@@ -55,6 +59,8 @@ class AndroidInputManager : public InputManager {
 
     Timer shieldButtonTimer;
     Timer bombButtonTimer;
+
+    int pressedItem;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */
