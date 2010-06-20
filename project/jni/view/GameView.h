@@ -39,7 +39,6 @@ class GameView {
     PlayerTankView playerTankView;
     //CursorView cursorView;
     LevelView levelView;
-    Sprite arrowEnd;
     Sprite rocket;
     Sprite bomb;
     Sprite hearthEmpty;

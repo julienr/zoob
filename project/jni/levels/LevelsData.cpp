@@ -1852,7 +1852,7 @@ namespace randomlvl {
 #if FULL_VERSION
 const size_t numLevels = 46;
 #else
-const size_t numLevels = 6;
+const size_t numLevels = 7;
 #endif
 lvl_callback_t levelsLoadFns[numLevels] = {
   lvl0::load,
@@ -1861,8 +1861,8 @@ lvl_callback_t levelsLoadFns[numLevels] = {
   lvl3::load,
   lvl4::load,
   lvl5::load,
-#if FULL_VERSION
   lvl6::load,
+#if FULL_VERSION
   lvl7::load,
   lvl8::load,
   lvl9::load,

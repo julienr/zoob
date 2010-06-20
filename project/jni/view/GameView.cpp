@@ -15,7 +15,6 @@ GameView::GameView ()
   : playerTankView(Game::getInstance()->getPlayerTank()),
     //cursorView(g.getCursor()),
     levelView(Game::getInstance()->getLevel()),
-    arrowEnd("assets/sprites/arrow_end.png", TEX_GROUP_GAME),
     rocket("assets/sprites/rocket.png", TEX_GROUP_GAME),
     bomb("assets/sprites/bomb.png", TEX_GROUP_GAME),
     hearthEmpty("assets/sprites/hearth_empty.png", TEX_GROUP_GAME),
@@ -51,8 +50,8 @@ void GameView::drawHearts () const {
 }
 
 void GameView::drawLevelIndicator () const {
-  levelTxt.draw(Vector2(1.3,0), Vector2(2.6, 1.3));
-  NumberView::getInstance()->drawInt(GameManager::getInstance()->getCurrentLevel(), Vector2(2.6,0), Vector2(1.5,1.5));
+  levelTxt.draw(Vector2(1.3,0), Vector2(2, 1));
+  NumberView::getInstance()->drawInt(GameManager::getInstance()->getCurrentLevel(), Vector2(3,0.05), Vector2(1.5,1.5));
 }
 
 void GameView::_drawLighting() const {

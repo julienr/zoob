@@ -226,11 +226,14 @@ list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius, const Enti
        //FIXME: should use entity bounding box
        const BoundingVolume* bv = entity->getBVolume();
        if (bv->getType() == TYPE_AABBOX && CollisionManager::AABBIntersectCircle(entity->getPosition(), static_cast<const AABBox*>(bv),
-                                                                                 center, &circ))
-         touchedList->append(entity);
-       else if (bv->getType() == TYPE_CIRCLE && CollisionManager::CircleIntersectCircle(entity->getPosition(), static_cast<const BCircle*>(bv),
-                                                                                         center, &circ))
-         touchedList->append(entity);
+                                                                                 center, &circ)) {
+         if (!touchedList->contains(entity))
+           touchedList->append(entity);
+       } else if (bv->getType() == TYPE_CIRCLE && CollisionManager::CircleIntersectCircle(entity->getPosition(), static_cast<const BCircle*>(bv),
+                                                                                         center, &circ)) {
+         if (!touchedList->contains(entity))
+           touchedList->append(entity);
+       }
     }
   }
   return touchedList;

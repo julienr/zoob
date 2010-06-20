@@ -35,7 +35,7 @@ void RewardMenu::draw () {
     rewardBounce.draw(rwPos, rwSize);
     break;
   case REWARD_FIRING:
-    rewardBounce.draw(rwPos, rwSize);
+    rewardFiring.draw(rwPos, rwSize);
     break;
   default:
     ASSERT(false);

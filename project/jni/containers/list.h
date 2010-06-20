@@ -72,6 +72,15 @@ class list {
       }
     }
 
+    bool contains (const T& elem) const {
+      _Element* el;
+      LL_FOREACH(head, el) {
+        if (el->data == elem)
+          return true;
+      }
+      return false;
+    }
+
     void clear () {
       for (_Element* e=head; e; ) {
          _Element* next = e->next;
