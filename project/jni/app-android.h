@@ -44,9 +44,17 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeRender
  * Method:    nativeMenu
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_nativeMenu
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeMenu
   (JNIEnv *, jclass);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_nativePause
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativePause
+  (JNIEnv *, jclass);
+
+/**
+ * Class:     net_fhtagn_zoob_Zoob
+ * Method:    isInMenu
+ * Signature  ()B
+ */
+JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoob_Zoob_isInMenu
   (JNIEnv *, jclass);
 
 /*
@@ -54,13 +62,13 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_nativePause
  * Method:    event callbacks
  * Signature: (FF)V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventDown
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventMove
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventMove
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventUp
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventOther
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat, jfloat);
 
 #ifdef __cplusplus

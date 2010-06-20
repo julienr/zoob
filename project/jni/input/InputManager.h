@@ -9,8 +9,6 @@ class InputManager {
   public:
     //This can be used to draw input-method specific stuff on the screen (such as a virtual gamepad)
     virtual void draw () {}
-  protected:
-    Game* getGame () { return Game::getInstance(); }
 
 };
 

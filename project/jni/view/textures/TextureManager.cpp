@@ -38,6 +38,11 @@ void TextureManager::commitLock () {
 }
 
 void TextureManager::reloadAll() {
+  //This function is called when OpenGL context has been lost to reload all textures
+  //Have to unload all groups so they will be reloaded correctly
+  for (_GroupRecord* r = groups; r != NULL; r = static_cast<_GroupRecord*>(r->hh.next)) {
+    r->group->unload();
+  }
   commitLock();
 }
 

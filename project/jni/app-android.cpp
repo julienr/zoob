@@ -72,32 +72,37 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeRender
   nativeRender();
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_nativeMenu
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeMenu
   (JNIEnv *, jclass) {
   nativeMenu();
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_nativePause
+JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoob_Zoob_isInMenu
+  (JNIEnv *, jclass) {
+  return isInMenu();
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativePause
   (JNIEnv *, jclass) {
   nativePause();
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventDown
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   touchEventDown(x,y);
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventMove
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventMove
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   touchEventMove(x,y);
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventUp
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   touchEventUp(x,y);
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobGLSurface_touchEventOther
+JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   touchEventOther(x,y);
 }

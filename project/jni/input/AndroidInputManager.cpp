@@ -100,10 +100,10 @@ void AndroidInputManager::draw () {
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
     case MOVING_TANK:
-      getGame()->setTankMoveDir(touchPosition-getGame()->getPlayerTank()->getPosition());
+      Game::getInstance()->setTankMoveDir(touchPosition-Game::getInstance()->getPlayerTank()->getPosition());
       break;
     default:
-      getGame()->setTankMoveDir(Vector2::ZERO);
+      Game::getInstance()->setTankMoveDir(Vector2::ZERO);
       break;
   }
 }
@@ -118,7 +118,7 @@ void AndroidInputManager::setMoveTouchPoint (const Vector2& pos) {
 }
 
 void AndroidInputManager::stopMoving () {
-  Game* game = getGame();
+  Game* game = Game::getInstance();
   if (!game) {
     LOGE("stopMoving with game = NULL");
     return;
@@ -136,10 +136,10 @@ void AndroidInputManager::think (double elapsedS) {
 
   if ((elapsed > DOUBLETAP_TIME) && pressedItem != -1) {
     if (pressedItem == BOMB_BUTTON_ID) {
-      getGame()->playerDropBomb();
+      Game::getInstance()->playerDropBomb();
       bombButtonTimer.start();
     } else if (pressedItem == SHIELD_BUTTON_ID) {
-      getGame()->playerActivateShield();
+      Game::getInstance()->playerActivateShield();
       shieldButtonTimer.start();
     }
     bombButton.setPressed(false);
@@ -180,7 +180,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
   } else if ((tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME)) {
-    getGame()->playerFire(p);
+    Game::getInstance()->playerFire(p);
     //startMoving(MOVING_TANK, p);
     //_setPressedItem(-1);
     updatePressedItem(p, pNoTrans);
@@ -233,14 +233,14 @@ void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     if (state == FIRING_MODE) {
-      getGame()->playerFire(Vector2(XSG(x),YSG(y)));
+      Game::getInstance()->playerFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
     } else {
       if (rocketButton.inside(pNoTrans)) {
         state = FIRING_MODE;
         LOGE("switching to firing mode");
-        getGame()->setTankMoveDir(Vector2::ZERO);
+        Game::getInstance()->setTankMoveDir(Vector2::ZERO);
       } else {
         rocketButton.setPressed(false);
         if ((pressedItem == BOMB_BUTTON_ID && bombButton.inside(pNoTrans)) ||

@@ -10,6 +10,7 @@ void nativeResize (int w, int h);
 void nativeRender ();
 void nativeMenu();
 void nativePause ();
+bool isInMenu ();
 
 void touchEventDown (float x, float y);
 void touchEventMove (float x, float y);

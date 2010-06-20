@@ -57,6 +57,10 @@ void startGame (GameManager* manager) {
   manager->setState(STATE_PLAYING);
 }
 
+bool isInMenu () {
+  return (GameManager::getInstance()->getState() == STATE_MAINMENU);
+}
+
 void nativeMenu () {
   GameManager::getInstance()->setState(STATE_MAINMENU);
 }
@@ -78,6 +82,7 @@ AndroidInputManager* inputManager = NULL;
 void toPlayingState () {
   GameManager* gm = GameManager::getInstance();
   if (Game::getInstance() && Game::getInstance()->isPaused()) {
+    LOGE("unpause");
     Game::getInstance()->unpause();
   } else {
     delete lvl;
