@@ -2,4 +2,7 @@
 <resources>
     
     <string name="app_name">Zoob</string>
+    <string name="eula_title">EULA</string>
+    <string name="eula_accept">Accept</string>
+    <string name="eula_refuse">Refuse</string>
 </resources>

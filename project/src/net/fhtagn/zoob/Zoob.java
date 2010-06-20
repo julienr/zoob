@@ -37,6 +37,9 @@ public class Zoob extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//EULA
+		Eula.show(this);
+		
 		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication());
 		setContentView(mGLView);
 		
@@ -178,7 +181,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 
 	//This constructor is not ran in the rendering thread (but in the surface thread)
 	public ZoobRenderer (Context context, ZoobApplication app) {
-		Log.e("ZoobRenderer", "Creating a new ZoobRenderer");
 		this.context = context;
 		// return apk file path (or null on error)
 		ApplicationInfo appInfo = null;
@@ -196,7 +198,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		//Call ALL nativeInit methods here, because we want the JNIEnv of the rendering thread
 		//(see comments in app-android.cpp)
-		Log.i("ZoobRenderer", "Surface created, calling nativeInit");
 		if (!initialized) {
 			nativeInit(apkFilePath, this);
 			initialized = true;
@@ -215,7 +216,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 
 	public void onDrawFrame(GL10 gl) {
 		if (restoreGL) {
-			Log.i("ZoobRenderer", "Restoring GL context");
 			nativeInitGL(app.getLevel(), app.getDifficulty());
 			restoreGL = false;
 		}

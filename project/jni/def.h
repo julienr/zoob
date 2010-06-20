@@ -24,10 +24,15 @@ extern zip* APKArchive;
   #define LOGI(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
   #define LOGE(...) do {printf(__VA_ARGS__);printf("\n");} while(0)
 #else //Android build
-  #include <android/log.h>
   #include <GLES/gl.h>
-  #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-  #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+  #include <android/log.h>
+  #if 0
+    #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+    #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+  #else
+    #define LOGI(...)
+    #define LOGE(...)
+  #endif
 #endif
 
 //BEGIN opengl-related defs

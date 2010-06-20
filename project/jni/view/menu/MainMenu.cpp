@@ -13,7 +13,11 @@ MainMenu::MainMenu (GameManager* gm)
     logo("assets/sprites/logo.png", TEX_GROUP_MENU),
     easy("assets/sprites/menuitems/easy.png", TEX_GROUP_MENU),
     normal("assets/sprites/menuitems/normal.png", TEX_GROUP_MENU),
-    hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU) {
+    hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU)
+#if !FULL_VERSION
+    ,demo("assets/sprites/demo.png", TEX_GROUP_MENU)
+#endif
+   {
    addItem(new MenuItem("assets/sprites/menuitems/start.png",
                               "assets/sprites/menuitems/start_h.png",
                               MENU_ITEM_START,
@@ -44,6 +48,9 @@ MainMenu::~MainMenu () {
 
 void MainMenu::draw () {
   logo.draw(logoPos, logoSize);
+#if !FULL_VERSION
+  demo.draw(logoPos+Vector2(1.5,3), Vector2(4, 2));
+#endif
   const int currentDiff = Difficulty::getInstance()->currentDifficulty();
   for (size_t i=0; i<numItems(); i++) {
     MenuItem* item = getItem(i);

@@ -217,8 +217,6 @@ namespace lvl5 {
   DECLARE_LVL
 }
 
-#if FULL_VERSION
-
 namespace lvl6 {
   const int xdim = 9;
   const int ydim = 8;
@@ -257,6 +255,8 @@ namespace lvl6 {
 
   DECLARE_LVL
 }
+
+#if FULL_VERSION
 
 namespace lvl7 {
   const int xdim = 12;

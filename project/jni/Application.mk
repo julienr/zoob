@@ -1,2 +1,2 @@
-APP_OPTIM := debug #release
+APP_OPTIM := release
 APP_MODULES := zoob

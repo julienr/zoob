@@ -19,6 +19,9 @@ class MainMenu : public Menu {
     void _actionPrevDiff ();
 
     Sprite logo;
+#if !FULL_VERSION
+    Sprite demo;
+#endif
     Sprite easy, normal, hard;
     Vector2 logoPos, logoSize;
     Vector2 numberPos, numberSize;
