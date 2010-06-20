@@ -1,6 +1,7 @@
 #include "BuyFullMenu.h"
 #include "MenuItem.h"
 #include "view/GameManager.h"
+#include "app.h"
 
 #define MENU_ITEM_YES 0
 #define MENU_ITEM_NO 1
@@ -49,7 +50,8 @@ void BuyFullMenu::actionPerformed(short touchedItem) {
 }
 
 void BuyFullMenu::_actionYes () {
-  LOGE("YES");
+  GameManager::getInstance()->setState(STATE_MAINMENU);
+  buyFull();
 }
 
 void BuyFullMenu::_actionNo () {

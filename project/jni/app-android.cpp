@@ -8,6 +8,7 @@ static jclass zoobRendererClass;
 static jobject zoobRenderer;
 static jmethodID java_saveProgress;
 static jmethodID java_saveDifficulty;
+static jmethodID java_buyFull;
 
 void saveProgress (int level) {
   LOGE("saveProgress : %i", level);
@@ -17,6 +18,11 @@ void saveProgress (int level) {
 void saveDifficulty (int diff) {
   LOGE("saveDifficulty : %i", diff);
   jniEnv->CallVoidMethod(zoobRenderer, java_saveDifficulty, diff);
+}
+
+void buyFull () {
+  LOGE("buyFull");
+  jniEnv->CallVoidMethod(zoobRenderer, java_buyFull);
 }
 
 #define JNI_GET_METHOD(var,name,type) \
@@ -40,6 +46,7 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
 
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
+  JNI_GET_METHOD(java_buyFull, "buyFullVersion", "()V");
 }
 
 /**

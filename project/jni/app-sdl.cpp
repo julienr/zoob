@@ -13,6 +13,10 @@ void saveDifficulty (int diff) {
   LOGE("SDL saveDifficulty : diff %i", diff);
 }
 
+void buyFull () {
+  LOGE("Buy full");
+}
+
 int main (int argc, char** argv) {
   if (argc < 2) {
     LOGE("Usage : <apk path>");

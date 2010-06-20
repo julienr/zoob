@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -16,6 +17,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -275,6 +277,11 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		
 	public void saveDifficulty (int level) {
 		app.saveDifficulty(level);
+	}
+	
+	public void buyFullVersion () {
+		Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoob");
+		context.startActivity(new Intent(Intent.ACTION_VIEW, fullVersionURI));
 	}
 	
 }

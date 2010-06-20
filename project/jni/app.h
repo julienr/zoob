@@ -1,6 +1,7 @@
 #ifndef APP_H_
 #define APP_H_
 
+//downcall (Java to C++) functions
 //performs all non-gl initialisation
 void nativeInit (const char* apkPath);
 
@@ -18,6 +19,11 @@ void touchEventUp (float x, float y);
 void touchEventOther (float x, float y);
 
 void toggleGodMode ();
+
+//upcall (C++ to Java) functions
+void saveProgress (int level);
+void saveDifficulty (int diff);
+void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system
 float XSG (const float x);

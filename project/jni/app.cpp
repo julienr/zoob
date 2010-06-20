@@ -1,4 +1,5 @@
 #include "def.h"
+#include "app.h"
 #include "view/textures/TextureManager.h"
 #include "logic/Entity.h"
 #include "view/TankView.h"
@@ -13,10 +14,6 @@
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
 #include "view/Square.h"
-
-
-extern void saveProgress (int level);
-extern void saveDifficulty (int diff);
 
 zip* APKArchive;
 
