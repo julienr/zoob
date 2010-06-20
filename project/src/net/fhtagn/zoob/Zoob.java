@@ -186,7 +186,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = context.getPackageManager();
 		try {
-	    appInfo = packMgmr.getApplicationInfo("net.fhtagn.zoob", 0);
+	    appInfo = packMgmr.getApplicationInfo(app.getPackageName(), 0);
     } catch (NameNotFoundException e) {
 	    e.printStackTrace();
 	    throw new RuntimeException("Unable to locate assets, aborting...");

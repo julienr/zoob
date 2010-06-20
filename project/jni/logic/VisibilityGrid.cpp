@@ -165,7 +165,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   }
 
   //LOGE("biggest size : %i, center(%f,%f)" , biggestGroup->length(), biggestCenter.x, biggestCenter.y);
-  int minIdx;
+  int minIdx=0;
   float minDist = MOOB_INF;
   for (size_t i=0; i<biggestGroup->length(); i++) {
     float d = (biggestCenter-biggestGroup->get(i)->data.waypoint).length();

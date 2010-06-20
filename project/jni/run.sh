@@ -1,2 +1,2 @@
 #!/bin/sh
-./app ../bin/Zoob-NDK.apk $@
+./app ../bin/Zoob.apk $@

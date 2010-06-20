@@ -2,7 +2,7 @@
 #include "def.h"
 #include "app.h"
 
-#define SCREEN_WIDTH 640//480
+#define SCREEN_WIDTH 480//480
 #define SCREEN_HEIGHT 320//279
 
 void saveProgress (int level) {

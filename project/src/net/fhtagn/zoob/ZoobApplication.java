@@ -7,11 +7,14 @@ import android.net.Uri;
 import android.util.Log;
 
 public class ZoobApplication extends Application {
-	private static final String PREFS_NAME = "net_fhtagn_zoob_prefs";
 	private static final String PREF_KEY_LEVEL = "level";
 	private static final String PREF_KEY_DIFFICULTY = "difficulty";
 	
 	private SharedPreferences settings;
+	
+	protected String getPrefsName () {
+		return "net_fhtagn_zoob_prefs";
+	}
 	
 	@Override
 	public void onCreate () {
@@ -20,7 +23,7 @@ public class ZoobApplication extends Application {
 		Log.i("ZoobApplication", "onCreate()");
 		
     //Fetch level from preferences
-    settings = getSharedPreferences(PREFS_NAME, 0);
+    settings = getSharedPreferences(getPrefsName(), 0);
 	}
 	
 	public int getLevel () {
