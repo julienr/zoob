@@ -118,7 +118,11 @@ void toMenuState () {
 
 void toWonState () {
   if (!GameManager::getInstance()->hasMoreLevels()) {
+#if FULL_VERSION
     GameManager::getInstance()->setState(STATE_END);
+#else
+    GameManager::getInstance()->setState(STATE_BUY_FULL);
+#endif
   } else {
     toMenuState();
     saveProgress(GameManager::getInstance()->getCurrentLevel()+1);

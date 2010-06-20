@@ -217,6 +217,8 @@ namespace lvl5 {
   DECLARE_LVL
 }
 
+#if FULL_VERSION
+
 namespace lvl6 {
   const int xdim = 9;
   const int ydim = 8;
@@ -1844,8 +1846,14 @@ namespace randomlvl {
   }
 }
 
+#endif
+
 //Array fill
+#if FULL_VERSION
 const size_t numLevels = 46;
+#else
+const size_t numLevels = 6;
+#endif
 lvl_callback_t levelsLoadFns[numLevels] = {
   lvl0::load,
   lvl1::load,
@@ -1853,6 +1861,7 @@ lvl_callback_t levelsLoadFns[numLevels] = {
   lvl3::load,
   lvl4::load,
   lvl5::load,
+#if FULL_VERSION
   lvl6::load,
   lvl7::load,
   lvl8::load,
@@ -1893,5 +1902,6 @@ lvl_callback_t levelsLoadFns[numLevels] = {
   lvl43::load,
   lvl44::load,
   lvl45::load
+#endif
   //randomlvl::load
 };

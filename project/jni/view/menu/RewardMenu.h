@@ -18,6 +18,7 @@ class RewardMenu : public Menu {
     Sprite rewardBounce;
     Sprite rewardFiring;
     Sprite nextlvl;
+    Sprite rewardInstr;
 };
 
 #endif /* REWARDMENU_H_ */

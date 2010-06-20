@@ -28,8 +28,11 @@ GameManager::GameManager (startGameCallback_t gameCb,
 
   for (int i=0; i<MAX_STATE; i++)
     stateCallbacks[i] = NULL;
-  //setState(STATE_MAINMENU);
+#if FULL_VERSION
+  state = STATE_MAINMENU;
+#else
   state = STATE_BUY_FULL;
+#endif
   applyLocks();
 }
 
