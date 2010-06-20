@@ -3,7 +3,7 @@ title: double-tapping to fire rocket leads to small player movement
 desc: ""
 type: :bugfix
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-02 13:23:01.872271 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-06-20 16:14:56.809211 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""

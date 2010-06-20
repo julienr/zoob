@@ -3,7 +3,7 @@ title: "Merge Djikstra and hidden cell group determination "
 desc: since djikstra visits all the cells, at first create one group per cell and merge the groups of neighbouring cells
 type: :bugfix
 component: zoob
-release: android market
+release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
 status: :unstarted
 disposition: 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-05-15 12:52:36.833947 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-06-20 16:15:10.137096 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - assigned to release post-market from android market
   - ""
