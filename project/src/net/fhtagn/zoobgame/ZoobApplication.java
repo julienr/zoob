@@ -1,4 +1,4 @@
-package net.fhtagn.zoob;
+package net.fhtagn.zoobgame;
 
 import android.app.Application;
 import android.content.Intent;
@@ -13,7 +13,7 @@ public class ZoobApplication extends Application {
 	private SharedPreferences settings;
 	
 	protected String getPrefsName () {
-		return "net_fhtagn_zoob_prefs";
+		return "net_fhtagn_zoobgame_prefs";
 	}
 	
 	@Override

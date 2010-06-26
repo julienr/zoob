@@ -12,7 +12,7 @@ extern "C" {
  * Method:    nativeInit
  * Signature: (S, L/net.fhtagn.zoob/ZoobApplication)V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
   (JNIEnv *, jclass, jstring, jobject);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInit
  * Method:    nativeInitGL
  * Signature: (I,I)V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInitGL
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL
   (JNIEnv *, jclass, int, int);
 
 /*
@@ -28,7 +28,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeInitGL
  * Method:    nativeResize
  * Signature: (II)V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeResize
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeResize
   (JNIEnv *, jclass, jint, jint);
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeResize
  * Method:    nativeRender
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeRender
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeRender
   (JNIEnv *, jclass);
 
 /*
@@ -44,9 +44,9 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeRender
  * Method:    nativeMenu
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativeMenu
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeMenu
   (JNIEnv *, jclass);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativePause
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
   (JNIEnv *, jclass);
 
 /**
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_nativePause
  * Method:    isInMenu
  * Signature  ()B
  */
-JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoob_Zoob_isInMenu
+JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoobgame_Zoob_isInMenu
   (JNIEnv *, jclass);
 
 /*
@@ -62,13 +62,13 @@ JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoob_Zoob_isInMenu
  * Method:    event callbacks
  * Signature: (FF)V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventDown
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventMove
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventMove
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventUp
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat, jfloat);
-JNIEXPORT void JNICALL Java_net_fhtagn_zoob_ZoobRenderer_touchEventOther
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat, jfloat);
 
 #ifdef __cplusplus

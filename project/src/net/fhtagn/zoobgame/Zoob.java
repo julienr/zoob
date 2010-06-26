@@ -1,4 +1,4 @@
-package net.fhtagn.zoob;
+package net.fhtagn.zoobgame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -280,7 +280,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 	
 	public void buyFullVersion () {
-		Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoob");
+		Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoobgame");
 		context.startActivity(new Intent(Intent.ACTION_VIEW, fullVersionURI));
 	}
 	
