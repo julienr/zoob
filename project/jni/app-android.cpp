@@ -1,7 +1,9 @@
 #include "app-android.h"
 #include "app.h"
 #include "def.h"
+#include "input/AndroidInputManager.h"
 
+/** JNI UPCALL STUFF **/
 static JNIEnv* jniEnv = NULL;
 
 static jclass zoobRendererClass;
@@ -47,6 +49,14 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
   JNI_GET_METHOD(java_buyFull, "buyFullVersion", "()V");
+}
+
+
+/** Input Manager **/
+static AndroidInputManager* inputManager = NULL;
+InputManager* createInputManager () {
+  inputManager = new AndroidInputManager;
+  return inputManager;
 }
 
 /**
@@ -96,20 +106,20 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  touchEventDown(x,y);
+  inputManager->touchEventDown(x,y);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventMove
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  touchEventMove(x,y);
+  inputManager->touchEventMove(x,y);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  touchEventUp(x,y);
+  inputManager->touchEventUp(x,y);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat x, jfloat y) {
-  touchEventOther(x,y);
+  inputManager->touchEventOther(x,y);
 }

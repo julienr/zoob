@@ -1,6 +1,8 @@
 #include <SDL/SDL.h>
 #include "def.h"
 #include "app.h"
+#include "input/SDLInputManager.h"
+#include "input/AndroidInputManager.h"
 
 #define SCREEN_WIDTH 480//480
 #define SCREEN_HEIGHT 320//279
@@ -17,11 +19,48 @@ void buyFull () {
   LOGE("Buy full");
 }
 
+//The SDL app can use the android input manager too, for debugging purposes
+enum eInputManager {
+    INPUT_ANDROID,
+    INPUT_SDL
+};
+
+eInputManager inputType = INPUT_SDL;
+
+union {
+    SDLInputManager* sdl;
+    AndroidInputManager* android;
+} inputManager;
+
+InputManager* createInputManager () {
+  if (inputType == INPUT_SDL) {
+    inputManager.sdl = new SDLInputManager();
+    return inputManager.sdl;
+  } else {
+    inputManager.android = new AndroidInputManager();
+    return inputManager.android;
+  }
+}
+
+static bool handleAndroidInputEvents ();
+static bool handleSDLInputEvents ();
+
+int cursorW, cursorH;
+
 int main (int argc, char** argv) {
   if (argc < 2) {
-    LOGE("Usage : <apk path>");
+    LOGE("Usage : <apk path> [-android]");
     return -1;
   }
+  if (argc >= 3) {
+    for (int i=2; i<argc; i++) {
+      if (strcmp(argv[i], "-android") == 0) {
+        inputType = INPUT_ANDROID;
+        LOGE("android input emulation");
+      }
+    }
+  }
+
   int level = 0;
   if (argc >= 3)
     level = atoi(argv[2]);
@@ -37,51 +76,19 @@ int main (int argc, char** argv) {
   nativeInitGL(level, difficulty);
   nativeResize(SCREEN_WIDTH,SCREEN_HEIGHT);
 
-  bool leftBtnClicked = false;
   bool done = false;
 
   SDL_Cursor* cursor = SDL_GetCursor();
-  int cursorW = cursor->area.w;
-  int cursorH = cursor->area.h;
+  cursorW = cursor->area.w;
+  cursorH = cursor->area.h;
   LOGE("Cursor w,h : %i,%i", cursorW, cursorH);
-
-#define MOUSE_EVENT_POS event.button.x+cursorW, event.button.y+cursorH
 
   while (!done) {
     //Event handling
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-        case SDL_MOUSEBUTTONDOWN:
-          if (event.button.button == SDL_BUTTON_LEFT) {
-            touchEventDown(MOUSE_EVENT_POS);
-            leftBtnClicked = true;
-          }
-          break;
-        case SDL_MOUSEBUTTONUP:
-          if (event.button.button == SDL_BUTTON_LEFT) {
-            touchEventUp(MOUSE_EVENT_POS);
-            leftBtnClicked = false;
-          }
-          break;
-        case SDL_MOUSEMOTION:
-          if (leftBtnClicked)
-            touchEventMove(MOUSE_EVENT_POS);
-          break;
-        case SDL_QUIT:
-          done = true;
-          break;
-        case SDL_KEYDOWN:
-          switch (event.key.keysym.sym) {
-            case SDLK_ESCAPE: done = true; break;
-            case SDLK_m: nativeMenu(); break;
-            case SDLK_p: nativePause(); break;
-            case SDLK_g: toggleGodMode(); break;
-            default: break;
-          }
-          break;
-      }
-    }
+    if (inputType == INPUT_ANDROID)
+      done = handleAndroidInputEvents();
+    else
+      done = handleSDLInputEvents();
     nativeRender();
     SDL_GL_SwapBuffers();
   }
@@ -89,3 +96,99 @@ int main (int argc, char** argv) {
   SDL_Quit();
 }
 
+#define MOUSE_EVENT_POS event.button.x+cursorW, event.button.y+cursorH
+
+static bool handleAndroidInputEvents () {
+  static bool leftBtnClicked = false;
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          inputManager.android->touchEventDown(MOUSE_EVENT_POS);
+          leftBtnClicked = true;
+        }
+        break;
+      case SDL_MOUSEBUTTONUP:
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          inputManager.android->touchEventUp(MOUSE_EVENT_POS);
+          leftBtnClicked = false;
+        }
+        break;
+      case SDL_MOUSEMOTION:
+        if (leftBtnClicked)
+          inputManager.android->touchEventMove(MOUSE_EVENT_POS);
+        break;
+      case SDL_QUIT:
+        return true;
+        break;
+      case SDL_KEYDOWN:
+        switch (event.key.keysym.sym) {
+          case SDLK_ESCAPE: return true;
+          case SDLK_m: nativeMenu(); break;
+          case SDLK_p: nativePause(); break;
+          case SDLK_g: toggleGodMode(); break;
+          default: break;
+        }
+        break;
+    }
+  }
+  return false;
+}
+
+struct {
+    int up; //1 = up, 0 = none, -1 = down
+    int left; //1 = left, 0 = none, -1 = right
+
+    void reset () {
+      up = left = 0;
+    }
+} keyState;
+
+static bool handleSDLInputEvents () {
+  static bool leftBtnClicked = false;
+  keyState.reset();
+
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          //touchEventDown(MOUSE_EVENT_POS);
+          leftBtnClicked = true;
+        }
+        break;
+      case SDL_MOUSEBUTTONUP:
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          //touchEventUp(MOUSE_EVENT_POS);
+          leftBtnClicked = false;
+        }
+        break;
+      case SDL_MOUSEMOTION:
+        if (leftBtnClicked) {
+          //touchEventMove(MOUSE_EVENT_POS);
+        }
+        break;
+      case SDL_QUIT:
+        return true;
+        break;
+      case SDL_KEYDOWN:
+        switch (event.key.keysym.sym) {
+          case SDLK_ESCAPE: return true;
+          case SDLK_m: nativeMenu(); break;
+          case SDLK_p: nativePause(); break;
+          case SDLK_g: toggleGodMode(); break;
+          //keyState
+          case SDLK_w: keyState.up++; break;
+          case SDLK_s: keyState.up--; break;
+          case SDLK_d: keyState.left--; break;
+          case SDLK_a: keyState.left++; break;
+          default: break;
+        }
+        break;
+    }
+  }
+
+  inputManager.sdl->setMove(keyState.up, keyState.left);
+  return false;
+}

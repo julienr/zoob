@@ -13,11 +13,6 @@ void nativeMenu();
 void nativePause ();
 bool isInMenu ();
 
-void touchEventDown (float x, float y);
-void touchEventMove (float x, float y);
-void touchEventUp (float x, float y);
-void touchEventOther (float x, float y);
-
 void toggleGodMode ();
 
 //upcall (C++ to Java) functions
@@ -41,4 +36,12 @@ extern float yScreenToGame;
 extern float transX;
 extern float transY;
 
+//This function MUST be defined by the <platform>-app file and it must
+//allocate a new InputManager and return it. It shouldn't REGISTER the
+//new input manager
+//It is GUARANTEED that this function will be called at most once (at the
+//very beginning of the app livecycle. Called just after openGL initialisation
+//so the input manager can allocate openGL resources
+class InputManager;
+extern InputManager* createInputManager ();
 #endif

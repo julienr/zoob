@@ -74,8 +74,6 @@ void gameUnPauseCallback () {
   GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
-AndroidInputManager* inputManager = NULL;
-
 void toPlayingState () {
   GameManager* gm = GameManager::getInstance();
   if (Game::getInstance() && Game::getInstance()->isPaused()) {
@@ -91,7 +89,7 @@ void toPlayingState () {
     gameView = new GameView();
     ProgressionManager::getInstance()->changedLevel();
 
-    inputManager->reset();
+    InputManager::getInstance()->reset();
 
     centerGameInViewport();
     saveDifficulty(Difficulty::getInstance()->currentDifficulty());
@@ -157,7 +155,8 @@ void nativeInitGL(int level, int difficulty) {
     gm->setStateCallback(STATE_MAINMENU, toMenuState);
     gm->setStateCallback(STATE_PLAYING, toPlayingState);
     gm->setStateCallback(STATE_PAUSED, toPauseState);
-    inputManager = new AndroidInputManager();
+
+    InputManager::registerInstance(createInputManager());
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -364,14 +363,13 @@ void nativeRender () {
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
-  inputManager->think(elapsedS);
-
+  InputManager::getInstance()->think(elapsedS);
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
     if (!GameManager::getInstance()->paused())
       Game::getInstance()->update(elapsedS);
 
-    inputManager->draw();
+    InputManager::getInstance()->draw();
 
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);
@@ -385,8 +383,6 @@ void nativeRender () {
 
     glPushMatrix();
     GLW::translate(transX, transY, 0);
-
-
 
     gameView->draw();
     //gameView->debugDraw();
@@ -410,21 +406,5 @@ void nativeRender () {
   } else {
     GameManager::getInstance()->drawMenu();
   }
-}
-
-void touchEventDown (float x, float y) {
-  inputManager->touchEventDown(x,y);
-}
-
-void touchEventMove (float x, float y) {
-  inputManager->touchEventMove(x,y);
-}
-
-void touchEventUp (float x, float y) {
-  inputManager->touchEventUp(x,y);
-}
-
-void touchEventOther (float x, float y) {
-  inputManager->touchEventOther(x,y);
 }
 

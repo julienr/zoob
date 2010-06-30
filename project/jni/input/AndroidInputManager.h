@@ -6,12 +6,6 @@
 #include "PlayerFormControl.h"
 #include "lib/Timer.h"
 
-/**
- * See important comment in Moob.java regarding native event-handling methods.
- * Basically, they shouldn't lead to any OpenGL call, because they'll be run in a separate
- * thread than the rendering thread.
- */
-
 #undef FORM_CONTROL
 
 class AndroidInputManager : public InputManager {

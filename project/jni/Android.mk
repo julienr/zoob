@@ -61,7 +61,8 @@ LOCAL_SRC_FILES := \
     ai/algorithms/AStar.cpp \
     logic/VisibilityGrid.cpp \
     input/AndroidInputManager.cpp \
-    input/PlayerFormControl.cpp
+    input/PlayerFormControl.cpp \
+    input/InputManager.cpp
 
 LIBPNG_PATH := /home/julien/programs/android-ndk-r3/out/apps/libpng/armeabi/
 LIBZIP_PATH := /home/julien/programs/android-ndk-r3/out/apps/libzip/armeabi
