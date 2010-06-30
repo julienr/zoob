@@ -13,10 +13,10 @@ MainMenu::MainMenu (GameManager* gm)
     logo("assets/sprites/logo.png", TEX_GROUP_MENU),
     easy("assets/sprites/menuitems/easy.png", TEX_GROUP_MENU),
     normal("assets/sprites/menuitems/normal.png", TEX_GROUP_MENU),
-    hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU)
 #if !FULL_VERSION
-    ,demo("assets/sprites/demo.png", TEX_GROUP_MENU)
+    demo("assets/sprites/demo.png", TEX_GROUP_MENU),
 #endif
+    hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU)
    {
    addItem(new MenuItem("assets/sprites/menuitems/start.png",
                               "assets/sprites/menuitems/start_h.png",

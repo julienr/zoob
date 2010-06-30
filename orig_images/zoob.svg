@@ -2488,15 +2488,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.3535534"
-     inkscape:cx="3224.062"
-     inkscape:cy="-2823.5539"
+     inkscape:cx="4017.3797"
+     inkscape:cy="-657.7267"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="748"
+     inkscape:window-width="1024"
+     inkscape:window-height="1253"
      inkscape:window-x="-3"
-     inkscape:window-y="25"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -3274,7 +3274,7 @@
     <g
        id="g4232"
        transform="translate(203.99997,232.15547)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/project/assets/sprites/cursor.png"
+       inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/cursor.png"
        inkscape:export-xdpi="57.18"
        inkscape:export-ydpi="57.18">
       <rect
@@ -3299,7 +3299,7 @@
     <g
        transform="matrix(0,1,-1,0,4920.2067,-2123.6378)"
        id="g4232-6"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/project/assets/sprites/cursor.png"
+       inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/cursor.png"
        inkscape:export-xdpi="57.18"
        inkscape:export-ydpi="57.18">
       <rect

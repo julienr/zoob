@@ -89,7 +89,7 @@ public class Zoob extends Activity {
 class Command {
 	public enum Type {
 		EVENT_DOWN, EVENT_MOVE, EVENT_UP, EVENT_OTHER,
-		EVENT_PAUSE, EVENT_MENU
+		EVENT_PAUSE, EVENT_MENU, EVENT_TRACKBALL, EVENT_TRACKBALL_CLICK
 	}
 	
 	public final float x;
@@ -123,6 +123,7 @@ class ZoobGLSurface extends GLSurfaceView {
 		super(context);
 		mRenderer = new ZoobRenderer(context, app);
 		setRenderer(mRenderer);
+		setFocusableInTouchMode(true); //necessary to get trackball events
 	}
 	
 	public void onResume () {
@@ -138,6 +139,7 @@ class ZoobGLSurface extends GLSurfaceView {
 		mRenderer.addCommand(new Command(Command.Type.EVENT_PAUSE));
 	}
 
+	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
 		final float x = event.getX();
 		final float y = event.getY();
@@ -164,6 +166,18 @@ class ZoobGLSurface extends GLSurfaceView {
 		try {
 	    Thread.sleep(16);
     } catch (InterruptedException e) {}
+		return true;
+	}
+	
+	@Override
+	public boolean onTrackballEvent (final MotionEvent event) {
+		int action = event.getAction();
+		if (action == MotionEvent.ACTION_MOVE) { 
+			//Event returns RELATIVE x,y
+			mRenderer.addCommand(new Command(Command.Type.EVENT_TRACKBALL, event.getX(), event.getY()));
+		} else if (action == MotionEvent.ACTION_DOWN) { 
+			mRenderer.addCommand(new Command(Command.Type.EVENT_TRACKBALL_CLICK, event.getX(), event.getY()));
+		}
 		return true;
 	}
 }
@@ -242,6 +256,12 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 					case EVENT_MENU:
 						nativeMenu();
 						break;
+					case EVENT_TRACKBALL:
+						trackballMove(c.x, c.y);
+						break;
+					case EVENT_TRACKBALL_CLICK:
+						trackballClick(c.x, c.y);
+						break;
 				}
 			}
 			commands.clear();
@@ -265,6 +285,8 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	private static native void touchEventMove (float x, float y);
 	private static native void touchEventUp (float x, float y);
 	private static native void touchEventOther (float x, float y);
+	private static native void trackballMove (float rx, float ry);
+	private static native void trackballClick (float rx, float ry);
 	
 	private static native void nativePause();
 	private static native void nativeMenu();

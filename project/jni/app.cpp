@@ -369,8 +369,6 @@ void nativeRender () {
     if (!GameManager::getInstance()->paused())
       Game::getInstance()->update(elapsedS);
 
-    InputManager::getInstance()->draw();
-
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);
     gameView->drawLevelIndicator();
@@ -389,6 +387,8 @@ void nativeRender () {
     //gameView->debugDrawAI();
     glPopMatrix();
     
+    InputManager::getInstance()->draw();
+
     if (GameManager::getInstance()->inTransition()) {
       const float timeleft = GameManager::getInstance()->getTransitionDelay();
       glPushMatrix();

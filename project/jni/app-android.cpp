@@ -123,3 +123,13 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   inputManager->touchEventOther(x,y);
 }
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballMove
+  (JNIEnv *, jclass, jfloat rx, jfloat ry) {
+  inputManager->trackballMove(rx, ry);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballClick
+  (JNIEnv *, jclass, jfloat rx, jfloat ry) {
+  inputManager->trackballClick(rx, ry);
+}

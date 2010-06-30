@@ -38,6 +38,9 @@ AndroidInputManager::AndroidInputManager ()
                  "assets/sprites/shield_button_clicked.png",
                  SHIELD_BUTTON_ID,
                  TEX_GROUP_GAME),
+    cursor("assets/sprites/cursor.png",
+             TEX_GROUP_GAME),
+    cursorPosition(7.5, 5),
     lastTouchDownTime(0),
     shieldButtonTimer(SHIELD_BUTTON_COOLDOWN),
     bombButtonTimer(MINE_BUTTON_COOLDOWN),
@@ -62,6 +65,7 @@ void AndroidInputManager::reset () {
   shieldButton.setPressed(false);
   shieldButtonTimer.stop();
   bombButtonTimer.stop();
+  cursorPosition.set(7.5, 5);
   state = STATE_DEFAULT;
 }
 
@@ -91,6 +95,9 @@ void AndroidInputManager::draw () {
     } else
       shieldButton.draw();
   }
+
+  cursor.draw(cursorPosition, Vector2(1,1));
+
 #ifdef FORM_CONTROL
   if (_progMan()->hasForms())
     formControl.draw();
@@ -287,4 +294,18 @@ void AndroidInputManager::touchEventUp (float x, float y) {
 
 void AndroidInputManager::touchEventOther (float x, float y) {
   touchEventUp(x,y);
+}
+
+void AndroidInputManager::trackballMove (float rx, float ry) {
+  if (GameManager::getInstance()->inGame()) {
+    cursorPosition += Vector2(rx,ry);
+  }
+}
+
+void AndroidInputManager::trackballClick (float rx, float ry) {
+  if (GameManager::getInstance()->inGame()) {
+    cursorPosition += Vector2(rx,ry);
+    //FIXME: have to convert cursorPosition to game pos (it is in screen pos (15,10))
+    Game::getInstance()->playerFire(cursorPosition-Vector2(transX, transY));
+  }
 }

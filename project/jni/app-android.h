@@ -70,6 +70,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat, jfloat);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
   (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballMove
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballClick
+  (JNIEnv *, jclass, jfloat, jfloat);
 
 #ifdef __cplusplus
 }

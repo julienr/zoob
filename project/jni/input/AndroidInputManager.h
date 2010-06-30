@@ -17,6 +17,9 @@ class AndroidInputManager : public InputManager {
     void touchEventMove (float x, float y);
     void touchEventUp (float x, float y);
     void touchEventOther (float x, float y);
+    //RELATIVE (x,y)
+    void trackballMove (float rx, float ry);
+    void trackballClick (float rx, float ry);
 
     //reset all states
     void reset ();
@@ -53,6 +56,9 @@ class AndroidInputManager : public InputManager {
 #ifdef FORM_CONTROL
     PlayerFormControl formControl;
 #endif
+
+    Sprite cursor;
+    Vector2 cursorPosition;
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;
