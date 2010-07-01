@@ -231,7 +231,7 @@ void AndroidInputManager::touchEventMove (float x, float y) {
 
   const Vector2 p(XSG(x), YSG(y));
   const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-  updatePressedItem(p, pNoTrans);
+  //updatePressedItem(p, pNoTrans);
 
   setMoveTouchPoint(p);
 }
@@ -244,7 +244,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
     } else {
-      if (rocketButton.inside(pNoTrans)) {
+      if (rocketButton.isPressed() && rocketButton.inside(pNoTrans)) {
         state = FIRING_MODE;
         LOGE("switching to firing mode");
         Game::getInstance()->setTankMoveDir(Vector2::ZERO);
@@ -253,6 +253,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
         if ((pressedItem == BOMB_BUTTON_ID && bombButton.inside(pNoTrans)) ||
             (pressedItem == SHIELD_BUTTON_ID && shieldButton.inside(pNoTrans))) {
           const uint64_t now = Utils::getCurrentTimeMillis();
+          stopMoving();
           if ((now-lastButtonPressTime) < DOUBLETAP_TIME)
             _setPressedItem(-1);
         } else {
