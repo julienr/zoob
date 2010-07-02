@@ -143,6 +143,8 @@ class ZoobGLSurface extends GLSurfaceView {
 	public boolean onTouchEvent(final MotionEvent event) {
 		final float x = event.getX();
 		final float y = event.getY();
+		
+		//FIXME: use event.getSize() to calculate event center ?
 
 		Command c = null;
 		switch (event.getAction()) {

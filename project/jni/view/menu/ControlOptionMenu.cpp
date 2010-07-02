@@ -10,6 +10,7 @@ ControlOptionMenu::ControlOptionMenu(GameManager* gm)
   : Menu(gm),
     inputTouch("assets/sprites/menuitems/input_touch.png", TEX_GROUP_MENU),
     inputTrackball("assets/sprites/menuitems/input_trackball.png", TEX_GROUP_MENU),
+    inputMixed("assets/sprites/menuitems/input_mixed.png", TEX_GROUP_MENU),
     optionDesc("assets/sprites/menuitems/controls_option.png", TEX_GROUP_MENU) {
   addItem(new MenuItem("assets/sprites/menuitems/back.png",
                        "assets/sprites/menuitems/back_h.png",
@@ -22,7 +23,7 @@ ControlOptionMenu::ControlOptionMenu(GameManager* gm)
                        TEX_GROUP_MENU));
 
   addItem(new MenuItem("assets/sprites/menuitems/prev.png",
-                       "assets/sprites/menuitems/prev.png",
+                       "assets/sprites/menuitems/prev_h.png",
                        MENU_ITEM_CONTROL_PREV,
                        TEX_GROUP_MENU));
   _initItems();
@@ -48,6 +49,11 @@ void ControlOptionMenu::draw () {
     case INPUT_TRACKBALL:
       inputTrackball.draw(inputDescPos, Vector2(8,4));
       break;
+    case INPUT_MIXED:
+      inputMixed.draw(inputDescPos, Vector2(8,4));
+      break;
+    default:
+      ASSERT(false);
   }
 
   optionDesc.draw(Vector2(4, 1), Vector2(8, 2));
@@ -55,8 +61,8 @@ void ControlOptionMenu::draw () {
   for (size_t i=0; i<numItems(); i++) {
      MenuItem* item = getItem(i);
      short id = item->getID();
-     if ((id == MENU_ITEM_CONTROL_PREV && mode == INPUT_TOUCH) ||
-         (id == MENU_ITEM_CONTROL_NEXT && mode == INPUT_TRACKBALL))
+     if ((id == MENU_ITEM_CONTROL_PREV && mode == 0) ||
+         (id == MENU_ITEM_CONTROL_NEXT && mode == NUM_INPUT_METHODS-1))
        continue;
 
      item->draw();
@@ -80,11 +86,17 @@ void ControlOptionMenu::_actionBack() {
 }
 
 void ControlOptionMenu::_actionNextCtrl () {
-  getInputManager()->setInputMode(INPUT_TRACKBALL);
+  eInputMode mode = getInputManager()->getInputMode();
+  if (mode == NUM_INPUT_METHODS-1)
+    return;
+  getInputManager()->setInputMode((eInputMode)(mode+1));
 }
 
 void ControlOptionMenu::_actionPrevCtrl () {
-  getInputManager()->setInputMode(INPUT_TOUCH);
+  eInputMode mode = getInputManager()->getInputMode();
+    if (mode == 0)
+      return;
+  getInputManager()->setInputMode((eInputMode)(mode-1));
 }
 
 void ControlOptionMenu::_initItems () {

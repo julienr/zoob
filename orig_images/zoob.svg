@@ -2502,15 +2502,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7071068"
-     inkscape:cx="1418.4881"
-     inkscape:cy="-3328.9473"
+     inkscape:cx="3681.0328"
+     inkscape:cy="-1100.5438"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="747"
-     inkscape:window-x="1021"
-     inkscape:window-y="506"
+     inkscape:window-width="1024"
+     inkscape:window-height="1253"
+     inkscape:window-x="-3"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -3743,7 +3743,7 @@
        height="642.05298"
        x="3301.3025"
        y="1707.1429"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3752,7 +3752,7 @@
        x="3684.0264"
        y="1796.2385"
        id="text4157"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -3770,31 +3770,31 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="3681.3264"
-       y="1995.6427"
+       x="3408.3833"
+       y="1989.9858"
        id="text4161"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan4164"
-         x="3681.3264"
-         y="1995.6427"
+         x="3408.3833"
+         y="1989.9858"
          style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"><tspan
    style="fill:#66ff3f;fill-opacity:1"
-   id="tspan4395">double-tap</tspan> to </tspan><tspan
+   id="tspan4395">double-tap/trackball</tspan> to </tspan><tspan
          sodipodi:role="line"
-         x="3681.3264"
-         y="2070.6426"
+         x="3408.3833"
+         y="2064.9856"
          style="font-size:60px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie"
-         id="tspan4172">fire a rocket</tspan></text>
+         id="tspan4172">fire rockets</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        x="3681.6265"
        y="2197.8752"
        id="text4166"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
@@ -3823,9 +3823,9 @@
          id="tspan4182" /></text>
     <path
        style="fill:#a2a2a2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 3655.8075,1848.8094 -22.5152,-18.0286 c 8.3609,-18.6622 3.4746,-41.2949 -13.2309,-54.6715 -19.831,-15.8793 -48.7799,-12.6758 -64.6591,7.1552 -15.8792,19.8309 -12.6758,48.7799 7.1551,64.6591 16.7056,13.3766 39.859,13.1961 56.2418,0.9572 l 22.5152,18.0285 14.4931,-18.0999 z"
+       d="m 3620.4522,1864.3657 -22.5152,-18.0286 c 8.3609,-18.6622 3.4746,-41.2949 -13.2309,-54.6715 -19.831,-15.8793 -48.7799,-12.6758 -64.6591,7.1552 -15.8792,19.8309 -12.6758,48.7799 7.1551,64.6591 16.7056,13.3766 39.859,13.1961 56.2418,0.9572 l 22.5152,18.0285 14.4931,-18.0999 z"
        id="path4503-8"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <text
@@ -3842,14 +3842,14 @@
        style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4.20000000000000018;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter4506)"
        d="m 3509.9824,2303.053 -17.7469,-22.7379 c 12.442,-16.229 12.9107,-39.3783 -0.2569,-56.2492 -15.631,-20.0271 -44.5378,-23.5907 -64.5649,-7.9596 -20.0271,15.631 -23.591,44.5378 -7.9598,64.5649 13.1676,16.8709 35.7377,22.0385 54.5027,13.9106 l 17.7468,22.7379 18.279,-14.2667 z"
        id="path4503-8-5"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <path
        style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 3525.7438,2207.4211 12.9659,5.6089 26.3657,-24.4563 c -2.7988,20.2571 8.2314,40.6151 28.0151,48.777 23.485,9.6888 50.3777,-1.4953 60.0664,-24.9803 9.6888,-23.4849 -1.4951,-50.3777 -24.9801,-60.0665 -19.7837,-8.1618 -41.598,-1.3466 -53.8967,14.9913 0,0 3.7345,-25.5018 -0.7295,-36.5486 l -12.8983,-5.5795 -34.9085,82.254 z"
        id="path4503-3-8"
-       inkscape:export-filename="/home/julien/programs/android-ndk-r3/apps/zoob/orig_images/tutorial.png"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295"
        sodipodi:nodetypes="cccssscccc" />

@@ -19,6 +19,7 @@ class ControlOptionMenu : public Menu {
 
     Sprite inputTouch;
     Sprite inputTrackball;
+    Sprite inputMixed;
     Sprite optionDesc;
 
 };

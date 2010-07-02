@@ -9,8 +9,10 @@
 #undef FORM_CONTROL
 
 enum eInputMode {
+    INPUT_MIXED=0, //touch to move/fire + trackball
     INPUT_TOUCH, //touch to move, double-tap to fire
-    INPUT_TRACKBALL //gamePad to move, trackball to fire
+    INPUT_TRACKBALL, //gamePad to move, trackball to fire
+    NUM_INPUT_METHODS
 };
 
 class AndroidInputManager : public InputManager {
@@ -38,9 +40,12 @@ class AndroidInputManager : public InputManager {
     float getLeftXMargin() {
       switch (inputMode) {
         case INPUT_TOUCH:
+        case INPUT_MIXED:
           return 1.0f;
         case INPUT_TRACKBALL:
           return 3.2f;
+        default:
+          ASSERT(false);
       }
     }
 
