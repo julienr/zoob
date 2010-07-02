@@ -20,6 +20,10 @@ class InputManager {
       return instance;
     }
 
+    //When rendering, the margin to add on the left before rendering the game area
+    //This is most likely usefull if the input manager wants to render controls on the left instead of on the right
+    virtual float getLeftXMargin() { return 1.0f; }
+
   public:
     //This can be used to draw input-method specific stuff on the screen (such as a virtual gamepad)
     virtual void draw () {}

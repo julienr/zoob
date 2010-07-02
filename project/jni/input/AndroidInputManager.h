@@ -8,6 +8,11 @@
 
 #undef FORM_CONTROL
 
+enum eInputMode {
+    INPUT_TOUCH, //touch to move, double-tap to fire
+    INPUT_TRACKBALL //gamePad to move, trackball to fire
+};
+
 class AndroidInputManager : public InputManager {
   public:
     AndroidInputManager ();
@@ -25,10 +30,25 @@ class AndroidInputManager : public InputManager {
     void reset ();
 
     void think (double elapsedS);
+
+    void setInputMode (eInputMode mode);
+
+    eInputMode getInputMode () { return inputMode; }
+
+    float getLeftXMargin() {
+      switch (inputMode) {
+        case INPUT_TOUCH:
+          return 1.0f;
+        case INPUT_TRACKBALL:
+          return 3.2f;
+      }
+    }
+
   protected:
     enum eState {
       STATE_DEFAULT=0,
       MOVING_TANK,
+      MOVING_TANK_PAD,
       FIRING_MODE //pressed on fire button and need to touch somewhere to fire the rocket
     };
 
@@ -46,6 +66,7 @@ class AndroidInputManager : public InputManager {
       pressedItem = item;
     }
 
+    eInputMode inputMode;
     eState state;
 
     Vector2 tankMoveEnd;
@@ -59,6 +80,8 @@ class AndroidInputManager : public InputManager {
 
     Sprite cursor;
     Vector2 cursorPosition;
+
+    Sprite gamePad;
 
     uint64_t lastTouchDownTime;
     Vector2 lastTouchDownLocation;

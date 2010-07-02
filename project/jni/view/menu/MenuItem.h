@@ -13,7 +13,8 @@ class MenuItem {
       normalSprite(tex, groupID),
       hoverSprite(hoverTex, groupID),
       pressed(false),
-      repeatable(repeatable) {}
+      repeatable(repeatable),
+      enabled(true) {}
 
     short getID () const {
       return id;
@@ -34,6 +35,10 @@ class MenuItem {
       this->size = size;
     }
 
+    const Vector2& getSize () {
+      return size;
+    }
+
     //bounding box
     void setBB (const Vector2& pos, const Vector2& size) {
       bbPos = pos;
@@ -41,7 +46,7 @@ class MenuItem {
     }
 
     bool inside (const Vector2& p) const {
-      return Utils::insideC(bbPos, bbSize, p);
+      return enabled && Utils::insideC(bbPos, bbSize, p);
     }
 
     //FIXME: used ONLY by input manager, also use for menus
@@ -56,6 +61,15 @@ class MenuItem {
     bool isRepeatable () const {
       return repeatable;
     }
+
+    //When disabled, inside() will always return false and as a result, the button won't be activeable
+    void setEnabled (bool b) {
+      enabled = b;
+    }
+
+    bool isEnabled () const {
+      return enabled;
+    }
   private:
     short id;
     Vector2 pos;
@@ -67,6 +81,7 @@ class MenuItem {
 
     bool pressed;
     bool repeatable;
+    bool enabled;
 };
 
 #endif /* MENUITEM_H_ */

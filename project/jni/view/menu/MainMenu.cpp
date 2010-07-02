@@ -7,6 +7,7 @@
 #define MENU_ITEM_LVL_PREV 2
 #define MENU_ITEM_DIFF_NEXT 3
 #define MENU_ITEM_DIFF_PREV 4
+#define MENU_ITEM_OPTIONS 5
 
 MainMenu::MainMenu (GameManager* gm)
   : Menu (gm),
@@ -40,6 +41,10 @@ MainMenu::MainMenu (GameManager* gm)
                                "assets/sprites/menuitems/prev_h.png",
                                MENU_ITEM_DIFF_PREV,
                                TEX_GROUP_MENU));
+   addItem(new MenuItem("assets/sprites/menuitems/options.png",
+                                  "assets/sprites/menuitems/options_h.png",
+                                  MENU_ITEM_OPTIONS,
+                                  TEX_GROUP_MENU));
    _initItems();
 }
 
@@ -80,6 +85,7 @@ void MainMenu::actionPerformed (short touchedItem) {
     case MENU_ITEM_LVL_PREV: _actionPrevLvl(); break;
     case MENU_ITEM_DIFF_NEXT: _actionNextDiff(); break;
     case MENU_ITEM_DIFF_PREV: _actionPrevDiff(); break;
+    case MENU_ITEM_OPTIONS: _actionOptions(); break;
     default:
       LOGE("unhandled menu id : %i", touchedItem);
       ASSERT(false);
@@ -97,6 +103,10 @@ void MainMenu::_actionNextLvl () {
 
 void MainMenu::_actionPrevLvl () {
   gameManager->prevLevel();
+}
+
+void MainMenu::_actionOptions () {
+  gameManager->setState(STATE_CONTROL_OPTIONS);
 }
 
 void MainMenu::_actionNextDiff () {
@@ -120,36 +130,41 @@ void MainMenu::_initItems () {
   numberPos = Vector2(9, 2);
   numberSize = Vector2(3,3);
 
-  diffPos = Vector2(9.5, 7.2f);
+  diffPos = Vector2(9.5, 6.3f);
   diffSize = Vector2(8, 4);
 
   for (size_t i=0; i<numItems(); i++) {
     MenuItem* mi = getItem(i);
     switch (mi->getID()) {
       case MENU_ITEM_START:
-        mi->setPosition(Vector2(11, 4.5f));
+        mi->setPosition(Vector2(11, 4));
         mi->setSize(Vector2(8, 4));
         mi->setBB(mi->getPosition(), Vector2(8,2));
         break;
       case MENU_ITEM_LVL_NEXT:
         mi->setPosition(Vector2(11,2));
         mi->setSize(Vector2(2,2));
-        mi->setBB(mi->getPosition(), Vector2(2.5,2.5));
+        mi->setBB(mi->getPosition(), Vector2(2.5,2));
         break;
       case MENU_ITEM_LVL_PREV:
         mi->setPosition(Vector2(7, 2));
         mi->setSize(Vector2(2,2));
-        mi->setBB(mi->getPosition(), Vector2(2.5,2.5));
+        mi->setBB(mi->getPosition(), Vector2(2.5,2));
         break;
       case MENU_ITEM_DIFF_PREV:
-        mi->setPosition(Vector2(5.5, 7.2f));
+        mi->setPosition(Vector2(5.5, diffPos.y));
         mi->setSize(Vector2(2,2));
         mi->setBB(mi->getPosition(), Vector2(2.5,2.5));
         break;
       case MENU_ITEM_DIFF_NEXT:
-        mi->setPosition(Vector2(14, 7.2f));
+        mi->setPosition(Vector2(14, diffPos.y));
         mi->setSize(Vector2(2,2));
         mi->setBB(mi->getPosition(), Vector2(2.5,2.5));
+        break;
+      case MENU_ITEM_OPTIONS:
+        mi->setPosition(Vector2(11, 8.6f));
+        mi->setSize(Vector2(8, 4));
+        mi->setBB(mi->getPosition(), Vector2(8, 2));
         break;
       default:
         LOGE("unhandled menu id : %i", mi->getID());

@@ -209,7 +209,7 @@ float transY = 0;
 
 /**
  * The screen is divided as follow :
- * - the biggest are is the window
+ * - the biggest area is the window
  * - then comes the viewport that contains EVERYTHING that we ever render. it is
  *   COMPLETELY FORBIDDEN to render outside the viewport since it won't be visible on some devices
  *   depending on the screen ratio
@@ -262,15 +262,9 @@ void centerGameInViewport () {
   const int levelH = Game::getInstance()->getLevel()->getHeight();
   //const int levelW = game->getLevel()->getWidth();
 
-  //FIXME
-  //if (showGamePad) {
-    transX = 1.0f;
-    transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-  /*  game->setGamePadPos(gamePadPos - Vector2(transX, transY));
-  } else {
-    transX = 0.5f + (VIEWPORT_WIDTH-levelW)/2.0f;
-    transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
-  }*/
+  //transX = 1.0f;
+  transX = InputManager::getInstance()->getLeftXMargin();
+  transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
 }
 
 void forceRatio (float sW, float sH) {
@@ -278,9 +272,9 @@ void forceRatio (float sW, float sH) {
   * We base all our calculations on a 480/320 = 1.5 aspect ratio (that's the most
   * common resolution for android and iphone)
   * If we have a screen that doesn't have this aspect ratio, we use the biggest square
-  * that has this aspect ratio that we can display in this screen and we display the menu
+  * that has this aspect ratio that we can display in this screen and we display
   * in this square.
-  * This will of course waste some screen space, but at least the menu will look good
+  * This will of course waste some screen space, but at least the display will look good
   */
   const float targetRatio = 1.5f;
   float ratio = sW/sH;

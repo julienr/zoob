@@ -17,6 +17,7 @@ class MainMenu : public Menu {
     void _actionPrevLvl ();
     void _actionNextDiff ();
     void _actionPrevDiff ();
+    void _actionOptions ();
 
     Sprite logo;
 #if !FULL_VERSION

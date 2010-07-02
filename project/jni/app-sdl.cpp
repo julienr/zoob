@@ -49,17 +49,11 @@ int cursorW, cursorH;
 
 int main (int argc, char** argv) {
   if (argc < 2) {
-    LOGE("Usage : <apk path> [-android]");
+    LOGE("Usage : <apk path>");
     return -1;
   }
-  if (argc >= 3) {
-    for (int i=2; i<argc; i++) {
-      if (strcmp(argv[i], "-android") == 0) {
-        inputType = INPUT_ANDROID;
-        LOGE("android input emulation");
-      }
-    }
-  }
+
+  inputType = INPUT_ANDROID;
 
   int level = 0;
   if (argc >= 3)
