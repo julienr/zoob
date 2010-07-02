@@ -130,7 +130,7 @@ void MainMenu::_initItems () {
   numberPos = Vector2(9, 2);
   numberSize = Vector2(3,3);
 
-  diffPos = Vector2(9.5, 6.3f);
+  diffPos = Vector2(9.5, 6.15f);
   diffSize = Vector2(8, 4);
 
   for (size_t i=0; i<numItems(); i++) {

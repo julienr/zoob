@@ -17,7 +17,7 @@ enum eInputMode {
 
 class AndroidInputManager : public InputManager {
   public:
-    AndroidInputManager ();
+    AndroidInputManager (eInputMode mode);
     void draw ();
 
     void touchEventDown (float x, float y);
@@ -46,6 +46,7 @@ class AndroidInputManager : public InputManager {
           return 3.2f;
         default:
           ASSERT(false);
+          return 1.0f;
       }
     }
 

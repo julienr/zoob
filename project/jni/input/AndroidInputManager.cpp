@@ -24,9 +24,9 @@ Vector2 gamePadPos(buttonsLeftX, 5.0f);
 Vector2 gamePadSize(2.5f,2.5f);
 Vector2 gamePadBBSize (3,3);
 
-AndroidInputManager::AndroidInputManager ()
+AndroidInputManager::AndroidInputManager (eInputMode mode)
   : InputManager(),
-    inputMode(INPUT_TOUCH),
+    inputMode(mode),
     state(STATE_DEFAULT),
     rocketButton("assets/sprites/fire_rocket.png",
                  "assets/sprites/fire_rocket_clicked.png",
@@ -49,7 +49,7 @@ AndroidInputManager::AndroidInputManager ()
     shieldButtonTimer(SHIELD_BUTTON_COOLDOWN),
     bombButtonTimer(MINE_BUTTON_COOLDOWN),
     pressedItem(-1) {
-  setInputMode(INPUT_MIXED);
+  setInputMode(mode);
 }
 
 void AndroidInputManager::reset () {
@@ -210,7 +210,7 @@ void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pN
     startMoving(MOVING_TANK_PAD, p);
   } else {
     _setPressedItem(-1);
-    if (inputMode == INPUT_TOUCH)
+    if (inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED)
       startMoving(MOVING_TANK, p);
   }
 }

@@ -54,8 +54,8 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
 
 /** Input Manager **/
 static AndroidInputManager* inputManager = NULL;
-InputManager* createInputManager () {
-  inputManager = new AndroidInputManager;
+InputManager* createInputManager (int inputMethod) {
+  inputManager = new AndroidInputManager((eInputType)inputMethod);
   return inputManager;
 }
 
@@ -74,8 +74,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL
-  (JNIEnv *, jclass, int level, int difficulty) {
-  nativeInitGL(level, difficulty);
+  (JNIEnv *, jclass, int level, int difficulty, int method) {
+  nativeInitGL(level, difficulty, method);
 }
 
 

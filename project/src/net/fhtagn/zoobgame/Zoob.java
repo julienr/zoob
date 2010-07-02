@@ -218,7 +218,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 			nativeInit(apkFilePath, this);
 			initialized = true;
 		}
-    nativeInitGL(app.getLevel(), app.getDifficulty());
+    nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod());
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -232,7 +232,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 
 	public void onDrawFrame(GL10 gl) {
 		if (restoreGL) {
-			nativeInitGL(app.getLevel(), app.getDifficulty());
+			nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod());
 			restoreGL = false;
 		}
 		
@@ -278,7 +278,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		}
 	}
 
-  private static native void nativeInitGL(int level, int difficulty);
+  private static native void nativeInitGL(int level, int difficulty, int inputMethod);
 	private static native void nativeInit(String apkPath, ZoobRenderer app);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
@@ -301,6 +301,10 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		
 	public void saveDifficulty (int level) {
 		app.saveDifficulty(level);
+	}
+	
+	public void saveInputMethod (int method) {
+		app.saveInputMethod(method);
 	}
 	
 	public void buyFullVersion () {

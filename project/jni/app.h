@@ -5,7 +5,7 @@
 //performs all non-gl initialisation
 void nativeInit (const char* apkPath);
 
-void nativeInitGL (int level, int difficulty);
+void nativeInitGL (int level, int difficulty, int inputMethod);
 void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
@@ -43,5 +43,5 @@ extern float transY;
 //very beginning of the app livecycle. Called just after openGL initialisation
 //so the input manager can allocate openGL resources
 class InputManager;
-extern InputManager* createInputManager ();
+extern InputManager* createInputManager (int inputMethod);
 #endif
