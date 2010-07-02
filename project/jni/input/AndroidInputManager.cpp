@@ -67,6 +67,7 @@ void AndroidInputManager::reset () {
 
 void AndroidInputManager::setInputMode (eInputMode mode) {
   inputMode = mode;
+  saveInputMethod(inputMode);
 
   if (inputMode == INPUT_TOUCH)
     rocketButton.setEnabled(true);

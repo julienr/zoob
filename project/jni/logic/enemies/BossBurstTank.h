@@ -20,7 +20,7 @@ class BossBurstTank : public EnemyTank {
     }
 
     Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
-      return new Rocket(owner, pos, dir, BOUNCE, BURST_ROCKET_SPEED);
+      return new Rocket(owner, pos, dir, Difficulty::getInstance()->getEnemiesBurstRocketSpeed(), BOUNCE);
     }
 };
 

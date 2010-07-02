@@ -42,9 +42,9 @@ uint64_t ProgressionManager::getPlayerFireInterval () const {
 
 float ProgressionManager::getPlayerRocketsSpeed () const {
   if (_level() <= FIRING_LVL)
-    return ROCKET_DEFAULT_SPEED;
+    return 2.0f;
   else
-    return ROCKET_DEFAULT_SPEED*1.5f;
+    return 3.0f;
 }
 
 eReward ProgressionManager::getLastReward () const {

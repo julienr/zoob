@@ -10,6 +10,7 @@ static jclass zoobRendererClass;
 static jobject zoobRenderer;
 static jmethodID java_saveProgress;
 static jmethodID java_saveDifficulty;
+static jmethodID java_saveInputMethod;
 static jmethodID java_buyFull;
 
 void saveProgress (int level) {
@@ -20,6 +21,11 @@ void saveProgress (int level) {
 void saveDifficulty (int diff) {
   LOGE("saveDifficulty : %i", diff);
   jniEnv->CallVoidMethod(zoobRenderer, java_saveDifficulty, diff);
+}
+
+void saveInputMethod (int inputMethod) {
+  LOGE("saveInputMethod : %i", inputMethod);
+  jniEnv->CallVoidMethod(zoobRenderer, java_saveInputMethod, inputMethod);
 }
 
 void buyFull () {
@@ -48,6 +54,7 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
 
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
+  JNI_GET_METHOD(java_saveInputMethod, "saveInputMethod", "(I)V");
   JNI_GET_METHOD(java_buyFull, "buyFullVersion", "()V");
 }
 
@@ -55,7 +62,7 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
 /** Input Manager **/
 static AndroidInputManager* inputManager = NULL;
 InputManager* createInputManager (int inputMethod) {
-  inputManager = new AndroidInputManager((eInputType)inputMethod);
+  inputManager = new AndroidInputManager((eInputMode)inputMethod);
   return inputManager;
 }
 

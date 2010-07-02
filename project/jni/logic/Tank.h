@@ -108,7 +108,7 @@ class Tank: public Entity {
     unsigned getMaxLives () const { return maxLives; }
 
   protected:
-    virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir);
+    virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) = 0;
 
     FireRatePolicy* getFireRatePolicy () const { return firePolicy; }
 

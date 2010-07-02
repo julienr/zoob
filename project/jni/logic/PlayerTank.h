@@ -67,7 +67,7 @@ class PlayerTank : public Tank {
     }
 
     Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
-      return new Rocket(owner, pos, dir, BOUNCE, ProgressionManager::getInstance()->getPlayerRocketsSpeed());
+      return new Rocket(owner, pos, dir, ProgressionManager::getInstance()->getPlayerRocketsSpeed(), BOUNCE);
     }
   private:
     ePlayerForm currentForm;

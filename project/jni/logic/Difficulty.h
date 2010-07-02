@@ -36,6 +36,9 @@ class Difficulty {
 
     virtual double getPlayerShieldTime () const = 0;
 
+    virtual float getEnemiesRocketSpeed () const = 0;
+    virtual float getEnemiesBurstRocketSpeed () const = 0;
+
   protected:
     virtual int getID () const = 0;
   private:
@@ -51,6 +54,8 @@ class DifficultyEasy : public Difficulty {
     unsigned getShieldResistance () const { return 1; }
     unsigned getPlayerShieldResistance () const { return 1; }
     double getPlayerShieldTime () const { return 10; }
+    float getEnemiesRocketSpeed () const { return 1.5f; }
+    float getEnemiesBurstRocketSpeed () const { return 3.0f; }
   protected:
     int getID () const { return 0; }
 };
@@ -63,6 +68,8 @@ class DifficultyMedium : public Difficulty {
     unsigned getShieldResistance () const { return 1; }
     unsigned getPlayerShieldResistance () const { return 1; }
     double getPlayerShieldTime () const { return 5; }
+    float getEnemiesRocketSpeed () const { return 2.0f; }
+    float getEnemiesBurstRocketSpeed () const { return 3.0f; }
   protected:
     int getID () const { return 1; }
 };
@@ -75,6 +82,8 @@ class DifficultyHard : public Difficulty {
     unsigned getShieldResistance () const { return 2; }
     unsigned getPlayerShieldResistance () const { return 1; }
     double getPlayerShieldTime () const { return 5; }
+    float getEnemiesRocketSpeed () const { return 2.0f; }
+    float getEnemiesBurstRocketSpeed () const { return 3.0f; }
   protected:
     int getID () const { return 2; }
 };

@@ -72,6 +72,10 @@ class EnemyTank: public Tank {
     //Returns NULL for the player's tank
     TankAI* getAI () { return ai; }
 
+    virtual Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
+      return new Rocket(owner, pos, dir, Difficulty::getInstance()->getEnemiesRocketSpeed(), BOUNCE);
+    }
+
     double getInitialFiringDelay () const { return initialFiringDelay; }
   private:
     TankAI* ai;

@@ -18,6 +18,7 @@ void toggleGodMode ();
 //upcall (C++ to Java) functions
 void saveProgress (int level);
 void saveDifficulty (int diff);
+void saveInputMethod (int inputMethod);
 void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system

@@ -4,8 +4,6 @@
 #include "ExplosiveEntity.h"
 #include "logic/physics/BCircle.h"
 
-#define ROCKET_DEFAULT_SPEED 2.0f
-
 class Game;
 class Tank;
 
@@ -16,7 +14,7 @@ enum BouncePolicy {
 
 class Rocket : public ExplosiveEntity {
   public:
-    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir, BouncePolicy bouncePol=BOUNCE, float speed=ROCKET_DEFAULT_SPEED)
+    Rocket (Tank* owner, const Vector2& pos, const Vector2& dir, float speed, BouncePolicy bouncePol=BOUNCE)
       : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(owner),
         numBounces(0),

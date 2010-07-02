@@ -5,8 +5,8 @@
 
 class GuidedRocket : public Rocket {
   public:
-    GuidedRocket (Tank* owner, const Vector2& pos, const Vector2& dir, Tank* target)
-      : Rocket(owner, pos, dir),
+    GuidedRocket (Tank* owner, const Vector2& pos, const Vector2& dir, float speed, Tank* target)
+      : Rocket(owner, pos, dir, speed),
         target(target) {
     }
 

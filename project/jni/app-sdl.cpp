@@ -15,6 +15,10 @@ void saveDifficulty (int diff) {
   LOGE("SDL saveDifficulty : diff %i", diff);
 }
 
+void saveInputMethod (int inputMethod) {
+  LOGE("SDL saveInputMethod : %i", inputMethod);
+}
+
 void buyFull () {
   LOGE("Buy full");
 }

@@ -7,8 +7,6 @@
 #define IN_BURST_INTERVAL 350
 #define NUM_BURST 3
 
-#define BURST_ROCKET_SPEED 3.0f
-
 class BurstTank : public EnemyTank {
   public:
     BurstTank (float radius=TANK_BCIRCLE_R)
@@ -26,7 +24,7 @@ class BurstTank : public EnemyTank {
     eTankType getTankType () const { return TANK_BURST; }
 
     Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
-      return new Rocket(owner, pos, dir, BOUNCE, BURST_ROCKET_SPEED);
+      return new Rocket(owner, pos, dir, Difficulty::getInstance()->getEnemiesBurstRocketSpeed(), BOUNCE);
     }
 };
 

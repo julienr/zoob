@@ -13,10 +13,6 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   return createRocket(this, getPosition()+trans*1.5, dir);
 }
 
-Rocket* Tank::createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) {
-  return new Rocket(owner, pos, dir);
-}
-
 bool Tank::checkFireDir (const Vector2& dir, const CollisionManager& colManager, CollisionResult* r) {
   const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
   return !colManager.traceCircle(this, getPosition(), trans*1.5, ROCKET_BCIRCLE_R, r, 0);

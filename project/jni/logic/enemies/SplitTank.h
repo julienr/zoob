@@ -19,7 +19,7 @@ class SplitTank: public ShieldTank {
     eTankType getTankType () const { return TANK_SPLIT; }
 
     Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
-      return new Rocket(owner, pos, dir, SPLIT);
+      return new Rocket(owner, pos, dir, Difficulty::getInstance()->getEnemiesRocketSpeed(), SPLIT);
     }
 };
 
