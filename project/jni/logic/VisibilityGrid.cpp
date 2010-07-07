@@ -165,6 +165,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   }
 
   //LOGE("biggest size : %i, center(%f,%f)" , biggestGroup->length(), biggestCenter.x, biggestCenter.y);
+  //Look for closer cell in biggest group
   int minIdx=0;
   float minDist = MOOB_INF;
   for (size_t i=0; i<biggestGroup->length(); i++) {
@@ -174,7 +175,9 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
       minIdx = i;
     }
   }
-  return pathTo(biggestGroup->get(minIdx));
+  Cell* closest = biggestGroup->get(minIdx);
+  delete biggestGroup;
+  return pathTo(closest);
 }
 
 Path* VisibilityGrid::pathToClosest (bool vis) const {
