@@ -8,6 +8,7 @@
 #include "Path.h"
 #include "FireRatePolicy.h"
 #include "logic/physics/CollisionResult.h"
+#include "lib/Timer.h"
 
 class Rocket;
 class Bomb;
@@ -43,7 +44,8 @@ class Tank: public Entity {
         //FIXME: move the whole bomb stuff to PlayerTank
         bombPolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
         path(NULL),
-        numMines(0) {
+        numMines(0),
+        forceDirTimer(0.3){
       ASSERT(pol != NULL);
     }
 
@@ -104,6 +106,12 @@ class Tank: public Entity {
       numMines--;
     }
 
+    void setRotationFromDir (const Vector2& dir) {
+      if (forceDirTimer.isActive())
+        return;
+      Entity::setRotationFromDir(dir);
+    }
+
     unsigned getLivesLeft () const { return numLives; }
     unsigned getMaxLives () const { return maxLives; }
 
@@ -139,6 +147,10 @@ class Tank: public Entity {
     Path* path;
     
     int numMines;
+
+    //This is a timer just used to force the direction in which the tank is viewing after it has fired (to have a visual feedback
+    //of the direction in which the tank just fired)
+    Timer forceDirTimer;
 };
 
 #endif /* TANK_H_ */

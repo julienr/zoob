@@ -9,6 +9,7 @@ Rocket* Tank::fireRocket (Vector2 dir) {
   //Have to spawn the rocket just outside of our bounding box
   const Vector2 trans = dir*ROCKET_BCIRCLE_R + dir*tankRadius;
   setRotationFromDir(dir);
+  forceDirTimer.start();
   firePolicy->fire();
   return createRocket(this, getPosition()+trans*1.5, dir);
 }

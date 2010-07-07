@@ -32,6 +32,10 @@ class ProgressionManager {
         instance = new ProgressionManager();
       return instance;
     }
+
+    static void destroy () {
+      delete instance;
+    }
   private:
     ProgressionManager ();
     static ProgressionManager* instance;

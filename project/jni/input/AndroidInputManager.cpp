@@ -48,7 +48,8 @@ AndroidInputManager::AndroidInputManager (eInputMode mode)
     lastTouchDownTime(0),
     shieldButtonTimer(SHIELD_BUTTON_COOLDOWN),
     bombButtonTimer(MINE_BUTTON_COOLDOWN),
-    pressedItem(-1) {
+    pressedItem(-1),
+    lastButtonPressTime(0) {
   setInputMode(mode);
 }
 
@@ -243,28 +244,6 @@ void AndroidInputManager::touchEventDown (float x, float y) {
     updatePressedItem(p, pNoTrans);
   }
 
-  //LOGE("time between taps : %li, dist between tap : %f", (long)(now-lastTouchDownTime), tapDist);
-  /*if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
-    rocketButton.setPressed(true);
-  } else if (bombButton.inside(pNoTrans)) {
-    if (!bombButtonTimer.isActive() && _progMan()->hasBombs())
-      bombButton.setPressed(true);
-  }
-#ifdef FORM_CONTROL
-  else if (formControl.inside(pNoTrans)) {
-    if (_progMan()->hasForms())
-      formControl.handleTouchDown(pNoTrans);
-  }
-#endif
-  else if (shieldButton.inside(pNoTrans)) {
-    if (!shieldButtonTimer.isActive() && _progMan()->hasShield())
-      shieldButton.setPressed(true);
-  } else if (tapDist < 5 && elapsed <= 600) {
-    getGame()->playerFire(p);
-    startMoving(MOVING_TANK, p);
-  } else {
-    startMoving(MOVING_TANK, p);
-  }*/
   lastTouchDownTime = now;
   lastTouchDownLocation = p;
   return;
@@ -282,6 +261,27 @@ void AndroidInputManager::touchEventMove (float x, float y) {
   //updatePressedItem(p, pNoTrans);
 
   setMoveTouchPoint(p);
+}
+
+void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
+  const Vector2 p(XSG(x), YSG(y));
+  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+
+  if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
+    _setPressedItem(BOMB_BUTTON_ID);
+  } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
+    _setPressedItem(SHIELD_BUTTON_ID);
+  } else if (inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED){
+    Game::getInstance()->playerFire(p);
+  }
+}
+
+void AndroidInputManager::touchEventSecondaryUp (float x, float y) {
+
+}
+
+void AndroidInputManager::touchEventSecondaryMove (float x, float y) {
+
 }
 
 void AndroidInputManager::touchEventUp (float x, float y) {

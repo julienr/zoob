@@ -1,7 +1,7 @@
 {
   opengl addr4 (1)
   Memcheck:Addr4
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl param (2)
@@ -9,47 +9,88 @@
   ioctl(generic)
   fun:ioctl
   fun:_nv*gl
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl cond (3)
   Memcheck:Cond
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl param (4)
   Memcheck:Param
   ioctl(generic)
   fun:ioctl
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl cond (5)
   Memcheck:Cond
   fun:_nv*gl
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl cond (6)
   Memcheck:Cond
   fun:strcat
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl value4 (7)
   Memcheck:Value4
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl memleak (8)
   Memcheck:Leak
   fun:calloc
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
 {
   opengl memleak (9)
   Memcheck:Leak
   fun:malloc
-  obj:/usr/lib/libGL*
+  obj:/usr/lib/mesa/libGL*
 }
+
+{
+  sdl memleak (1)
+  Memcheck:Leak
+  fun:calloc
+  obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+  X11 memleak (1)
+  Memcheck:Leak
+  fun:realloc
+  obj:/usr/lib/libX11*
+}
+
+{
+  X11 memleak (2)
+  Memcheck:Leak
+  fun:malloc
+  obj:/usr/lib/libX11*
+}
+
+{
+   sdl 1 
+   Memcheck:Cond
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_PumpEvents
+   fun:SDL_PollEvent
+   fun:_ZL24handleAndroidInputEventsv
+   fun:main
+}
+
+{
+   libgl
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/mesa/libGL.so.1.2
+}
+
 

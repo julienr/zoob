@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: add popup to tell player to have a look in the options
+desc: ""
+type: :feature
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-07-06 17:36:55.289250 Z
+references: []
+
+id: 6ea526e0f52bf1201e36846bec1fab0138e43068
+log_events: 
+- - 2010-07-06 17:36:56.285679 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

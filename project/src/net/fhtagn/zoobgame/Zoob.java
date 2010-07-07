@@ -1,5 +1,6 @@
 package net.fhtagn.zoobgame;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,8 @@ public class Zoob extends Activity {
 class Command {
 	public enum Type {
 		EVENT_DOWN, EVENT_MOVE, EVENT_UP, EVENT_OTHER,
-		EVENT_PAUSE, EVENT_MENU, EVENT_TRACKBALL, EVENT_TRACKBALL_CLICK
+		EVENT_PAUSE, EVENT_MENU, EVENT_TRACKBALL, EVENT_TRACKBALL_CLICK,
+		EVENT_SECONDARY_DOWN, EVENT_SECONDARY_MOVE, EVENT_SECONDARY_UP
 	}
 	
 	public final float x;
@@ -110,14 +112,122 @@ class Command {
 	}
 }
 
+interface MotionEventHandler {
+	public Command processEvent (MotionEvent e);
+}
+
+class SingleTouchMotionHandler implements MotionEventHandler {
+	public Command processEvent (MotionEvent e) {
+		Command c = null;
+		final float x = e.getX();
+		final float y = e.getY();
+		switch (e.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				c = new Command(Command.Type.EVENT_DOWN, x, y);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				c = new Command(Command.Type.EVENT_MOVE, x, y);
+				break;
+			case MotionEvent.ACTION_UP:
+				c = new Command(Command.Type.EVENT_UP, x, y);
+				break;
+			default:
+				c = new Command(Command.Type.EVENT_OTHER, x, y);
+				break;
+		}
+		return null;
+	}
+}
+
+class MultiTouchMotionHandler implements MotionEventHandler {
+	private static final String TAG = "SingleTouchEventProcessor";
+	private static final int INVALID_POINTER_ID = -1;
+	
+	//We support at most 2 active pointers. The first one is always the one controlling the movements
+	private int [] activePointersID = {INVALID_POINTER_ID, INVALID_POINTER_ID};
+	
+	private static int getActionIndex (MotionEvent e) {
+		final int action = e.getAction();
+		return (action & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+	}
+	
+	public Command processEvent (MotionEvent e) {
+		final int action = e.getAction();
+		switch (action & MotionEvent.ACTION_MASK) {
+			case MotionEvent.ACTION_DOWN:
+				activePointersID[0] = e.getPointerId(0);
+				//Log.v(TAG, "Primary pointer down, id : " + activePointersID[0]);
+				return new Command(Command.Type.EVENT_DOWN, e.getX(0), e.getY(0));
+			case MotionEvent.ACTION_POINTER_DOWN: {
+				final int pointerIndex = getActionIndex(e);
+				final int pointerID = e.getPointerId(pointerIndex);
+				if (activePointersID[1] == INVALID_POINTER_ID) {
+					activePointersID[1] = pointerID;
+					//Log.v(TAG, "Secondary pointer down, id : " + pointerID);
+					return new Command(Command.Type.EVENT_SECONDARY_DOWN, e.getX(pointerIndex), e.getY(pointerIndex));
+				}
+				break;
+			}
+			case MotionEvent.ACTION_MOVE:
+				if (activePointersID[0] != INVALID_POINTER_ID) {
+					final int primaryIndex = e.findPointerIndex(activePointersID[0]);
+					//Log.v(TAG, "Move ("+activePointersID[0]+") ("+e.getX(primaryIndex) + ","+e.getY(primaryIndex)+")");
+					return new Command(Command.Type.EVENT_MOVE, e.getX(0), e.getY(0));
+				} 
+				if (activePointersID[1] != INVALID_POINTER_ID) {
+					final int secondaryIndex = e.findPointerIndex(activePointersID[1]);
+					//Log.v(TAG, "Move ("+activePointersID[1]+") ("+e.getX(secondaryIndex) + ","+e.getY(secondaryIndex)+")");
+					return new Command(Command.Type.EVENT_SECONDARY_MOVE, e.getX(secondaryIndex), e.getY(secondaryIndex));
+				}
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+			case MotionEvent.ACTION_POINTER_UP: {
+				final int pointerIndex = getActionIndex(e);
+				final int pointerID = e.getPointerId(pointerIndex);
+				if (activePointersID[0] == pointerID) {
+					//Log.v(TAG, "Primary pointer up, id : " + activePointersID[0]);
+					activePointersID[0] = INVALID_POINTER_ID;
+					return new Command(Command.Type.EVENT_UP, e.getX(0), e.getY(0));
+				}
+				if (activePointersID[1] == pointerID) {
+					//Log.v(TAG, "Secondary pointer up, id : " + e.getPointerId(pointerIndex));
+					activePointersID[1] = INVALID_POINTER_ID;
+					return new Command(Command.Type.EVENT_SECONDARY_UP, e.getX(pointerIndex), e.getY(pointerIndex));
+				}
+				break;
+			}
+		}
+		return null;
+	}
+}
+
+
 class ZoobGLSurface extends GLSurfaceView {
 	ZoobRenderer mRenderer;
+	private static final String TAG = "ZoobGLSurface";
+	private static MotionEventHandler motionHandler = null;
+	
+	static {
+		initialize();
+	}
+	
+	public static void initialize () {
+		try {
+	    Method findPointerIndexMethod = MotionEvent.class.getMethod("findPointerIndex", new Class[] {int.class});
+	    motionHandler = new MultiTouchMotionHandler();
+	    Log.i(TAG, "multitouch");
+    } catch (NoSuchMethodException e) {
+	    motionHandler = new SingleTouchMotionHandler();
+	    Log.i(TAG, "no multitouch");
+    }
+	}
+	
 	/**
 	 * These native methods MUST NOT CALL OPENGL. OpenGL/mRenderer is run in a separate
 	 * thread and calling opengl from these native methods will result in errors
 	 * like "call to OpenGL ES API with no current context" 
 	 */
-
 	
 	public ZoobGLSurface(Context context, ZoobApplication app) {
 		super(context);
@@ -144,25 +254,10 @@ class ZoobGLSurface extends GLSurfaceView {
 		final float x = event.getX();
 		final float y = event.getY();
 		
-		//FIXME: use event.getSize() to calculate event center ?
+		Command c = motionHandler.processEvent(event);
+		if (c != null)
+			mRenderer.addCommand(c);
 
-		Command c = null;
-		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				c = new Command(Command.Type.EVENT_DOWN, x, y);
-				break;
-			case MotionEvent.ACTION_MOVE:
-				c = new Command(Command.Type.EVENT_MOVE, x, y);
-				break;
-			case MotionEvent.ACTION_UP:
-				c = new Command(Command.Type.EVENT_UP, x, y);
-				break;
-			default:
-				c = new Command(Command.Type.EVENT_OTHER, x, y);
-				break;
-		}
-		assert(c != null);
-		mRenderer.addCommand(c);
 		//This is an advice from "Writing real time games for android" Google I/O presentation
 		//This avoid event flood when the screen is touched
 		try {
@@ -252,6 +347,15 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 					case EVENT_OTHER:
 						touchEventOther(c.x, c.y);
 						break;
+					case EVENT_SECONDARY_DOWN:
+						touchEventSecondaryDown(c.x, c.y);
+						break;
+					case EVENT_SECONDARY_MOVE:
+						touchEventSecondaryMove(c.x, c.y);
+						break;
+					case EVENT_SECONDARY_UP:
+						touchEventSecondaryUp(c.x, c.y);
+						break;
 					case EVENT_PAUSE:
 						nativePause();
 						break;
@@ -283,12 +387,17 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 	
-	private static native void touchEventDown (float x, float y);
-	private static native void touchEventMove (float x, float y);
-	private static native void touchEventUp (float x, float y);
-	private static native void touchEventOther (float x, float y);
+	public static native void touchEventDown (float x, float y);
+	public static native void touchEventMove (float x, float y);
+	public static native void touchEventUp (float x, float y);
+	public static native void touchEventOther (float x, float y);
 	private static native void trackballMove (float rx, float ry);
 	private static native void trackballClick (float rx, float ry);
+	
+	//multitouch
+	public static native void touchEventSecondaryDown (float x, float y);
+	public static native void touchEventSecondaryUp (float x, float y);
+	public static native void touchEventSecondaryMove (float x, float y);
 	
 	private static native void nativePause();
 	private static native void nativeMenu();

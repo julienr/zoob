@@ -20,6 +20,12 @@ class AndroidInputManager : public InputManager {
     AndroidInputManager (eInputMode mode);
     void draw ();
 
+    //Multitouch, callback for secondary pointer
+    void touchEventSecondaryDown (float x, float y);
+    void touchEventSecondaryUp (float x, float y);
+    void touchEventSecondaryMove (float x, float y);
+
+
     void touchEventDown (float x, float y);
     void touchEventMove (float x, float y);
     void touchEventUp (float x, float y);

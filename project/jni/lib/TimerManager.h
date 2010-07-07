@@ -18,6 +18,10 @@ class TimerManager {
       return instance;
     }
 
+    static void destroy () {
+      delete instance;
+    }
+
   /** Instance method */
   public:
     void registerTimer (Timer* t) {

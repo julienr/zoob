@@ -40,7 +40,7 @@
 <listOptionValue builtIn="false" value="/usr/local/include"/>
 </option>
 <option id="org.eclipse.cdt.build.core.settings.holder.incpaths.2064429796" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-<listOptionValue builtIn="false" value="/home/julien/programs/android-ndk-r3/build/platforms/android-4/arch-arm/usr/include"/>
+  <listOptionValue builtIn="false" value="/home/julien/programs/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include"/>
 </option>
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1706811331" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>

@@ -140,3 +140,18 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballClick
   (JNIEnv *, jclass, jfloat rx, jfloat ry) {
   inputManager->trackballClick(rx, ry);
 }
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryDown
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  inputManager->touchEventSecondaryDown(x, y);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryUp
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  inputManager->touchEventSecondaryUp(x, y);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryMove
+  (JNIEnv *, jclass, jfloat x, jfloat y) {
+  inputManager->touchEventSecondaryMove(x, y);
+}

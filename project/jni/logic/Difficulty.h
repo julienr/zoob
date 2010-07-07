@@ -18,6 +18,10 @@ class Difficulty {
       return difficulty;
     }
 
+    static void destroy () {
+      delete difficulty;
+    }
+
     int currentDifficulty () const { return difficulty->getID(); }
   /** Difficulty settings **/
     //Enemy tanks will observe this delay between the moment they decide to fire and the moment the

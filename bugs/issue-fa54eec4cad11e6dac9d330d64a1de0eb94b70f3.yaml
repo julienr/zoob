@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: use whole screen instead of fixed aspect ratio
+desc: ""
+type: :feature
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-07-02 21:26:31.506554 Z
+references: []
+
+id: fa54eec4cad11e6dac9d330d64a1de0eb94b70f3
+log_events: 
+- - 2010-07-02 21:26:32.158473 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

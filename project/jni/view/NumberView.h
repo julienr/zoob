@@ -5,7 +5,7 @@
 
 class NumberView {
   public:
-    static void free () {
+    static void destroy () {
       delete instance;
     }
 

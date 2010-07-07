@@ -36,7 +36,6 @@ LOCAL_SRC_FILES := \
     view/Explosion.cpp \
     view/GameManager.cpp \
     view/NumberView.cpp \
-    view/menu/Font.cpp \
     view/menu/MenuItem.cpp \
     view/menu/Menu.cpp \
     view/menu/MainMenu.cpp \
@@ -65,8 +64,8 @@ LOCAL_SRC_FILES := \
     input/PlayerFormControl.cpp \
     input/InputManager.cpp
 
-LIBPNG_PATH := /home/julien/programs/android-ndk-r3/out/apps/libpng/armeabi/
-LIBZIP_PATH := /home/julien/programs/android-ndk-r3/out/apps/libzip/armeabi
+LIBPNG_PATH := /home/julien/android/libpng/bin/ndk/local/armeabi/
+LIBZIP_PATH := /home/julien/android/libzip/bin/ndk/local/armeabi/
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip
 
 #To generate a map file in case of segfault

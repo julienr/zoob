@@ -66,6 +66,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat, jfloat);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventMove
   (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventDown
+  (JNIEnv *, jclass, jfloat, jfloat);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventUp
   (JNIEnv *, jclass, jfloat, jfloat);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
@@ -73,6 +75,14 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventOther
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballMove
   (JNIEnv *, jclass, jfloat, jfloat);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_trackballClick
+  (JNIEnv *, jclass, jfloat, jfloat);
+
+//Multitouch
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryDown
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryUp
+  (JNIEnv *, jclass, jfloat, jfloat);
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventSecondaryMove
   (JNIEnv *, jclass, jfloat, jfloat);
 
 #ifdef __cplusplus

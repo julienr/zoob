@@ -184,6 +184,11 @@ void nativeQuit () {
   TextureManager::destroy();
   delete lvl;
   Game::destroy();
+  GameManager::destroy();
+  Difficulty::destroy();
+  TimerManager::destroy();
+  NumberView::destroy();
+  ProgressionManager::destroy();
   delete gameView;
 }
 
@@ -334,8 +339,13 @@ void nativePause () {
   }
 }
 
+//FIXME: Only for malinfo, remove
+#include <malloc.h>
+
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
+
+  static uint64_t lastMallocReport = Utils::getCurrentTimeMillis();
 
   GameManager::getInstance()->applyTransition();
   glClear(GL_COLOR_BUFFER_BIT);
@@ -354,6 +364,14 @@ void nativeRender () {
   if (Math::epsilonEq(elapsedS, 0))
     return;
   lastTime = now;
+
+  //BEGIN malloc debug
+  if ((now - lastMallocReport) > 1000) {
+    struct mallinfo info = mallinfo();
+    LOGE("mallinfo : total (%i kb), used (%i kb), freed (%i kb)", info.arena/1024, info.uordblks/1024, info.fordblks/1024);
+    lastMallocReport = now;
+  }
+  //END malloc debug
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
