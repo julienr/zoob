@@ -366,11 +366,11 @@ void nativeRender () {
   lastTime = now;
 
   //BEGIN malloc debug
-  if ((now - lastMallocReport) > 1000) {
+  /*if ((now - lastMallocReport) > 1000) {
     struct mallinfo info = mallinfo();
     LOGE("mallinfo : total (%i kb), used (%i kb), freed (%i kb)", info.arena/1024, info.uordblks/1024, info.fordblks/1024);
     lastMallocReport = now;
-  }
+  }*/
   //END malloc debug
 
   //END time management

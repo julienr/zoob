@@ -163,7 +163,7 @@ class MultiTouchMotionHandler implements MotionEventHandler {
 				final int pointerID = e.getPointerId(pointerIndex);
 				if (activePointersID[1] == INVALID_POINTER_ID) {
 					activePointersID[1] = pointerID;
-					//Log.v(TAG, "Secondary pointer down, id : " + pointerID);
+					Log.v(TAG, "Secondary pointer down, id : " + pointerID + "("+e.getX(pointerIndex) + ","+e.getY(pointerIndex) +")");
 					return new Command(Command.Type.EVENT_SECONDARY_DOWN, e.getX(pointerIndex), e.getY(pointerIndex));
 				}
 				break;

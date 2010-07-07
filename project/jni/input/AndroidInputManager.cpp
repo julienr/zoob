@@ -207,9 +207,13 @@ void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pN
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
     //LOGE("shield");
-  } else if (inputMode == INPUT_TRACKBALL && inGamePad(pNoTrans)) {
-    _setPressedItem(-1);
-    startMoving(MOVING_TANK_PAD, p);
+  } else if (inputMode == INPUT_TRACKBALL) {
+    if (inGamePad(pNoTrans)) {
+      _setPressedItem(-1);
+      startMoving(MOVING_TANK_PAD, p);
+    } else {
+      Game::getInstance()->playerFire(p);
+    }
   } else {
     _setPressedItem(-1);
     if (inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED)
@@ -271,7 +275,10 @@ void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
     _setPressedItem(BOMB_BUTTON_ID);
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
-  } else if (inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED){
+  } else if ((inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED)) {
+    Game::getInstance()->playerFire(p);
+  } else if (inputMode == INPUT_TRACKBALL && !inGamePad(pNoTrans)) {
+    //FIXME: looks like this isn't always working...
     Game::getInstance()->playerFire(p);
   }
 }
