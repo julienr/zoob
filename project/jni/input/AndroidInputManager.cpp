@@ -278,7 +278,6 @@ void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
   } else if ((inputMode == INPUT_TOUCH || inputMode == INPUT_MIXED)) {
     Game::getInstance()->playerFire(p);
   } else if (inputMode == INPUT_TRACKBALL && !inGamePad(pNoTrans)) {
-    //FIXME: looks like this isn't always working...
     Game::getInstance()->playerFire(p);
   }
 }

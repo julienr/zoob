@@ -135,7 +135,7 @@ class SingleTouchMotionHandler implements MotionEventHandler {
 				c = new Command(Command.Type.EVENT_OTHER, x, y);
 				break;
 		}
-		return null;
+		return c;
 	}
 }
 
@@ -163,7 +163,7 @@ class MultiTouchMotionHandler implements MotionEventHandler {
 				final int pointerID = e.getPointerId(pointerIndex);
 				if (activePointersID[1] == INVALID_POINTER_ID) {
 					activePointersID[1] = pointerID;
-					Log.v(TAG, "Secondary pointer down, id : " + pointerID + "("+e.getX(pointerIndex) + ","+e.getY(pointerIndex) +")");
+					//Log.v(TAG, "Secondary pointer down, id : " + pointerID + "("+e.getX(pointerIndex) + ","+e.getY(pointerIndex) +")");
 					return new Command(Command.Type.EVENT_SECONDARY_DOWN, e.getX(pointerIndex), e.getY(pointerIndex));
 				}
 				break;

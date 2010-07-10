@@ -345,7 +345,7 @@ void nativePause () {
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
 
-  static uint64_t lastMallocReport = Utils::getCurrentTimeMillis();
+  /*static uint64_t lastMallocReport = Utils::getCurrentTimeMillis();*/
 
   GameManager::getInstance()->applyTransition();
   glClear(GL_COLOR_BUFFER_BIT);

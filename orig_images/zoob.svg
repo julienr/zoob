@@ -2501,16 +2501,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="3681.0328"
-     inkscape:cy="-1100.5438"
+     inkscape:zoom="1"
+     inkscape:cx="1230.3269"
+     inkscape:cy="-3335.9739"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1024"
-     inkscape:window-height="1253"
+     inkscape:window-width="1280"
+     inkscape:window-height="748"
      inkscape:window-x="-3"
-     inkscape:window-y="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -2522,7 +2522,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -5252,43 +5252,24 @@
        height="642.05298"
        x="1040.8611"
        y="4145.2471" />
-    <path
-       sodipodi:type="arc"
-       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path3654"
-       sodipodi:cx="1330.0679"
-       sodipodi:cy="4341.1157"
-       sodipodi:rx="88.388344"
-       sodipodi:ry="88.388344"
-       d="m 1418.4562,4341.1157 a 88.388344,88.388344 0 1 1 -176.7767,0 88.388344,88.388344 0 1 1 176.7767,0 z"
-       inkscape:export-filename="/home/julien/android/zoob/orig_images/combo_btn_active.png"
-       inkscape:export-xdpi="57.18"
-       inkscape:export-ydpi="57.18" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       id="path4428"
-       sodipodi:cx="1014.6982"
-       sodipodi:cy="4332.6304"
-       sodipodi:rx="67.17514"
-       sodipodi:ry="67.17514"
-       d="m 1081.8733,4332.6304 a 67.17514,67.17514 0 1 1 -134.35026,0 67.17514,67.17514 0 1 1 134.35026,0 z"
-       transform="matrix(0.78947368,0,0,0.78947368,528.99036,920.61808)"
-       inkscape:export-filename="/home/julien/android/zoob/orig_images/combo_btn_active.png"
-       inkscape:export-xdpi="57.18"
-       inkscape:export-ydpi="57.18" />
-    <path
-       transform="translate(258.09392,-6.3639475)"
-       sodipodi:type="arc"
-       style="fill:none;stroke:#ffffff;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path3654-0"
-       sodipodi:cx="1330.0679"
-       sodipodi:cy="4341.1157"
-       sodipodi:rx="88.388344"
-       sodipodi:ry="88.388344"
-       d="m 1418.4562,4341.1157 a 88.388344,88.388344 0 1 1 -176.7767,0 88.388344,88.388344 0 1 1 176.7767,0 z"
-       inkscape:export-filename="/home/julien/android/zoob/orig_images/combo_btn_inactive.png"
-       inkscape:export-xdpi="57.18"
-       inkscape:export-ydpi="57.18" />
+    <rect
+       style="fill:none;stroke:#ffffff;stroke-width:12;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3638"
+       width="169.70563"
+       height="169.70563"
+       x="1156.8267"
+       y="4336.166"
+       ry="18" />
+    <text
+       xml:space="preserve"
+       style="font-size:137.52490234px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1143.5833"
+       y="4505.6001"
+       id="text4412"><tspan
+         sodipodi:role="line"
+         id="tspan4415"
+         x="1143.5833"
+         y="4505.6001"
+         style="font-size:247.5447998px;fill:#ffffff;fill-opacity:1">✔</tspan></text>
   </g>
 </svg>
