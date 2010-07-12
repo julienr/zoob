@@ -11,7 +11,7 @@ extern zip* APKArchive;
 #define ASSERT(x) assert(x)
 
 //
-#define FULL_VERSION 1
+#define FULL_VERSION 0
 
 
 #define LOG_TAG    __FILE__ ":" STR(__LINE__)
@@ -26,7 +26,7 @@ extern zip* APKArchive;
 #else //Android build
   #include <GLES/gl.h>
   #include <android/log.h>
-  #if 1
+  #if 0
     #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
     #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
   #else

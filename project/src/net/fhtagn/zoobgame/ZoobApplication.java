@@ -37,7 +37,7 @@ public class ZoobApplication extends Application {
 	}
 	
 	public synchronized int getInputMethod () {
-		return settings.getInt(PREF_KEY_INPUT_METHOD, 0);
+		return settings.getInt(PREF_KEY_INPUT_METHOD, 1);
 	}
 	
 	public synchronized int getUseTrackball () {

@@ -40,12 +40,12 @@ union {
     AndroidInputManager* android;
 } inputManager;
 
-InputManager* createInputManager (int inputMethod) {
+InputManager* createInputManager (int inputMethod, int useTrackball) {
   if (inputType == INPUT_SDL) {
     inputManager.sdl = new SDLInputManager();
     return inputManager.sdl;
   } else {
-    inputManager.android = new AndroidInputManager((eInputMode)inputMethod, false);
+    inputManager.android = new AndroidInputManager((eInputMode)inputMethod, useTrackball);
     return inputManager.android;
   }
 }
@@ -75,7 +75,7 @@ int main (int argc, char** argv) {
   SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_OPENGL);
 
   nativeInit (argv[1]);
-  nativeInitGL(level, difficulty, 0);
+  nativeInitGL(level, difficulty, 0, 0);
   nativeResize(SCREEN_WIDTH,SCREEN_HEIGHT);
 
   bool done = false;
