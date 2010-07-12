@@ -1,6 +1,7 @@
 #include "PlayerFormControl.h"
 #include "view/GameManager.h"
 #include "view/TankView.h"
+#include "view/menu/Button.h"
 
 #define BTN_NEXT 0
 #define BTN_PREV 1
@@ -10,7 +11,7 @@ PlayerFormControl::PlayerFormControl ()
     tankSprite("assets/sprites/tank1.png", TEX_GROUP_GAME),
     bounceTankSprite("assets/sprites/tank_bounce.png", TEX_GROUP_GAME),
     currentFormIdx(0){
-  MenuItem* next = new MenuItem("assets/sprites/menuitems/next.png",
+  Button* next = new Button("assets/sprites/menuitems/next.png",
                                 "assets/sprites/menuitems/next_h.png",
                                 BTN_NEXT,
                                 TEX_GROUP_UTILS);
@@ -22,7 +23,7 @@ PlayerFormControl::PlayerFormControl ()
   next->setSize(btnSize);
   next->setBB(nextPos, btnBBSize);
 
-  MenuItem* prev = new MenuItem("assets/sprites/menuitems/prev.png",
+  Button* prev = new Button("assets/sprites/menuitems/prev.png",
                                 "assets/sprites/menuitems/prev_h.png",
                                 BTN_PREV,
                                 TEX_GROUP_UTILS);

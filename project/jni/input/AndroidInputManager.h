@@ -1,7 +1,7 @@
 #ifndef ANDROIDINPUTMANAGER_H_
 #define ANDROIDINPUTMANAGER_H_
 
-#include "view/menu/MenuItem.h"
+#include "view/menu/Button.h"
 #include "InputManager.h"
 #include "PlayerFormControl.h"
 #include "lib/Timer.h"
@@ -9,15 +9,14 @@
 #undef FORM_CONTROL
 
 enum eInputMode {
-    INPUT_MIXED=0, //touch to move/fire + trackball
-    INPUT_TOUCH, //touch to move, double-tap to fire
-    INPUT_TRACKBALL, //gamePad to move, trackball to fire
+    INPUT_TOUCH=0,
+    INPUT_GAMEPAD,
     NUM_INPUT_METHODS
 };
 
 class AndroidInputManager : public InputManager {
   public:
-    AndroidInputManager (eInputMode mode);
+    AndroidInputManager (eInputMode mode, bool trackball);
     void draw ();
 
     //Multitouch, callback for secondary pointer
@@ -41,14 +40,19 @@ class AndroidInputManager : public InputManager {
 
     void setInputMode (eInputMode mode);
 
+    void setUseTrackball (bool use);
+
     eInputMode getInputMode () { return inputMode; }
+
+    bool getUseTrackball () {
+      return useTrackball;
+    }
 
     float getLeftXMargin() {
       switch (inputMode) {
         case INPUT_TOUCH:
-        case INPUT_MIXED:
           return 1.0f;
-        case INPUT_TRACKBALL:
+        case INPUT_GAMEPAD:
           return 3.2f;
         default:
           ASSERT(false);
@@ -83,9 +87,9 @@ class AndroidInputManager : public InputManager {
 
     Vector2 tankMoveEnd;
 
-    MenuItem rocketButton;
-    MenuItem bombButton;
-    MenuItem shieldButton;
+    Button rocketButton;
+    Button bombButton;
+    Button shieldButton;
 #ifdef FORM_CONTROL
     PlayerFormControl formControl;
 #endif
@@ -103,6 +107,8 @@ class AndroidInputManager : public InputManager {
 
     int pressedItem;
     uint64_t lastButtonPressTime;
+
+    bool useTrackball;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */

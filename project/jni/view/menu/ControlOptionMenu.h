@@ -2,6 +2,7 @@
 #define CONTROLOPTIONMENU_H_
 
 #include "Menu.h"
+#include "Checkbox.h"
 
 class ControlOptionMenu : public Menu {
   public:
@@ -16,11 +17,15 @@ class ControlOptionMenu : public Menu {
     void _actionBack ();
     void _actionNextCtrl ();
     void _actionPrevCtrl ();
+    void _actionTrackballToggle ();
 
     Sprite inputTouch;
-    Sprite inputTrackball;
-    Sprite inputMixed;
+    Sprite inputGamepad;
     Sprite optionDesc;
+    Sprite trackballDesc;
+    Sprite star;
+
+    Checkbox* trackballCheckbox;
 
 };
 

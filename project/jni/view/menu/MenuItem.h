@@ -8,26 +8,22 @@
 
 class MenuItem {
   public:
-    MenuItem(const char* tex, const char* hoverTex, short id, int groupID, bool repeatable=false) :
+    MenuItem(short id, bool repeatable) :
       id(id),
-      normalSprite(tex, groupID),
-      hoverSprite(hoverTex, groupID),
-      pressed(false),
       repeatable(repeatable),
-      enabled(true) {}
+      pressed(false) {}
 
     short getID () const {
       return id;
     }
 
-    void draw () const;
-    void drawPressed () const;
+    virtual void draw () const = 0;
 
     void setPosition (const Vector2& pos) {
       this->pos = pos;
     }
 
-    const Vector2& getPosition () {
+    const Vector2& getPosition () const {
       return pos;
     }
 
@@ -35,7 +31,7 @@ class MenuItem {
       this->size = size;
     }
 
-    const Vector2& getSize () {
+    const Vector2& getSize () const {
       return size;
     }
 
@@ -45,8 +41,8 @@ class MenuItem {
       bbSize = size;
     }
 
-    bool inside (const Vector2& p) const {
-      return enabled && Utils::insideC(bbPos, bbSize, p);
+    virtual bool inside (const Vector2& p) const {
+      return Utils::insideC(bbPos, bbSize, p);
     }
 
     //FIXME: used ONLY by input manager, also use for menus
@@ -54,34 +50,26 @@ class MenuItem {
       pressed = p;
     }
 
-    bool isPressed () const {
-      return pressed;
-    }
-
     bool isRepeatable () const {
       return repeatable;
     }
 
-    //When disabled, inside() will always return false and as a result, the button won't be activeable
-    void setEnabled (bool b) {
-      enabled = b;
+    bool isPressed () const {
+      return pressed;
     }
 
-    bool isEnabled () const {
-      return enabled;
-    }
+  protected:
+    void drawBB (const Vector2& pos, const Vector2& size);
+
   private:
     short id;
     Vector2 pos;
     Vector2 size;
     Vector2 bbPos;
     Vector2 bbSize;
-    Sprite normalSprite;
-    Sprite hoverSprite;
 
-    bool pressed;
     bool repeatable;
-    bool enabled;
+    bool pressed;
 };
 
 #endif /* MENUITEM_H_ */

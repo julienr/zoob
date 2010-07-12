@@ -141,7 +141,7 @@ void nativeInit (const char* apkPath) {
 bool initialised = false;
 
 
-void nativeInitGL(int level, int difficulty, int inputMethod) {
+void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) {
   if (!initialised) {
     initialised = true;
     Difficulty::setDifficulty(difficulty);
@@ -156,7 +156,7 @@ void nativeInitGL(int level, int difficulty, int inputMethod) {
     gm->setStateCallback(STATE_PLAYING, toPlayingState);
     gm->setStateCallback(STATE_PAUSED, toPauseState);
 
-    InputManager::registerInstance(createInputManager(inputMethod));
+    InputManager::registerInstance(createInputManager(inputMethod, useTrackball));
 
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);

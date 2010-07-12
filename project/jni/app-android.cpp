@@ -11,6 +11,7 @@ static jobject zoobRenderer;
 static jmethodID java_saveProgress;
 static jmethodID java_saveDifficulty;
 static jmethodID java_saveInputMethod;
+static jmethodID java_saveUseTrackball;
 static jmethodID java_buyFull;
 
 void saveProgress (int level) {
@@ -26,6 +27,11 @@ void saveDifficulty (int diff) {
 void saveInputMethod (int inputMethod) {
   LOGE("saveInputMethod : %i", inputMethod);
   jniEnv->CallVoidMethod(zoobRenderer, java_saveInputMethod, inputMethod);
+}
+
+void saveUseTrackball (int use) {
+  LOGE("saveUseTrackball : %i", use);
+  jniEnv->CallVoidMethod(zoobRenderer, java_saveUseTrackball, use);
 }
 
 void buyFull () {
@@ -55,14 +61,15 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_saveDifficulty, "saveDifficulty", "(I)V");
   JNI_GET_METHOD(java_saveInputMethod, "saveInputMethod", "(I)V");
+  JNI_GET_METHOD(java_saveUseTrackball, "saveUseTrackball", "(I)V");
   JNI_GET_METHOD(java_buyFull, "buyFullVersion", "()V");
 }
 
 
 /** Input Manager **/
 static AndroidInputManager* inputManager = NULL;
-InputManager* createInputManager (int inputMethod) {
-  inputManager = new AndroidInputManager((eInputMode)inputMethod);
+InputManager* createInputManager (int inputMethod, int useTrackball) {
+  inputManager = new AndroidInputManager((eInputMode)inputMethod, useTrackball!=0);
   return inputManager;
 }
 
@@ -81,8 +88,8 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL
-  (JNIEnv *, jclass, int level, int difficulty, int method) {
-  nativeInitGL(level, difficulty, method);
+  (JNIEnv *, jclass, int level, int difficulty, int method, int useTrackball) {
+  nativeInitGL(level, difficulty, method, useTrackball);
 }
 
 

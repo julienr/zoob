@@ -19,6 +19,10 @@ void saveInputMethod (int inputMethod) {
   LOGE("SDL saveInputMethod : %i", inputMethod);
 }
 
+void saveUseTrackball (int use) {
+  LOGE("SDL saveUseTrackball : %i", use);
+}
+
 void buyFull () {
   LOGE("Buy full");
 }
@@ -41,7 +45,7 @@ InputManager* createInputManager (int inputMethod) {
     inputManager.sdl = new SDLInputManager();
     return inputManager.sdl;
   } else {
-    inputManager.android = new AndroidInputManager((eInputMode)inputMethod);
+    inputManager.android = new AndroidInputManager((eInputMode)inputMethod, false);
     return inputManager.android;
   }
 }

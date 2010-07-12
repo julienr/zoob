@@ -5,7 +5,7 @@
 //performs all non-gl initialisation
 void nativeInit (const char* apkPath);
 
-void nativeInitGL (int level, int difficulty, int inputMethod);
+void nativeInitGL (int level, int difficulty, int inputMethod, int useTrackball);
 void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
@@ -19,6 +19,7 @@ void toggleGodMode ();
 void saveProgress (int level);
 void saveDifficulty (int diff);
 void saveInputMethod (int inputMethod);
+void saveUseTrackball (int use);
 void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system
@@ -44,5 +45,5 @@ extern float transY;
 //very beginning of the app livecycle. Called just after openGL initialisation
 //so the input manager can allocate openGL resources
 class InputManager;
-extern InputManager* createInputManager (int inputMethod);
+extern InputManager* createInputManager (int inputMethod, int useTrackball);
 #endif

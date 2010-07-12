@@ -2493,6 +2493,79 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4507"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4529"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4551"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       id="linearGradient7285-8-7">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop7287-8-87" />
+      <stop
+         id="stop4360-4"
+         offset="0.60000002"
+         style="stop-color:#ffffff;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop7289-6-9" />
+    </linearGradient>
+    <inkscape:perspective
+       id="perspective4597"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4619"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter4506-3">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.0561064"
+         id="feGaussianBlur4508-7" />
+    </filter>
+    <inkscape:perspective
+       id="perspective4656"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4459-3"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2502,8 +2575,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="1230.3269"
-     inkscape:cy="-3335.9739"
+     inkscape:cx="1466.0195"
+     inkscape:cy="-3449.0026"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -2522,7 +2595,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -3150,14 +3223,14 @@
        id="rect4161-2-1"
        width="633.56769"
        height="601.04077"
-       x="2816.4062"
-       y="978.82306"
+       x="3093.592"
+       y="973.1662"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tutorial.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
     <path
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 3268.2549,1373.7247 0,-14.127 -32.914,-14.4888 c 19.7033,-5.4739 34.0087,-23.6802 33.645,-45.0783 -0.4317,-25.4014 -21.3737,-45.6433 -46.7751,-45.2115 -25.4013,0.4317 -45.6434,21.3736 -45.2116,46.775 0.3637,21.3981 15.2796,38.7136 35.1576,43.5148 0,0 -24.8884,6.6974 -33.2549,15.1803 l 0,14.0534 89.353,-0.6179 z"
+       d="m 3545.4408,1368.0678 0,-14.127 -32.914,-14.4888 c 19.7033,-5.4739 34.0087,-23.6802 33.645,-45.0783 -0.4317,-25.4014 -21.3737,-45.6433 -46.7751,-45.2115 -25.4013,0.4317 -45.6434,21.3736 -45.2116,46.775 0.3637,21.3981 15.2796,38.7136 35.1576,43.5148 0,0 -24.8884,6.6974 -33.2549,15.1803 l 0,14.0534 89.353,-0.6179 z"
        id="path4503-3-7"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
        inkscape:export-xdpi="299.86295"
@@ -3287,7 +3360,7 @@
        inkscape:export-ydpi="55.66" />
     <g
        id="g4232"
-       transform="translate(203.99997,232.15547)"
+       transform="translate(481.18582,226.49862)"
        inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/cursor.png"
        inkscape:export-xdpi="57.18"
        inkscape:export-ydpi="57.18">
@@ -3311,7 +3384,7 @@
          style="fill:#ff47f0;fill-opacity:1;fill-rule:nonzero;stroke:none" />
     </g>
     <g
-       transform="matrix(0,1,-1,0,4920.2067,-2123.6378)"
+       transform="matrix(0,1,-1,0,5197.3926,-2129.2947)"
        id="g4232-6"
        inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/cursor.png"
        inkscape:export-xdpi="57.18"
@@ -3563,7 +3636,7 @@
    id="tspan4404-2">:</tspan>-(</tspan></text>
     <path
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 3054.4927,1379.66 0,-14.127 -32.914,-14.4888 c 19.7033,-5.4739 34.0087,-23.6802 33.645,-45.0783 -0.4317,-25.4014 -21.3737,-45.6433 -46.7751,-45.2115 -25.4013,0.4317 -45.6434,21.3736 -45.2116,46.775 0.3637,21.3981 15.2796,38.7136 35.1576,43.5148 0,0 -24.8884,6.6974 -33.2549,15.1803 l 0,14.0534 89.353,-0.6179 z"
+       d="m 3331.6786,1374.0031 0,-14.127 -32.914,-14.4888 c 19.7033,-5.4739 34.0087,-23.6802 33.645,-45.0783 -0.4317,-25.4014 -21.3737,-45.6433 -46.7751,-45.2115 -25.4013,0.4317 -45.6434,21.3736 -45.2116,46.775 0.3637,21.3981 15.2796,38.7136 35.1576,43.5148 0,0 -24.8884,6.6974 -33.2549,15.1803 l 0,14.0534 89.353,-0.6179 z"
        id="path4503-3"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
        inkscape:export-xdpi="299.86295"
@@ -4370,7 +4443,7 @@
        sodipodi:rx="90.509666"
        sodipodi:ry="90.509666"
        d="m 3213.0932,1510.5674 a 90.509666,90.509666 0 1 1 -181.0194,0 90.509666,90.509666 0 1 1 181.0194,0 z"
-       transform="translate(-113.35315,-190.05462)"
+       transform="translate(163.8327,-195.71147)"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/shield_1.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
@@ -5253,23 +5326,125 @@
        x="1040.8611"
        y="4145.2471" />
     <rect
-       style="fill:none;stroke:#ffffff;stroke-width:12;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#ffffff;stroke-width:6.02266169;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect3638"
-       width="169.70563"
-       height="169.70563"
-       x="1156.8267"
-       y="4336.166"
-       ry="18" />
+       width="85.173302"
+       height="85.173302"
+       x="1143.1934"
+       y="4666.1602"
+       ry="9.0339928"
+       inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/menuitems/checkbox_checked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
     <text
        xml:space="preserve"
-       style="font-size:137.52490234px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="1143.5833"
-       y="4505.6001"
-       id="text4412"><tspan
+       style="font-size:69.02216339px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1133.7909"
+       y="4753.335"
+       id="text4412"
+       inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/menuitems/checkbox_checked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"><tspan
          sodipodi:role="line"
          id="tspan4415"
-         x="1143.5833"
-         y="4505.6001"
-         style="font-size:247.5447998px;fill:#ffffff;fill-opacity:1">✔</tspan></text>
+         x="1133.7909"
+         y="4753.335"
+         style="font-size:124.23988342px;fill:#ffffff;fill-opacity:1">✔</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:32.58125687px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1276.4609"
+       y="4745.1426"
+       id="text4417"><tspan
+         sodipodi:role="line"
+         id="tspan4419"
+         x="1276.4609"
+         y="4745.1426"
+         style="font-size:85.52580261px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">trackball</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1164.5668"
+       y="4528.7764"
+       id="text4513"><tspan
+         sodipodi:role="line"
+         id="tspan4515"
+         x="1164.5668"
+         y="4528.7764"
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">&lt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1813.3232"
+       y="4515.3618"
+       id="text4517"><tspan
+         sodipodi:role="line"
+         id="tspan4519"
+         x="1813.3232"
+         y="4515.3618"
+         style="font-size:105px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">&gt;</tspan></text>
+    <path
+       style="fill:#66ff3f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 1125.99,4212.4778 -10.774,9.1376 10.2393,34.4733 c -16.919,-11.4861 -40.0569,-10.62 -56.1409,3.4979 -19.0931,16.7592 -20.985,45.8233 -4.2258,64.9163 16.7591,19.093 45.8232,20.9852 64.9163,4.2259 16.084,-14.1179 19.6418,-36.6934 10.4462,-54.9587 0,0 21.2058,14.649 33.0869,15.5429 l 10.7178,-9.0899 -58.2658,-67.7453 z"
+       id="path4503-3-7-0"
+       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/moob/orig_images/tank_shield.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295"
+       sodipodi:nodetypes="cccssscccc" />
+    <path
+       style="fill:#ff663f;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-miterlimit:4.19999980999999956;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter4506-3)"
+       d="m 1292.134,4257.5719 -17.7469,-22.7379 c 12.442,-16.229 12.9107,-39.3783 -0.2569,-56.2492 -15.631,-20.0271 -44.5378,-23.5907 -64.5649,-7.9596 -20.0271,15.631 -23.591,44.5378 -7.9598,64.5649 13.1676,16.8709 35.7377,22.0385 54.5027,13.9106 l 17.7468,22.7379 18.279,-14.2667 z"
+       id="path4503-8-5-1"
+       inkscape:export-filename="/home/julien/android/zoob/orig_images/tutorial.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
+    <text
+       xml:space="preserve"
+       style="font-size:77.79651642px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1156.9449"
+       y="4366.7227"
+       id="text4644"><tspan
+         sodipodi:role="line"
+         id="tspan4646"
+         x="1156.9449"
+         y="4366.7227"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">controls :</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:38.98934937px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="1287.9404"
+       y="4472.604"
+       id="text4673"><tspan
+         sodipodi:role="line"
+         id="tspan4675"
+         x="1287.9404"
+         y="4472.604"
+         style="font-size:77.97869873px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">touch</tspan><tspan
+         sodipodi:role="line"
+         x="1287.9404"
+         y="4536.2261"
+         id="tspan4679"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">Touch to move. Double-tap </tspan><tspan
+         sodipodi:role="line"
+         x="1287.9404"
+         y="4584.9624"
+         id="tspan4681"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">or single-tap while moving </tspan><tspan
+         sodipodi:role="line"
+         x="1287.9404"
+         y="4633.6992"
+         id="tspan4693"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:OogieBoogie;-inkscape-font-specification:OogieBoogie">to fire a rocket</tspan></text>
+    <rect
+       style="fill:none;stroke:#ffffff;stroke-width:6.02266169;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3638-6"
+       width="85.173302"
+       height="85.173302"
+       x="1070.4133"
+       y="4550.7754"
+       ry="9.0339928"
+       inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/menuitems/checkbox_unchecked.png"
+       inkscape:export-xdpi="299.86295"
+       inkscape:export-ydpi="299.86295" />
   </g>
 </svg>

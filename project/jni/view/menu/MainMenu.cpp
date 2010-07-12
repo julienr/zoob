@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "view/GameManager.h"
 #include "view/NumberView.h"
+#include "Button.h"
 
 #define MENU_ITEM_START 0
 #define MENU_ITEM_LVL_NEXT 1
@@ -19,29 +20,29 @@ MainMenu::MainMenu (GameManager* gm)
     normal("assets/sprites/menuitems/normal.png", TEX_GROUP_MENU),
     hard("assets/sprites/menuitems/hard.png", TEX_GROUP_MENU)
    {
-   addItem(new MenuItem("assets/sprites/menuitems/start.png",
+   addItem(new Button("assets/sprites/menuitems/start.png",
                               "assets/sprites/menuitems/start_h.png",
                               MENU_ITEM_START,
                               TEX_GROUP_MENU));
-   addItem(new MenuItem("assets/sprites/menuitems/next.png",
+   addItem(new Button("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
                                MENU_ITEM_LVL_NEXT,
                                TEX_GROUP_MENU,
                                true));
-   addItem(new MenuItem("assets/sprites/menuitems/prev.png",
+   addItem(new Button("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
                                MENU_ITEM_LVL_PREV,
                                TEX_GROUP_MENU,
                                true));
-   addItem(new MenuItem("assets/sprites/menuitems/next.png",
+   addItem(new Button("assets/sprites/menuitems/next.png",
                                "assets/sprites/menuitems/next_h.png",
                                MENU_ITEM_DIFF_NEXT,
                                TEX_GROUP_MENU));
-   addItem(new MenuItem("assets/sprites/menuitems/prev.png",
+   addItem(new Button("assets/sprites/menuitems/prev.png",
                                "assets/sprites/menuitems/prev_h.png",
                                MENU_ITEM_DIFF_PREV,
                                TEX_GROUP_MENU));
-   addItem(new MenuItem("assets/sprites/menuitems/options.png",
+   addItem(new Button("assets/sprites/menuitems/options.png",
                                   "assets/sprites/menuitems/options_h.png",
                                   MENU_ITEM_OPTIONS,
                                   TEX_GROUP_MENU));

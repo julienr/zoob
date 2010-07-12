@@ -18,13 +18,17 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 public class Zoob extends Activity {
 	private ZoobGLSurface mGLView;
@@ -313,7 +317,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 			nativeInit(apkFilePath, this);
 			initialized = true;
 		}
-    nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod());
+    nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -327,7 +331,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 
 	public void onDrawFrame(GL10 gl) {
 		if (restoreGL) {
-			nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod());
+			nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
 			restoreGL = false;
 		}
 		
@@ -382,7 +386,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		}
 	}
 
-  private static native void nativeInitGL(int level, int difficulty, int inputMethod);
+  private static native void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball);
 	private static native void nativeInit(String apkPath, ZoobRenderer app);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
@@ -414,6 +418,10 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	
 	public void saveInputMethod (int method) {
 		app.saveInputMethod(method);
+	}
+	
+	public void saveUseTrackball (int use) {
+		app.saveUseTrackball(use);
 	}
 	
 	public void buyFullVersion () {

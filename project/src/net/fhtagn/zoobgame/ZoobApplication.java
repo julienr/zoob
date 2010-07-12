@@ -9,7 +9,8 @@ import android.util.Log;
 public class ZoobApplication extends Application {
 	private static final String PREF_KEY_LEVEL = "level";
 	private static final String PREF_KEY_DIFFICULTY = "difficulty";
-	private static final String PREF_KEY_INPUT_METHOD = "input_method";
+	private static final String PREF_KEY_INPUT_METHOD = "input_mode";
+	private static final String PREF_KEY_USE_TRACKBALL = "use_trackball";
 	
 	private SharedPreferences settings;
 	
@@ -39,6 +40,10 @@ public class ZoobApplication extends Application {
 		return settings.getInt(PREF_KEY_INPUT_METHOD, 0);
 	}
 	
+	public synchronized int getUseTrackball () {
+		return settings.getInt(PREF_KEY_USE_TRACKBALL, 0);
+	}
+	
 	private void saveIntPref (String key, int val) {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(key, val);
@@ -57,4 +62,8 @@ public class ZoobApplication extends Application {
 	public synchronized void saveInputMethod (int method) {
 		saveIntPref(PREF_KEY_INPUT_METHOD, method);
 	}
+
+	public void saveUseTrackball(int use) {
+	  saveIntPref(PREF_KEY_USE_TRACKBALL, use);
+  }
 }
