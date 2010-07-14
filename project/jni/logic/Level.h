@@ -89,6 +89,9 @@ class Level {
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
     //and array subscripting is done our way then
     //The tanks array MUST contain the player tank description in its first index
+
+    //Level take ownership of the tanks array
+    //board should be FREED BY CALLER
     Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks, bool drawShadows=false, bool boss=false)
       : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss){
       _initBoard(w,h,board, tanks, numTanks);

@@ -29,12 +29,14 @@ enum eAppState {
   STATE_BUY_FULL,
   STATE_REWARD,
   STATE_CONTROL_OPTIONS,
+  STATE_ERROR,
   MAX_STATE
 };
 
 class GameManager;
 //Type for a function that will be called when a new game has to be started
 typedef void (*startGameCallback_t) (GameManager* menu);
+//state callback for when switching state
 typedef void (*callback_t) ();
 
 class GameManager {

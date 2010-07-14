@@ -3,9 +3,7 @@
 
 #include "logic/Level.h"
 
-typedef Level* (*lvl_callback_t) ();
-
 extern const size_t numLevels;
-extern lvl_callback_t levelsLoadFns[];
+Level* loadAPKLevel (int level);
 
 #endif /* LEVELSDATA_H_ */

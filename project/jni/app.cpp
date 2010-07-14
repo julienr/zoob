@@ -84,7 +84,12 @@ void toPlayingState () {
     Game::destroy();
     delete gameView;
 
-    lvl = levelsLoadFns[GameManager::getInstance()->getCurrentLevel()]();
+    lvl = loadAPKLevel(GameManager::getInstance()->getCurrentLevel());
+    if (lvl == NULL) {
+      gm->setState(STATE_ERROR);
+      return;
+    }
+
     Game::create(gameOverCallback, gameWonCallback, lvl);
     gameView = new GameView();
     ProgressionManager::getInstance()->changedLevel();
@@ -345,9 +350,13 @@ void nativePause () {
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
 
-  /*static uint64_t lastMallocReport = Utils::getCurrentTimeMillis();*/
+  //Let game manager apply all the transition it has. It normally will have only one, but if during
+  //the transition callback, a transition to another state was requested, it might have two or more
+  GameManager* gm = GameManager::getInstance();
+  do {
+    gm->applyTransition();
+  } while (gm->inTransition() && gm->getTransitionDelay() <= 0);
 
-  GameManager::getInstance()->applyTransition();
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
@@ -364,14 +373,6 @@ void nativeRender () {
   if (Math::epsilonEq(elapsedS, 0))
     return;
   lastTime = now;
-
-  //BEGIN malloc debug
-  /*if ((now - lastMallocReport) > 1000) {
-    struct mallinfo info = mallinfo();
-    LOGE("mallinfo : total (%i kb), used (%i kb), freed (%i kb)", info.arena/1024, info.uordblks/1024, info.fordblks/1024);
-    lastMallocReport = now;
-  }*/
-  //END malloc debug
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);

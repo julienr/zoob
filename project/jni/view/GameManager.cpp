@@ -3,6 +3,7 @@
 #include "textures/TextureManager.h"
 #include "view/menu/RewardMenu.h"
 #include "view/menu/ControlOptionMenu.h"
+#include "view/menu/ErrorMenu.h"
 
 GameManager* GameManager::instance = NULL;
 
@@ -27,6 +28,7 @@ GameManager::GameManager (startGameCallback_t gameCb,
   menus[STATE_BUY_FULL] = new BuyFullMenu(this);
   menus[STATE_REWARD] = new RewardMenu(this);
   menus[STATE_CONTROL_OPTIONS] = new ControlOptionMenu(this);
+  menus[STATE_ERROR] = new ErrorMenu(this);
 
   for (int i=0; i<MAX_STATE; i++)
     stateCallbacks[i] = NULL;
@@ -88,6 +90,7 @@ void GameManager::applyLocks () {
       TEX_LOCK(TEX_GROUP_GAME);
       break;
     case STATE_MAINMENU:
+    case STATE_ERROR:
     case STATE_CONTROL_OPTIONS:
       TEX_LOCK(TEX_GROUP_MENU);
       break;
