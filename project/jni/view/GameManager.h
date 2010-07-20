@@ -159,7 +159,7 @@ class GameManager {
 
     inline
     bool hasMoreLevels () {
-      return currentLevel < numLevels-1;
+      return currentLevel < getNumLevels()-1;
     }
 
     inline

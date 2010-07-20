@@ -2,42 +2,17 @@
 #include <zip.h>
 #include <jansson.h>
 
-const size_t numLevels = 45; //FIXME: set it dynamically
+Level* levelFromJSON (json_t* json);
 
-Level* levelFromJSON (const char* buffer);
-
-//Loads a level from the APK (an original level)
-//Return NULL if an error occurs during loading
-Level* loadAPKLevel (int level) {
-  static char levelFile[256];
-  snprintf(levelFile, 256, "assets/levels/%i.json", level);
-  zip_file* file = zip_fopen(APKArchive, levelFile, 0);
-
-  struct zip_stat stats;
-  if (zip_stat(APKArchive, levelFile, 0, &stats) == -1) {
-    LOGE("Cannot zip_stat file %s", levelFile);
-    return NULL;
-  }
-
-  char* buffer = (char*)malloc(sizeof(char)*(stats.size+1));
-
-  if (zip_fread(file, buffer, stats.size) == -1) {
-    LOGE("Error during zip_fread on %s", levelFile);
-    return NULL;
-  }
-
-  buffer[stats.size] = '\0';
-
-  Level* l = levelFromJSON(buffer);
-  free(buffer);
-  return l;
-}
+//The currently used levelSerie
+json_t* levelSerie = NULL;
 
 //get from an object, ensuring we don't get NULL
 static json_t* obj_get (json_t* obj, const char* key) {
   json_t* val = json_object_get(obj, key);
   if (!val) {
     fprintf(stderr, "ERROR getting %s\n", key);
+    //FIXME: no exit() on android, should goto error
     exit(-1);
   }
   return val;
@@ -60,6 +35,7 @@ static const char* type2str (json_type t) {
 static json_t* expect (json_t* val, json_type expected_type) {
   if (json_typeof(val) != expected_type) {
     fprintf(stderr, "val type(%s) != expected_type(%s)\n", type2str(json_typeof(val)), type2str(expected_type));
+    //FIXME: no exit() on android, should goto error
     exit(-1);
   }
   return val;
@@ -71,6 +47,7 @@ static bool json_bool_value(json_t* val) {
   if (json_typeof(val) == JSON_FALSE)
     return false;
   fprintf(stderr, "json_bool_value : not bool (%i)", json_typeof(val));
+  //FIXME: no exit() on android, should goto error
   exit(-1);
 }
 
@@ -108,16 +85,60 @@ static int str2ttype (const char* str) {
 
 #define CONDITION(x,err) if (!(x)) { LOGE(err); goto error; }
 
-//Create a Level object from a JSON string. Returns NULL if an error occurs
-Level* levelFromJSON (const char* buffer) {
-  json_t* json;
-  json_error_t error;
-  json = json_loads(buffer, &error);
-  if (!json) {
-    LOGE("Error loading json at line %i: %s", error.line, error.text);
-    goto error;
+//Loads a level from the APK (an original level)
+//Return NULL if an error occurs during loading
+Level* loadAPKLevel (int levelNum) {
+  ASSERT(levelSerie != NULL && levelNum < (int)getNumLevels());
+  json_t* levels = obj_get(levelSerie, "levels");
+  return levelFromJSON(json_array_get(levels, levelNum));
+}
+
+size_t getNumLevels () {
+  ASSERT(levelSerie != NULL);
+  json_t* levels = obj_get(levelSerie, "levels");
+  return json_array_size(levels);
+}
+
+void loadSerie (const char* serieFile) {
+  if (levelSerie != NULL) {
+    json_decref(levelSerie);
+    levelSerie = NULL;
   }
 
+  zip_file* file = zip_fopen(APKArchive, serieFile, 0);
+
+  struct zip_stat stats;
+  if (zip_stat(APKArchive, serieFile, 0, &stats) == -1) {
+    LOGE("Cannot zip_stat file %s", serieFile);
+    //FIXME: error
+    levelSerie = NULL;
+    return;
+  }
+
+  char* buffer = (char*)malloc(sizeof(char)*(stats.size+1));
+
+  if (zip_fread(file, buffer, stats.size) == -1) {
+    LOGE("Error during zip_fread on %s", serieFile);
+    //FIXME: error
+    levelSerie = NULL;
+    return;
+  }
+
+  buffer[stats.size] = '\0';
+
+  json_error_t error;
+  levelSerie = json_loads(buffer, &error);
+  free(buffer);
+
+  if (!levelSerie) {
+    LOGE("Error loading json at line %i: %s", error.line, error.text);
+    //FIXME: should goto error => create a global levelLoadError function that display the error menu
+    levelSerie = NULL;
+  }
+}
+
+//Create a Level object from a json representation of the level
+Level* levelFromJSON (json_t* json) {
   CONDITION(json_typeof(json) == JSON_OBJECT, "root JSON element not an object");
   //GENERAL PROPERTIES
   {

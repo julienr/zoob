@@ -148,6 +148,7 @@ bool initialised = false;
 
 void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) {
   if (!initialised) {
+    loadSerie("assets/levels/original.json");
     initialised = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 

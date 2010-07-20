@@ -3,7 +3,8 @@
 
 #include "logic/Level.h"
 
-extern const size_t numLevels;
-Level* loadAPKLevel (int level);
+Level* loadAPKLevel (int levelNum);
+void loadSerie(const char* serieFile);
+size_t getNumLevels ();
 
 #endif /* LEVELSDATA_H_ */
