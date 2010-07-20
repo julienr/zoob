@@ -1,5 +1,8 @@
 package net.fhtagn.zoobgame;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 
 public class Zoob extends Activity {
+	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY_SERIE";
 	private ZoobGLSurface mGLView;
 
 	static {
@@ -38,11 +42,34 @@ public class Zoob extends Activity {
 		//EULA
 		Eula.show(this);
 		
-		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication());
+		Intent intent = getIntent();
+		String serieJSON;
+		if (intent.getAction().equals(ACTION_PLAY)) {
+			Uri data = intent.getData();
+			//serieJSON = data.getPath();
+			//FIXME: read string from external storage by using the data.getPath() uri
+			serieJSON = "";
+		} else {
+			BufferedReader reader;
+      try {
+	      reader = new BufferedReader(new InputStreamReader(getAssets().open("levels/original.json")));
+				serieJSON = "";
+				String line;
+				while ((line = reader.readLine()) != null)
+					serieJSON += line;
+      } catch (IOException e) {
+	      serieJSON = "";
+	      e.printStackTrace();
+      }
+		}
+		
+		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), serieJSON);
 		setContentView(mGLView);
 		
     //Force landscape
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);    
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
+    
+ 
 	}
 	
 	@Override
@@ -226,9 +253,9 @@ class ZoobGLSurface extends GLSurfaceView {
 	 * like "call to OpenGL ES API with no current context" 
 	 */
 	
-	public ZoobGLSurface(Context context, ZoobApplication app) {
+	public ZoobGLSurface(Context context, ZoobApplication app, String levelsSerie) {
 		super(context);
-		mRenderer = new ZoobRenderer(context, app);
+		mRenderer = new ZoobRenderer(context, app, levelsSerie);
 		setRenderer(mRenderer);
 		setFocusableInTouchMode(true); //necessary to get trackball events
 	}
@@ -285,11 +312,14 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	
 	private boolean initialized = false; //avoid multiple calls to nativeInit
 	
+	private final String levelsSerie;
+	
 	private boolean restoreGL = false; //notify this renderer that it should restore opengl context (the app was resumed from sleep)
 
 	//This constructor is not ran in the rendering thread (but in the surface thread)
-	public ZoobRenderer (Context context, ZoobApplication app) {
+	public ZoobRenderer (Context context, ZoobApplication app, String levelsSerie) {
 		this.context = context;
+		this.levelsSerie = levelsSerie;
 		// return apk file path (or null on error)
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = context.getPackageManager();
@@ -307,7 +337,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		//Call ALL nativeInit methods here, because we want the JNIEnv of the rendering thread
 		//(see comments in app-android.cpp)
 		if (!initialized) {
-			nativeInit(apkFilePath, this);
+			nativeInit(apkFilePath, this, levelsSerie);
 			initialized = true;
 		}
     nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
@@ -380,7 +410,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 
   private static native void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball);
-	private static native void nativeInit(String apkPath, ZoobRenderer app);
+	private static native void nativeInit(String apkPath, ZoobRenderer app, String levelsSerie);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 	

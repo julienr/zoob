@@ -78,13 +78,16 @@ InputManager* createInputManager (int inputMethod, int useTrackball) {
  * We SHOULDN'T use it to make upcall to stuff outside the rendering thread
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
-  (JNIEnv * env, jclass cls, jstring apkPath, jobject zoob) {
+  (JNIEnv * env, jclass cls, jstring apkPath, jobject zoob, jstring levelSerie) {
   ASSERT(jniEnv == NULL);
   init_for_upcall(env, zoob);
   const char* str;
-  jboolean isCopy;
-  str = env->GetStringUTFChars(apkPath, &isCopy);
-  nativeInit(str);
+  const char* serie;
+  str = env->GetStringUTFChars(apkPath, NULL);
+  serie = env->GetStringUTFChars(levelSerie, NULL);
+  nativeInit(str, serie);
+  env->ReleaseStringUTFChars(apkPath, str);
+  env->ReleaseStringUTFChars(levelSerie, serie);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL

@@ -135,9 +135,10 @@ void toPauseState () {
   Game::getInstance()->pause();
 }
 
-void nativeInit (const char* apkPath) {
+void nativeInit (const char* apkPath, const char* levelSerie) {
   srand(Utils::getCurrentTimeMillis());
   loadAPK(apkPath);
+  loadSerie(levelSerie);
 }
 
 /** Since nativeInitGL will be called on app creation AND each time the opengl 
@@ -148,7 +149,6 @@ bool initialised = false;
 
 void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) {
   if (!initialised) {
-    loadSerie("assets/levels/original.json");
     initialised = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 

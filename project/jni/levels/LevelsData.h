@@ -4,7 +4,7 @@
 #include "logic/Level.h"
 
 Level* loadAPKLevel (int levelNum);
-void loadSerie(const char* serieFile);
+void loadSerie(const char* serieJSON);
 size_t getNumLevels ();
 
 #endif /* LEVELSDATA_H_ */

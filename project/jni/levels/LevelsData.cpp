@@ -99,36 +99,15 @@ size_t getNumLevels () {
   return json_array_size(levels);
 }
 
-void loadSerie (const char* serieFile) {
+void loadSerie (const char* serieJSON) {
   if (levelSerie != NULL) {
     json_decref(levelSerie);
     levelSerie = NULL;
   }
 
-  zip_file* file = zip_fopen(APKArchive, serieFile, 0);
-
-  struct zip_stat stats;
-  if (zip_stat(APKArchive, serieFile, 0, &stats) == -1) {
-    LOGE("Cannot zip_stat file %s", serieFile);
-    //FIXME: error
-    levelSerie = NULL;
-    return;
-  }
-
-  char* buffer = (char*)malloc(sizeof(char)*(stats.size+1));
-
-  if (zip_fread(file, buffer, stats.size) == -1) {
-    LOGE("Error during zip_fread on %s", serieFile);
-    //FIXME: error
-    levelSerie = NULL;
-    return;
-  }
-
-  buffer[stats.size] = '\0';
-
   json_error_t error;
-  levelSerie = json_loads(buffer, &error);
-  free(buffer);
+  levelSerie = json_loads(serieJSON, &error);
+  //free(buffer);
 
   if (!levelSerie) {
     LOGE("Error loading json at line %i: %s", error.line, error.text);

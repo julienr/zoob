@@ -55,6 +55,26 @@ static bool handleSDLInputEvents ();
 
 int cursorW, cursorH;
 
+char* loadJSONFromAPK (const char* serieFile) {
+  zip_file* file = zip_fopen(APKArchive, serieFile, 0);
+
+  struct zip_stat stats;
+  if (zip_stat(APKArchive, serieFile, 0, &stats) == -1) {
+    LOGE("Cannot zip_stat file %s", serieFile);
+    exit(-1);
+  }
+
+  char* buffer = (char*)malloc(sizeof(char)*(stats.size+1));
+
+  if (zip_fread(file, buffer, stats.size) == -1) {
+    LOGE("Error during zip_fread on %s", serieFile);
+    exit(-1);
+  }
+
+  buffer[stats.size] = '\0';
+  return buffer;
+}
+
 int main (int argc, char** argv) {
   if (argc < 2) {
     LOGE("Usage : <apk path>");
@@ -74,7 +94,9 @@ int main (int argc, char** argv) {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_OPENGL);
 
-  nativeInit (argv[1]);
+  char* buffer = loadJSONFromAPK("assets/levels/original.json");
+  nativeInit (argv[1], buffer);
+  free(buffer);
   nativeInitGL(level, difficulty, 0, 0);
   nativeResize(SCREEN_WIDTH,SCREEN_HEIGHT);
 

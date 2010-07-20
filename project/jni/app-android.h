@@ -13,7 +13,7 @@ extern "C" {
  * Signature: (S, L/net.fhtagn.zoob/ZoobApplication)V
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
-  (JNIEnv *, jclass, jstring, jobject);
+  (JNIEnv *, jclass, jstring, jobject, jstring);
 
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer

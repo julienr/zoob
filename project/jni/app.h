@@ -3,7 +3,7 @@
 
 //downcall (Java to C++) functions
 //performs all non-gl initialisation
-void nativeInit (const char* apkPath);
+void nativeInit (const char* apkPath, const char* levelSerie);
 
 void nativeInitGL (int level, int difficulty, int inputMethod, int useTrackball);
 void nativeQuit ();
