@@ -7,12 +7,13 @@ import android.net.Uri;
 import android.util.Log;
 
 public class ZoobApplication extends Application {
-	private static final String PREF_KEY_LEVEL = "level";
 	private static final String PREF_KEY_DIFFICULTY = "difficulty";
 	private static final String PREF_KEY_INPUT_METHOD = "input_mode";
 	private static final String PREF_KEY_USE_TRACKBALL = "use_trackball";
 	
 	private SharedPreferences settings;
+	
+	private String prefKeyLevel = null;
 	
 	protected String getPrefsName () {
 		return "net_fhtagn_zoobgame_prefs";
@@ -28,8 +29,20 @@ public class ZoobApplication extends Application {
     settings = getSharedPreferences(getPrefsName(), 0);
 	}
 	
+	/** Serie name is used as a preference key to store progression in a particular serie */
+	public synchronized void setSerieName (String name) {
+		prefKeyLevel = "prog_"+name;
+	}
+	
+	//Same as setSerieName, but for the original levelest
+	public synchronized void setOriginalSerie () {
+		prefKeyLevel = "level";
+	}
+	
 	public synchronized int getLevel () {
-		return settings.getInt(PREF_KEY_LEVEL, 0);
+		if (prefKeyLevel == null)
+			return 0;
+		return settings.getInt(prefKeyLevel, 0);
 	}
 	
 	public synchronized int getDifficulty () {
@@ -52,7 +65,9 @@ public class ZoobApplication extends Application {
 	}
 	
 	public synchronized void saveProgress (int level) {
-		saveIntPref(PREF_KEY_LEVEL, level);
+		if (prefKeyLevel == null)
+			return;
+		saveIntPref(prefKeyLevel, level);
 	}
 	
 	public synchronized void saveDifficulty (int difficulty) {

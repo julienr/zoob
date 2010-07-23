@@ -1,6 +1,8 @@
 package net.fhtagn.zoobgame;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -9,6 +11,9 @@ import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +26,15 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 
 public class Zoob extends Activity {
-	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY_SERIE";
+	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY";
+	public static final String LEVELS_DIR_NAME = "zoob_levels";
 	private ZoobGLSurface mGLView;
 
 	static {
@@ -42,34 +49,63 @@ public class Zoob extends Activity {
 		//EULA
 		Eula.show(this);
 		
+		ZoobApplication app = (ZoobApplication)getApplication();
+		/** Intent resolution **/
 		Intent intent = getIntent();
 		String serieJSON;
-		if (intent.getAction().equals(ACTION_PLAY)) {
-			Uri data = intent.getData();
-			//serieJSON = data.getPath();
-			//FIXME: read string from external storage by using the data.getPath() uri
-			serieJSON = "";
-		} else {
-			BufferedReader reader;
-      try {
-	      reader = new BufferedReader(new InputStreamReader(getAssets().open("levels/original.json")));
+		try {
+			if (intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
+				Uri data = intent.getData();
+				File root = getLevelsDir();
+				File levelFile = new File(root, data.getPath());
+				BufferedReader reader = new BufferedReader(new FileReader(levelFile));
+				int startLevel;
+				//The URI can have a query parameter ?startlevel=<level>
+				String qp = data.getQueryParameter("startlevel");
+				if (qp == null)
+					startLevel = 0;
+				else
+					startLevel = Integer.parseInt(qp);
 				serieJSON = "";
 				String line;
 				while ((line = reader.readLine()) != null)
 					serieJSON += line;
-      } catch (IOException e) {
-	      serieJSON = "";
-	      e.printStackTrace();
-      }
-		}
-		
+				JSONObject serieObj = new JSONObject(serieJSON);
+				app.setSerieName(serieObj.getString("name"));
+				app.saveProgress(startLevel); 
+			} else { //Play original serie
+				app.setOriginalSerie();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("levels/original.json")));
+				serieJSON = "";
+				String line;
+				while ((line = reader.readLine()) != null)
+					serieJSON += line;
+			}			
+    } catch (IOException e) {
+      serieJSON = "";
+      e.printStackTrace();
+    } catch (JSONException e) {
+    	serieJSON = "";
+	    e.printStackTrace();
+    }
+    
+    //Intent resolved, go ahead with glview creation
 		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), serieJSON);
 		setContentView(mGLView);
 		
     //Force landscape
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
+	}
+	
+	public static File getLevelsDir () throws IOException {
+		String state = Environment.getExternalStorageState();
+		File root = Environment.getExternalStorageDirectory();
+		if (!Environment.MEDIA_MOUNTED.equals(state) || !root.canWrite())
+			throw new IOException("Cannot write to external storage");
     
- 
+    File levelsDir = new File(root+File.separator+LEVELS_DIR_NAME);
+    levelsDir.mkdirs();
+    return levelsDir;
 	}
 	
 	@Override

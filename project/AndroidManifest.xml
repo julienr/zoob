@@ -14,9 +14,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-              <action android:name="net.fhtagn.zoobgame.PLAY_SERIE" />
-              <category android:name="android.intent.category.DEFAULT" />
             <intent-filter>
+                <action android:name="net.fhtagn.zoobgame.PLAY" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content"/>
             </intent-filter>
         </activity>
 
