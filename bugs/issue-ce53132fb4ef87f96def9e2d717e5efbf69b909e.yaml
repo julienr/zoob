@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: d'avoir un mur d'un quart de block (les 4 coins possible) ?
+desc: ""
+type: :feature
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-08-03 22:17:18.114236 Z
+references: []
+
+id: ce53132fb4ef87f96def9e2d717e5efbf69b909e
+log_events: 
+- - 2010-08-03 22:17:18.701639 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

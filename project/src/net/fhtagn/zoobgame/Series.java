@@ -17,4 +17,5 @@ public final class Series implements BaseColumns {
 	public static final String IS_MINE = "is_mine"; //indicate whether the level has been created on this phone
 	public static final String DOWNLOAD_DATE = "download_date";
 	public static final String PROGRESS = "progress";
+	public static final String COMMUNITY_ID = "community_id";
 }

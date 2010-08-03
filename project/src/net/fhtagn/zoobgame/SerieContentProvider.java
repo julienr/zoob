@@ -21,7 +21,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 3;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -39,6 +39,7 @@ public class SerieContentProvider extends ContentProvider {
     public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + SERIE_TABLE_NAME + "(" 
 					+ Series.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
 					+ Series.JSON + " TEXT, "
 					+ Series.IS_MINE + " BOOLEAN, "
 					+ Series.PROGRESS + " INTEGER, "
@@ -209,6 +210,7 @@ public class SerieContentProvider extends ContentProvider {
 		levelsProjectionMap.put(Series.IS_MINE, Series.IS_MINE);
 		levelsProjectionMap.put(Series.DOWNLOAD_DATE, Series.DOWNLOAD_DATE);
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
+		levelsProjectionMap.put(Series.COMMUNITY_ID, Series.COMMUNITY_ID);
 	}
 	
 	//This is the original level set
