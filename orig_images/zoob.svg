@@ -2054,15 +2054,6 @@
          offset="1"
          id="stop7289-6-0" />
     </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4275"
-       id="linearGradient4285"
-       x1="1091.8077"
-       y1="1742.1331"
-       x2="1091.8077"
-       y2="1342.5544"
-       gradientUnits="userSpaceOnUse" />
     <inkscape:perspective
        id="perspective3456"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
@@ -2566,6 +2557,62 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4275"
+       id="linearGradient4587"
+       gradientUnits="userSpaceOnUse"
+       x1="1091.8077"
+       y1="1742.1331"
+       x2="1091.8077"
+       y2="1342.5544" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4275"
+       id="linearGradient4589"
+       gradientUnits="userSpaceOnUse"
+       x1="1091.8077"
+       y1="1742.1331"
+       x2="1091.8077"
+       y2="1342.5544" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4275"
+       id="linearGradient4603"
+       x1="3181.4934"
+       y1="2875.9038"
+       x2="3181.4934"
+       y2="2506.5276"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(62.225397,36.769553)" />
+    <inkscape:perspective
+       id="perspective4617"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4641"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4710"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4863"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2574,19 +2621,25 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="1466.0195"
-     inkscape:cy="-3449.0026"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="3474.4399"
+     inkscape:cy="-1751.7321"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1280"
-     inkscape:window-height="748"
-     inkscape:window-x="-3"
-     inkscape:window-y="25"
+     inkscape:window-height="747"
+     inkscape:window-x="1277"
+     inkscape:window-y="250"
      inkscape:window-maximized="1"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4591" />
+  </sodipodi:namedview>
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -4515,37 +4568,34 @@
        inkscape:export-ydpi="299.86295" />
     <path
        sodipodi:type="arc"
-       style="fill:url(#linearGradient4285);stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       style="fill:url(#linearGradient4587);fill-opacity:1;stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="path3973-4"
        sodipodi:cx="1067"
        sodipodi:cy="1554.3622"
        sodipodi:rx="172"
        sodipodi:ry="172"
        d="m 1239,1554.3622 a 172,172 0 1 1 -344,0 172,172 0 1 1 344,0 z"
-       transform="translate(2421.8648,1173.843)"
+       transform="translate(2175.8648,1605.843)"
        inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
+    <rect
+       style="fill:url(#linearGradient4603);fill-opacity:1;stroke:none"
+       id="rect4593"
+       width="369.37613"
+       height="369.37613"
+       x="3059.0308"
+       y="2543.2971"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
     <path
-       style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.98865127999999913;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 3500.6345,2691.1046 -32.012,30.4849 c -26.6227,-16.537 -62.0002,-13.7723 -85.7522,8.8467 -28.1956,26.8504 -29.2859,71.4743 -2.4353,99.67 26.8504,28.1957 71.4745,29.2862 99.6703,2.4355 23.7518,-22.6188 28.2411,-57.8193 13.024,-85.2177 l 32.0121,-30.4849 -24.5069,-25.7345 z"
+       style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:9.95935249;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 3268.3821,2692.9037 -13.8685,13.2069 c -11.5337,-7.1643 -26.8603,-5.9666 -37.1503,3.8326 -12.2152,11.6324 -12.6875,30.9648 -1.0551,43.18 11.6324,12.2152 30.9648,12.6876 43.1801,1.0551 10.29,-9.7991 12.2349,-25.049 5.6424,-36.9188 l 13.8685,-13.2069 -10.6171,-11.1489 z"
        id="path4503-0-03-0-6"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
-       inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="path4661-7-2"
-       sodipodi:cx="1563.4131"
-       sodipodi:cy="593.44989"
-       sodipodi:rx="9.1923885"
-       sodipodi:ry="9.1923885"
-       d="m 1572.6055,593.44989 a 9.1923885,9.1923885 0 1 1 -18.3848,0 9.1923885,9.1923885 0 1 1 18.3848,0 z"
-       transform="translate(2003.8659,2062.5665)"
-       inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
-       inkscape:export-xdpi="299.86295"
-       inkscape:export-ydpi="299.86295" />
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
     <g
        id="g5086-0"
        transform="matrix(2.0370721,0,0,2.0370721,110.89936,1217.9629)"
@@ -5446,5 +5496,692 @@
        inkscape:export-filename="/home/julien/android/zoob/project/assets/sprites/menuitems/checkbox_unchecked.png"
        inkscape:export-xdpi="299.86295"
        inkscape:export-ydpi="299.86295" />
+    <g
+       id="g4541"
+       transform="matrix(1.0898529,0,0,1.0898529,-563.7661,-240.43229)"
+       style="opacity:1"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2553.3623"
+         x="3325"
+         height="113"
+         width="113"
+         id="rect4441"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4443"
+         width="113"
+         height="113"
+         x="3551"
+         y="2553.3623" />
+      <rect
+         y="2553.3623"
+         x="3438"
+         height="113"
+         width="113"
+         id="rect4445"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4451"
+         width="113"
+         height="113"
+         x="3438"
+         y="2666.3623" />
+      <rect
+         y="2666.3623"
+         x="3325"
+         height="113"
+         width="113"
+         id="rect4453"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4455"
+         width="113"
+         height="113"
+         x="3551"
+         y="2666.3623" />
+      <rect
+         y="2779.3623"
+         x="3551"
+         height="113"
+         width="113"
+         id="rect4457"
+         style="opacity:0.64210528000000000;fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4459"
+         width="113"
+         height="113"
+         x="3438"
+         y="2779.3623" />
+      <rect
+         y="2779.3623"
+         x="3325"
+         height="113"
+         width="113"
+         id="rect4461"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4684"
+       width="20.506096"
+       height="5.6568542"
+       x="3059.6511"
+       y="2664.2571"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <g
+       id="g4582"
+       transform="translate(-202,0)">
+      <path
+         sodipodi:type="arc"
+         style="fill:url(#linearGradient4589);fill-opacity:1;stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path4574"
+         sodipodi:cx="1067"
+         sodipodi:cy="1554.3622"
+         sodipodi:rx="172"
+         sodipodi:ry="172"
+         d="m 1239,1554.3622 c 0,94.993 -77.007,172 -172,172 -94.99298,0 -172,-77.007 -172,-172 0,-94.993 77.00702,-172 172,-172 94.993,0 172,77.007 172,172 z"
+         transform="translate(2830.8648,1177.843)"
+         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
+         inkscape:export-xdpi="299.86295"
+         inkscape:export-ydpi="299.86295" />
+      <path
+         style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:22.98865128;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 3909.6345,2695.1046 -32.012,30.4849 c -26.6227,-16.537 -62.0002,-13.7723 -85.7522,8.8467 -28.1956,26.8504 -29.2859,71.4743 -2.4353,99.67 26.8504,28.1957 71.4745,29.2862 99.6703,2.4355 23.7518,-22.6188 28.2411,-57.8193 13.024,-85.2177 l 32.0121,-30.4849 -24.5069,-25.7345 z"
+         id="path4576"
+         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
+         inkscape:export-xdpi="299.86295"
+         inkscape:export-ydpi="299.86295" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path4578"
+         sodipodi:cx="1563.4131"
+         sodipodi:cy="593.44989"
+         sodipodi:rx="9.1923885"
+         sodipodi:ry="9.1923885"
+         d="m 1572.6055,593.44989 c 0,5.07682 -4.1156,9.19239 -9.1924,9.19239 -5.0768,0 -9.1924,-4.11557 -9.1924,-9.19239 0,-5.07682 4.1156,-9.19239 9.1924,-9.19239 5.0768,0 9.1924,4.11557 9.1924,9.19239 z"
+         transform="translate(2412.8659,2066.5665)"
+         inkscape:export-filename="/home/silver/programs/android-ndk-r3/apps/zoob/orig_images/icon.png"
+         inkscape:export-xdpi="299.86295"
+         inkscape:export-ydpi="299.86295" />
+    </g>
+    <path
+       inkscape:export-ydpi="62.110001"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       id="path4605"
+       d="m 3332.6825,2588.9867 16.8571,9.0882 c -3.2337,13.187 2.6587,27.3863 15.1662,34.1295 14.8475,8.0048 33.373,2.4576 41.3778,-12.3898 8.0048,-14.8475 2.4577,-33.373 -12.3898,-41.3779 -12.5075,-6.7432 -27.6085,-3.8622 -36.8482,6.0867 l -16.8571,-9.0882 -7.306,13.5515 z"
+       style="fill:#ff3030;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:9.95935249;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4631"
+       width="66.46804"
+       height="66.46804"
+       x="3088.6423"
+       y="2691.4358"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4680"
+       width="20.506096"
+       height="5.6568542"
+       x="3059.6511"
+       y="2542.9434"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="2603.6001"
+       x="3059.6511"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4682"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="2724.9138"
+       x="3059.6511"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4686"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4688"
+       width="20.506096"
+       height="5.6568542"
+       x="3059.6511"
+       y="2785.5708"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="2846.2275"
+       x="3059.6511"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4690"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4694"
+       width="8.1317282"
+       height="1.2374369"
+       x="3060.1814"
+       y="2554.2571"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="2568.4946"
+       x="3060.1814"
+       height="1.2374369"
+       width="8.1317282"
+       id="rect4696"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4698"
+       width="8.1317282"
+       height="1.2374369"
+       x="3060.1814"
+       y="2582.7319"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="2596.9695"
+       x="3060.1814"
+       height="1.2374369"
+       width="8.1317282"
+       id="rect4700"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <g
+       id="g4755"
+       transform="translate(0,60)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4757"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4759"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4761"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4763"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       transform="translate(0,120)"
+       id="g4765"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2554.2571"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4767"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4769"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2568.4946" />
+      <rect
+         y="2582.7319"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4771"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4773"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2596.9695" />
+    </g>
+    <g
+       id="g4775"
+       transform="translate(0,180)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4777"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4779"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4781"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4783"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       transform="translate(0,240)"
+       id="g4785"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2554.2571"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4787"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4789"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2568.4946" />
+      <rect
+         y="2582.7319"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4791"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4793"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2596.9695" />
+    </g>
+    <g
+       id="g4795"
+       transform="translate(0,300)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4797"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4799"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4801"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4803"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <rect
+       y="3120.0637"
+       x="-2911.5781"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4682-5"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4684-5"
+       width="20.506096"
+       height="5.6568542"
+       x="-2911.5781"
+       y="3180.7207"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="3241.3774"
+       x="-2911.5781"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4686-1"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4688-5"
+       width="20.506096"
+       height="5.6568542"
+       x="-2911.5781"
+       y="3302.0344"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       y="3362.6912"
+       x="-2911.5781"
+       height="5.6568542"
+       width="20.506096"
+       id="rect4690-0"
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <rect
+       style="opacity:0.54210528;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect4692-6"
+       width="20.506096"
+       height="5.6568542"
+       x="-2911.5781"
+       y="3423.3481"
+       transform="matrix(0,-1,1,0,0,0)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001" />
+    <g
+       id="g4739-9"
+       style="opacity:0.54210528"
+       transform="matrix(0,-1,1,0,516.46354,5971.2293)"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2554.2571"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4694-3"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4696-7"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2568.4946" />
+      <rect
+         y="2582.7319"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4698-5"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4700-5"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2596.9695" />
+    </g>
+    <g
+       id="g4755-3"
+       transform="matrix(0,-1,1,0,576.46354,5971.2293)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4757-9"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4759-5"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4761-4"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4763-4"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       transform="matrix(0,-1,1,0,636.46354,5971.2293)"
+       id="g4765-1"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2554.2571"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4767-2"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4769-1"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2568.4946" />
+      <rect
+         y="2582.7319"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4771-0"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4773-5"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2596.9695" />
+    </g>
+    <g
+       id="g4775-2"
+       transform="matrix(0,-1,1,0,696.46354,5971.2293)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4777-2"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4779-3"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4781-7"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4783-6"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <g
+       transform="matrix(0,-1,1,0,756.46354,5971.2293)"
+       id="g4785-8"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         y="2554.2571"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4787-4"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4789-1"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2568.4946" />
+      <rect
+         y="2582.7319"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4791-6"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4793-0"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2596.9695" />
+    </g>
+    <g
+       id="g4795-6"
+       transform="matrix(0,-1,1,0,816.46354,5971.2293)"
+       style="opacity:0.54210528"
+       inkscape:export-filename="/home/julien/android/ZoobEditor/res/drawable/icon.png"
+       inkscape:export-xdpi="62.110001"
+       inkscape:export-ydpi="62.110001">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4797-1"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2554.2571" />
+      <rect
+         y="2568.4946"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4799-1"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none"
+         id="rect4801-4"
+         width="8.1317282"
+         height="1.2374369"
+         x="3060.1814"
+         y="2582.7319" />
+      <rect
+         y="2596.9695"
+         x="3060.1814"
+         height="1.2374369"
+         width="8.1317282"
+         id="rect4803-1"
+         style="fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
   </g>
 </svg>

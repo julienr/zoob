@@ -113,10 +113,6 @@ class Level {
 
     void addToColManager (CollisionManager& colManager);
 
-    Vector2 getStartPosition () const {
-      return Vector2(tanks[0].x, tanks[0].y);
-    }
-
     const TankDescription* getTanks () const { return tanks; }
     size_t getNumTanks () const { return numTanks; }
 

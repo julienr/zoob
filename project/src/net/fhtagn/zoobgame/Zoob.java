@@ -16,13 +16,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -33,6 +37,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 
 public class Zoob extends Activity {
+	static final String TAG = "Zoob";
 	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY";
 	public static final String LEVELS_DIR_NAME = "zoob_levels";
 	private ZoobGLSurface mGLView;
@@ -52,42 +57,42 @@ public class Zoob extends Activity {
 		ZoobApplication app = (ZoobApplication)getApplication();
 		/** Intent resolution **/
 		Intent intent = getIntent();
-		String serieJSON;
-		try {
-			if (intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
-				Uri data = intent.getData();
-				File root = getLevelsDir();
-				File levelFile = new File(root, data.getPath());
-				BufferedReader reader = new BufferedReader(new FileReader(levelFile));
-				int startLevel;
-				//The URI can have a query parameter ?startlevel=<level>
-				String qp = data.getQueryParameter("startlevel");
-				if (qp == null)
-					startLevel = 0;
-				else
-					startLevel = Integer.parseInt(qp);
-				serieJSON = "";
-				String line;
-				while ((line = reader.readLine()) != null)
-					serieJSON += line;
-				JSONObject serieObj = new JSONObject(serieJSON);
-				app.setSerieName(serieObj.getString("name"));
-				app.saveProgress(startLevel); 
-			} else { //Play original serie
-				app.setOriginalSerie();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("levels/original.json")));
-				serieJSON = "";
-				String line;
-				while ((line = reader.readLine()) != null)
-					serieJSON += line;
-			}			
-    } catch (IOException e) {
-      serieJSON = "";
-      e.printStackTrace();
-    } catch (JSONException e) {
-    	serieJSON = "";
-	    e.printStackTrace();
-    }
+		int serieID;
+		if (intent != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
+			String lastSegment = intent.getData().getLastPathSegment();
+			
+			if (lastSegment == null) {
+				Log.e(TAG, "lastSegment = null when resolving PLAY intent : " + intent.getData());
+				serieID = 1;
+			} else {
+				serieID = Integer.parseInt(lastSegment);
+				Log.i(TAG, "PLAY intent received, serieID = " + serieID);
+			}
+			app.setSerieId(serieID);
+			//The URI can have a query parameter ?startlevel=<level>
+			String qp = intent.getData().getQueryParameter("startlevel");
+			int startLevel;
+			if (qp == null)
+				startLevel = 0;
+			else
+				startLevel = Integer.parseInt(qp);
+			
+			app.saveProgress(startLevel);
+		} else {
+			Log.i(TAG, "No PLAY intent received, launching original serie");
+			serieID = 1;
+			app.setSerieId(serieID);
+		}
+		
+		//Load serie JSON
+		Uri serieURI = ContentUris.withAppendedId(Series.CONTENT_URI, serieID); //original serie has id 1
+		Cursor cur = managedQuery(serieURI, new String[]{Series.JSON}, null, null, null);
+		if (cur == null || !cur.moveToFirst() || cur.getCount() != 1) {
+			Log.e(TAG, "Unable to retrieve requested serie");
+			finish();
+			return;
+		}
+		String serieJSON = cur.getString(cur.getColumnIndex(Series.JSON));
     
     //Intent resolved, go ahead with glview creation
 		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), serieJSON);

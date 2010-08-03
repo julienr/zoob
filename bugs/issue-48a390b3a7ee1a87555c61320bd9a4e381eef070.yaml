@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Use mytracks VersionChecker to check for new version and prompt user
+desc: ""
+type: :feature
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-07-27 15:22:32.689958 Z
+references: []
+
+id: 48a390b3a7ee1a87555c61320bd9a4e381eef070
+log_events: 
+- - 2010-07-27 15:22:33.381870 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

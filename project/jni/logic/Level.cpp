@@ -26,7 +26,6 @@ Level::~Level() {
 void Level::_initBoard (unsigned w, unsigned h, eTileType* b, TankDescription* tanks, size_t numTanks) {
   //first entry in tank description must be player
   ASSERT(numTanks >= 1);
-  ASSERT(tanks[0].tankType == TANK_PLAYER);
   width = w;
   height = h;
   board = new Tile**[width];

@@ -1,8 +1,11 @@
 package net.fhtagn.zoobgame;
 
 import android.app.Application;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
@@ -13,7 +16,7 @@ public class ZoobApplication extends Application {
 	
 	private SharedPreferences settings;
 	
-	private String prefKeyLevel = null;
+	private Uri currentSerie;
 	
 	protected String getPrefsName () {
 		return "net_fhtagn_zoobgame_prefs";
@@ -29,20 +32,19 @@ public class ZoobApplication extends Application {
     settings = getSharedPreferences(getPrefsName(), 0);
 	}
 	
-	/** Serie name is used as a preference key to store progression in a particular serie */
-	public synchronized void setSerieName (String name) {
-		prefKeyLevel = "prog_"+name;
-	}
-	
-	//Same as setSerieName, but for the original levelest
-	public synchronized void setOriginalSerie () {
-		prefKeyLevel = "level";
+	public synchronized void setSerieId (long id) {
+		currentSerie = ContentUris.withAppendedId(Series.CONTENT_URI, id);
 	}
 	
 	public synchronized int getLevel () {
-		if (prefKeyLevel == null)
+		//FIXME: for transition, if it is stored in preferences, should get it from preferences
+		//and then put it in the db, remove from pref and go on with the db
+		Cursor cur = getContentResolver().query(currentSerie, new String[]{Series.PROGRESS}, null, null, null);
+		if (!cur.moveToFirst())
 			return 0;
-		return settings.getInt(prefKeyLevel, 0);
+		int progress = cur.getInt(cur.getColumnIndex(Series.PROGRESS));
+		cur.close();
+		return progress; 
 	}
 	
 	public synchronized int getDifficulty () {
@@ -65,9 +67,10 @@ public class ZoobApplication extends Application {
 	}
 	
 	public synchronized void saveProgress (int level) {
-		if (prefKeyLevel == null)
-			return;
-		saveIntPref(prefKeyLevel, level);
+		ContentValues values = new ContentValues();
+		values.put(Series.PROGRESS, level);
+		getContentResolver().update(currentSerie, values, null, null);
+		return;
 	}
 	
 	public synchronized void saveDifficulty (int difficulty) {

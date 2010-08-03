@@ -31,15 +31,18 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       introTimeLeft(BOSS_INTRO_TIME),
       introDone(!level->isBoss()) {
   level->addToColManager(colManager);
-  playerTank->setPosition(level->getStartPosition());
-  ProgressionManager::getInstance()->setPlayerForm(playerTank);
-  colManager.addEntity(playerTank);
+
+  Vector2 playerStartPosition = Vector2(1,1);
+  bool foundPlayer = false;
 
   const TankDescription* tanks = level->getTanks();
-  for (size_t i=1; i<level->getNumTanks(); i++) {
+  for (size_t i=0; i<level->getNumTanks(); i++) {
     const TankDescription& desc = tanks[i];
     EnemyTank* t = NULL;
     switch (desc.tankType) {
+      //Special player case, don't create a tank yet for player
+      case TANK_PLAYER: foundPlayer = true; playerStartPosition.set(desc.x, desc.y); break;
+
       case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
       case TANK_BOUNCE: t = desc.path?new BounceTank(desc.path):new BounceTank(); break;
       case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
@@ -53,10 +56,19 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       case BOSS_SPLIT: ASSERT(!desc.path); t = new BossSplitTank(); break;
       default: LOGE("unknown tank type : %i", desc.tankType); ASSERT(false); break;
     }
-    t->setPosition(Vector2(desc.x, desc.y));
-    enemies.append(t);
-    colManager.addEntity(t);
+    if (t != NULL) { //t will be NULL when we found player, to be handled below
+      t->setPosition(Vector2(desc.x, desc.y));
+      enemies.append(t);
+      colManager.addEntity(t);
+    }
   }
+
+  if (!foundPlayer)
+    LOGE("No player start position defined in level, falling back on default (1,1)");
+
+  playerTank->setPosition(playerStartPosition);
+  ProgressionManager::getInstance()->setPlayerForm(playerTank);
+  colManager.addEntity(playerTank);
 }
 
 Game::~Game () {

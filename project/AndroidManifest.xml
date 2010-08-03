@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
+        <provider android:name="SerieContentProvider"
+                  android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />
     </application>
+    
     <uses-sdk android:minSdkVersion="3" />
-
 </manifest> 
