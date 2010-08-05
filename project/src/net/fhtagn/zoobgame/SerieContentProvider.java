@@ -26,7 +26,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 6;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -47,11 +47,11 @@ public class SerieContentProvider extends ContentProvider {
 			db.execSQL("CREATE TABLE " + SERIE_TABLE_NAME + "(" 
 					+ Series.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
-					+ Series.JSON + " TEXT, "
+					+ Series.JSON + " TEXT NOT NULL, "
 					+ Series.IS_MINE + " BOOLEAN, "
-					+ Series.PROGRESS + " INTEGER, "
+					+ Series.PROGRESS + " INTEGER NOT NULL DEFAULT 0, "
 					+ Series.UPLOAD_DATE + " DATE, "
-					+ Series.LAST_MODIFICATION + " DATE);");
+					+ Series.LAST_MODIFICATION + " DATE NOT NULL DEFAULT CURRENT_TIMESTAMP);");
 			
 			ContentValues values = new ContentValues();
 			values.put(Series.JSON, originalLevel);
