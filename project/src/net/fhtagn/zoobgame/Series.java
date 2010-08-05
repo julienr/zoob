@@ -13,6 +13,7 @@ public final class Series implements BaseColumns {
 	
 	//DB fields
 	public static final String ID = _ID;
+	public static final String NAME = "name";
 	public static final String JSON = "json";
 	public static final String IS_MINE = "is_mine"; //indicate whether the level has been created on this phone
 	public static final String PROGRESS = "progress";

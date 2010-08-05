@@ -7,6 +7,9 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -26,7 +29,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -46,6 +49,7 @@ public class SerieContentProvider extends ContentProvider {
     public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + SERIE_TABLE_NAME + "(" 
 					+ Series.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ Series.NAME + " VARCHAR(255) NOT NULL,"
 					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
 					+ Series.JSON + " TEXT NOT NULL, "
 					+ Series.IS_MINE + " BOOLEAN, "
@@ -56,9 +60,17 @@ public class SerieContentProvider extends ContentProvider {
 			ContentValues values = new ContentValues();
 			values.put(Series.JSON, originalLevel);
 			values.put(Series.IS_MINE, 0);
+			try {
+				JSONObject originalObj = new JSONObject(originalLevel);
+				values.put(Series.NAME, originalObj.getString("name"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				throw new SQLException("Error parsing original level JSON");
+			}
+			
 			long rowId = db.insert(SERIE_TABLE_NAME, Series.JSON, values);
 			if (rowId != 1) {
-				throw new SQLException("ID for original level is not 1");
+				throw new SQLException("ID for original level is not 1 but " + rowId);
 			}
     }
 
@@ -129,6 +141,19 @@ public class SerieContentProvider extends ContentProvider {
 		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 		return cal.getTime();
 	}
+	
+	private void extractName (ContentValues values) {
+		if (values.containsKey(Series.NAME)) //name is basically just used for caching (don't have to reparse the whole JSON each time we want a name
+			throw new IllegalArgumentException(Series.NAME + " shouldn't be specified, it will be read from JSON");
+		
+		try {
+			JSONObject serieObj = new JSONObject(values.getAsString(Series.JSON));
+			values.put(Series.NAME, serieObj.getString("name"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new SQLException("Invalid JSON");
+		}
+	}
 
 	@Override
   public Uri insert(Uri uri, ContentValues initialValues) {
@@ -146,6 +171,8 @@ public class SerieContentProvider extends ContentProvider {
 				!values.containsKey(Series.IS_MINE)) {
 			throw new IllegalArgumentException(Series.JSON + " and " + Series.IS_MINE + " are required to insert a new serie");
 		}
+		
+		extractName(values);
 		
 		if (!values.containsKey(Series.PROGRESS))
 			values.put(Series.PROGRESS, 0);
@@ -201,12 +228,14 @@ public class SerieContentProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 			case SERIES:
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
+				extractName(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
 				break;
 			case SERIE_ID:
 				String noteId = uri.getPathSegments().get(1);
 				where = Series.ID + "=" + noteId + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : "");
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
+				extractName(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
 				break;
 			default:
@@ -224,6 +253,7 @@ public class SerieContentProvider extends ContentProvider {
 		
 		levelsProjectionMap = new HashMap<String, String>();
 		levelsProjectionMap.put(Series.ID, Series.ID);
+		levelsProjectionMap.put(Series.NAME, Series.NAME);
 		levelsProjectionMap.put(Series.JSON, Series.JSON);
 		levelsProjectionMap.put(Series.IS_MINE, Series.IS_MINE);
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
