@@ -1,6 +1,11 @@
 package net.fhtagn.zoobgame;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -21,7 +26,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -29,6 +34,8 @@ public class SerieContentProvider extends ContentProvider {
 	private static final UriMatcher uriMatcher;
 	
 	private static final HashMap<String, String> levelsProjectionMap;
+	
+	private static final SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // set the format to sql date time
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		public DatabaseHelper(Context context) {
@@ -43,7 +50,8 @@ public class SerieContentProvider extends ContentProvider {
 					+ Series.JSON + " TEXT, "
 					+ Series.IS_MINE + " BOOLEAN, "
 					+ Series.PROGRESS + " INTEGER, "
-					+ Series.DOWNLOAD_DATE + " DATE);");
+					+ Series.UPLOAD_DATE + " DATE, "
+					+ Series.LAST_MODIFICATION + " DATE);");
 			
 			ContentValues values = new ContentValues();
 			values.put(Series.JSON, originalLevel);
@@ -116,6 +124,11 @@ public class SerieContentProvider extends ContentProvider {
 				throw new IllegalArgumentException("Unknown uri : " + uri);
 		}
   }
+	
+	private Date getUTCTime () {
+		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		return cal.getTime();
+	}
 
 	@Override
   public Uri insert(Uri uri, ContentValues initialValues) {
@@ -136,6 +149,8 @@ public class SerieContentProvider extends ContentProvider {
 		
 		if (!values.containsKey(Series.PROGRESS))
 			values.put(Series.PROGRESS, 0);
+		
+		values.put(Series.LAST_MODIFICATION, sqlDateFormat.format(getUTCTime()));
 		
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(SERIE_TABLE_NAME, Series.JSON, values);
@@ -180,6 +195,9 @@ public class SerieContentProvider extends ContentProvider {
   public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		int count;
+		//Don't consider progress update as a real update for last_modification
+		if (!(values.size() == 1 && values.containsKey(Series.PROGRESS)))
+				values.put(Series.LAST_MODIFICATION, sqlDateFormat.format(getUTCTime()));
 		switch (uriMatcher.match(uri)) {
 			case SERIES:
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
@@ -208,9 +226,10 @@ public class SerieContentProvider extends ContentProvider {
 		levelsProjectionMap.put(Series.ID, Series.ID);
 		levelsProjectionMap.put(Series.JSON, Series.JSON);
 		levelsProjectionMap.put(Series.IS_MINE, Series.IS_MINE);
-		levelsProjectionMap.put(Series.DOWNLOAD_DATE, Series.DOWNLOAD_DATE);
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
 		levelsProjectionMap.put(Series.COMMUNITY_ID, Series.COMMUNITY_ID);
+		levelsProjectionMap.put(Series.LAST_MODIFICATION, Series.LAST_MODIFICATION);
+		levelsProjectionMap.put(Series.UPLOAD_DATE, Series.UPLOAD_DATE);
 	}
 	
 	//This is the original level set

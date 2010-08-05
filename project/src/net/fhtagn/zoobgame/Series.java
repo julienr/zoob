@@ -9,13 +9,16 @@ public final class Series implements BaseColumns {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/net.fhtagn.zoobgame.serie";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/net.fhtagn.zoobgame.serie";
 	
-	public static final String DEFAULT_SORT_ORDER = "download_date DESC";
+	public static final String DEFAULT_SORT_ORDER = "last_modification DESC";
 	
 	//DB fields
 	public static final String ID = _ID;
 	public static final String JSON = "json";
 	public static final String IS_MINE = "is_mine"; //indicate whether the level has been created on this phone
-	public static final String DOWNLOAD_DATE = "download_date";
 	public static final String PROGRESS = "progress";
 	public static final String COMMUNITY_ID = "community_id";
+
+	public static final String LAST_MODIFICATION = "last_modification"; //either the download date or the last modification using the editor
+	/** The following fields are only useful for series authored by the phone user */
+	public static final String UPLOAD_DATE = "upload_date";
 }
