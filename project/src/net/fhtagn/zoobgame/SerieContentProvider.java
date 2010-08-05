@@ -29,7 +29,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 10;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -51,6 +51,9 @@ public class SerieContentProvider extends ContentProvider {
 					+ Series.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ Series.NAME + " VARCHAR(255) NOT NULL,"
 					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
+					+ Series.NUM_LEVELS + " INTEGER NOT NULL, "
+					+ Series.RATING + " FLOAT, "
+					+ Series.AUTHOR + " VARCHAR(255), "
 					+ Series.JSON + " TEXT NOT NULL, "
 					+ Series.IS_MINE + " BOOLEAN, "
 					+ Series.PROGRESS + " INTEGER NOT NULL DEFAULT 0, "
@@ -60,14 +63,7 @@ public class SerieContentProvider extends ContentProvider {
 			ContentValues values = new ContentValues();
 			values.put(Series.JSON, originalLevel);
 			values.put(Series.IS_MINE, 0);
-			try {
-				JSONObject originalObj = new JSONObject(originalLevel);
-				values.put(Series.NAME, originalObj.getString("name"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new SQLException("Error parsing original level JSON");
-			}
-			
+			cacheInfos(values);	
 			long rowId = db.insert(SERIE_TABLE_NAME, Series.JSON, values);
 			if (rowId != 1) {
 				throw new SQLException("ID for original level is not 1 but " + rowId);
@@ -142,13 +138,29 @@ public class SerieContentProvider extends ContentProvider {
 		return cal.getTime();
 	}
 	
-	private void extractName (ContentValues values) {
-		if (values.containsKey(Series.NAME)) //name is basically just used for caching (don't have to reparse the whole JSON each time we want a name
-			throw new IllegalArgumentException(Series.NAME + " shouldn't be specified, it will be read from JSON");
+	private static void assertNotContained (String key, ContentValues values) {
+		if (values.containsKey(key)) 
+			throw new IllegalArgumentException(key + " shouldn't be specified in ContentValues, it is infered from JSON");
+	}
+	private static void cacheInfos (ContentValues values) {
+		assertNotContained(Series.NAME, values);
+		assertNotContained(Series.NUM_LEVELS, values);
+		assertNotContained(Series.RATING, values);
+		assertNotContained(Series.AUTHOR, values);
 		
+		if (!values.containsKey(Series.JSON))
+			return;
+			
 		try {
 			JSONObject serieObj = new JSONObject(values.getAsString(Series.JSON));
 			values.put(Series.NAME, serieObj.getString("name"));
+			values.put(Series.NUM_LEVELS, serieObj.getJSONArray("levels").length());
+			if (serieObj.has("meta")) { 
+				if (serieObj.getJSONObject("meta").has("rating"))
+					values.put(Series.RATING, serieObj.getJSONObject("meta").getDouble("rating"));
+				if (serieObj.getJSONObject("meta").has("author"))
+					values.put(Series.AUTHOR, serieObj.getJSONObject("meta").getString("author"));
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new SQLException("Invalid JSON");
@@ -172,7 +184,7 @@ public class SerieContentProvider extends ContentProvider {
 			throw new IllegalArgumentException(Series.JSON + " and " + Series.IS_MINE + " are required to insert a new serie");
 		}
 		
-		extractName(values);
+		cacheInfos(values);
 		
 		if (!values.containsKey(Series.PROGRESS))
 			values.put(Series.PROGRESS, 0);
@@ -228,14 +240,14 @@ public class SerieContentProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 			case SERIES:
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
-				extractName(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
+				cacheInfos(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
 				break;
 			case SERIE_ID:
 				String noteId = uri.getPathSegments().get(1);
 				where = Series.ID + "=" + noteId + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : "");
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
-				extractName(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
+				cacheInfos(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
 				break;
 			default:
@@ -257,6 +269,9 @@ public class SerieContentProvider extends ContentProvider {
 		levelsProjectionMap.put(Series.JSON, Series.JSON);
 		levelsProjectionMap.put(Series.IS_MINE, Series.IS_MINE);
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
+		levelsProjectionMap.put(Series.NUM_LEVELS, Series.NUM_LEVELS);
+		levelsProjectionMap.put(Series.RATING, Series.RATING);
+		levelsProjectionMap.put(Series.AUTHOR, Series.AUTHOR);
 		levelsProjectionMap.put(Series.COMMUNITY_ID, Series.COMMUNITY_ID);
 		levelsProjectionMap.put(Series.LAST_MODIFICATION, Series.LAST_MODIFICATION);
 		levelsProjectionMap.put(Series.UPLOAD_DATE, Series.UPLOAD_DATE);
