@@ -29,7 +29,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 11;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -51,7 +51,7 @@ public class SerieContentProvider extends ContentProvider {
 					+ Series.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ Series.NAME + " VARCHAR(255) NOT NULL,"
 					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
-					+ Series.NUM_LEVELS + " INTEGER NOT NULL, "
+					+ Series.NUM_LEVELS + " INTEGER, "
 					+ Series.RATING + " FLOAT, "
 					+ Series.AUTHOR + " VARCHAR(255), "
 					+ Series.JSON + " TEXT NOT NULL, "
@@ -154,7 +154,9 @@ public class SerieContentProvider extends ContentProvider {
 		try {
 			JSONObject serieObj = new JSONObject(values.getAsString(Series.JSON));
 			values.put(Series.NAME, serieObj.getString("name"));
-			values.put(Series.NUM_LEVELS, serieObj.getJSONArray("levels").length());
+			if (serieObj.has("levels"))
+				values.put(Series.NUM_LEVELS, serieObj.getJSONArray("levels").length());
+			
 			if (serieObj.has("meta")) { 
 				if (serieObj.getJSONObject("meta").has("rating"))
 					values.put(Series.RATING, serieObj.getJSONObject("meta").getDouble("rating"));
