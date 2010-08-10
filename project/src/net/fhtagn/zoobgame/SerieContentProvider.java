@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.Map.Entry;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,7 +96,7 @@ public class SerieContentProvider extends ContentProvider {
 		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"==1 AND "+where, whereArgs, null, null, null);
 		if (c.getCount() > 0) {
 			if (!(update.size() == 1 && update.containsKey(Series.PROGRESS))) {
-				throw new IllegalArgumentException("Updating anything else than progress on original serie is disallowed");	
+				throw new IllegalArgumentException("Updating anything else than progress on original serie is disallowed. where=[" + where+"]");	
 			}
 		}	
 	}
@@ -247,8 +248,8 @@ public class SerieContentProvider extends ContentProvider {
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
 				break;
 			case SERIE_ID:
-				String noteId = uri.getPathSegments().get(1);
-				where = Series.ID + "=" + noteId + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : "");
+				String serieId = uri.getPathSegments().get(1);
+				where = Series.ID + "=" + serieId + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : "");
 				preventOriginalSerieUpdate(values, db, where, whereArgs);
 				cacheInfos(values); //doing that before preventOriginal would prevent it to work (because we change values.count)
 				count = db.update(SERIE_TABLE_NAME, values, where, whereArgs);
