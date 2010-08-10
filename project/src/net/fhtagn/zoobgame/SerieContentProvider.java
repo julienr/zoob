@@ -29,7 +29,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 12;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -53,6 +53,7 @@ public class SerieContentProvider extends ContentProvider {
 					+ Series.COMMUNITY_ID + " INTEGER UNIQUE, "
 					+ Series.NUM_LEVELS + " INTEGER, "
 					+ Series.RATING + " FLOAT, "
+					+ Series.MY_RATING + " FLOAT, "
 					+ Series.AUTHOR + " VARCHAR(255), "
 					+ Series.JSON + " TEXT NOT NULL, "
 					+ Series.IS_MINE + " BOOLEAN, "
@@ -273,6 +274,7 @@ public class SerieContentProvider extends ContentProvider {
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
 		levelsProjectionMap.put(Series.NUM_LEVELS, Series.NUM_LEVELS);
 		levelsProjectionMap.put(Series.RATING, Series.RATING);
+		levelsProjectionMap.put(Series.MY_RATING, Series.MY_RATING);
 		levelsProjectionMap.put(Series.AUTHOR, Series.AUTHOR);
 		levelsProjectionMap.put(Series.COMMUNITY_ID, Series.COMMUNITY_ID);
 		levelsProjectionMap.put(Series.LAST_MODIFICATION, Series.LAST_MODIFICATION);

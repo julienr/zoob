@@ -26,5 +26,6 @@ public final class Series implements BaseColumns {
 	public static final String NAME = "name"; //used to cache name to avoid loading JSON each time
 	public static final String NUM_LEVELS = "num_levels"; //used to cache number of levels 
 	public static final String RATING = "rating"; //might be null if no rating
+	public static final String MY_RATING = "my_rating";
 	public static final String AUTHOR = "author";
 }
