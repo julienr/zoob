@@ -89,17 +89,22 @@ public class SerieContentProvider extends ContentProvider {
 	//if where/whereArgs combination would lead to such a modification
 	private void preventOriginalSerieDeletion (SQLiteDatabase db, String where, String[] whereArgs) {
 		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"==1 AND "+where, whereArgs, null, null, null);
-		if (c.getCount() > 0)
+		if (c.getCount() > 0) {
+			c.close();
 			throw new IllegalArgumentException("Query would delete original serie, aborting. DELETE WHERE " + where + " with args : " + whereArgs);
+		}
+		c.close();
 	}
 	
 	private void preventOriginalSerieUpdate (ContentValues update, SQLiteDatabase db, String where, String[] whereArgs) {
 		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"==1 AND "+where, whereArgs, null, null, null);
-		if (c.getCount() > 0) {
+		if (c.getCount() > 0) { 
+			c.close();
 			if (!(update.size() == 1 && update.containsKey(Series.PROGRESS))) {
 				throw new IllegalArgumentException("Updating anything else than progress on original serie is disallowed. where=[" + where+"]");	
 			}
 		}	
+		c.close();
 	}
 	
 	@Override

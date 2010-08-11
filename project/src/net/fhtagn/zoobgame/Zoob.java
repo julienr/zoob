@@ -55,6 +55,7 @@ public class Zoob extends Activity {
 		Eula.show(this);
 		
 		ZoobApplication app = (ZoobApplication)getApplication();
+		app.setProgressPersistent(true);
 		/** Intent resolution **/
 		Intent intent = getIntent();
 		int serieID;
@@ -74,8 +75,11 @@ public class Zoob extends Activity {
 			int startLevel;
 			if (qp == null)
 				startLevel = 0;
-			else
+			else {
 				startLevel = Integer.parseInt(qp);
+				app.setProgressPersistent(false);
+				Log.i(TAG, "Got startlevel = " + startLevel);
+			}
 			
 			app.saveProgress(startLevel);
 		} else {
