@@ -22,6 +22,7 @@ public final class Series implements BaseColumns {
 	/** The following fields are only useful for series authored by the phone user */
 	public static final String UPLOAD_DATE = "upload_date";
 	
+	public static final String UPDATE_AVAILABLE = "update_available"; //indicate wether an updated version of this serie is available on the server
 	//"cache" fields
 	public static final String NAME = "name"; //used to cache name to avoid loading JSON each time
 	public static final String NUM_LEVELS = "num_levels"; //used to cache number of levels 

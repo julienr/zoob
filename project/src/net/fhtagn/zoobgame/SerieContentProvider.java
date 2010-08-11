@@ -30,7 +30,7 @@ import android.util.Log;
 public class SerieContentProvider extends ContentProvider {
 	static final String TAG = "SerieContentProvider";
 	private static final String DATABASE_NAME = "zoob.db";
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 14;
 	private static final String SERIE_TABLE_NAME = "series";
 	static final String AUTHORITY = "net.fhtagn.zoobgame.SerieContentProvider";
 	private static final int SERIES = 1; //code for uri matcher
@@ -56,6 +56,7 @@ public class SerieContentProvider extends ContentProvider {
 					+ Series.RATING + " FLOAT, "
 					+ Series.MY_RATING + " FLOAT, "
 					+ Series.AUTHOR + " VARCHAR(255), "
+					+ Series.UPDATE_AVAILABLE + " BOOLEAN NOT NULL DEFAULT 0, "
 					+ Series.JSON + " TEXT NOT NULL, "
 					+ Series.IS_MINE + " BOOLEAN, "
 					+ Series.PROGRESS + " INTEGER NOT NULL DEFAULT 0, "
@@ -160,10 +161,13 @@ public class SerieContentProvider extends ContentProvider {
 				values.put(Series.NUM_LEVELS, serieObj.getJSONArray("levels").length());
 			
 			if (serieObj.has("meta")) { 
-				if (serieObj.getJSONObject("meta").has("rating"))
-					values.put(Series.RATING, serieObj.getJSONObject("meta").getDouble("rating"));
-				if (serieObj.getJSONObject("meta").has("author"))
-					values.put(Series.AUTHOR, serieObj.getJSONObject("meta").getString("author"));
+				final JSONObject meta = serieObj.getJSONObject("meta");
+				if (meta.has("rating"))
+					values.put(Series.RATING, meta.getDouble("rating"));
+				if (meta.has("author"))
+					values.put(Series.AUTHOR, meta.getString("author"));
+				if (meta.has("my_rating"))
+					values.put(Series.MY_RATING, meta.getDouble("my_rating"));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -274,6 +278,7 @@ public class SerieContentProvider extends ContentProvider {
 		levelsProjectionMap.put(Series.IS_MINE, Series.IS_MINE);
 		levelsProjectionMap.put(Series.PROGRESS, Series.PROGRESS);
 		levelsProjectionMap.put(Series.NUM_LEVELS, Series.NUM_LEVELS);
+		levelsProjectionMap.put(Series.UPDATE_AVAILABLE, Series.UPDATE_AVAILABLE);
 		levelsProjectionMap.put(Series.RATING, Series.RATING);
 		levelsProjectionMap.put(Series.MY_RATING, Series.MY_RATING);
 		levelsProjectionMap.put(Series.AUTHOR, Series.AUTHOR);
