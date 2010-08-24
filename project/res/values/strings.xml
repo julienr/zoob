@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
     <string name="app_name">Zoob</string>
     <string name="eula_title">EULA</string>
     <string name="eula_accept">Accept</string>
     <string name="eula_refuse">Refuse</string>
+
+    <!--  Preferences -->
+    <string name="controls_preferences">Controls</string>
+    
+    <string name="title_gamepad_preference">Virtual gamepad</string>
+    <string name="summary_gamepad_preference">Enable this to display a virtual gamepad to control the tank. Disable to touch anywhere to move</string>
+    
+    <string name="title_trackball_preference">Trackball</string>
+    <string name="summary_trackball_preference">Enable trackball to aim and fire</string>
+    
+    <!-- In-game screens -->
+    <string name="lvl_complete">level complete!</string>
+    <string name="tap_continue">tap to continue</string>
+    <string name="lvl_gameover">game over</string>
+    <string name="all_complete">all levels complete</string>
+    <string name="thx_playing">thanks for playing !</string>
 </resources>

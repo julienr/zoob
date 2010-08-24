@@ -39,7 +39,6 @@ import android.view.MotionEvent;
 public class Zoob extends Activity {
 	static final String TAG = "Zoob";
 	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY";
-	public static final String LEVELS_DIR_NAME = "zoob_levels";
 	private ZoobGLSurface mGLView;
 
 	static {

@@ -20,6 +20,20 @@
                 <data android:scheme="content"/>
             </intent-filter>
         </activity>
+        
+        <activity android:name="MainMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="OptionsMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="HelpMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="WonMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="LostMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="EndMenu"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        
 
         <provider android:name="SerieContentProvider"
                   android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />

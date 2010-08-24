@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:gravity="center_vertical"
+    android:tileMode="repeat"
+    android:weightSum="1.0">
+    <!--  for an explanation of weightSum, see http://andmobidev.blogspot.com/2010/01/setting-width-of-view-using-percentage.html -->
+  <ImageView android:id="@+id/logo"
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_weight=".5"
+    android:src="@drawable/logo" />
+    
+  <ScrollView
+    android:layout_width="0dip"
+    android:layout_height="fill_parent"
+    android:layout_weight=".5">
+	  <RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="center_horizontal">
+	    
+	    <Gallery android:id="@+id/lvlgallery"
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"/>
+	    
+		  <net.fhtagn.zoobmenu.BlurButton  android:id="@+id/start"
+		    style="@style/Menu.Button" 
+		    android:layout_below="@id/lvlgallery"
+		    android:layout_centerHorizontal="true"
+		    android:text="start"/>
+		    
+		  <Gallery android:id="@+id/diffgallery"
+		    android:layout_below="@id/start"
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"/>
+		  
+		  <net.fhtagn.zoobmenu.BlurButton  android:id="@+id/options"
+		    android:layout_below="@id/diffgallery"
+		    android:layout_centerHorizontal="true"
+	      style="@style/Menu.Button" 
+	      android:text="options"/>
+	  </RelativeLayout>
+  </ScrollView>
+</LinearLayout>
