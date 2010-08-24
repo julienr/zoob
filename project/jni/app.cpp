@@ -108,8 +108,9 @@ void toPlayingState () {
 }
 
 void startGame (int level) {
+  LOGE("startGame(%i)", level);
   GameManager::getInstance()->setCurrentLevel((size_t)level);
-  toPlayingState();
+  GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
 void toMenuState () {
@@ -122,7 +123,11 @@ void toMenuState () {
 
 
 void toWonState () {
-  if (!GameManager::getInstance()->hasMoreLevels()) {
+  LOGE("toWonState");
+  showMenu(MENU_WON, GameManager::getInstance()->getCurrentLevel());
+  GameManager::getInstance()->setState(STATE_NONE);
+
+  /*if (!GameManager::getInstance()->hasMoreLevels()) {
 #if FULL_VERSION
     GameManager::getInstance()->setState(STATE_END);
 #else
@@ -133,7 +138,7 @@ void toWonState () {
     saveProgress(GameManager::getInstance()->getCurrentLevel()+1);
     if (ProgressionManager::getInstance()->getLastReward() != REWARD_NONE)
        GameManager::getInstance()->setState(STATE_REWARD);
-  }
+  }*/
 }
 
 void toPauseState () {

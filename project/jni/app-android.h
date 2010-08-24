@@ -17,14 +17,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
 
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer
- * Method:    nativeSetSerie
- * Signature: (S)V
- */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeSetSerie
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     net_fhtagn_zoob_zoobRenderer
  * Method:    nativeStartGame
  * Signature: (S)V
  */

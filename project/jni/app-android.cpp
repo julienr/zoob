@@ -13,6 +13,7 @@ static jmethodID java_saveDifficulty;
 static jmethodID java_saveInputMethod;
 static jmethodID java_saveUseTrackball;
 static jmethodID java_buyFull;
+static jmethodID java_showMenu;
 
 void saveProgress (int level) {
   LOGE("saveProgress : %i", level);
@@ -32,6 +33,11 @@ void saveInputMethod (int inputMethod) {
 void saveUseTrackball (int use) {
   LOGE("saveUseTrackball : %i", use);
   jniEnv->CallVoidMethod(zoobRenderer, java_saveUseTrackball, use);
+}
+
+void showMenu (eMenu id, int currentLevel) {
+  LOGE("showMenu : %i, currentLevel : %i", id, currentLevel);
+  jniEnv->CallVoidMethod(zoobRenderer, java_showMenu, id, currentLevel);
 }
 
 void buyFull () {
@@ -63,6 +69,7 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
   JNI_GET_METHOD(java_saveInputMethod, "saveInputMethod", "(I)V");
   JNI_GET_METHOD(java_saveUseTrackball, "saveUseTrackball", "(I)V");
   JNI_GET_METHOD(java_buyFull, "buyFullVersion", "()V");
+  JNI_GET_METHOD(java_showMenu, "showMenu", "(II)V");
 }
 
 
@@ -88,14 +95,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
   nativeInit(str, serie);
   env->ReleaseStringUTFChars(apkPath, str);
   env->ReleaseStringUTFChars(levelSerie, serie);
-}
-
-JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeSetSerie
-  (JNIEnv *env, jclass, jstring serie) {
-  const char* _serie;
-  _serie = env->GetStringUTFChars(serie, NULL);
-  nativeLoadSerie(_serie);
-  env->ReleaseStringUTFChars(serie, _serie);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartGame

@@ -7,6 +7,9 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import net.fhtagn.zoobgame.menus.MainMenu;
+import net.fhtagn.zoobgame.menus.WonMenu;
+
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -28,6 +31,9 @@ import android.view.MotionEvent;
 public class Zoob extends Activity {
 	static final String TAG = "Zoob";
 	private ZoobGLSurface mGLView;
+	
+	//request used when a menu is called from the game
+	static final int REQUEST_MENU = 1;
 
 	static {
 		System.loadLibrary("zoob");
@@ -76,6 +82,15 @@ public class Zoob extends Activity {
       return true;
     }
     return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_MENU) {
+			int level = data.getIntExtra("level", 0);
+			Log.i(TAG, "onActivityResult, level = " + level);
+			mGLView.setLevel(level);
+		}
 	}
 	
 	@Override
@@ -232,17 +247,19 @@ class ZoobGLSurface extends GLSurfaceView {
 	 * like "call to OpenGL ES API with no current context" 
 	 */
 	
-	public ZoobGLSurface(Context context, ZoobApplication app, String levelsSerie) {
+	public ZoobGLSurface(Zoob context, ZoobApplication app, String levelsSerie) {
 		super(context);
 		mRenderer = new ZoobRenderer(context, app, levelsSerie);
 		setRenderer(mRenderer);
 		setFocusableInTouchMode(true); //necessary to get trackball events
 	}
 	
-	public void startGame (int level) {
-		mRenderer.startGame(level);
+	//Will change the level the next time the renderer is either resumed or recreated
+	public void setLevel (int level) {
+		mRenderer.setLevel(level);
 	}
 	
+	@Override
 	public void onResume () {
 		super.onResume();
 		mRenderer.triggerRestoreGL();
@@ -288,7 +305,7 @@ class ZoobGLSurface extends GLSurfaceView {
 
 class ZoobRenderer implements GLSurfaceView.Renderer {
 	static final String TAG = "ZoobRenderer";
-	private Context context;
+	private Zoob context;
 	private ZoobApplication app;
 	private String apkFilePath;
 	
@@ -299,9 +316,11 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	private final String levelsSerie;
 	
 	private boolean restoreGL = false; //notify this renderer that it should restore opengl context (the app was resumed from sleep)
+	
+	private int nextLevel = -1; //if set to something different than -1, indicate the next lvl to start (in the next onDrawFrame)
 
 	//This constructor is not ran in the rendering thread (but in the surface thread)
-	public ZoobRenderer (Context context, ZoobApplication app, String levelsSerie) {
+	public ZoobRenderer (Zoob context, ZoobApplication app, String levelsSerie) {
 		this.context = context;
 		this.levelsSerie = levelsSerie;
 		// return apk file path (or null on error)
@@ -340,14 +359,20 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		restoreGL = true;
 	}
 	
-	public void startGame (int level) {
-		nativeStartGame(level);
+	public void setLevel (int level) {
+		nextLevel = level;
 	}
 
 	public void onDrawFrame(GL10 gl) {
 		if (restoreGL) {
 			nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
 			restoreGL = false;
+		}
+		
+		if (nextLevel != -1) {
+			Log.i(TAG, "nextLevel = " + nextLevel);
+			nativeStartGame(nextLevel);
+			nextLevel = -1;
 		}
 		
 		//process commands
@@ -406,7 +431,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	
 	private static native void nativeStartGame(int level);
 	
-	private static native void nativeSetSerie (String serieJSON);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 	
@@ -448,4 +472,20 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		context.startActivity(new Intent(Intent.ACTION_VIEW, fullVersionURI));
 	}
 	
+	static final int MENU_MAIN = 0;
+	static final int MENU_WON = 1;
+	static final int MENU_LOST = 2;
+	public void showMenu (int id, int currentLevel) {
+		Intent i;
+		switch (id) {
+			case MENU_WON:
+				i = new Intent(context, WonMenu.class);
+				i.putExtra("current_level", currentLevel);
+				break;
+			default:
+				i = new Intent(context, MainMenu.class);
+				break;
+		}
+		context.startActivityForResult(i, Zoob.REQUEST_MENU);
+	}
 }

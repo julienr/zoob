@@ -1,19 +1,39 @@
 package net.fhtagn.zoobgame.menus;
 
 import net.fhtagn.zoobgame.R;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 public class WonMenu extends MenuActivity {
+	private int currentLevel = 0;
 	
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(new MyView(this));
+		
+		Intent i = getIntent();
+		if (i != null)
+			currentLevel = i.getIntExtra("current_level", 0);
+	}
+	
+	@Override
+	public boolean onTouchEvent (MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_UP || 
+				event.getAction() == MotionEvent.ACTION_CANCEL) {
+			Intent result = new Intent();
+			result.putExtra("level", currentLevel+1);
+			setResult(Activity.RESULT_OK, result);
+			finish();
+		}
+		return true;
 	}
 	
 	class MyView extends FullscreenView {

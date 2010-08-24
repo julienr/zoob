@@ -23,6 +23,14 @@ void saveProgress (int level);
 void saveDifficulty (int diff);
 void saveInputMethod (int inputMethod);
 void saveUseTrackball (int use);
+
+//WARNING: this has to be kept in sync with java code
+enum eMenu {
+    MENU_MAIN=0,
+    MENU_WON,
+    MENU_LOST
+};
+void showMenu (eMenu id, int currentLevel);
 void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system
