@@ -107,6 +107,11 @@ void toPlayingState () {
   }
 }
 
+void startGame (int level) {
+  GameManager::getInstance()->setCurrentLevel((size_t)level);
+  toPlayingState();
+}
+
 void toMenuState () {
   delete lvl;
   lvl = NULL;
@@ -135,10 +140,14 @@ void toPauseState () {
   Game::getInstance()->pause();
 }
 
-void nativeInit (const char* apkPath, const char* levelSerie) {
+void nativeInit (const char* apkPath, const char* serie) {
   srand(Utils::getCurrentTimeMillis());
   loadAPK(apkPath);
-  loadSerie(levelSerie);
+  nativeLoadSerie(serie);
+}
+
+void nativeLoadSerie (const char* serie) {
+  loadSerie(serie);
 }
 
 /** Since nativeInitGL will be called on app creation AND each time the opengl 
@@ -164,10 +173,10 @@ void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) 
 
     InputManager::registerInstance(createInputManager(inputMethod, useTrackball));
 
-    printGLString("Version", GL_VERSION);
+    /*printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
     printGLString("Renderer", GL_RENDERER);
-    printGLString("Extensions", GL_EXTENSIONS);
+    printGLString("Extensions", GL_EXTENSIONS);*/
   } else {
     //In case we're coming back from sleep
     TextureManager::getInstance()->reloadAll();
@@ -378,6 +387,9 @@ void nativeRender () {
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
   InputManager::getInstance()->think(elapsedS);
+
+  if (GameManager::getInstance()->getState() == STATE_NONE)
+    return;
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
     if (!GameManager::getInstance()->paused())

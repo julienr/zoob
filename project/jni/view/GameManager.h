@@ -19,7 +19,8 @@
 #include "logic/Game.h"
 
 enum eAppState {
-  STATE_PLAYING=0,
+  STATE_NONE=0,
+  STATE_PLAYING,
   STATE_MAINMENU,
   STATE_LOST,
   STATE_WON,
@@ -150,6 +151,10 @@ class GameManager {
     //Based on this player's progress, the biggest completed level to date
     void setLevelLimit (size_t level) {
       levelLimit = level;
+    }
+
+    void setCurrentLevel (size_t level) {
+      currentLevel = level;
     }
 
     inline

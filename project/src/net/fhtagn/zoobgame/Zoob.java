@@ -41,6 +41,7 @@ public class Zoob extends Activity {
 		
 		Intent i = getIntent();
 		String json = i.getStringExtra("json");
+		int level = i.getIntExtra("level", 0);
 
     //Intent resolved, go ahead with glview creation
 		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), json);
@@ -238,6 +239,10 @@ class ZoobGLSurface extends GLSurfaceView {
 		setFocusableInTouchMode(true); //necessary to get trackball events
 	}
 	
+	public void startGame (int level) {
+		mRenderer.startGame(level);
+	}
+	
 	public void onResume () {
 		super.onResume();
 		mRenderer.triggerRestoreGL();
@@ -282,6 +287,7 @@ class ZoobGLSurface extends GLSurfaceView {
 }
 
 class ZoobRenderer implements GLSurfaceView.Renderer {
+	static final String TAG = "ZoobRenderer";
 	private Context context;
 	private ZoobApplication app;
 	private String apkFilePath;
@@ -312,22 +318,30 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		Log.i(TAG, "onSurfaceCreated");
 		//Call ALL nativeInit methods here, because we want the JNIEnv of the rendering thread
 		//(see comments in app-android.cpp)
 		if (!initialized) {
+			Log.i(TAG, "calling nativeInit");
 			nativeInit(apkFilePath, this, levelsSerie);
 			initialized = true;
 		}
+		Log.i(TAG, "calling nativeInitGL");
     nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
+    nativeStartGame(0);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
-		// gl.glViewport(0, 0, w, h);
+		Log.i(TAG, "onSurfaceChanged");
 		nativeResize(w, h);
 	}
 	
 	public void triggerRestoreGL () {
 		restoreGL = true;
+	}
+	
+	public void startGame (int level) {
+		nativeStartGame(level);
 	}
 
 	public void onDrawFrame(GL10 gl) {
@@ -388,7 +402,11 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 
   private static native void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball);
-	private static native void nativeInit(String apkPath, ZoobRenderer app, String level);
+	private static native void nativeInit(String apkPath, ZoobRenderer app, String serieJSON);
+	
+	private static native void nativeStartGame(int level);
+	
+	private static native void nativeSetSerie (String serieJSON);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 	

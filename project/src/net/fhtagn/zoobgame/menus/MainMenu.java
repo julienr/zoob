@@ -151,6 +151,7 @@ public class MainMenu extends MenuActivity {
 				int selectedLevel = lvlGallery.getSelectedItemPosition();
 				Intent i = new Intent(getApplicationContext(), Zoob.class);
         i.putExtra("json", serieJSON.toString());
+        i.putExtra("level", selectedLevel);
         startActivityForResult(i, REQUEST_PLAY);
       }
     });

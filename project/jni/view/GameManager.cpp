@@ -32,11 +32,12 @@ GameManager::GameManager (startGameCallback_t gameCb,
 
   for (int i=0; i<MAX_STATE; i++)
     stateCallbacks[i] = NULL;
-#if FULL_VERSION
+  state = STATE_NONE;
+/*#if FULL_VERSION
   state = STATE_MAINMENU;
 #else
   state = STATE_BUY_FULL;
-#endif
+#endif*/
   applyLocks();
 }
 
@@ -79,6 +80,8 @@ void GameManager::applyTransition () {
 #define TEX_LOCK(i) TextureManager::getInstance()->lockGroup(i)
 
 void GameManager::applyLocks () {
+  if (state == STATE_NONE)
+    return;
   TextureManager::getInstance()->startLock();
   TEX_LOCK(TEX_GROUP_UTILS);
   switch (state) {

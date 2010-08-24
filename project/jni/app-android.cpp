@@ -90,6 +90,19 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
   env->ReleaseStringUTFChars(levelSerie, serie);
 }
 
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeSetSerie
+  (JNIEnv *env, jclass, jstring serie) {
+  const char* _serie;
+  _serie = env->GetStringUTFChars(serie, NULL);
+  nativeLoadSerie(_serie);
+  env->ReleaseStringUTFChars(serie, _serie);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartGame
+  (JNIEnv *, jclass, int lvl) {
+  startGame(lvl);
+}
+
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL
   (JNIEnv *, jclass, int level, int difficulty, int method, int useTrackball) {
   nativeInitGL(level, difficulty, method, useTrackball);

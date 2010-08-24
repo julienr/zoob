@@ -3,7 +3,8 @@
 
 //downcall (Java to C++) functions
 //performs all non-gl initialisation
-void nativeInit (const char* apkPath, const char* levelSerie);
+void nativeInit (const char* apkPath, const char* serieJSON);
+void nativeLoadSerie (const char* serieJSON);
 
 void nativeInitGL (int level, int difficulty, int inputMethod, int useTrackball);
 void nativeQuit ();
@@ -12,6 +13,8 @@ void nativeRender ();
 void nativeMenu();
 void nativePause ();
 bool isInMenu ();
+
+void startGame (int level);
 
 void toggleGodMode ();
 
