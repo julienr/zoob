@@ -1,10 +1,5 @@
 package net.fhtagn.zoobgame;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +7,19 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -38,7 +27,6 @@ import android.view.MotionEvent;
 
 public class Zoob extends Activity {
 	static final String TAG = "Zoob";
-	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY";
 	private ZoobGLSurface mGLView;
 
 	static {
@@ -50,70 +38,16 @@ public class Zoob extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//EULA
-		Eula.show(this);
 		
-		ZoobApplication app = (ZoobApplication)getApplication();
-		app.setProgressPersistent(true);
-		/** Intent resolution **/
-		Intent intent = getIntent();
-		int serieID;
-		if (intent != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
-			String lastSegment = intent.getData().getLastPathSegment();
-			
-			if (lastSegment == null) {
-				Log.e(TAG, "lastSegment = null when resolving PLAY intent : " + intent.getData());
-				serieID = 1;
-			} else {
-				serieID = Integer.parseInt(lastSegment);
-				Log.i(TAG, "PLAY intent received, serieID = " + serieID);
-			}
-			app.setSerieId(serieID);
-			//The URI can have a query parameter ?startlevel=<level>
-			String qp = intent.getData().getQueryParameter("startlevel");
-			int startLevel;
-			if (qp == null)
-				startLevel = 0;
-			else {
-				startLevel = Integer.parseInt(qp);
-				app.setProgressPersistent(false);
-				Log.i(TAG, "Got startlevel = " + startLevel);
-			}
-			
-			app.saveProgress(startLevel);
-		} else {
-			Log.i(TAG, "No PLAY intent received, launching original serie");
-			serieID = 1;
-			app.setSerieId(serieID);
-		}
-		
-		//Load serie JSON
-		Uri serieURI = ContentUris.withAppendedId(Series.CONTENT_URI, serieID); //original serie has id 1
-		Cursor cur = managedQuery(serieURI, new String[]{Series.JSON}, null, null, null);
-		if (cur == null || !cur.moveToFirst() || cur.getCount() != 1) {
-			Log.e(TAG, "Unable to retrieve requested serie");
-			finish();
-			return;
-		}
-		String serieJSON = cur.getString(cur.getColumnIndex(Series.JSON));
-    
+		Intent i = getIntent();
+		String json = i.getStringExtra("json");
+
     //Intent resolved, go ahead with glview creation
-		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), serieJSON);
+		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), json);
 		setContentView(mGLView);
 		
     //Force landscape
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
-	}
-	
-	public static File getLevelsDir () throws IOException {
-		String state = Environment.getExternalStorageState();
-		File root = Environment.getExternalStorageDirectory();
-		if (!Environment.MEDIA_MOUNTED.equals(state) || !root.canWrite())
-			throw new IOException("Cannot write to external storage");
-    
-    File levelsDir = new File(root+File.separator+LEVELS_DIR_NAME);
-    levelsDir.mkdirs();
-    return levelsDir;
 	}
 	
 	@Override
@@ -454,7 +388,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	}
 
   private static native void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball);
-	private static native void nativeInit(String apkPath, ZoobRenderer app, String levelsSerie);
+	private static native void nativeInit(String apkPath, ZoobRenderer app, String level);
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
 	

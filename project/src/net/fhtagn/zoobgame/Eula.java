@@ -35,7 +35,7 @@ import net.fhtagn.zoobgame.R;
  * be shown again. If the user refuses, {@link android.app.Activity#finish()} is invoked
  * on your activity.
  */
-class Eula {
+public class Eula {
     private static final String ASSET_EULA = "EULA";
     private static final String PREFERENCE_EULA_ACCEPTED = "eula.accepted";
     private static final String PREFERENCES_EULA = "eula";
@@ -58,7 +58,7 @@ class Eula {
      * @param activity The Activity to finish if the user rejects the EULA.
      * @return Whether the user has agreed already.
      */
-    static boolean show(final Activity activity) {
+    public static boolean show(final Activity activity) {
         final SharedPreferences preferences = activity.getSharedPreferences(PREFERENCES_EULA,
                 Activity.MODE_PRIVATE);
         if (!preferences.getBoolean(PREFERENCE_EULA_ACCEPTED, false)) {

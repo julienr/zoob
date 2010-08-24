@@ -1,5 +1,6 @@
 package net.fhtagn.zoobgame.menus;
 
+import net.fhtagn.zoobgame.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -1,5 +1,6 @@
 package net.fhtagn.zoobgame.menus;
 
+import net.fhtagn.zoobgame.R;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;

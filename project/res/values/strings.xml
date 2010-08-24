@@ -20,4 +20,5 @@
     <string name="lvl_gameover">game over</string>
     <string name="all_complete">all levels complete</string>
     <string name="thx_playing">thanks for playing !</string>
+    <string name="error_loading">Error loading serie</string>
 </resources>

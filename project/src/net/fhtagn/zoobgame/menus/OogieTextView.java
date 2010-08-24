@@ -22,8 +22,7 @@ public class OogieTextView extends TextView {
 	
 	public OogieTextView(Context context, AttributeSet attrs) {
 	  super(context, attrs);
-	  
-	  setTypeface(Common.getOogie(getContext()));
+	  setTypeface(Common.getOogie(context));
 	  scale = getResources().getDisplayMetrics().density;
 	  setTextSize(Common.MENU_ITEM_TEXT_SIZE*scale);
 	  setTextColor(Color.WHITE);
