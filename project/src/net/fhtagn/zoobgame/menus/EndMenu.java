@@ -7,11 +7,10 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-public class EndMenu extends MenuActivity {
+public class EndMenu extends FullscreenMenuActivity {
 	@Override
-	public void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setFullscreenView(new MyView(this));
+	protected FullscreenView createView () {
+		return new MyView(this);
 	}
 	
 	class MyView extends FullscreenView {

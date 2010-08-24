@@ -11,17 +11,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-public class WonMenu extends MenuActivity {
+public class WonMenu extends FullscreenMenuActivity {
 	private int currentLevel = 0;
 	
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(new MyView(this));
 		
 		Intent i = getIntent();
 		if (i != null)
 			currentLevel = i.getIntExtra("current_level", 0);
+	}
+	
+	@Override
+	protected FullscreenView createView () {
+		return new MyView(this);
 	}
 	
 	@Override

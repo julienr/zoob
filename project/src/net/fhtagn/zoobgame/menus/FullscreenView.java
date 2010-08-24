@@ -125,7 +125,7 @@ public abstract class FullscreenView extends View {
 
 	@Override
 	protected final void onDraw (Canvas canvas) {
-		//canvas.drawARGB(255, 101, 101, 101);
+		canvas.drawARGB(255, 101, 101, 101);
 		canvas.save();
 		canvas.translate(marginX, marginY);
 		canvas.clipRect(new RectF(0,0,areaWidth, areaHeight), Region.Op.REPLACE);

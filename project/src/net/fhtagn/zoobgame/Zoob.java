@@ -52,6 +52,7 @@ public class Zoob extends Activity {
     //Intent resolved, go ahead with glview creation
 		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), json);
 		setContentView(mGLView);
+		mGLView.setLevel(level);
 		
     //Force landscape
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
