@@ -54,14 +54,6 @@ void startGame (GameManager* manager) {
   manager->setState(STATE_PLAYING);
 }
 
-bool isInMenu () {
-  return (GameManager::getInstance()->getState() == STATE_MAINMENU);
-}
-
-void nativeMenu () {
-  GameManager::getInstance()->setState(STATE_MAINMENU);
-}
-
 void gameOverCallback () {
   GameManager::getInstance()->setState(STATE_LOST, WON_LOST_DELAY);
 }
@@ -100,10 +92,10 @@ void toPlayingState () {
     saveDifficulty(Difficulty::getInstance()->currentDifficulty());
 
     //Display the tutorial before starting level 0
-    if (gm->getCurrentLevel() == 0) {
+    /*if (gm->getCurrentLevel() == 0) {
       Game::getInstance()->pause();
       gm->setState(STATE_TUTORIAL);
-    }
+    }*/
   }
 }
 
@@ -123,6 +115,7 @@ void toMenuState () {
 
 
 void toWonState () {
+  toMenuState();
   LOGE("toWonState");
   showMenu(MENU_WON, GameManager::getInstance()->getCurrentLevel());
   GameManager::getInstance()->setState(STATE_NONE);
@@ -139,6 +132,18 @@ void toWonState () {
     if (ProgressionManager::getInstance()->getLastReward() != REWARD_NONE)
        GameManager::getInstance()->setState(STATE_REWARD);
   }*/
+}
+
+void toLostState () {
+  toMenuState();
+  showMenu(MENU_LOST, GameManager::getInstance()->getCurrentLevel());
+  GameManager::getInstance()->setState(STATE_NONE);
+}
+
+void toEndState () {
+  toMenuState();
+  showMenu(MENU_END, GameManager::getInstance()->getCurrentLevel());
+  GameManager::getInstance()->setState(STATE_NONE);
 }
 
 void toPauseState () {
@@ -167,12 +172,11 @@ void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) 
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGame, nativeMenu, gameUnPauseCallback, level);
+    GameManager::create(startGame, gameUnPauseCallback, level);
     GameManager* gm = GameManager::getInstance();
     gm->setStateCallback(STATE_WON, toWonState);
-    gm->setStateCallback(STATE_LOST, toMenuState);
-    gm->setStateCallback(STATE_END, toMenuState);
-    gm->setStateCallback(STATE_MAINMENU, toMenuState);
+    gm->setStateCallback(STATE_LOST, toLostState);
+    gm->setStateCallback(STATE_END, toEndState);
     gm->setStateCallback(STATE_PLAYING, toPlayingState);
     gm->setStateCallback(STATE_PAUSED, toPauseState);
 
@@ -434,8 +438,6 @@ void nativeRender () {
     }
     if (GameManager::getInstance()->paused())
       GameManager::getInstance()->drawMenu(); //draw the pause menu
-  } else {
-    GameManager::getInstance()->drawMenu();
   }
 }
 

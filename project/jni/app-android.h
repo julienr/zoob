@@ -50,20 +50,10 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeRender
 
 /*
  * Class:     net_fhtagn_zoob_zoobGLSurface
- * Method:    nativeMenu
+ * Method:    nativePause
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeMenu
-  (JNIEnv *, jclass);
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
-  (JNIEnv *, jclass);
-
-/**
- * Class:     net_fhtagn_zoob_Zoob
- * Method:    isInMenu
- * Signature  ()B
- */
-JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoobgame_Zoob_isInMenu
   (JNIEnv *, jclass);
 
 /*

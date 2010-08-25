@@ -8,28 +8,17 @@
 #include "def.h"
 #include "containers/vector.h"
 #include "menu/Menu.h"
-#include "menu/MainMenu.h"
-#include "menu/LostMenu.h"
-#include "menu/WonMenu.h"
-#include "menu/EndMenu.h"
 #include "menu/PausedMenu.h"
-#include "menu/BuyFullMenu.h"
-#include "menu/TutorialMenu.h"
 #include "levels/LevelsData.h"
 #include "logic/Game.h"
 
 enum eAppState {
   STATE_NONE=0,
   STATE_PLAYING,
-  STATE_MAINMENU,
   STATE_LOST,
   STATE_WON,
   STATE_END,
   STATE_PAUSED,
-  STATE_TUTORIAL,
-  STATE_BUY_FULL,
-  STATE_REWARD,
-  STATE_CONTROL_OPTIONS,
   STATE_ERROR,
   MAX_STATE
 };
@@ -43,10 +32,9 @@ typedef void (*callback_t) ();
 class GameManager {
   public:
     static void create (startGameCallback_t gameCb,
-                          callback_t menuCb,
                           callback_t continueCb,
                           int levelLimit) {
-      instance = new GameManager(gameCb, menuCb, continueCb, levelLimit);
+      instance = new GameManager(gameCb, continueCb, levelLimit);
     }
 
     inline
@@ -66,7 +54,6 @@ class GameManager {
     static GameManager* instance;
 
     GameManager (startGameCallback_t gameCb, 
-                 callback_t menuCb,
                  callback_t continueCb,
                  int levelLimit);
 
@@ -128,10 +115,6 @@ class GameManager {
       currentLevel--;
     }
 
-    void goToMenu () {
-      menuCB();
-    }
-
     void newGame () {
       newGameCB(this);
     }
@@ -191,7 +174,6 @@ class GameManager {
     void applyLocks ();
 
     const startGameCallback_t newGameCB;
-    const callback_t menuCB;
     const callback_t continueCB;
     eAppState state;
     size_t currentLevel;

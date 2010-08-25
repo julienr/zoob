@@ -118,16 +118,6 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeRender
   nativeRender();
 }
 
-JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeMenu
-  (JNIEnv *, jclass) {
-  nativeMenu();
-}
-
-JNIEXPORT jboolean JNICALL Java_net_fhtagn_zoobgame_Zoob_isInMenu
-  (JNIEnv *, jclass) {
-  return isInMenu();
-}
-
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
   (JNIEnv *, jclass) {
   nativePause();

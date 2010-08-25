@@ -7,6 +7,8 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import net.fhtagn.zoobgame.menus.EndMenu;
+import net.fhtagn.zoobgame.menus.LostMenu;
 import net.fhtagn.zoobgame.menus.MainMenu;
 import net.fhtagn.zoobgame.menus.WonMenu;
 
@@ -34,12 +36,12 @@ public class Zoob extends Activity {
 	
 	//request used when a menu is called from the game
 	static final int REQUEST_MENU = 1;
+	
+	private boolean showPause = true; //wether the pause screen should be shown when onPause is called
 
 	static {
 		System.loadLibrary("zoob");
 	}
-	
-	private static native boolean isInMenu();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,14 @@ public class Zoob extends Activity {
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
 	}
 	
+	public void setShowPause (boolean b) {
+		showPause = false;
+	}
+	
+	public boolean showPause () {
+		return showPause;
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -66,6 +76,7 @@ public class Zoob extends Activity {
 
 	@Override
 	protected void onResume() {
+		showPause = true;
 		super.onResume();
 		mGLView.onResume();
 	}
@@ -78,7 +89,7 @@ public class Zoob extends Activity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && !isInMenu()) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
     	mGLView.onMenu();
       return true;
     }
@@ -227,6 +238,8 @@ class ZoobGLSurface extends GLSurfaceView {
 	private static final String TAG = "ZoobGLSurface";
 	private static MotionEventHandler motionHandler = null;
 	
+	private final Zoob zoob;
+	
 	static {
 		initialize();
 	}
@@ -250,6 +263,7 @@ class ZoobGLSurface extends GLSurfaceView {
 	
 	public ZoobGLSurface(Zoob context, ZoobApplication app, String levelsSerie) {
 		super(context);
+		zoob = context;
 		mRenderer = new ZoobRenderer(context, app, levelsSerie);
 		setRenderer(mRenderer);
 		setFocusableInTouchMode(true); //necessary to get trackball events
@@ -270,21 +284,20 @@ class ZoobGLSurface extends GLSurfaceView {
 		mRenderer.addCommand(new Command(Command.Type.EVENT_MENU));
 	}
 	
+	@Override
 	public void onPause () {
-		mRenderer.addCommand(new Command(Command.Type.EVENT_PAUSE));
+		if (zoob.showPause())
+			mRenderer.addCommand(new Command(Command.Type.EVENT_PAUSE));
 	}
 
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
-		final float x = event.getX();
-		final float y = event.getY();
-		
 		Command c = motionHandler.processEvent(event);
 		if (c != null)
 			mRenderer.addCommand(c);
 
 		//This is an advice from "Writing real time games for android" Google I/O presentation
-		//This avoid event flood when the screen is touched
+		//This avoids event flood when the screen is touched
 		try {
 	    Thread.sleep(16);
     } catch (InterruptedException e) {}
@@ -404,9 +417,13 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 					case EVENT_PAUSE:
 						nativePause();
 						break;
-					case EVENT_MENU:
-						nativeMenu();
+					case EVENT_MENU: {
+						Intent i = new Intent(context, MainMenu.class);
+						context.setShowPause(false);
+						context.startActivity(i);
+						context.finish();
 						break;
+					}
 					case EVENT_TRACKBALL:
 						trackballMove(c.x, c.y);
 						break;
@@ -448,7 +465,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	public static native void touchEventSecondaryMove (float x, float y);
 	
 	private static native void nativePause();
-	private static native void nativeMenu();
 	
 	//These are stubs for upcall from JNI because the Application object isn't in the 
 	//same thread as the JNI stuff (nativeRender) and this can lead to random crashes
@@ -476,17 +492,24 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	static final int MENU_MAIN = 0;
 	static final int MENU_WON = 1;
 	static final int MENU_LOST = 2;
+	static final int MENU_END = 3;
 	public void showMenu (int id, int currentLevel) {
 		Intent i;
 		switch (id) {
 			case MENU_WON:
 				i = new Intent(context, WonMenu.class);
-				i.putExtra("current_level", currentLevel);
+				break;
+			case MENU_LOST:
+				i = new Intent(context, LostMenu.class);
+				break;
+			case MENU_END:
+				i = new Intent(context, EndMenu.class);
 				break;
 			default:
 				i = new Intent(context, MainMenu.class);
 				break;
 		}
+		i.putExtra("current_level", currentLevel);
 		context.startActivityForResult(i, Zoob.REQUEST_MENU);
 	}
 }

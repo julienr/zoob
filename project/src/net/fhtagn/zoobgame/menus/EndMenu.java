@@ -1,16 +1,29 @@
 package net.fhtagn.zoobgame.menus;
 
 import net.fhtagn.zoobgame.R;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 public class EndMenu extends FullscreenMenuActivity {
 	@Override
 	protected FullscreenView createView () {
 		return new MyView(this);
+	}
+	
+	@Override
+	public boolean onTouchEvent (MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_UP || 
+				event.getAction() == MotionEvent.ACTION_CANCEL) {
+			Intent i = new Intent(this, MainMenu.class);
+			startActivity(i);
+		}
+		return true;
 	}
 	
 	class MyView extends FullscreenView {

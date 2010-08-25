@@ -56,7 +56,7 @@ public class MainMenu extends MenuActivity {
   		/** Intent resolution **/
   		Intent intent = getIntent();
   		int serieID;
-  		if (intent != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
+  		if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
   			String lastSegment = intent.getData().getLastPathSegment();
   			
   			if (lastSegment == null) {

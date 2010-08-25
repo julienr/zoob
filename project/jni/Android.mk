@@ -38,19 +38,9 @@ LOCAL_SRC_FILES := \
     view/GameManager.cpp \
     view/NumberView.cpp \
     view/menu/MenuItem.cpp \
-		view/menu/ErrorMenu.cpp \
     view/menu/Menu.cpp \
-    view/menu/MainMenu.cpp \
-    view/menu/LostMenu.cpp \
-    view/menu/WonMenu.cpp \
-    view/menu/EndMenu.cpp \
     view/menu/PausedMenu.cpp \
-    view/menu/TutorialMenu.cpp \
-    view/menu/BuyFullMenu.cpp \
-    view/menu/RewardMenu.cpp \
-    view/menu/ControlOptionMenu.cpp \
     view/menu/Button.cpp \
-    view/menu/Checkbox.cpp \
     view/ShadowPolygonView.cpp \
     logic/physics/AABBox.cpp \
     logic/physics/CollisionManager.cpp \

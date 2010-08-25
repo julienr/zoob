@@ -2,6 +2,7 @@ package net.fhtagn.zoobgame.menus;
 
 import net.fhtagn.zoobgame.R;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,6 +22,13 @@ public class HelpMenu extends FullscreenMenuActivity {
 	@Override
 	protected FullscreenView createView () {
 		return new MyView(this);
+	}
+	
+	@Override
+	protected Intent prepareResult () {
+		Intent i = new Intent();
+		i.putExtra("level", getCurrentLevel()+1);
+		return i;
 	}
 	
 	class MyView extends FullscreenView {

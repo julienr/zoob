@@ -2,6 +2,7 @@ package net.fhtagn.zoobgame.menus;
 
 import net.fhtagn.zoobgame.R;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,14 @@ public class LostMenu extends FullscreenMenuActivity {
 	protected FullscreenView createView () {
 		return new MyView(this);
 	}
+	
+	@Override
+	protected Intent prepareResult () {
+		Intent i = new Intent();
+		i.putExtra("level", getCurrentLevel());
+		return i;
+	}
+	
 	
 	class MyView extends FullscreenView {
 		private final String gameover;

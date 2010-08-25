@@ -12,32 +12,16 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 
 public class WonMenu extends FullscreenMenuActivity {
-	private int currentLevel = 0;
-	
-	@Override
-	public void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		Intent i = getIntent();
-		if (i != null)
-			currentLevel = i.getIntExtra("current_level", 0);
-	}
-	
 	@Override
 	protected FullscreenView createView () {
 		return new MyView(this);
 	}
-	
+
 	@Override
-	public boolean onTouchEvent (MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_UP || 
-				event.getAction() == MotionEvent.ACTION_CANCEL) {
-			Intent result = new Intent();
-			result.putExtra("level", currentLevel+1);
-			setResult(Activity.RESULT_OK, result);
-			finish();
-		}
-		return true;
+	protected Intent prepareResult () {
+		Intent i = new Intent();
+		i.putExtra("level", getCurrentLevel()+1);
+		return i;
 	}
 	
 	class MyView extends FullscreenView {

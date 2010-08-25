@@ -10,9 +10,7 @@ void nativeInitGL (int level, int difficulty, int inputMethod, int useTrackball)
 void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
-void nativeMenu();
 void nativePause ();
-bool isInMenu ();
 
 void startGame (int level);
 
@@ -28,7 +26,8 @@ void saveUseTrackball (int use);
 enum eMenu {
     MENU_MAIN=0,
     MENU_WON,
-    MENU_LOST
+    MENU_LOST,
+    MENU_END
 };
 void showMenu (eMenu id, int currentLevel);
 void buyFull ();
