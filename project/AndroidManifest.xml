@@ -8,8 +8,13 @@
                  android:name="ZoobApplication"
                  android:debuggable="true">
         <activity android:name=".Zoob"
+                  android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
                   android:configChanges="keyboard|keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>   
             <intent-filter>
                 <action android:name="net.fhtagn.zoobgame.PLAY" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -17,26 +22,8 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".menus.MainMenu"
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>          
-        </activity>
-        
         <activity android:name=".menus.OptionsMenu"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity android:name=".menus.HelpMenu"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity android:name=".menus.WonMenu"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity android:name=".menus.LostMenu"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity android:name=".menus.EndMenu"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        
 
         <provider android:name="SerieContentProvider"
                   android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />
