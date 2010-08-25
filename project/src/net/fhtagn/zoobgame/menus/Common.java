@@ -15,6 +15,7 @@ public class Common {
 	public final static int SHADOW_FOCUS_COLOR = Color.parseColor("#64fb3d");
 	
 	public final static float MENU_ITEM_TEXT_SIZE = 35; //dip, should be the same as the one used in style.xml
+	public final static float MENU_ITEM_SMALL_TEXT_SIZE = 20;
 	
 	// Font
 	private static Typeface oogie = null;

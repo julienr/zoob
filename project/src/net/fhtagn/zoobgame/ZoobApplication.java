@@ -120,6 +120,7 @@ public class ZoobApplication extends Application {
 	public synchronized void saveProgress (int level) {
 		if (progressPersistent) {
 			ContentValues values = new ContentValues();
+			Log.i(TAG, "saveProgress : " + level);
 			values.put(Series.PROGRESS, level);
 			getContentResolver().update(currentSerie, values, null, null);
 		} else {

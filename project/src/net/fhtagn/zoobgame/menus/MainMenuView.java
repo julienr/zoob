@@ -7,14 +7,15 @@ import org.json.JSONObject;
 import net.fhtagn.zoobgame.R;
 import net.fhtagn.zoobgame.Zoob;
 import net.fhtagn.zoobgame.ZoobApplication;
-import net.fhtagn.zoobgame.menus.MainMenu.GalleryTextAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,39 @@ public class MainMenuView extends FrameLayout {
 	  setupButtons();
   }
 	
+	@Override
+	public void  setVisibility  (int visibility) {
+		super.setVisibility(visibility);
+		//We intercept setVisibility because we have to refresh some infos (like the progress) each
+		//time this view is shown
+		refreshLvlGallery();
+	}
+	
+	private void refreshLvlGallery() {
+		ZoobApplication app = (ZoobApplication) activity.getApplication();
+		final Gallery lvlGallery = (Gallery) findViewById(R.id.lvlgallery);
+		lvlGallery.setUnselectedAlpha(0.3f);
+		OogieTextView serieName = (OogieTextView) findViewById(R.id.serie_name);
+		JSONObject serieJSON = app.getSerieJSON();
+		try {
+			JSONArray lvlArray = serieJSON.getJSONArray("levels");
+			int lastLevel = Math.min(app.getLevel(), lvlArray.length() - 1);
+			String[] levels = new String[lastLevel + 1];
+			for (int i = 0; i <= lastLevel; i++)
+				levels[i] = "" + i;
+			lvlGallery.setAdapter(new GalleryTextAdapter(levels));
+			lvlGallery.setSelection(lastLevel);
+
+			serieName.setTextSizeDip(Common.MENU_ITEM_SMALL_TEXT_SIZE);
+			serieName.setText(serieJSON.getString("name") + " ( " + lastLevel+"/"+(lvlArray.length()-1)+" )");
+		} catch (JSONException e) {
+			lvlGallery.setEnabled(false);
+			serieName.setTextColor(Color.RED);
+			serieName.setText(getResources().getString(R.string.error_loading));
+			e.printStackTrace();
+		}
+	}
+	
   private void setupButtons () {
  	 //FIXME: for a strange reason, this doesn't work from the XML, so do it programmatically
    LinearLayout container = (LinearLayout)findViewById(R.id.container);
@@ -56,25 +90,10 @@ public class MainMenuView extends FrameLayout {
    	}
    });
    
-   OogieTextView serieName = (OogieTextView)findViewById(R.id.serie_name);
+   ZoobApplication app = (ZoobApplication)activity.getApplication();
    
+   refreshLvlGallery();
    final Gallery lvlGallery = (Gallery)findViewById(R.id.lvlgallery);
-   lvlGallery.setUnselectedAlpha(0.3f);
-   JSONObject serieJSON = ((ZoobApplication)activity.getApplication()).getSerieJSON();
-   try {
-	    JSONArray lvlArray = serieJSON.getJSONArray("levels");
-	    String[] levels = new String[lvlArray.length()];
-	    for (int i=0; i<lvlArray.length(); i++) 
-	    	levels[i] = ""+i;
-	    lvlGallery.setAdapter(new GalleryTextAdapter(levels));
-	    
-	    serieName.setText(serieJSON.getString("name"));
-   } catch (JSONException e) {
-   	lvlGallery.setEnabled(false);
-   	serieName.setTextColor(Color.RED);
-   	serieName.setText(getResources().getString(R.string.error_loading));
-	    e.printStackTrace();
-   }
    
    BlurButton startBtn = (BlurButton)findViewById(R.id.start);
    startBtn.setOnClickListener(new OnClickListener() {
@@ -89,6 +108,7 @@ public class MainMenuView extends FrameLayout {
    diffGallery.setUnselectedAlpha(0.3f);
    String[] difficulties = {"easy", "medium", "hard"};
    diffGallery.setAdapter(new GalleryTextAdapter(difficulties));
+   diffGallery.setSelection(app.getDifficulty());
  }
  
  class GalleryTextAdapter extends BaseAdapter {

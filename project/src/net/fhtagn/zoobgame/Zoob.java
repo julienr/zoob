@@ -11,7 +11,6 @@ import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.HelpView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
-import net.fhtagn.zoobgame.menus.MainMenu;
 import net.fhtagn.zoobgame.menus.MainMenuView;
 import net.fhtagn.zoobgame.menus.WonView;
 
@@ -87,7 +86,7 @@ public class Zoob extends Activity {
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
 
     //Create GL view
-		ZoobApplication app = (ZoobApplication)getApplication();
+		final ZoobApplication app = (ZoobApplication)getApplication();
 		mGLView = new ZoobGLSurface(this, app, app.getSerieJSONString());
 		
 		OnClickListener interViewListener = new OnClickListener() {
@@ -168,7 +167,7 @@ public class Zoob extends Activity {
 	}
 	
 	public void play (int level) {
-		flipper.setDisplayedChild(MENU_PLAY);
+		showView(MENU_PLAY);
 		mGLView.setLevel(level);
 	}
 	

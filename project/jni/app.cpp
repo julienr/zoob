@@ -117,7 +117,9 @@ void toMenuState () {
 void toWonState () {
   toMenuState();
   LOGE("toWonState");
-  showMenu(MENU_WON, GameManager::getInstance()->getCurrentLevel());
+  int currentLevel = GameManager::getInstance()->getCurrentLevel();
+  saveProgress(currentLevel+1);
+  showMenu(MENU_WON, currentLevel);
   GameManager::getInstance()->setState(STATE_NONE);
 
   /*if (!GameManager::getInstance()->hasMoreLevels()) {
