@@ -26,6 +26,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -74,12 +75,11 @@ public class Zoob extends Activity {
 		parseIntent(getIntent());
 		
 		flipper = new ViewAnimator(this);
-		flipper.setBackgroundColor(Color.parseColor("#656565"));
-		Animation fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-		//fadeIn.setDuration(1000);
+		/*Animation fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+		fadeIn.setDuration(1000);
 		Animation fadeOut = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
-		//fadeOut.setDuration(1000);
-		/*flipper.setInAnimation(fadeIn);
+		fadeOut.setDuration(1000);
+		flipper.setInAnimation(fadeIn);
 		flipper.setOutAnimation(fadeOut);*/
 		setContentView(flipper);
 		
@@ -119,6 +119,9 @@ public class Zoob extends Activity {
 		flipper.addView(helpView, MENU_HELP);
 		
 		flipper.addView(mGLView, MENU_PLAY);
+		
+		//Needed to avoid getting a black screen when switching to glview
+		mGLView.setBackgroundColor(Color.parseColor("#FF656565"));
 		
 		showView(MENU_MAIN);
 	}

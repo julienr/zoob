@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -46,7 +47,7 @@ class ZoobGLSurface extends GLSurfaceView {
 	public ZoobGLSurface(Zoob context, ZoobApplication app, String levelsSerie) {
 		super(context);
 		zoob = context;
-		mRenderer = new ZoobRenderer(context, app, levelsSerie);
+		mRenderer = new ZoobRenderer(context, app, levelsSerie, this);
 		setRenderer(mRenderer);
 		setFocusableInTouchMode(true); //necessary to get trackball events
 	}
@@ -113,12 +114,15 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	
 	private final String levelsSerie;
 	
+	private final ZoobGLSurface glSurface;
+	
 	private boolean restoreGL = false; //notify this renderer that it should restore opengl context (the app was resumed from sleep)
 	
 	private int nextLevel = -1; //if set to something different than -1, indicate the next lvl to start (in the next onDrawFrame)
 
 	//This constructor is not ran in the rendering thread (but in the surface thread)
-	public ZoobRenderer (Zoob context, ZoobApplication app, String levelsSerie) {
+	public ZoobRenderer (Zoob context, ZoobApplication app, String levelsSerie, ZoobGLSurface surface) {
+		this.glSurface = surface;
 		this.context = context;
 		this.levelsSerie = levelsSerie;
 		// return apk file path (or null on error)
@@ -142,6 +146,15 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 			Log.i(TAG, "calling nativeInit");
 			nativeInit(apkFilePath, this, levelsSerie);
 			initialized = true;
+			//UGLY hack. In Zoob.java, we set a background on this view to avoid black screen.
+			//When this view is initialized, we have to REMOVE the opaque background otherwise, the opengl drawing
+			//won't be shown (for some strange reason).
+			context.runOnUiThread(new Runnable() {
+				@Override
+        public void run() {
+					glSurface.setBackgroundColor(Color.parseColor("#00000000"));
+        }
+			});
 		}
 		Log.i(TAG, "calling nativeInitGL");
     nativeInitGL(app.getLevel(), app.getDifficulty(), app.getInputMethod(), app.getUseTrackball());
