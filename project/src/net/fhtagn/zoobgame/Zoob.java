@@ -12,6 +12,7 @@ import net.fhtagn.zoobgame.menus.HelpView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
 import net.fhtagn.zoobgame.menus.MainMenuView;
+import net.fhtagn.zoobgame.menus.RewardView;
 import net.fhtagn.zoobgame.menus.WonView;
 
 import android.app.Activity;
@@ -54,14 +55,19 @@ public class Zoob extends Activity {
 	static final int MENU_WON = 1;
 	static final int MENU_LOST = 2;
 	static final int MENU_END = 3;
-	static final int MENU_HELP = 4;
-	static final int MENU_PLAY = 5;
-	static final int MENU_LAST = 6;
+	static final int MENU_REWARD_BOMB = 4;
+	static final int MENU_REWARD_BOUNCE = 5;
+	static final int MENU_REWARD_SHIELD = 6;
+	static final int MENU_REWARD_FIRING = 7;
+	static final int MENU_HELP = 8;
+	static final int MENU_PLAY = 9;
+	static final int MENU_LAST = 10;
 	
 	private MainMenuView mainMenu;
 	private WonView wonView;
 	private LostView lostView;
 	private EndView endView;
+	private RewardView[] rewardViews = new RewardView[4]; 
 	private HelpView helpView;
 	static {
 		System.loadLibrary("zoob");
@@ -112,6 +118,15 @@ public class Zoob extends Activity {
 		endView = new EndView(this);
 		endView.setOnClickListener(interViewListener);
 		flipper.addView(endView, MENU_END);
+		
+		rewardViews[0] = new RewardView(this, R.drawable.reward_bomb, true);
+		rewardViews[1] = new RewardView(this, R.drawable.reward_bounce, false);
+		rewardViews[2] = new RewardView(this, R.drawable.reward_shield, true);
+		rewardViews[3] = new RewardView(this, R.drawable.reward_firing, false);
+		for (int i=0; i<4; i++) {
+			rewardViews[i].setOnClickListener(interViewListener);
+			flipper.addView(rewardViews[i], MENU_REWARD_BOMB+i);
+		}
 		
 		helpView = new HelpView(this);
 		helpView.setOnClickListener(interViewListener);

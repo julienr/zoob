@@ -35,7 +35,7 @@ void saveUseTrackball (int use) {
   jniEnv->CallVoidMethod(zoobRenderer, java_saveUseTrackball, use);
 }
 
-void showMenu (eMenu id, int currentLevel) {
+void showMenu (int id, int currentLevel) {
   LOGE("showMenu : %i, currentLevel : %i", id, currentLevel);
   jniEnv->CallVoidMethod(zoobRenderer, java_showMenu, id, currentLevel);
 }

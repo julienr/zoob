@@ -1,6 +1,7 @@
 #ifndef LEVEL_H_
 #define LEVEL_H_
 
+#include "app.h"
 #include "def.h"
 #include "Entity.h"
 #include "physics/CollisionManager.h"
@@ -84,6 +85,23 @@ struct TankDescription {
   Path* path;
 };
 
+//items available in the level
+enum eItems {
+    ITEM_BOMB=1,
+    ITEM_BOUNCE=2,
+    ITEM_SHIELD=4,
+    ITEM_FIRING=8
+};
+
+//reward screen shown at the end of the level
+enum eReward {
+    REWARD_NONE=0,
+    REWARD_BOMB=MENU_LAST,
+    REWARD_BOUNCE,
+    REWARD_SHIELD,
+    REWARD_FIRING
+};
+
 class Level {
   public:
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
@@ -92,12 +110,15 @@ class Level {
 
     //Level take ownership of the tanks array
     //board should be FREED BY CALLER
-    Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks, bool drawShadows=false, bool boss=false)
-      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss){
+    Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks, bool drawShadows, bool boss, uint8_t items, eReward reward)
+      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss), reward(reward), items(items) {
       _initBoard(w,h,board, tanks, numTanks);
     }
 
     ~Level ();
+
+    bool hasItem(eItems mask) const { return items & mask; }
+    eReward getReward () const { return reward; }
 
     unsigned getHeight () const {
       return height;
@@ -136,6 +157,8 @@ class Level {
     AABBox* bounds;
     bool drawShadows;
     bool boss;
+    eReward reward;
+    uint8_t items;
 };
 
 #endif /* LEVEL_H_ */

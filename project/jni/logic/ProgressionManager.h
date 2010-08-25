@@ -3,19 +3,12 @@
 
 #include "Tank.h"
 #include "containers/vector.h"
+#include "Level.h"
 
 enum ePlayerForm {
   FORM_SIMPLE=TANK_SIMPLE,
   FORM_BOUNCE=TANK_BOUNCE,
   FORM_BURST=TANK_BURST
-};
-
-enum eReward {
-    REWARD_NONE,
-    REWARD_BOMB,
-    REWARD_SHIELD,
-    REWARD_BOUNCE,
-    REWARD_FIRING
 };
 
 class PlayerTank;
@@ -57,7 +50,9 @@ class ProgressionManager {
 
     bool hasShield () const;
 
-    void setPlayerForm (PlayerTank* player) const;
+    //Level is explicitely passed here because this is usually called in Game::Game() and
+    //Game::getInstance() would return null (in _level()) at this point
+    void setPlayerForm (Level* level, PlayerTank* player) const;
 
     uint64_t getPlayerFireInterval () const;
     float getPlayerRocketsSpeed () const;
@@ -67,7 +62,7 @@ class ProgressionManager {
     eReward getLastReward () const;
 
   private:
-    size_t _level() const;
+    const Level* _level() const;
     vector<ePlayerForm> availablePlayerForms;
 };
 

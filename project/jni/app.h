@@ -27,9 +27,10 @@ enum eMenu {
     MENU_MAIN=0,
     MENU_WON,
     MENU_LOST,
-    MENU_END
+    MENU_END,
+    MENU_LAST
 };
-void showMenu (eMenu id, int currentLevel);
+void showMenu (int id, int currentLevel);
 void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system

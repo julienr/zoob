@@ -1,6 +1,7 @@
 #include "LevelsData.h"
 #include <zip.h>
 #include <jansson.h>
+#include "logic/Level.h"
 
 Level* levelFromJSON (json_t* json);
 
@@ -49,6 +50,15 @@ static bool json_bool_value(json_t* val) {
   fprintf(stderr, "json_bool_value : not bool (%i)", json_typeof(val));
   //FIXME: no exit() on android, should goto error
   exit(-1);
+}
+
+//return true if the key is set to true, false otherwise (if not set or set to false)
+static bool opt_istrue (json_t* obj, const char* key) {
+  json_t* val = json_object_get(obj, key);
+  if (!val || !json_bool_value(val))
+    return false;
+  else
+    return true;
 }
 
 static int str2tile (char c) {
@@ -190,7 +200,29 @@ Level* levelFromJSON (json_t* json) {
       }
       tanks[i] = TankDescription(coords[0], coords[1], ttype, path);
     }
-    Level* l = new Level(xdim, ydim, board, tanks, numTanks, shadows, boss);
+    //Determine available items
+    uint8_t items = 0;
+    if (opt_istrue(json, "bombs"))
+      items |= ITEM_BOMB;
+    if (opt_istrue(json, "bounce"))
+      items |= ITEM_BOUNCE;
+    if (opt_istrue(json, "shield"))
+      items |= ITEM_SHIELD;
+    if (opt_istrue(json, "improved_firing"))
+      items |= ITEM_FIRING;
+
+    //Rewards
+    eReward reward = REWARD_NONE;
+    if (opt_istrue(json, "reward_bombs"))
+      reward = REWARD_BOMB;
+    if (opt_istrue(json, "reward_bounce"))
+      reward = REWARD_BOUNCE;
+    if (opt_istrue(json, "reward_shield"))
+      reward = REWARD_SHIELD;
+    if (opt_istrue(json, "reward_firing"))
+      reward = REWARD_FIRING;
+
+    Level* l = new Level(xdim, ydim, board, tanks, numTanks, shadows, boss, items, reward);
     delete[] board;
     return l;
   }

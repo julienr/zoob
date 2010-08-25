@@ -21,4 +21,6 @@
     <string name="all_complete">all levels complete</string>
     <string name="thx_playing">thanks for playing !</string>
     <string name="error_loading">Error loading serie</string>
+    <string name="reward">Reward !</string>
+    <string name="long_touch_activate">(long touch on button to activate)</string>
 </resources>

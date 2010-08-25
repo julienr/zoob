@@ -15,56 +15,43 @@ ProgressionManager::ProgressionManager ()
   availablePlayerForms.append(FORM_SIMPLE);
 }
 
-size_t ProgressionManager::_level() const {
-  return GameManager::getInstance()->getCurrentLevel();
+const Level* ProgressionManager::_level() const {
+  LOGE("_level(), game instance %i", Game::getInstance());
+  return Game::getInstance()->getLevel();
 }
 
 bool ProgressionManager::hasBombs () const {
-  return _level() > BOMB_LVL;
+  return _level()->hasItem(ITEM_BOMB);
 }
 
 bool ProgressionManager::hasShield () const {
-  return _level() > SHIELD_LVL;
+  return _level()->hasItem(ITEM_SHIELD);
 }
 
-void ProgressionManager::setPlayerForm (PlayerTank* player) const {
-  if (_level() > BOUNCE_LVL)
+void ProgressionManager::setPlayerForm (Level* level, PlayerTank* player) const {
+  if (level->hasItem(ITEM_BOUNCE))
     player->changePlayerForm(FORM_BOUNCE);
 }
 
 uint64_t ProgressionManager::getPlayerFireInterval () const {
-  /*if (_level() <= FIRING_LVL)
-    return 1000;
-  else
-    return 700;*/
   return 1000;
 }
 
 float ProgressionManager::getPlayerRocketsSpeed () const {
-  if (_level() <= FIRING_LVL)
-    return 2.0f;
-  else
+  if (_level()->hasItem(ITEM_FIRING))
     return 3.0f;
+  else
+    return 2.0f;
 }
 
 eReward ProgressionManager::getLastReward () const {
-  const size_t l = _level();
-  if (l == BOMB_LVL)
-    return REWARD_BOMB;
-  if (l == BOUNCE_LVL)
-    return REWARD_BOUNCE;
-  if (l == SHIELD_LVL)
-    return REWARD_SHIELD;
-  if (l == FIRING_LVL)
-    return REWARD_FIRING;
-  else
-    return REWARD_NONE;
+  return _level()->getReward();
 }
 
 #define AV_FORM(f) availablePlayerForms.append(f)
 void ProgressionManager::changedLevel () {
   availablePlayerForms.clear();
   AV_FORM(FORM_SIMPLE);
-  if (_level() > BOUNCE_LVL)
+  if (_level()->hasItem(ITEM_BOUNCE))
     AV_FORM(FORM_BOUNCE);
 }

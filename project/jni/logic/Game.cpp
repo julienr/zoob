@@ -67,7 +67,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     LOGE("No player start position defined in level, falling back on default (1,1)");
 
   playerTank->setPosition(playerStartPosition);
-  ProgressionManager::getInstance()->setPlayerForm(playerTank);
+  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
   colManager.addEntity(playerTank);
 }
 
