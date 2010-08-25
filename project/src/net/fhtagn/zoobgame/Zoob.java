@@ -47,17 +47,21 @@ public class Zoob extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Intent i = getIntent();
-		String json = i.getStringExtra("json");
-		int level = i.getIntExtra("level", 0);
-
-    //Intent resolved, go ahead with glview creation
-		mGLView = new ZoobGLSurface(this, (ZoobApplication)getApplication(), json);
-		setContentView(mGLView);
-		mGLView.setLevel(level);
+		onNewIntent(getIntent());
 		
     //Force landscape
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
+	}
+	
+	@Override
+	public void onNewIntent (Intent intent) {
+		int level = intent.getIntExtra("level", 0);
+
+    //Intent resolved, go ahead with glview creation
+		ZoobApplication app = (ZoobApplication)getApplication();
+		mGLView = new ZoobGLSurface(this, app, app.getSerieJSONString());
+		setContentView(mGLView);
+		mGLView.setLevel(level);
 	}
 	
 	public void setShowPause (boolean b) {
@@ -419,6 +423,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 						break;
 					case EVENT_MENU: {
 						Intent i = new Intent(context, MainMenu.class);
+						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						context.setShowPause(false);
 						context.startActivity(i);
 						context.finish();

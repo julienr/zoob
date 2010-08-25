@@ -1,5 +1,8 @@
 package net.fhtagn.zoobgame;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Application;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -22,6 +25,10 @@ public class ZoobApplication extends Application {
 	
 	private Uri currentSerie;
 	
+	//This is really just a cache
+	private String currentJSONString = null;
+	private JSONObject currentJSON = null;
+	
 	//if true, progress will be saved to preferences. This is the normal behaviour
 	//This might be turned off and the progress won't be saved when zoob closes. This is usefull when doing level edition
 	private boolean progressPersistent = true;
@@ -43,10 +50,35 @@ public class ZoobApplication extends Application {
 	
 	public synchronized void setSerieId (long id) {
 		currentSerie = ContentUris.withAppendedId(Series.CONTENT_URI, id);
+		loadJSON();
 		if (id == 1) {
 			//Original serie, try to restore progress
 			transferProgressFromPreferences();
 		}
+	}
+	
+	public JSONObject getSerieJSON () {
+		return currentJSON;
+	}
+	
+	public String getSerieJSONString () {
+		return currentJSONString;
+	}
+	
+	private void loadJSON () {
+		//Load serie JSON
+		Cursor cur = getContentResolver().query(currentSerie, new String[]{Series.JSON}, null, null, null);
+		if (cur == null || !cur.moveToFirst() || cur.getCount() != 1) {
+			Log.e(TAG, "Unable to retrieve requested serie");
+		} else {
+			try {
+				currentJSONString = cur.getString(cur.getColumnIndex(Series.JSON));
+	      currentJSON = new JSONObject(currentJSONString);
+	    } catch (JSONException e) {
+	      e.printStackTrace();
+	    }
+		}
+    cur.close();
 	}
 	
 	//This is a compability functions that will retrieve the progress currently saved in the user preferences (versions <= 1.0.2-2)

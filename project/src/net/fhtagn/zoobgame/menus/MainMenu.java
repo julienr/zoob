@@ -42,7 +42,45 @@ public class MainMenu extends MenuActivity {
 	
 	static final int REQUEST_PLAY = 1;
 	
-	static JSONObject serieJSON = null;
+	@Override
+	public void onNewIntent (Intent intent) {
+		ZoobApplication app = (ZoobApplication)getApplication();
+		app.setProgressPersistent(true);
+		/** Intent resolution **/
+		int serieID;
+		if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
+			String lastSegment = intent.getData().getLastPathSegment();
+			
+			if (lastSegment == null) {
+				Log.e(TAG, "lastSegment = null when resolving PLAY intent : " + intent.getData());
+				serieID = 1;
+			} else {
+				serieID = Integer.parseInt(lastSegment);
+				Log.i(TAG, "PLAY intent received, serieID = " + serieID);
+			}
+			app.setSerieId(serieID);
+			//The URI can have a query parameter ?startlevel=<level>
+			String qp = intent.getData().getQueryParameter("startlevel");
+			int startLevel;
+			if (qp == null)
+				startLevel = 0;
+			else {
+				startLevel = Integer.parseInt(qp);
+				app.setProgressPersistent(false);
+				Log.i(TAG, "Got startlevel = " + startLevel);
+			}
+			app.saveProgress(startLevel);
+		} else if (app.getSerieJSON() == null) {
+			//We only load original serie if we haven't yet loaded any serie
+			//because a "back" intent (sent from Zoob) won't have any serie information and we should just keep the same serie
+			Log.i(TAG, "No PLAY intent received, launching original serie");
+			serieID = 1;
+			app.setSerieId(serieID);
+		}
+    
+		setContentView(R.layout.mainmenu);
+		setupButtons();
+	}
 	
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -51,61 +89,7 @@ public class MainMenu extends MenuActivity {
   		//EULA
   		Eula.show(this);
   		
-  		ZoobApplication app = (ZoobApplication)getApplication();
-  		app.setProgressPersistent(true);
-  		/** Intent resolution **/
-  		Intent intent = getIntent();
-  		int serieID;
-  		if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) { //Play a serie, specified in the intent
-  			String lastSegment = intent.getData().getLastPathSegment();
-  			
-  			if (lastSegment == null) {
-  				Log.e(TAG, "lastSegment = null when resolving PLAY intent : " + intent.getData());
-  				serieID = 1;
-  			} else {
-  				serieID = Integer.parseInt(lastSegment);
-  				Log.i(TAG, "PLAY intent received, serieID = " + serieID);
-  			}
-  			app.setSerieId(serieID);
-  			//The URI can have a query parameter ?startlevel=<level>
-  			String qp = intent.getData().getQueryParameter("startlevel");
-  			int startLevel;
-  			if (qp == null)
-  				startLevel = 0;
-  			else {
-  				startLevel = Integer.parseInt(qp);
-  				app.setProgressPersistent(false);
-  				Log.i(TAG, "Got startlevel = " + startLevel);
-  			}
-  			app.saveProgress(startLevel);
-  		} else {
-  			Log.i(TAG, "No PLAY intent received, launching original serie");
-  			serieID = 1;
-  			app.setSerieId(serieID);
-  		}
-  		
-  		//Load serie JSON
-  		Uri serieURI = ContentUris.withAppendedId(Series.CONTENT_URI, serieID); //original serie has id 1
-  		Cursor cur = managedQuery(serieURI, new String[]{Series.JSON}, null, null, null);
-  		if (cur == null || !cur.moveToFirst() || cur.getCount() != 1) {
-  			Log.e(TAG, "Unable to retrieve requested serie");
-  			finish();
-  			return;
-  		}
-  		try {
-	      serieJSON = new JSONObject(cur.getString(cur.getColumnIndex(Series.JSON)));
-      } catch (JSONException e) {
-      	jsonError();
-	      e.printStackTrace();
-      }
-      
-  		setContentView(R.layout.mainmenu);
-  		setupButtons();
-  }
-  
-  private void jsonError () {
-  	Toast toast = Toast.makeText(this, getResources().getString(R.string.error_loading), Toast.LENGTH_LONG);
-  	toast.show();
+  		onNewIntent(getIntent());
   }
   
   private void setupButtons () {
@@ -129,6 +113,7 @@ public class MainMenu extends MenuActivity {
     
     final Gallery lvlGallery = (Gallery)findViewById(R.id.lvlgallery);
     lvlGallery.setUnselectedAlpha(0.3f);
+    JSONObject serieJSON = ((ZoobApplication)getApplication()).getSerieJSON();
     try {
 	    JSONArray lvlArray = serieJSON.getJSONArray("levels");
 	    String[] levels = new String[lvlArray.length()];
@@ -150,8 +135,8 @@ public class MainMenu extends MenuActivity {
       public void onClick(View view) {
 				int selectedLevel = lvlGallery.getSelectedItemPosition();
 				Intent i = new Intent(getApplicationContext(), Zoob.class);
-        i.putExtra("json", serieJSON.toString());
         i.putExtra("level", selectedLevel);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(i, REQUEST_PLAY);
       }
     });
