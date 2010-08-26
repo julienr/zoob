@@ -6,13 +6,13 @@
   <PreferenceCategory
     android:title="@string/controls_preferences">
     <CheckBoxPreference 
-      android:key="pref_gamepad"
+      android:key="input_gamepad"
       android:title="@string/title_gamepad_preference"
       android:summary="@string/summary_gamepad_preference"
       android:persistent="true" />
       
     <CheckBoxPreference
-      android:key="pref_trackball"
+      android:key="input_trackball"
       android:title="@string/title_trackball_preference"
       android:summary="@string/summary_trackball_preference"
       android:persistent="true" />

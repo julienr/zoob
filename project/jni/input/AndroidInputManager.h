@@ -8,15 +8,9 @@
 
 #undef FORM_CONTROL
 
-enum eInputMode {
-    INPUT_TOUCH=0,
-    INPUT_GAMEPAD,
-    NUM_INPUT_METHODS
-};
-
 class AndroidInputManager : public InputManager {
   public:
-    AndroidInputManager (eInputMode mode, bool trackball);
+    AndroidInputManager (bool gamepad, bool trackball);
     void draw ();
 
     //Multitouch, callback for secondary pointer
@@ -38,26 +32,19 @@ class AndroidInputManager : public InputManager {
 
     void think (double elapsedS);
 
-    void setInputMode (eInputMode mode);
+    void setUseGamepad (bool use);
 
     void setUseTrackball (bool use);
 
-    eInputMode getInputMode () { return inputMode; }
+    bool getUseGamepad () { return useGamepad; }
 
-    bool getUseTrackball () {
-      return useTrackball;
-    }
+    bool getUseTrackball () { return useTrackball; }
 
     float getLeftXMargin() {
-      switch (inputMode) {
-        case INPUT_TOUCH:
-          return 1.0f;
-        case INPUT_GAMEPAD:
-          return 3.2f;
-        default:
-          ASSERT(false);
-          return 1.0f;
-      }
+      if (useGamepad)
+        return 3.2f;
+      else
+        return 1.0f;
     }
 
   protected:
@@ -82,7 +69,6 @@ class AndroidInputManager : public InputManager {
       pressedItem = item;
     }
 
-    eInputMode inputMode;
     eState state;
 
     Vector2 tankMoveEnd;
@@ -108,6 +94,7 @@ class AndroidInputManager : public InputManager {
     int pressedItem;
     uint64_t lastButtonPressTime;
 
+    bool useGamepad;
     bool useTrackball;
 };
 

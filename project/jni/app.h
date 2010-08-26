@@ -6,7 +6,7 @@
 void nativeInit (const char* apkPath, const char* serieJSON);
 void nativeLoadSerie (const char* serieJSON);
 
-void nativeInitGL (int level, int difficulty, int inputMethod, int useTrackball);
+void nativeInitGL (int level, int difficulty, int useGamepad, int useTrackball);
 void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
@@ -18,9 +18,6 @@ void toggleGodMode ();
 
 //upcall (C++ to Java) functions
 void saveProgress (int level);
-void saveDifficulty (int diff);
-void saveInputMethod (int inputMethod);
-void saveUseTrackball (int use);
 
 //WARNING: this has to be kept in sync with java code
 enum eMenu {
@@ -31,7 +28,6 @@ enum eMenu {
     MENU_LAST
 };
 void showMenu (int id, int currentLevel);
-void buyFull ();
 
 //Utility functions to transform window coordinates to our internal coordinate system
 float XSG (const float x);
@@ -56,5 +52,5 @@ extern float transY;
 //very beginning of the app livecycle. Called just after openGL initialisation
 //so the input manager can allocate openGL resources
 class InputManager;
-extern InputManager* createInputManager (int inputMethod, int useTrackball);
+extern InputManager* createInputManager (int useGamepad, int useTrackball);
 #endif

@@ -10,9 +10,6 @@ extern zip* APKArchive;
 
 #define ASSERT(x) assert(x)
 
-//
-#define FULL_VERSION 1
-
 
 #define LOG_TAG    __FILE__ ":" STR(__LINE__)
 #define STR(x) STRINGIFY(x)

@@ -20,11 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class MainMenuView extends FrameLayout {
 	static final String TAG = "MainMenu";
@@ -90,7 +92,7 @@ public class MainMenuView extends FrameLayout {
    	}
    });
    
-   ZoobApplication app = (ZoobApplication)activity.getApplication();
+   final ZoobApplication app = (ZoobApplication)activity.getApplication();
    
    refreshLvlGallery();
    final Gallery lvlGallery = (Gallery)findViewById(R.id.lvlgallery);
@@ -109,6 +111,15 @@ public class MainMenuView extends FrameLayout {
    String[] difficulties = {"easy", "medium", "hard"};
    diffGallery.setAdapter(new GalleryTextAdapter(difficulties));
    diffGallery.setSelection(app.getDifficulty());
+   diffGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+		@Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+	    app.saveDifficulty(position);
+    }
+
+		@Override
+    public void onNothingSelected(AdapterView<?> view) {}
+   });
  }
  
  class GalleryTextAdapter extends BaseAdapter {

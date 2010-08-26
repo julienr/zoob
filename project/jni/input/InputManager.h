@@ -11,7 +11,8 @@ class InputManager {
 
   public:
     static void registerInstance (InputManager* i) {
-      ASSERT(!instance);
+      if (instance)
+        delete instance;
       instance = i;
     }
 

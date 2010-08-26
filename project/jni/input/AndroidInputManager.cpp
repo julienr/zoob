@@ -24,9 +24,8 @@ Vector2 gamePadPos(buttonsLeftX, 5.0f);
 Vector2 gamePadSize(2.5f,2.5f);
 Vector2 gamePadBBSize (3,3);
 
-AndroidInputManager::AndroidInputManager (eInputMode mode, bool trackball)
+AndroidInputManager::AndroidInputManager (bool gamepad, bool trackball)
   : InputManager(),
-    inputMode(mode),
     state(STATE_DEFAULT),
     rocketButton("assets/sprites/fire_rocket.png",
                  "assets/sprites/fire_rocket_clicked.png",
@@ -50,8 +49,9 @@ AndroidInputManager::AndroidInputManager (eInputMode mode, bool trackball)
     bombButtonTimer(MINE_BUTTON_COOLDOWN),
     pressedItem(-1),
     lastButtonPressTime(0),
+    useGamepad(gamepad),
     useTrackball(trackball){
-  setInputMode(mode);
+  setUseGamepad(gamepad);
   setUseTrackball(trackball);
 }
 
@@ -70,25 +70,23 @@ void AndroidInputManager::reset () {
 
 void AndroidInputManager::setUseTrackball (bool use) {
   useTrackball = use;
-  saveUseTrackball(useTrackball);
 
-  if (inputMode == INPUT_GAMEPAD)
+  if (useGamepad)
     rocketButton.setEnabled(false);
   else
     rocketButton.setEnabled(!useTrackball);
 }
 
-void AndroidInputManager::setInputMode (eInputMode mode) {
-  inputMode = mode;
-  saveInputMethod(inputMode);
+void AndroidInputManager::setUseGamepad(bool use) {
+  useGamepad = use;
 
-  if (inputMode == INPUT_GAMEPAD)
+  if (useGamepad)
     rocketButton.setEnabled(false);
   else
     rocketButton.setEnabled(!useTrackball);
 
   //BUTTONS position
-  const float buttonsX = (inputMode==INPUT_GAMEPAD)?buttonsLeftX:buttonsRightX;
+  const float buttonsX = (useGamepad)?buttonsLeftX:buttonsRightX;
   const Vector2 buttonSize (2.5,2.5);
   rocketButton.setPosition(Vector2(buttonsX, 5.25f));
   rocketButton.setSize(buttonSize);
@@ -107,7 +105,7 @@ void AndroidInputManager::draw () {
   const uint64_t now = Utils::getCurrentTimeMillis();
 
   //BUTTONS
-  if (!useTrackball || inputMode != INPUT_GAMEPAD)
+  if (!useTrackball && !useGamepad)
     rocketButton.draw();
   if (_progMan()->hasBombs()) {
     if (bombButtonTimer.isActive()) {
@@ -135,7 +133,7 @@ void AndroidInputManager::draw () {
   //CURSOR
   if (useTrackball)
     cursor.draw(cursorPosition, Vector2(1,1));
-  if (inputMode == INPUT_GAMEPAD)
+  if (useGamepad)
     gamePad.draw(gamePadPos, gamePadSize);
 
 #ifdef FORM_CONTROL
@@ -218,7 +216,7 @@ void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pN
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
     //LOGE("shield");
-  } else if (inputMode == INPUT_GAMEPAD) {
+  } else if (useGamepad) {
     if (inGamePad(pNoTrans)) {
       _setPressedItem(-1);
       startMoving(MOVING_TANK_PAD, p);
@@ -250,7 +248,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
   //For buttons, we only consider events that couldn't be double tap
   if (state == FIRING_MODE || rocketButton.inside(pNoTrans)) {
     rocketButton.setPressed(true);
-  } else if (inputMode == INPUT_TOUCH) {
+  } else if (!useGamepad) {
     if (!useTrackball && (tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME))
       Game::getInstance()->playerFire(p);
     updatePressedItem(p, pNoTrans);
@@ -285,9 +283,9 @@ void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
     _setPressedItem(BOMB_BUTTON_ID);
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
-  } else if (!useTrackball && inputMode == INPUT_TOUCH) {
+  } else if (!useTrackball && !useGamepad) {
     Game::getInstance()->playerFire(p);
-  } else if (!useTrackball && inputMode == INPUT_GAMEPAD && !inGamePad(pNoTrans)) {
+  } else if (!useTrackball && useGamepad && !inGamePad(pNoTrans)) {
     Game::getInstance()->playerFire(p);
   }
 }

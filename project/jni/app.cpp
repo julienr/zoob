@@ -89,7 +89,6 @@ void toPlayingState () {
     InputManager::getInstance()->reset();
 
     centerGameInViewport();
-    saveDifficulty(Difficulty::getInstance()->currentDifficulty());
 
     //Display the tutorial before starting level 0
     /*if (gm->getCurrentLevel() == 0) {
@@ -173,7 +172,7 @@ void nativeLoadSerie (const char* serie) {
 bool initialised = false;
 
 
-void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) {
+void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
   if (!initialised) {
     initialised = true;
     Difficulty::setDifficulty(difficulty);
@@ -187,7 +186,7 @@ void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) 
     gm->setStateCallback(STATE_PLAYING, toPlayingState);
     gm->setStateCallback(STATE_PAUSED, toPauseState);
 
-    InputManager::registerInstance(createInputManager(inputMethod, useTrackball));
+    InputManager::registerInstance(createInputManager(useGamepad, useTrackball));
 
     /*printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -195,7 +194,17 @@ void nativeInitGL(int level, int difficulty, int inputMethod, int useTrackball) 
     printGLString("Extensions", GL_EXTENSIONS);*/
   } else {
     //In case we're coming back from sleep
+
+    //prefs might have changed
+    AndroidInputManager* inputManager = static_cast<AndroidInputManager*>(InputManager::getInstance());
+    inputManager->setUseGamepad(useGamepad);
+    inputManager->setUseTrackball(useTrackball);
+
+    //need to reload textures (GL context might have been destroyed)
     TextureManager::getInstance()->reloadAll();
+
+    if (GameManager::getInstance()->inGame())
+      centerGameInViewport();
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
