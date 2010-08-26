@@ -44,6 +44,10 @@ public class ZoobApplication extends Application {
 		return "net_fhtagn_zoobgame_prefs";
 	}
 	
+	protected boolean isDemo () {
+		return false;
+	}
+	
 	@Override
 	public void onCreate () {
 		super.onCreate();

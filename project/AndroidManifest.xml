@@ -22,10 +22,10 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".menus.OptionsMenu"
+        <activity android:name="net.fhtagn.zoobgame.menus.OptionsMenu"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-        <provider android:name="SerieContentProvider"
+        <provider android:name="net.fhtagn.zoobgame.SerieContentProvider"
                   android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />
     </application>
     
