@@ -106,7 +106,6 @@ class Level {
   public:
     //Since we can't pass a static 2D array as a func argument, board should be a pointer to the first element
     //and array subscripting is done our way then
-    //The tanks array MUST contain the player tank description in its first index
 
     //Level take ownership of the tanks array
     //board should be FREED BY CALLER

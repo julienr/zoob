@@ -64,6 +64,9 @@ class ProgressionManager {
   private:
     const Level* _level() const;
     vector<ePlayerForm> availablePlayerForms;
+
+    //cache of available items
+    bool items[4];
 };
 
 #endif /* PROGRESSIONMANAGER_H_ */

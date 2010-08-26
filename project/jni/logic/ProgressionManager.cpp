@@ -13,23 +13,23 @@ ProgressionManager* ProgressionManager::instance = NULL;
 ProgressionManager::ProgressionManager ()
   : availablePlayerForms(3) {
   availablePlayerForms.append(FORM_SIMPLE);
+  memset(items, 0, sizeof(uint8_t)*4);
 }
 
 const Level* ProgressionManager::_level() const {
-  LOGE("_level(), game instance %i", Game::getInstance());
   return Game::getInstance()->getLevel();
 }
 
 bool ProgressionManager::hasBombs () const {
-  return _level()->hasItem(ITEM_BOMB);
+  return items[0];
 }
 
 bool ProgressionManager::hasShield () const {
-  return _level()->hasItem(ITEM_SHIELD);
+  return items[1];
 }
 
 void ProgressionManager::setPlayerForm (Level* level, PlayerTank* player) const {
-  if (level->hasItem(ITEM_BOUNCE))
+  if (items[2])
     player->changePlayerForm(FORM_BOUNCE);
 }
 
@@ -38,7 +38,7 @@ uint64_t ProgressionManager::getPlayerFireInterval () const {
 }
 
 float ProgressionManager::getPlayerRocketsSpeed () const {
-  if (_level()->hasItem(ITEM_FIRING))
+  if (items[3])
     return 3.0f;
   else
     return 2.0f;
@@ -54,4 +54,11 @@ void ProgressionManager::changedLevel () {
   AV_FORM(FORM_SIMPLE);
   if (_level()->hasItem(ITEM_BOUNCE))
     AV_FORM(FORM_BOUNCE);
+
+  const Level* l = _level();
+  items[0] = l->hasItem(ITEM_BOMB);
+  items[1] = l->hasItem(ITEM_SHIELD);
+  items[2] = l->hasItem(ITEM_BOUNCE);
+  items[3] = l->hasItem(ITEM_FIRING);
+  LOGE("bombs : %i, shield : %i, bounce : %i, firing : %i, reward : %i", items[0], items[1], items[2], items[3], l->getReward());
 }

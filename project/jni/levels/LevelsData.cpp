@@ -200,6 +200,10 @@ Level* levelFromJSON (json_t* json) {
       }
       tanks[i] = TankDescription(coords[0], coords[1], ttype, path);
     }
+    char* jsonText = json_dumps(json,0);
+    LOGE("loading level from json : %s", jsonText);
+    free(jsonText);
+
     //Determine available items
     uint8_t items = 0;
     if (opt_istrue(json, "bombs"))

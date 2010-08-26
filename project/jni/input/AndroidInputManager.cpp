@@ -107,7 +107,7 @@ void AndroidInputManager::draw () {
   const uint64_t now = Utils::getCurrentTimeMillis();
 
   //BUTTONS
-  if (!useTrackball)
+  if (!useTrackball || inputMode != INPUT_GAMEPAD)
     rocketButton.draw();
   if (_progMan()->hasBombs()) {
     if (bombButtonTimer.isActive()) {
