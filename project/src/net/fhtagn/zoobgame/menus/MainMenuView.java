@@ -95,16 +95,18 @@ public class MainMenuView extends FrameLayout {
 	}
 	
   private void setupButtons () {
- 	 //FIXME: for a strange reason, this doesn't work from the XML, so do it programmatically
-/*   LinearLayout container = (LinearLayout)findViewById(R.id.container);
-   NinePatchDrawable bg = (NinePatchDrawable)getResources().getDrawable(R.drawable.zoob_bg);
-   container.setBackgroundDrawable(bg);*/
-  
+ 	 //FIXME: for a strange reason, this doesn't work from the XML, so do it programmatically  
    LinearLayout container = (LinearLayout)findViewById(R.id.container);
    BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.backrepeat);
    bg.setTileModeX(TileMode.REPEAT);
    bg.setTileModeY(TileMode.REPEAT);
    container.setBackgroundDrawable(bg);
+   
+   BlurButton editorBtn = (BlurButton)findViewById(R.id.editor_btn);
+ 	 editorBtn.setTextSizeDip(Common.MENU_ITEM_SMALL_TEXT_SIZE);
+ 	 
+   BlurButton helpBtn = (BlurButton)findViewById(R.id.help_btn);
+   helpBtn.setTextSizeDip(Common.MENU_ITEM_SMALL_TEXT_SIZE);
    
    BlurButton optionsBtn = (BlurButton)findViewById(R.id.options);
    optionsBtn.setOnClickListener(new OnClickListener () {

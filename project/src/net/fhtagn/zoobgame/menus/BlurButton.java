@@ -27,19 +27,27 @@ public class BlurButton extends Button {
 	private boolean pressed = false;
 	private boolean focused = false;
 	
+	private final float scale;
+	
 	public BlurButton(Context context, AttributeSet attrs) {
 	  super(context, attrs);
 	  if (oogie == null) {
 	  	oogie = Typeface.createFromAsset(context.getAssets(), "fonts/OogieBoogie.ttf");
 	  }
+	  scale = getResources().getDisplayMetrics().density;
 	  this.setTypeface(oogie);
 	  //Have to do that here so the shadow size is taken into account in onMeasure()
 	  this.setShadowLayer(Common.SHADOW_RADIUS, Common.SHADOW_DX, Common.SHADOW_DY, Common.SHADOW_COLOR);
 	  this.setPadding((int)Common.SHADOW_RADIUS, (int)Common.SHADOW_RADIUS, (int)Common.SHADOW_RADIUS, (int)Common.SHADOW_RADIUS);
   }
 	
+	public void setTextSizeDip (float ts) {
+		setTextSize(ts*scale);
+	}
+	
 	@Override
 	protected void onDraw (Canvas canvas) {
+		this.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG | this.getPaint().getFlags());
 		if (pressed) {
 			this.getPaint().setShadowLayer(0, 1, 1, Common.SHADOW_COLOR); //remove shadow for blur
 			this.getPaint().setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));
