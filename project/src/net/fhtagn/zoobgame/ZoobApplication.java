@@ -8,6 +8,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -44,7 +46,7 @@ public class ZoobApplication extends Application {
 		return "net_fhtagn_zoobgame_prefs";
 	}
 	
-	protected boolean isDemo () {
+	public boolean isDemo () {
 		return false;
 	}
 	
@@ -53,6 +55,14 @@ public class ZoobApplication extends Application {
 		super.onCreate();
 		
 		Log.i("ZoobApplication", "onCreate()");
+		//Check for full version key
+		try {
+	    getPackageManager().getPackageInfo("net.fhtagn.zoobkey", 0);
+	    Log.i(TAG, "full version key found");
+      //FIXME: should disable key from launcher
+    } catch (NameNotFoundException e) {
+    	Log.i(TAG, "full version key not found");
+    }
 		
     settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     transferOldPref(OLD_PREF_KEY_INPUT_METHOD, PREF_KEY_GAMEPAD);

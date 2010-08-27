@@ -3,52 +3,58 @@
     android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/backrepeat"
-    android:gravity="center_vertical"
-    android:tileMode="repeat"
-    android:weightSum="1.0">
+    android:gravity="center_vertical">
     <!--  for an explanation of weightSum, see http://andmobidev.blogspot.com/2010/01/setting-width-of-view-using-percentage.html -->
   <ImageView android:id="@+id/logo"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_weight=".5"
-    android:src="@drawable/logo" />
-    
-  <ScrollView
-    android:layout_width="0dip"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:layout_weight=".5">
-	  <RelativeLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:gravity="center_horizontal">
-	    
-	    <net.fhtagn.zoobgame.menus.OogieTextView android:id="@+id/serie_name"
-	     android:gravity="center"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content" />
-	    
-	    <Gallery android:id="@+id/lvlgallery"
-	      android:layout_below="@id/serie_name"
-	      android:layout_width="fill_parent"
-	      android:layout_height="wrap_content"/>
-	    
-		  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/start"
-		    style="@style/Menu.Button" 
-		    android:layout_below="@id/lvlgallery"
-		    android:layout_centerHorizontal="true"
-		    android:text="start"/>
-		    
-		  <Gallery android:id="@+id/diffgallery"
-		    android:layout_below="@id/start"
-	      android:layout_width="fill_parent"
-	      android:layout_height="wrap_content"/>
-		  
-		  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/options"
-		    android:layout_below="@id/diffgallery"
-		    android:layout_centerHorizontal="true"
-	      style="@style/Menu.Button" 
-	      android:text="options"/>
-	  </RelativeLayout>
-  </ScrollView>
+    android:src="@drawable/logo" />
+    <LinearLayout
+      android:layout_height="fill_parent"
+      android:layout_width="fill_parent"
+      android:orientation="vertical">
+      <ScrollView
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1">
+			  <RelativeLayout
+			    android:layout_width="fill_parent"
+		      android:layout_height="0dip"
+			    android:gravity="center_horizontal">
+				    <net.fhtagn.zoobgame.menus.OogieTextView android:id="@+id/serie_name"
+				     android:gravity="center"
+			       android:layout_width="fill_parent"
+			       android:layout_height="wrap_content" />
+				    
+				    <Gallery android:id="@+id/lvlgallery"
+				      android:layout_below="@id/serie_name"
+				      android:layout_width="fill_parent"
+				      android:layout_height="wrap_content"/>
+				    
+					  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/start"
+					    style="@style/Menu.Button" 
+					    android:layout_below="@id/lvlgallery"
+					    android:layout_centerHorizontal="true"
+					    android:text="start"/>
+					    
+					  <Gallery android:id="@+id/diffgallery"
+					    android:layout_below="@id/start"
+				      android:layout_width="fill_parent"
+				      android:layout_height="wrap_content"/>
+					  
+					  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/options"
+					    android:layout_below="@id/diffgallery"
+					    android:layout_centerHorizontal="true"
+				      style="@style/Menu.Button" 
+				      android:text="options"/>
+		      </RelativeLayout>
+      </ScrollView>
+      
+	    <com.mobclix.android.sdk.MobclixMMABannerXLAdView 
+	        android:id="@+id/advertising_banner_view"
+	        android:layout_height="50dp"
+	        android:layout_width="320dp"
+	        android:layout_gravity="center"
+	    />
+    </LinearLayout>
 </LinearLayout>

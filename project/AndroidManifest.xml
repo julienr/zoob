@@ -27,7 +27,20 @@
 
         <provider android:name="net.fhtagn.zoobgame.SerieContentProvider"
                   android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />
+                  
+        <!-- Mobclix Required Parameter -->
+        <meta-data android:name="com.mobclix.APPLICATION_ID" android:value="insert-your-application-key"/>
+        <activity android:name="com.mobclix.android.sdk.MobclixBrowserActivity"/>       
     </application>
+    
+    <!-- Mobclix Required Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    
+    <!-- Mobclix Optional Permissions -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <uses-sdk android:minSdkVersion="3" />
 </manifest> 
