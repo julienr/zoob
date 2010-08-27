@@ -8,6 +8,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import net.fhtagn.zoobgame.menus.EndView;
+import net.fhtagn.zoobgame.menus.GetFullView;
 import net.fhtagn.zoobgame.menus.HelpView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
@@ -36,6 +37,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -60,8 +62,9 @@ public class Zoob extends Activity {
 	static final int MENU_REWARD_SHIELD = 6;
 	static final int MENU_REWARD_FIRING = 7;
 	static final int MENU_HELP = 8;
-	static final int MENU_PLAY = 9;
-	static final int MENU_LAST = 10;
+	static final int MENU_GET_FULL = 9;
+	static final int MENU_PLAY = 10;
+	static final int MENU_LAST = 11;
 	
 	private MainMenuView mainMenu;
 	private WonView wonView;
@@ -69,6 +72,9 @@ public class Zoob extends Activity {
 	private EndView endView;
 	private RewardView[] rewardViews = new RewardView[4]; 
 	private HelpView helpView;
+	
+	private GetFullView getFullView;
+	
 	static {
 		System.loadLibrary("zoob");
 	}
@@ -132,12 +138,29 @@ public class Zoob extends Activity {
 		helpView.setOnClickListener(interViewListener);
 		flipper.addView(helpView, MENU_HELP);
 		
+		getFullView = new GetFullView(this);
+		getFullView.setOnTouchListener(new OnTouchListener() {
+			@Override
+      public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_CANCEL ||
+						event.getAction() == MotionEvent.ACTION_UP) {
+					showView(MENU_MAIN);
+					return true;
+				}
+	      return false;
+      }
+		});
+		flipper.addView(getFullView, MENU_GET_FULL);
+		
 		flipper.addView(mGLView, MENU_PLAY);
 		
 		//Needed to avoid getting a black screen when switching to glview
 		mGLView.setBackgroundColor(Color.parseColor("#FF656565"));
 		
-		showView(MENU_MAIN);
+		if (app.isDemo())
+			showView(MENU_GET_FULL);
+		else
+			showView(MENU_MAIN);
 	}
 	
 	private void showView (int id) {

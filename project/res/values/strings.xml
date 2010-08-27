@@ -23,4 +23,7 @@
     <string name="error_loading">Error loading serie</string>
     <string name="reward">Reward !</string>
     <string name="long_touch_activate">(long touch on button to activate)</string>
+    
+    <!-- Get full -->
+    <string name="get_full">Click here to ad-free version version for only 0.5€.</string>
 </resources>

@@ -47,7 +47,7 @@ public class ZoobApplication extends Application {
 	}
 	
 	public boolean isDemo () {
-		return false;
+		return true;
 	}
 	
 	@Override

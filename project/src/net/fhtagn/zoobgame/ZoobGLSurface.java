@@ -270,12 +270,6 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	public void saveDifficulty (int level) {
 		app.saveDifficulty(level);
 	}
-	
-	public void buyFullVersion () {
-		Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoobgame");
-		context.startActivity(new Intent(Intent.ACTION_VIEW, fullVersionURI));
-	}
-	
 
 	public void showMenu (int id, int currentLevel) {
 		context.showMenu(id, currentLevel);

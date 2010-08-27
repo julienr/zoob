@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/container"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#ffffff">
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+	  <TextView android:id="@+id/get_full"
+	    android:gravity="center"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="#ffffff"
+	    android:textColor="#000000"
+	    android:textSize="16dip"
+	    android:text="@string/get_full" />
+	             
+	  <com.mobclix.android.sdk.MobclixIABRectangleMAdView 
+	    android:id="@+id/advertising_rectangle_view"
+	    android:layout_height="250dp"
+	    android:layout_width="300dp"
+	    android:layout_gravity="center"/>
+	    
+	 <TextView
+      android:gravity="center"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:background="#ffffff"
+      android:textColor="#000000"
+      android:textSize="16dip"
+      android:text="@string/tap_continue" />
+  </LinearLayout>
+</ScrollView>

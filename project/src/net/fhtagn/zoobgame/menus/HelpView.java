@@ -11,6 +11,7 @@ public class HelpView extends InterLevelView {
 	private final String tap_continue;
 	private final Drawable smileyHappy;
 	
+	//TODO
 	public HelpView(Context context) {
     super(context);
     complete = context.getResources().getString(R.string.lvl_complete);
