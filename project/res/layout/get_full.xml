@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/container"
+<LinearLayout android:id="@+id/container"
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:orientation="vertical"
   android:background="#ffffff">
-  <LinearLayout
+  <TextView android:id="@+id/get_full"
+    android:gravity="center"
     android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#0e9edc"
+    android:textColor="#ffffff"
+    android:textSize="16dip"
+    android:textStyle="bold"
+    android:padding="4dip"
+    android:text="@string/get_full" />
+	  
+  <ScrollView
+   android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
-	  <TextView android:id="@+id/get_full"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:background="#ffffff"
-	    android:textColor="#000000"
-	    android:textSize="16dip"
-	    android:text="@string/get_full" />
-	             
+    android:layout_weight="1">
 	  <com.mobclix.android.sdk.MobclixIABRectangleMAdView 
 	    android:id="@+id/advertising_rectangle_view"
 	    android:layout_height="250dp"
 	    android:layout_width="300dp"
 	    android:layout_gravity="center"/>
+  </ScrollView>
 	    
-	 <TextView
-      android:gravity="center"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:background="#ffffff"
-      android:textColor="#000000"
-      android:textSize="16dip"
-      android:text="@string/tap_continue" />
-  </LinearLayout>
-</ScrollView>
+	<TextView
+     android:gravity="center"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:background="#0e9edc"
+     android:textColor="#ffffff"
+     android:textSize="16dip"
+     android:textStyle="bold"
+     android:padding="4dip"
+     android:text="@string/tap_continue" />
+</LinearLayout>

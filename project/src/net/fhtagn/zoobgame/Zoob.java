@@ -142,6 +142,7 @@ public class Zoob extends Activity {
 		getFullView.setOnTouchListener(new OnTouchListener() {
 			@Override
       public boolean onTouch(View view, MotionEvent event) {
+				Log.i(TAG, "touch event");
 				if (event.getAction() == MotionEvent.ACTION_CANCEL ||
 						event.getAction() == MotionEvent.ACTION_UP) {
 					showView(MENU_MAIN);
