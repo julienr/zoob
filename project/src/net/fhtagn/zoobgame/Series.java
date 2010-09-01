@@ -11,6 +11,8 @@ public final class Series implements BaseColumns {
 	
 	public static final String DEFAULT_SORT_ORDER = "last_modification DESC";
 	
+	public static final int ORIGINAL_ID = 1;
+	
 	//DB fields
 	public static final String ID = _ID;
 	public static final String JSON = "json";

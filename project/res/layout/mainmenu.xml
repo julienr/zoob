@@ -21,29 +21,22 @@
 			    android:layout_width="fill_parent"
 		      android:layout_height="0dip"
 			    android:gravity="center_horizontal">
-			     <LinearLayout android:id="@+id/header"
-			       android:layout_height="wrap_content"
-             android:layout_width="fill_parent"
-             android:gravity="center_horizontal">
-					    <net.fhtagn.zoobgame.menus.OogieTextView android:id="@+id/serie_name"
-				       android:layout_width="wrap_content"
-				       android:layout_height="wrap_content" />
-				      <net.fhtagn.zoobgame.menus.BlurButton android:id="@+id/editor_btn"
-				       style="@style/Menu.Button" 
-				       android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="10dip"
-               android:text="editor" />
-              <net.fhtagn.zoobgame.menus.BlurButton android:id="@+id/help_btn"
-               style="@style/Menu.Button" 
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="10dip"
-               android:text="help" />
-			     </LinearLayout>
-				    
+				    <net.fhtagn.zoobgame.menus.OogieTextView android:id="@+id/serie_name"
+				     android:layout_centerHorizontal="true"
+			       android:layout_width="wrap_content"
+			       android:layout_height="wrap_content" />
+			       
+			      <ImageButton android:id="@+id/btn_help"
+              android:layout_width="35dip"
+              android:layout_height="35dip"
+              android:scaleType="fitCenter"
+              android:layout_alignParentRight="true"
+              android:layout_alignParentTop="true"
+              android:background="@null"
+              android:src="@drawable/btn_help" />
+			       
 				    <Gallery android:id="@+id/lvlgallery"
-				      android:layout_below="@id/header"
+				      android:layout_below="@id/serie_name"
 				      android:layout_width="fill_parent"
 				      android:layout_height="wrap_content"/>
 				    

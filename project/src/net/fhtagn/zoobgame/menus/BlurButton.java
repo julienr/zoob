@@ -47,7 +47,7 @@ public class BlurButton extends Button {
 	
 	@Override
 	protected void onDraw (Canvas canvas) {
-		this.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG | this.getPaint().getFlags());
+		//this.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG | this.getPaint().getFlags());
 		if (pressed) {
 			this.getPaint().setShadowLayer(0, 1, 1, Common.SHADOW_COLOR); //remove shadow for blur
 			this.getPaint().setMaskFilter(new BlurMaskFilter(3, BlurMaskFilter.Blur.NORMAL));

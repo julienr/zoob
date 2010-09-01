@@ -26,4 +26,8 @@
     
     <!-- Get full -->
     <string name="get_full">Click here to download ad-free version for only 0.5€.</string>
+    
+    <!--  Options menu -->
+    <string name="help">Help</string>
+    <string name="editor">Level editor</string>
 </resources>

@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.Gallery;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -102,11 +103,13 @@ public class MainMenuView extends FrameLayout {
    bg.setTileModeY(TileMode.REPEAT);
    container.setBackgroundDrawable(bg);
    
-   BlurButton editorBtn = (BlurButton)findViewById(R.id.editor_btn);
- 	 editorBtn.setTextSizeDip(Common.MENU_ITEM_SMALL_TEXT_SIZE);
- 	 
-   BlurButton helpBtn = (BlurButton)findViewById(R.id.help_btn);
-   helpBtn.setTextSizeDip(Common.MENU_ITEM_SMALL_TEXT_SIZE);
+   ImageButton helpBtn = (ImageButton)findViewById(R.id.btn_help);
+   helpBtn.setOnClickListener(new OnClickListener() {
+  	 @Override
+  	 public void onClick (View view) {
+  		 activity.openOptionsMenu();
+  	 }
+   });
    
    BlurButton optionsBtn = (BlurButton)findViewById(R.id.options);
    optionsBtn.setOnClickListener(new OnClickListener () {

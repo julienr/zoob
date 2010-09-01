@@ -68,7 +68,7 @@ public class SerieContentProvider extends ContentProvider {
 			values.put(Series.IS_MINE, 0);
 			cacheInfos(values);	
 			long rowId = db.insert(SERIE_TABLE_NAME, Series.JSON, values);
-			if (rowId != 1) {
+			if (rowId != Series.ORIGINAL_ID) {
 				throw new SQLException("ID for original level is not 1 but " + rowId);
 			}
     }
@@ -88,7 +88,7 @@ public class SerieContentProvider extends ContentProvider {
 	//This function will prevent any modification on the original serie record by throwing an IllegalArgumentException
 	//if where/whereArgs combination would lead to such a modification
 	private void preventOriginalSerieDeletion (SQLiteDatabase db, String where, String[] whereArgs) {
-		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"==1 AND "+where, whereArgs, null, null, null);
+		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"=="+Series.ORIGINAL_ID+" AND "+where, whereArgs, null, null, null);
 		if (c.getCount() > 0) {
 			c.close();
 			throw new IllegalArgumentException("Query would delete original serie, aborting. DELETE WHERE " + where + " with args : " + whereArgs);
@@ -97,7 +97,7 @@ public class SerieContentProvider extends ContentProvider {
 	}
 	
 	private void preventOriginalSerieUpdate (ContentValues update, SQLiteDatabase db, String where, String[] whereArgs) {
-		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"==1 AND "+where, whereArgs, null, null, null);
+		Cursor c = db.query(SERIE_TABLE_NAME, new String[]{Series.ID}, Series.ID+"=="+Series.ORIGINAL_ID+" AND "+where, whereArgs, null, null, null);
 		if (c.getCount() > 0) { 
 			c.close();
 			if (!(update.size() == 1 && update.containsKey(Series.PROGRESS))) {

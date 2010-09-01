@@ -35,6 +35,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +45,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.ViewFlipper;
 
@@ -224,9 +227,34 @@ public class Zoob extends Activity {
 	}
 	
 	@Override
+	public boolean onCreateOptionsMenu (Menu menu) {
+		//Create the menu here anyway
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_optionsmenu, menu);
+		return true;
+	}
+	
+	@Override
 	public boolean onPrepareOptionsMenu (Menu menu) {
-		mGLView.onMenu();
-		return false;
+		if (flipper.getDisplayedChild() == MENU_MAIN) {
+			return true;
+		} else {
+			mGLView.onMenu();
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected (MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.help:
+				Toast.makeText(this, "help !", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.editor:
+				Toast.makeText(this, "editor !", Toast.LENGTH_SHORT).show();
+				break;
+		}
+		return true;
 	}
 	
 	@Override
