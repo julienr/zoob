@@ -26,7 +26,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Closeable;
 
-import net.fhtagn.zoobgame.R;
+import net.fhtagn.zoob_demo.R;
 
 /**
  * Displays an EULA ("End User License Agreement") that the user has to accept before

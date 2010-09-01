@@ -7,6 +7,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.GetFullView;
 import net.fhtagn.zoobgame.menus.HelpView;

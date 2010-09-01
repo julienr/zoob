@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="net.fhtagn.zoobgame"
+      package="net.fhtagn.zoob_demo"
       android:versionCode="5"
       android:versionName="1.0.2">
     <application android:icon="@drawable/icon" 
@@ -29,7 +29,7 @@
                   android:authorities="net.fhtagn.zoobgame.SerieContentProvider" />
                   
         <!-- Mobclix Required Parameter -->
-        <meta-data android:name="com.mobclix.APPLICATION_ID" android:value="insert-your-application-key"/>
+        <meta-data android:name="com.mobclix.APPLICATION_ID" android:value="6C08F91C-80C1-4D94-8F57-E3A7FE2E849F"/>
         <activity android:name="com.mobclix.android.sdk.MobclixBrowserActivity"/>       
     </application>
     

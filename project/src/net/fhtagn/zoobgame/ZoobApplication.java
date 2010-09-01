@@ -61,7 +61,7 @@ public class ZoobApplication extends Application {
 		Log.i("ZoobApplication", "onCreate()");
 		//Check for full version key
 		try {
-	    getPackageManager().getPackageInfo("net.fhtagn.zoobkey", 0);
+	    getPackageManager().getPackageInfo("net.fhtagn.zoobgame", 0);
 	    Log.i(TAG, "full version key found");
 	    demo = true;
     } catch (NameNotFoundException e) {

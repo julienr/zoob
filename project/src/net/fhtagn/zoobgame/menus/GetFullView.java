@@ -4,7 +4,7 @@ import com.mobclix.android.sdk.MobclixAdView;
 import com.mobclix.android.sdk.MobclixIABRectangleMAdView;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 
-import net.fhtagn.zoobgame.R;
+import net.fhtagn.zoob_demo.R;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;

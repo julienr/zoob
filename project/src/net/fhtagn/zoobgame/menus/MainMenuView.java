@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import android.graphics.drawable.NinePatchDrawable;
 
-import net.fhtagn.zoobgame.R;
+import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.Zoob;
 import net.fhtagn.zoobgame.ZoobApplication;
 import android.app.Activity;

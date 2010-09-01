@@ -1,6 +1,6 @@
 package net.fhtagn.zoobgame.menus;
 
-import net.fhtagn.zoobgame.R;
+import net.fhtagn.zoob_demo.R;
 import android.content.pm.ActivityInfo;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
