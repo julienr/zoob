@@ -4,11 +4,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
@@ -40,6 +42,8 @@ public class ZoobApplication extends Application {
 	private boolean progressPersistent = true;
 	private int progress = -1; //only used if progressSavePersistent = false
 	
+	private boolean demo;
+	
 	//Now use getDefaultSharedPreferences()
 	@Deprecated
 	protected String getPrefsName () {
@@ -47,7 +51,7 @@ public class ZoobApplication extends Application {
 	}
 	
 	public boolean isDemo () {
-		return true;
+		return !demo;
 	}
 	
 	@Override
@@ -59,9 +63,10 @@ public class ZoobApplication extends Application {
 		try {
 	    getPackageManager().getPackageInfo("net.fhtagn.zoobkey", 0);
 	    Log.i(TAG, "full version key found");
-      //FIXME: should disable key from launcher
+	    demo = true;
     } catch (NameNotFoundException e) {
     	Log.i(TAG, "full version key not found");
+    	demo = false;
     }
 		
     settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
