@@ -30,4 +30,19 @@
     <!--  Options menu -->
     <string name="help">Help</string>
     <string name="editor">Level editor</string>
+    
+    <!--  help  -->
+    <string name="ok">Ok</string>
+    <string name="help_title">welcome to zoob !</string>
+    <string name="help_content">
+     &lt;div style=&quot;color:white;&quot;&gt;
+      &lt;ul&gt;
+        &lt;li&gt;the goal of the game is to destroy &lt;b&gt;&lt;font color=&quot;#65fe3e&quot;&gt;all&lt;/font&gt;&lt;/b&gt; enemy tanks&lt;/li&gt;
+        &lt;li&gt;use the virtual &lt;b&gt;&lt;font color=&quot;#65fe3e&quot;&gt;gamepad&lt;/font&gt;&lt;/b&gt; to move&lt;/li&gt;
+        &lt;li&gt;&lt;b&gt;&lt;font color=&quot;#65fe3e&quot;&gt;tap&lt;/font&gt;&lt;/b&gt; anywhere to fire a rocket&lt;/li&gt;
+        &lt;li&gt;check out the &lt;b&gt;&lt;font color=&quot;#65fe3e&quot;&gt;options&lt;/font&gt;&lt;/b&gt; for different input methods&lt;/li&gt;
+        &lt;li&gt;create and share your own levels by using the &lt;b&gt;&lt;font color=&quot;#65fe3e&quot;&gt;level editor&lt;/font&gt;&lt;/b&gt; (press menu key on main menu)&lt;/li&gt;
+      &lt;/ul&gt;
+     &lt;/div&gt;
+    </string>
 </resources>

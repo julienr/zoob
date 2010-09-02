@@ -10,7 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.GetFullView;
-import net.fhtagn.zoobgame.menus.HelpView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
 import net.fhtagn.zoobgame.menus.MainMenuView;
@@ -18,8 +17,11 @@ import net.fhtagn.zoobgame.menus.RewardView;
 import net.fhtagn.zoobgame.menus.WonView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -34,6 +36,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +48,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.webkit.WebView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.ViewFlipper;
@@ -56,6 +60,8 @@ public class Zoob extends Activity {
 	
 	private ViewAnimator flipper;
 	
+	public static final int DIALOG_HELP = 1;
+	
 	//Views
 	static final int MENU_MAIN = 0;
 	static final int MENU_WON = 1;
@@ -65,17 +71,15 @@ public class Zoob extends Activity {
 	static final int MENU_REWARD_BOUNCE = 5;
 	static final int MENU_REWARD_SHIELD = 6;
 	static final int MENU_REWARD_FIRING = 7;
-	static final int MENU_HELP = 8;
-	static final int MENU_GET_FULL = 9;
-	static final int MENU_PLAY = 10;
-	static final int MENU_LAST = 11;
+	static final int MENU_GET_FULL = 8;
+	static final int MENU_PLAY = 9;
+	static final int MENU_LAST = 10;
 	
 	private MainMenuView mainMenu;
 	private WonView wonView;
 	private LostView lostView;
 	private EndView endView;
 	private RewardView[] rewardViews = new RewardView[4]; 
-	private HelpView helpView;
 	
 	private GetFullView getFullView;
 	
@@ -138,15 +142,10 @@ public class Zoob extends Activity {
 			flipper.addView(rewardViews[i], MENU_REWARD_BOMB+i);
 		}
 		
-		helpView = new HelpView(this);
-		helpView.setOnClickListener(interViewListener);
-		flipper.addView(helpView, MENU_HELP);
-		
 		getFullView = new GetFullView(this);
 		getFullView.setOnTouchListener(new OnTouchListener() {
 			@Override
       public boolean onTouch(View view, MotionEvent event) {
-				Log.i(TAG, "touch event");
 				if (event.getAction() == MotionEvent.ACTION_CANCEL ||
 						event.getAction() == MotionEvent.ACTION_UP) {
 					showView(MENU_MAIN);
@@ -245,21 +244,58 @@ public class Zoob extends Activity {
 	}
 	
 	@Override
+	protected Dialog onCreateDialog (int dialogID) {
+		switch (dialogID) {
+			case DIALOG_HELP:
+				return createHtmlDialog(R.string.help_title, R.layout.help, R.string.help_content);
+		}
+		return null;
+	}
+	
+	private Dialog createHtmlDialog (int titleRes, int layoutRes, int htmlRes) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(titleRes);
+		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(layoutRes, null);
+		
+		WebView webView = (WebView)view.findViewById(R.id.webview);
+		webView.setBackgroundColor(Color.TRANSPARENT);
+		final String text = getResources().getString(htmlRes);
+		webView.loadData(text, "text/html", "utf-8");
+		
+		builder.setView(view);
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+      public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+      }
+		});
+		return builder.create();
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected (MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.help:
-				Toast.makeText(this, "help !", Toast.LENGTH_SHORT).show();
+			case R.id.help: {
+				//Toast.makeText(this, "help !", Toast.LENGTH_SHORT).show();
+				showDialog(DIALOG_HELP);
 				break;
-			case R.id.editor:
-				Toast.makeText(this, "editor !", Toast.LENGTH_SHORT).show();
+			}
+			case R.id.editor: {
+				Intent i = new Intent();
+				i.setClassName("net.fhtagn.zoobeditor", "net.fhtagn.zoobeditor.browser.Browser");
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(i);
+				//Toast.makeText(this, "editor !", Toast.LENGTH_SHORT).show();
 				break;
+			}
 		}
 		return true;
 	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
+    if (keyCode == KeyEvent.KEYCODE_BACK && flipper.getDisplayedChild() != MENU_MAIN) {
     	mGLView.onMenu();
       return true;
     }

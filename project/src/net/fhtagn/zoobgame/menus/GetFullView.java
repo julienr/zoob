@@ -45,7 +45,9 @@ public class GetFullView extends FrameLayout {
 			@Override
       public void onClick(View v) {
 				Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoobgame");
-				context.startActivity(new Intent(Intent.ACTION_VIEW, fullVersionURI));    
+				Intent i = new Intent(Intent.ACTION_VIEW, fullVersionURI);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(i);    
       }
 	  });
   }

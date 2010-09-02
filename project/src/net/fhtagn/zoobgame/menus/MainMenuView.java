@@ -107,7 +107,7 @@ public class MainMenuView extends FrameLayout {
    helpBtn.setOnClickListener(new OnClickListener() {
   	 @Override
   	 public void onClick (View view) {
-  		 activity.openOptionsMenu();
+  		 activity.showDialog(Zoob.DIALOG_HELP);
   	 }
    });
    
