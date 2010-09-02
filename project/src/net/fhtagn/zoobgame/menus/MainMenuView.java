@@ -70,7 +70,7 @@ public class MainMenuView extends FrameLayout {
 		refreshLvlGallery();
 	}
 	
-	private void refreshLvlGallery() {
+	public void refreshLvlGallery() {
 		ZoobApplication app = (ZoobApplication) activity.getApplication();
 		final Gallery lvlGallery = (Gallery) findViewById(R.id.lvlgallery);
 		lvlGallery.setUnselectedAlpha(0.3f);

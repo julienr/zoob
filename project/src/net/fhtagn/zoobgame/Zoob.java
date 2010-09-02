@@ -110,6 +110,7 @@ public class Zoob extends Activity {
 
     //Create GL view
 		final ZoobApplication app = (ZoobApplication)getApplication();
+		app.registerZoob(this);
 		mGLView = new ZoobGLSurface(this, app, app.getSerieJSONString());
 		
 		OnClickListener interViewListener = new OnClickListener() {
@@ -168,6 +169,18 @@ public class Zoob extends Activity {
 			showView(MENU_GET_FULL);
 		else
 			showView(MENU_MAIN);
+	}
+	
+	//This is only called when the application first transfer the progress from previous versions to this version
+	public void refreshLevels () {
+		if (flipper.getDisplayedChild() == MENU_MAIN) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run () {
+					mainMenu.refreshLvlGallery();
+				}
+			});
+		}
 	}
 	
 	private void showView (int id) {
@@ -288,10 +301,14 @@ public class Zoob extends Activity {
 				break;
 			}
 			case R.id.editor: {
-				Intent i = new Intent();
-				i.setClassName("net.fhtagn.zoobeditor", "net.fhtagn.zoobeditor.browser.Browser");
-				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(i);
+				if (Common.isEditorInstalled(this)) {
+					Intent i = new Intent();
+					i.setClassName("net.fhtagn.zoobeditor", "net.fhtagn.zoobeditor.browser.Browser");
+					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(i); 
+				} else {
+					startActivity(Common.getEditorIntent());
+				}
 				//Toast.makeText(this, "editor !", Toast.LENGTH_SHORT).show();
 				break;
 			}

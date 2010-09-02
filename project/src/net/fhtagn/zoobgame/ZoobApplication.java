@@ -7,29 +7,34 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ZoobApplication extends Application {
 	static final String TAG = "ZoobApplication";
-	//Deprecated: progress now saved using the content provider, only there to restore progress from previous versions when upgrading
-	private static final String OLD_PREF_KEY_LEVEL = "level";
-	private static final String OLD_PREF_KEY_DIFFICULTY = "difficulty";
-	private static final String OLD_PREF_KEY_INPUT_METHOD = "input_mode";
-	private static final String OLD_PREF_KEY_USE_TRACKBALL = "use_trackball";
 	
 	private static final String PREF_KEY_GAMEPAD = "input_gamepad";
 	private static final String PREF_KEY_TRACKBALL = "input_trackball";
 	private static final String PREF_KEY_DIFFICULTY = "game_difficulty";
 	
+	//indicate wether old prefs have been imported
+	private static final String PREF_KEY_OLDPREFS_IMPORTED = "oldprefs_imported";
+	
 	private SharedPreferences settings;
+	
+	private Zoob zoobActivity = null;
 	
 	private Uri currentSerie;
 	
@@ -43,12 +48,6 @@ public class ZoobApplication extends Application {
 	private int progress = -1; //only used if progressSavePersistent = false
 	
 	private boolean demo;
-	
-	//Now use getDefaultSharedPreferences()
-	@Deprecated
-	protected String getPrefsName () {
-		return "net_fhtagn_zoobgame_prefs";
-	}
 	
 	public boolean isDemo () {
 		return !demo;
@@ -70,8 +69,6 @@ public class ZoobApplication extends Application {
     }
 		
     settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-    transferOldPref(OLD_PREF_KEY_INPUT_METHOD, PREF_KEY_GAMEPAD);
-    transferOldPref(OLD_PREF_KEY_USE_TRACKBALL, PREF_KEY_TRACKBALL);
     
     //Insert default preferences
     if (!settings.contains(PREF_KEY_GAMEPAD)) {
@@ -82,12 +79,19 @@ public class ZoobApplication extends Application {
     }
 	}
 	
+	public void registerZoob (Zoob zoob) {
+		zoobActivity = zoob;
+	}
+	
 	public synchronized void setSerieId (long id) {
 		currentSerie = ContentUris.withAppendedId(Series.CONTENT_URI, id);
 		loadJSON();
-		if (id == 1) {
+		if (id == 1 && !settings.getBoolean(PREF_KEY_OLDPREFS_IMPORTED, false)) {
+			Log.i(TAG, "Trying to transfer old progress");
 			//Original serie, try to restore progress
 			transferProgressFromPreferences();
+		} else {
+			Log.i(TAG, "Old progress already transfered");
 		}
 	}
 	
@@ -115,29 +119,50 @@ public class ZoobApplication extends Application {
     cur.close();
 	}
 	
-	//Transfer preferences from old sharedpreferences "getPrefsName" to new defaultsharedpreferences
-	private void transferOldPref (String oldKey, String newKey) {
-		SharedPreferences oldPrefs = getSharedPreferences(getPrefsName(), 0);
-		if (oldPrefs.contains(oldKey)) {
-			int value = oldPrefs.getInt(newKey, 0);
-			saveBoolPref(newKey, value==1);
-			SharedPreferences.Editor editor = oldPrefs.edit();
-			editor.remove(oldKey);
-			editor.commit();
-		}
-	}
-	
 	//This is a compability functions that will retrieve the progress currently saved in the user preferences (versions <= 1.0.2-2)
 	//and transfer it to the contentprovider's db (versions > 1.0.2-2)
 	private void transferProgressFromPreferences () {
-		SharedPreferences oldPrefs = getSharedPreferences(getPrefsName(), 0);
-		int settingsProgress = oldPrefs.getInt(OLD_PREF_KEY_LEVEL, 0); 
-		if (settingsProgress != 0) {
-			saveProgress(settingsProgress);
-			SharedPreferences.Editor editor = oldPrefs.edit();
-			editor.remove(OLD_PREF_KEY_LEVEL);
-			editor.commit();
-		}
+		try {
+			//first test to see if zoobgame is installed
+	    getPackageManager().getPackageInfo("net.fhtagn.zoobgame", 0);
+	    
+	    //if we get here, this means zoobgame is installed
+			final Intent i = new Intent();
+			i.setClassName("net.fhtagn.zoobgame", "net.fhtagn.zoobgame.ProgressService");
+			bindService(i, new ServiceConnection() {
+				@Override
+	      public void onServiceConnected(ComponentName cn, IBinder binder) {
+					Log.i(TAG, "service connected : " + cn);
+		      ProgressBinder b = ProgressBinder.Stub.asInterface(binder);
+	        try {
+		        final int progress = b.getProgress();
+		        Log.i(TAG, "old progress : " + progress);
+		        //just take care of not removing progress
+		        if (progress > getLevel())
+		        	saveProgress(progress);
+		  			SharedPreferences.Editor editor = settings.edit();
+		      	editor.putBoolean(PREF_KEY_OLDPREFS_IMPORTED, true);
+		      	editor.commit();
+		      	//need to refresh the level gallery on the UI
+		      	if (zoobActivity != null)
+		      		zoobActivity.refreshLevels();
+		      	else
+		      		Log.i(TAG, "null zoobActivity");
+		      	//try to stop the service now that we are done
+		      	ZoobApplication.this.stopService(i);
+	        } catch (RemoteException e) {
+		        e.printStackTrace();
+	        }
+	      }
+
+				@Override
+	      public void onServiceDisconnected(ComponentName cn) {
+					Log.i(TAG, "service disconnected : " + cn);
+	      }
+			}, Context.BIND_AUTO_CREATE);
+    } catch (NameNotFoundException e) {
+    	return;
+    } 
 	}
 	
 	public synchronized void setProgressPersistent (boolean persistent) {
@@ -167,9 +192,14 @@ public class ZoobApplication extends Application {
 	public synchronized void saveProgress (int level) {
 		if (progressPersistent) {
 			ContentValues values = new ContentValues();
-			Log.i(TAG, "saveProgress : " + level);
-			values.put(Series.PROGRESS, level);
-			getContentResolver().update(currentSerie, values, null, null);
+			int currentProgress = getLevel();
+			if (level > currentProgress) {
+				Log.i(TAG, "saveProgress : current="+currentProgress+", new=" + level);
+				values.put(Series.PROGRESS, level);
+				getContentResolver().update(currentSerie, values, null, null);
+			} else {
+				Log.i(TAG, "saveProgress : not saving, current="+currentProgress+", new=" + level);
+			}
 		} else {
 			progress = level;
 		}

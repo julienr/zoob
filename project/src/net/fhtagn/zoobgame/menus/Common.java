@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.util.Log;
 
 public class Common {
 	//Request
@@ -48,6 +50,22 @@ public class Common {
 		Intent i = new Intent(Intent.ACTION_VIEW, fullVersionURI);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		return i;
+	}
+	
+	public static final Intent getEditorIntent () {
+		Uri uri = Uri.parse("market://details?id=net.fhtagn.zoobeditor");
+		Intent i = new Intent(Intent.ACTION_VIEW, uri);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		return i;
+	}
+	
+	public static boolean isEditorInstalled (Context ctx) {
+		try {
+	    ctx.getPackageManager().getPackageInfo("net.fhtagn.zoobeditor", 0);
+	    return true;
+    } catch (NameNotFoundException e) {
+    	return false;
+    } 
 	}
 	
 	public static String readFromAssets(Activity activity, String fileName) {
