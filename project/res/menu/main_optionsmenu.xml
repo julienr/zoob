@@ -3,7 +3,15 @@
   <item android:id="@+id/editor"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/editor" />
+  <group android:id="@+id/demo_only">
+    <item android:id="@+id/buy"
+          android:icon="@android:drawable/ic_menu_set_as"
+          android:title="@string/menu_buy_full" />
+  </group>
   <item android:id="@+id/help"
         android:icon="@android:drawable/ic_menu_help"
         android:title="@string/help" />
+  <item android:id="@+id/about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/about" />
 </menu>

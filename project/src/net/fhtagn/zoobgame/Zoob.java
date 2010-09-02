@@ -8,6 +8,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import net.fhtagn.zoob_demo.R;
+import net.fhtagn.zoobgame.menus.Common;
 import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.GetFullView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
@@ -55,12 +56,14 @@ import android.widget.ViewFlipper;
 
 public class Zoob extends Activity {
 	static final String TAG = "Zoob";
+	private static final String ASSET_EULA = "EULA";
 	static final String ACTION_PLAY = "net.fhtagn.zoobgame.PLAY";
 	private ZoobGLSurface mGLView;
 	
 	private ViewAnimator flipper;
 	
 	public static final int DIALOG_HELP = 1;
+	public static final int DIALOG_ABOUT = 2;
 	
 	//Views
 	static final int MENU_MAIN = 0;
@@ -230,6 +233,8 @@ public class Zoob extends Activity {
 		//Create the menu here anyway
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_optionsmenu, menu);
+		ZoobApplication app = (ZoobApplication)getApplication();
+		menu.setGroupVisible(R.id.demo_only, app.isDemo());
 		return true;
 	}
 	
@@ -247,12 +252,14 @@ public class Zoob extends Activity {
 	protected Dialog onCreateDialog (int dialogID) {
 		switch (dialogID) {
 			case DIALOG_HELP:
-				return createHtmlDialog(R.string.help_title, R.layout.help, R.string.help_content);
+				return createHtmlDialog(R.string.help_title, R.layout.html_dialog, getResources().getString(R.string.help_content));
+			case DIALOG_ABOUT:
+				return createHtmlDialog(R.string.about_title, R.layout.html_dialog, Common.readFromAssets(this, ASSET_EULA));
 		}
 		return null;
 	}
 	
-	private Dialog createHtmlDialog (int titleRes, int layoutRes, int htmlRes) {
+	private Dialog createHtmlDialog (int titleRes, int layoutRes, String html) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(titleRes);
 		LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -260,8 +267,7 @@ public class Zoob extends Activity {
 		
 		WebView webView = (WebView)view.findViewById(R.id.webview);
 		webView.setBackgroundColor(Color.TRANSPARENT);
-		final String text = getResources().getString(htmlRes);
-		webView.loadData(text, "text/html", "utf-8");
+		webView.loadData(html, "text/html", "utf-8");
 		
 		builder.setView(view);
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -287,6 +293,14 @@ public class Zoob extends Activity {
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);
 				//Toast.makeText(this, "editor !", Toast.LENGTH_SHORT).show();
+				break;
+			}
+			case R.id.buy: {
+				startActivity(Common.buyFullIntent());
+				break;
+			}
+			case R.id.about: {
+				showDialog(DIALOG_ABOUT);
 				break;
 			}
 		}

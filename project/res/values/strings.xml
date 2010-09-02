@@ -29,10 +29,14 @@
     
     <!--  Options menu -->
     <string name="help">Help</string>
+    <string name="about">About</string>
     <string name="editor">Level editor</string>
     
-    <!--  help  -->
+    <string name="menu_buy_full">Buy full</string>
+    
     <string name="ok">Ok</string>
+    
+    <!--  help  -->
     <string name="help_title">welcome to zoob !</string>
     <string name="help_content">
      &lt;div style=&quot;color:white;&quot;&gt;
@@ -45,4 +49,6 @@
       &lt;/ul&gt;
      &lt;/div&gt;
     </string>
+    <!--  about -->
+    <string name="about_title">about zoob</string>
 </resources>
