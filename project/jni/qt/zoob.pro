@@ -12,8 +12,8 @@ DEFINES += PLATFORM_SDL
 
 # Input
 #qt specific first
-HEADERS += GameScreen.h MainWindow.h MenuScreen.h
-SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp
+HEADERS += GameScreen.h MainWindow.h MenuScreen.h InterMenu.h
+SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp InterMenu.cpp
 #zoob (copied from Android.mk, but changed assignation to = instead of :=)
 LOCAL_SRC_FILES = \
 		app.cpp \

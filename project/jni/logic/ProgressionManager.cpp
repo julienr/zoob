@@ -28,7 +28,7 @@ bool ProgressionManager::hasShield () const {
   return items[1];
 }
 
-void ProgressionManager::setPlayerForm (Level* level, PlayerTank* player) const {
+void ProgressionManager::setPlayerForm (Level* UNUSED(level), PlayerTank* player) const {
   if (items[2])
     player->changePlayerForm(FORM_BOUNCE);
 }

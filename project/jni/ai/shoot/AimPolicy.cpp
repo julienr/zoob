@@ -3,7 +3,7 @@
 #include "logic/Game.h"
 #include "logic/EnemyTank.h"
 
-bool AimPolicy::aim (double elapsedS, Game* game, EnemyTank* myTank, Vector2* outDir) {
+bool AimPolicy::aim (double UNUSED(elapsedS), Game* game, EnemyTank* myTank, Vector2* outDir) {
   //FIXME: remove 3 lines
   /*CollisionResult r;
   const Vector2 dirToTank = game->getPlayerTank()->getPosition()-myTank->getPosition();
@@ -26,7 +26,7 @@ bool AimPolicy::aim (double elapsedS, Game* game, EnemyTank* myTank, Vector2* ou
   return true;
 }
 
-bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* myTank) {
+bool AimPolicy::decideFire (double UNUSED(elapsedS), Vector2* outDir, Game* game, EnemyTank* myTank) {
   CollisionResult r;
   const Vector2& tP = myTank->getPosition();
 
@@ -53,7 +53,7 @@ bool AimPolicy::decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyT
   }
 }
 
-bool AimPolicy::confirmFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+bool AimPolicy::confirmFire (double UNUSED(elapsedS), Vector2* outDir, Game* game, EnemyTank* tank) {
   //First, fire to approaching rockets
   Vector2 nearRocketPos;
   if (aimRockets && TankAI::rocketNear(game, tank,4*GRID_CELL_SIZE, &nearRocketPos)) {

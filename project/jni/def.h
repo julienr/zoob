@@ -32,6 +32,18 @@ extern zip* APKArchive;
   #endif
 #endif
 
+//Handy macro to define unused parameters
+//void dcc_mon_siginfo_handler(int UNUSED(whatsig))
+//http://sourcefrog.net/weblog/software/languages/C/unused.html
+#ifdef UNUSED
+#elif defined(__GNUC__)
+# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+#elif defined(__LCLINT__)
+# define UNUSED(x) /*@unused@*/ x
+#else
+# define UNUSED(x) x
+#endif
+
 //BEGIN opengl-related defs
 //Since the desktop version of opengl doesn't support fixed-point,
 #ifdef PLATFORM_SDL

@@ -25,7 +25,7 @@ Bomb* Tank::dropBomb () {
   return new Bomb(this, getPosition());
 }
 
-bool Tank::explode (Entity* e, const Vector2& dir) {
+bool Tank::explode (Entity* UNUSED(e), const Vector2& UNUSED(dir)) {
   numLives--;
   if (numLives > 0)
     return true;

@@ -42,7 +42,7 @@ class Rocket : public ExplosiveEntity {
       return dir;
     }
 
-    virtual void think (double elapsedS) {}
+    virtual void think (double UNUSED(elapsedS)) {}
 
     BouncePolicy getBouncePolicy () const {
       return bouncePolicy;

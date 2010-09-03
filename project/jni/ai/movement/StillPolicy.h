@@ -6,7 +6,7 @@
 class StillPolicy : public MovementPolicy {
   public:
 
-    bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+    bool decideDir (double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* UNUSED(game), EnemyTank* UNUSED(tank)) {
       return false;
     }
 };

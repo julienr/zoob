@@ -13,7 +13,7 @@ class WallEntity : public Entity {
   public:
     WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h) {}
     eEntityType getType () const { return ENTITY_WALL; }
-    bool explode (Entity* e, const Vector2& colPoint) { return false; }
+    bool explode (Entity* UNUSED(e), const Vector2& UNUSED(colPoint)) { return false; }
 
     float getWidth() const {
       return width;
@@ -23,7 +23,7 @@ class WallEntity : public Entity {
       return height;
     }
 
-    bool bounce (Entity* other, const Vector2& colPoint) {
+    bool bounce (Entity* other, const Vector2& UNUSED(colPoint)) {
       if (other->getType() == ENTITY_ROCKET)
         return true;
       else

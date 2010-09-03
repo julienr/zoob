@@ -3,12 +3,12 @@
 
 #include "MenuScreen.h"
 #include "GameScreen.h"
+#include "InterMenu.h"
 
 #include <QWidget>
 #include <QStackedLayout>
 #include <QTime>
 #include "input/InputManager.h"
-
 
 class MainWindow : public QWidget {
   Q_OBJECT
@@ -18,10 +18,10 @@ class MainWindow : public QWidget {
 
     InputManager* createInputManager (int gamepad, int trackball) { return gameScreen->createInputManager(gamepad, trackball); }
 
+    void showMenu (eMenu menu, int currentLevel=-1);
+
   public slots:
     void startGame ();
-    void showMenu ();
-
     void mainLoop ();
 
     void quit ();
@@ -29,6 +29,7 @@ class MainWindow : public QWidget {
   private:
     MenuScreen* menuScreen;
     GameScreen* gameScreen;
+    InterMenu* menuInter;
     QStackedLayout* layout;
 
     QTime timer;

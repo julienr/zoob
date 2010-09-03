@@ -123,8 +123,9 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
           neigh->data.gCost = tentativeGCost;
           openset.updateElement(neigh);
           //h cost stay the same
-        } else
+        } else {
           ALOGE("\t\tworst than existing");
+        }
       }
     }
   }

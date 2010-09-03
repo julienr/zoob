@@ -12,10 +12,6 @@ void saveProgress (int level) {
   LOGE("saveProgress : %i", level);
 }
 
-void showMenu (int id, int currentLevel) {
-  LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
-}
-
 #include <sys/stat.h>
 char* loadJSON (const char* serieFile) {
   FILE* file = fopen(serieFile, "r");
@@ -33,8 +29,8 @@ char* loadJSON (const char* serieFile) {
 
   char* buffer = (char*)malloc(sizeof(char)*(stats.st_size+1));
 
-  if (fread(buffer, 1, stats.st_size, file) == -1) {
-    LOGE("Error during zip_fread on %s", serieFile);
+  if (fread(buffer, 1, stats.st_size, file) == 0) {
+    LOGE("Error reading %s", serieFile);
     exit(-1);
   }
 
@@ -44,6 +40,11 @@ char* loadJSON (const char* serieFile) {
 }
 
 MainWindow* window;
+
+void showMenu (int id, int currentLevel) {
+  LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
+  window->showMenu((eMenu)id, currentLevel);
+}
 
 InputManager* createInputManager (int useGamepad, int useTrackball) {
   return window->createInputManager(useGamepad, useTrackball);

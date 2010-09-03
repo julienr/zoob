@@ -41,7 +41,7 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   return true;
 }
 
-Path* SmartPolicy::_aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank) {
   //Move to closest visible cell, this should trigger the firing policy to fire
 
   VisibilityGrid& vgrid = game->getPlayerVisibility();
@@ -50,7 +50,7 @@ Path* SmartPolicy::_aggressiveDir(double elapsedS, Vector2* outDir, Game* game, 
   return vgrid.pathToClosest(true);
 }
 
-Path* SmartPolicy::_defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank) {
   //If a rocket is near the tank, cancel all firing and just run away
   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
   if (TankAI::rocketNear(game, tank, 2 * GRID_CELL_SIZE, NULL))

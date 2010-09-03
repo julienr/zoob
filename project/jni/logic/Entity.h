@@ -44,7 +44,7 @@ class Entity: public Moveable {
      * If it returns true, the "other" entity will bounce against this one instead
      * of touching it
      */
-    virtual bool bounce (Entity* other, const Vector2& colPoint) {
+    virtual bool bounce (Entity* UNUSED(other), const Vector2& UNUSED(colPoint)) {
       return false;
     }
 

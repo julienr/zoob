@@ -188,7 +188,7 @@ void AndroidInputManager::stopMoving () {
   state = STATE_DEFAULT;
 }
 
-void AndroidInputManager::think (double elapsedS) {
+void AndroidInputManager::think (double UNUSED(elapsedS)) {
   const uint64_t now = Utils::getCurrentTimeMillis();
   const uint64_t elapsed = now - lastButtonPressTime;
 
@@ -290,11 +290,11 @@ void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
   }
 }
 
-void AndroidInputManager::touchEventSecondaryUp (float x, float y) {
+void AndroidInputManager::touchEventSecondaryUp (float UNUSED(x), float UNUSED(y)) {
 
 }
 
-void AndroidInputManager::touchEventSecondaryMove (float x, float y) {
+void AndroidInputManager::touchEventSecondaryMove (float UNUSED(x), float UNUSED(y)) {
 
 }
 

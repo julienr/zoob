@@ -3,6 +3,14 @@
 #include "app.h"
 
 GameScreen::GameScreen (MainWindow* parent, const char* json, const char* apkPath) :
+  QGLWidget(QGLFormat(QGL::DoubleBuffer |
+                      QGL::DepthBuffer |
+                      QGL::Rgba |
+                      QGL::AlphaChannel |
+                      QGL::AccumBuffer |
+                      QGL::StencilBuffer |
+                      QGL::DirectRendering |
+                      QGL::NoSampleBuffers)),
   mainWindow(parent) {
   nativeInit(apkPath, json);
   nativeLoadSerie(json);
@@ -12,7 +20,7 @@ void GameScreen::keyPressEvent (QKeyEvent* event) {
   event->accept();
   switch (event->key()) {
     case Qt::Key_Escape:
-      mainWindow->showMenu();
+      mainWindow->showMenu(MENU_MAIN);
       break;
   }
 }
@@ -44,6 +52,7 @@ void GameScreen::initializeGL () {
 }
 
 void GameScreen::startGame (int level) {
+  makeCurrent(); //this kind of restore the openGL context
   nativeInitGL(level, 0, 0, 0);
   ::startGame(level);
 }
