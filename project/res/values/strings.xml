@@ -4,6 +4,8 @@
     <string name="eula_title">EULA</string>
     <string name="eula_accept">Accept</string>
     <string name="eula_refuse">Refuse</string>
+    
+    <string name="korean_translation">Translated by Ubinuri</string>
 
     <!--  Preferences -->
     <string name="controls_preferences">Controls</string>
