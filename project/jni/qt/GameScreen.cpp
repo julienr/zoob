@@ -28,21 +28,18 @@ void GameScreen::keyPressEvent (QKeyEvent* event) {
 void GameScreen::mouseMoveEvent (QMouseEvent* event) {
   //Since mouse tracking isn't enabled, we only receive these when at least one button is pressed
   if (event->buttons() & Qt::LeftButton) {
-    LOGE("mouse move (%i,%i)", event->x(), event->y());
     inputManager->touchEventMove(event->x(), event->y());
   }
 }
 
 void GameScreen::mousePressEvent (QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    LOGE("touch event down");
     inputManager->touchEventDown(event->x(), event->y());
   }
 }
 
 void GameScreen::mouseReleaseEvent (QMouseEvent* event) {
   if (event->button() == Qt::LeftButton) {
-    LOGE("touch event up");
     inputManager->touchEventUp(event->x(), event->y());
   }
 }
