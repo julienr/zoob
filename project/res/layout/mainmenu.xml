@@ -38,7 +38,8 @@
 				    <Gallery android:id="@+id/lvlgallery"
 				      android:layout_below="@id/serie_name"
 				      android:layout_width="fill_parent"
-				      android:layout_height="wrap_content"/>
+				      android:layout_height="wrap_content"
+				      android:spacing="10dip"/>
 				    
 					  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/start"
 					    style="@style/Menu.Button" 
@@ -49,7 +50,8 @@
 					  <Gallery android:id="@+id/diffgallery"
 					    android:layout_below="@id/start"
 				      android:layout_width="fill_parent"
-				      android:layout_height="wrap_content"/>
+				      android:layout_height="wrap_content"
+				      android:spacing="10dip"/>
 					  
 					  <net.fhtagn.zoobgame.menus.BlurButton  android:id="@+id/options"
 					    android:layout_below="@id/diffgallery"

@@ -29,8 +29,8 @@ public class ZoobApplication extends Application {
 	private static final String PREF_KEY_TRACKBALL = "input_trackball";
 	private static final String PREF_KEY_DIFFICULTY = "game_difficulty";
 	
-	//indicate wether old prefs have been imported
-	private static final String PREF_KEY_OLDPREFS_IMPORTED = "oldprefs_imported";
+	//indicate wether old prefs have been imported (second version)
+	private static final String PREF_KEY_OLDPREFS_IMPORTED = "oldprefs_imported2";
 	
 	private SharedPreferences settings;
 	
@@ -86,12 +86,10 @@ public class ZoobApplication extends Application {
 	public synchronized void setSerieId (long id) {
 		currentSerie = ContentUris.withAppendedId(Series.CONTENT_URI, id);
 		loadJSON();
-		if (id == 1 && !settings.getBoolean(PREF_KEY_OLDPREFS_IMPORTED, false)) {
+		//Original serie, try to restore progress
+		if (id == Series.ORIGINAL_ID && !settings.getBoolean(PREF_KEY_OLDPREFS_IMPORTED, false)) {
 			Log.i(TAG, "Trying to transfer old progress");
-			//Original serie, try to restore progress
 			transferProgressFromPreferences();
-		} else {
-			Log.i(TAG, "Old progress already transfered");
 		}
 	}
 	
@@ -138,18 +136,22 @@ public class ZoobApplication extends Application {
 		        final int progress = b.getProgress();
 		        Log.i(TAG, "old progress : " + progress);
 		        //just take care of not removing progress
-		        if (progress > getLevel())
+		        if (progress > getLevel()) {
 		        	saveProgress(progress);
-		  			SharedPreferences.Editor editor = settings.edit();
-		      	editor.putBoolean(PREF_KEY_OLDPREFS_IMPORTED, true);
-		      	editor.commit();
-		      	//need to refresh the level gallery on the UI
-		      	if (zoobActivity != null)
-		      		zoobActivity.refreshLevels();
-		      	else
-		      		Log.i(TAG, "null zoobActivity");
+		        
+			  			SharedPreferences.Editor editor = settings.edit();
+			      	editor.putBoolean(PREF_KEY_OLDPREFS_IMPORTED, true);
+			      	editor.commit();
+			      	
+			      	//need to refresh the level gallery on the UI
+			      	if (zoobActivity != null)
+			      		zoobActivity.refreshLevels();
+			      	else
+			      		Log.i(TAG, "null zoobActivity");
+		        }
+		      	
 		      	//try to stop the service now that we are done
-		      	ZoobApplication.this.stopService(i);
+		      	ZoobApplication.this.unbindService(this);
 	        } catch (RemoteException e) {
 		        e.printStackTrace();
 	        }
@@ -157,9 +159,11 @@ public class ZoobApplication extends Application {
 
 				@Override
 	      public void onServiceDisconnected(ComponentName cn) {
+					//This is called ONLY on crash, not after unbindService()
 					Log.i(TAG, "service disconnected : " + cn);
 	      }
 			}, Context.BIND_AUTO_CREATE);
+			
     } catch (NameNotFoundException e) {
     	return;
     } 

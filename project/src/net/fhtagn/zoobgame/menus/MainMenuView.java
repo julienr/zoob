@@ -177,11 +177,14 @@ public class MainMenuView extends FrameLayout {
 			TextView tv;
 			if (convertView == null) {
 				tv = new OogieTextView(activity);
-				final float scale = getResources().getDisplayMetrics().density;
+				/*final float scale = getResources().getDisplayMetrics().density;
 				Paint paint = new Paint();
 				paint.setTypeface(tv.getTypeface());
 				paint.setTextSize(tv.getTextSize());
-				tv.setLayoutParams(new Gallery.LayoutParams((int)(paint.measureText(elements[position])+40*scale), 60));
+				Rect bounds = new Rect();
+				paint.getTextBounds(elements[position], 0, elements[position].length(), bounds);
+				tv.setLayoutParams(new Gallery.LayoutParams((int)(paint.measureText(elements[position])+40*scale), (int)(Math.abs(bounds.top-bounds.bottom))));*/
+				tv.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			} else {
 				tv = (TextView)convertView;
 			}
