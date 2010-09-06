@@ -80,7 +80,8 @@ class CollisionManager {
     void unmarkCollided () {
       for (list<Entity*>::iterator i = entities.begin(); i.hasNext(); i++)
         (*i)->collided = false;
-      grid.clearTouched();
+      grid.dbg_clearTouched();
+      grid.unmarkCollided();
     }
 
     void foreachEntity (void (*callback) (Entity*)) const {

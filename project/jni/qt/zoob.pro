@@ -9,6 +9,9 @@ INCLUDEPATH += . ../ /usr/include/GL/
 QT += opengl
 LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson
 DEFINES += PLATFORM_SDL
+#PROFILING
+QMAKE_CXXFLAGS_DEBUG += -pg
+QMAKE_LFLAGS_DEBUG += -pg
 
 # Input
 #qt specific first

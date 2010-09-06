@@ -11,12 +11,12 @@
 
 struct GridCell {
   GridCell (unsigned x, unsigned y) :
-    x(x),y(y),touched(false){
+    x(x),y(y),dbgTouched(false){
   }
 
   const unsigned x;
   const unsigned y;
-  bool touched;
+  bool dbgTouched;
   list<Entity*> entities;
 };
 
@@ -34,6 +34,7 @@ class Grid {
         }
       }
       tmpTouched = new vector<GridCell*>(20);
+      _touchedCells = new bool[width*height];
     }
 
     ~Grid () {
@@ -42,6 +43,7 @@ class Grid {
           delete grid[x][y];
           delete [] grid[x];
       }
+      delete [] _touchedCells;
       delete [] grid;
       delete tmpTouched;
     }
@@ -53,12 +55,15 @@ class Grid {
 
     void moveEntity (Entity* e, const Vector2& move);
 
-    void clearTouched ();
+    void dbg_clearTouched ();
 
-    bool touched (unsigned x, unsigned y) const {
+    void unmarkCollided ();
+
+    //DEBUG purposes only
+    bool dbg_touched (unsigned x, unsigned y) const {
       if (!inside(x,y))
         return false;
-      return grid[x][y]->touched;
+      return grid[x][y]->dbgTouched;
     }
 
     //To be used for movement < cellSize
@@ -177,24 +182,37 @@ class Grid {
     //Returns the number of touched Cells. Cells can be fetched using touchedCells array
     void findTouchedCells (const Vector2& start, const Vector2& move) const;
 
-    //This array is used for temporary storage of touched cells found by touchCells & Co.
+    //This array is used for temporary storage of touched cells found by touchCells & co.
     //GridCells should be added to it by using ONLY _addTouched
     vector<GridCell*>* tmpTouched;
+    //for each cell, store if it has already been included in tmpTouched
+    //this is basically only for fast lookup
+    bool* _touchedCells; 
 
     //tmpTouched management :
     //check if the cell [x][y] is in the touched cells
     inline
     bool _touched (unsigned x, unsigned y) const {
-      for (unsigned i=0; i<tmpTouched->length(); i++)
+/*      const size_t l = tmpTouched->length();
+      for (unsigned i=0; i<l; i++)
         if (tmpTouched->get(i)->x == x && tmpTouched->get(i)->y == y)
           return true;
-      return false;
+      return false;*/
+      return _touchedCells[y*width+x];
+    }
+
+    inline
+    void _clearTouched () const {
+      memset(_touchedCells, 0, sizeof(bool)*width*height);
+      tmpTouched->clear();
     }
 
     inline
     void _addTouched (GridCell* c) const {
-      if (!_touched(c->x, c->y))
+      if (!_touched(c->x, c->y)) {
+        _touchedCells[c->y*width+c->x] = true;
         tmpTouched->append(c);
+      }
     }
 };
 
