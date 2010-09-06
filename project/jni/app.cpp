@@ -67,7 +67,6 @@ void gameUnPauseCallback () {
 }
 
 void toPlayingState () {
-  GameManager* gm = GameManager::getInstance();
   if (Game::getInstance() && Game::getInstance()->isPaused()) {
     LOGE("unpause");
     Game::getInstance()->unpause();
@@ -78,7 +77,8 @@ void toPlayingState () {
 
     lvl = loadAPKLevel(GameManager::getInstance()->getCurrentLevel());
     if (lvl == NULL) {
-      gm->setState(STATE_ERROR);
+      showMenu(MENU_ERROR, -1);
+      GameManager::getInstance()->setState(STATE_NONE);
       return;
     }
 
@@ -89,12 +89,6 @@ void toPlayingState () {
     InputManager::getInstance()->reset();
 
     centerGameInViewport();
-
-    //Display the tutorial before starting level 0
-    /*if (gm->getCurrentLevel() == 0) {
-      Game::getInstance()->pause();
-      gm->setState(STATE_TUTORIAL);
-    }*/
   }
 }
 

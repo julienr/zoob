@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.menus.Common;
 import net.fhtagn.zoobgame.menus.EndView;
+import net.fhtagn.zoobgame.menus.ErrorView;
 import net.fhtagn.zoobgame.menus.GetFullView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
@@ -66,22 +67,26 @@ public class Zoob extends Activity {
 	public static final int DIALOG_ABOUT = 2;
 	
 	//Views
+	//BEGIN: Java equivalent of app.h eMenu
 	static final int MENU_MAIN = 0;
 	static final int MENU_WON = 1;
 	static final int MENU_LOST = 2;
 	static final int MENU_END = 3;
-	static final int MENU_REWARD_BOMB = 4;
-	static final int MENU_REWARD_BOUNCE = 5;
-	static final int MENU_REWARD_SHIELD = 6;
-	static final int MENU_REWARD_FIRING = 7;
-	static final int MENU_GET_FULL = 8;
-	static final int MENU_PLAY = 9;
-	static final int MENU_LAST = 10;
+	static final int MENU_ERROR = 4;
+	//END: Java equivalent of app.h eMenu
+	static final int MENU_REWARD_BOMB = 5;
+	static final int MENU_REWARD_BOUNCE = 6;
+	static final int MENU_REWARD_SHIELD = 7;
+	static final int MENU_REWARD_FIRING = 8;
+	static final int MENU_GET_FULL = 9;
+	static final int MENU_PLAY = 10;
+	static final int MENU_LAST = 11;
 	
 	private MainMenuView mainMenu;
 	private WonView wonView;
 	private LostView lostView;
 	private EndView endView;
+	private ErrorView errorView;
 	private RewardView[] rewardViews = new RewardView[4]; 
 	
 	private GetFullView getFullView;
@@ -136,6 +141,15 @@ public class Zoob extends Activity {
 		endView = new EndView(this);
 		endView.setOnClickListener(interViewListener);
 		flipper.addView(endView, MENU_END);
+		
+		errorView = new ErrorView(this);
+		errorView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick (View view) {
+				flipper.setDisplayedChild(MENU_MAIN);
+			}
+		});
+		flipper.addView(errorView, MENU_ERROR);
 		
 		rewardViews[0] = new RewardView(this, R.drawable.reward_bomb, true);
 		rewardViews[1] = new RewardView(this, R.drawable.reward_bounce, false);

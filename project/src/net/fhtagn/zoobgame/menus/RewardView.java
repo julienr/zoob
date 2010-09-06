@@ -30,13 +30,13 @@ public class RewardView extends InterLevelView {
 	@Override
   protected void render(Canvas canvas) {
 		final Paint textPaint = getTextPaint();
-		canvas.drawText(reward, 7.5f, 2, textPaint);
-		renderDrawable(canvas, rewardIcon, 7.5f, 5, 4, 4);
+		canvas.drawText(reward, 7.5f, 1.5f, textPaint);
+		renderDrawable(canvas, rewardIcon, 7.5f, 4.5f, 4, 4);
 		if (showLongTouch) {
 			Paint smallText = new Paint(textPaint);
 			smallText.setTextSize(0.5f);
-			canvas.drawText(longTouchActivate, 7.5f, 8, smallText);
+			canvas.drawText(longTouchActivate, 7.5f, 7.5f, smallText);
 		}
-		canvas.drawText(tap_continue, 7.5f, 10, textPaint);
+		canvas.drawText(tap_continue, 7.5f, 9, textPaint);
   }
 }

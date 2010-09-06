@@ -57,9 +57,12 @@ void MainWindow::showMenu (eMenu menu, int currentLevel) {
       menuInter->setText("End");
       layout->setCurrentWidget(menuInter);
       break;
-    case MENU_LAST:
-      menuInter->setText("Last");
+    case MENU_ERROR:
+      menuInter->setText("Loading error");
       layout->setCurrentWidget(menuInter);
+      break;
+    case MENU_LAST:
+      LOGE("Error, request to show MENU_LAST");
       break;
   }
 }

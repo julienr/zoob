@@ -10,13 +10,9 @@
 
 class ShieldTank : public EnemyTank {
   public:
-    ShieldTank (float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy())) {
-    }
-
-    ShieldTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy())) {
-      this->setPath(p);
+    ShieldTank (Path* p = NULL, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new StillPolicy())) {
+      if (p) this->setPath(p);
     }
 
     virtual eTankType getTankType () const { return TANK_SHIELD; }

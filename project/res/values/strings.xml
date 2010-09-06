@@ -26,6 +26,10 @@
     <string name="reward">Reward !</string>
     <string name="long_touch_activate">(long touch on button to activate)</string>
     
+    <string name="oops">Oops !</string>
+    <string name="loading_error">An error occured while loading the level</string>
+    <string name="please_report">Please report this by email</string>
+    
     <!-- Get full -->
     <string name="get_full">Click here to download ad-free version for only 0.5€.</string>
     

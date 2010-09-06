@@ -6,13 +6,9 @@
 
 class SimpleTank : public EnemyTank {
   public:
-    SimpleTank (float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy())) {
-    }
-
-    SimpleTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy())) {
-      this->setPath(p);
+    SimpleTank (Path* p = NULL, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new StillPolicy())) {
+      if (p) this->setPath(p);
     }
 
     eTankType getTankType () const { return TANK_SIMPLE; }

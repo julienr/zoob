@@ -43,17 +43,17 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       //Special player case, don't create a tank yet for player
       case TANK_PLAYER: foundPlayer = true; playerStartPosition.set(desc.x, desc.y); break;
 
-      case TANK_SIMPLE: t = desc.path?new SimpleTank(desc.path):new SimpleTank(); break;
-      case TANK_BOUNCE: t = desc.path?new BounceTank(desc.path):new BounceTank(); break;
-      case TANK_SHIELD: t = desc.path?new ShieldTank(desc.path):new ShieldTank(); break;
-      case TANK_BURST: t = desc.path?new BurstTank(desc.path):new BurstTank(); break;
-      case TANK_SPLIT: t = desc.path?new SplitTank(desc.path):new SplitTank(); break;
-      case TANK_STATIC: ASSERT(!desc.path); t = new StaticTank(); break;
-      case BOSS_BOUNCE: ASSERT(!desc.path); t = new BossBounceTank(); break;
-      case BOSS_SIMPLE: ASSERT(!desc.path); t = new BossSimpleTank(); break;
-      case BOSS_SHIELD: ASSERT(!desc.path); t = new BossShieldTank(); break;
-      case BOSS_BURST: ASSERT(!desc.path); t = new BossBurstTank(); break;
-      case BOSS_SPLIT: ASSERT(!desc.path); t = new BossSplitTank(); break;
+      case TANK_SIMPLE: t = new SimpleTank(desc.path); break;
+      case TANK_BOUNCE: t = new BounceTank(desc.path); break;
+      case TANK_SHIELD: t = new ShieldTank(desc.path); break;
+      case TANK_BURST: t = new BurstTank(desc.path); break;
+      case TANK_SPLIT: t = new SplitTank(desc.path); break;
+      case TANK_STATIC: t = new StaticTank(); break;
+      case BOSS_BOUNCE: t = new BossBounceTank(desc.path); break;
+      case BOSS_SIMPLE: t = new BossSimpleTank(desc.path); break;
+      case BOSS_SHIELD: t = new BossShieldTank(desc.path); break;
+      case BOSS_BURST: t = new BossBurstTank(desc.path); break;
+      case BOSS_SPLIT: t = new BossSplitTank(desc.path); break;
       default: LOGE("unknown tank type : %i", desc.tankType); ASSERT(false); break;
     }
     if (t != NULL) { //t will be NULL when we found player, to be handled below

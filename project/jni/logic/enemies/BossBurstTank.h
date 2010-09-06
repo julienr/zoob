@@ -5,10 +5,11 @@
 
 class BossBurstTank : public EnemyTank {
   public:
-    BossBurstTank ()
-      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
+    BossBurstTank (Path* p = NULL)
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new SmartPolicy())) {
       setLives(3);
       setFirePolicy(new BurstFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()/2, IN_BURST_INTERVAL, NUM_BURST));
+      if (p) setPath(p);
     }
 
     eTankType getTankType () const { return BOSS_BURST; }

@@ -9,16 +9,11 @@
 
 class BurstTank : public EnemyTank {
   public:
-    BurstTank (float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new StillPolicy()),
+    BurstTank (Path* p, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new StillPolicy()),
                    new BurstFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()/2, IN_BURST_INTERVAL, NUM_BURST),
                    Difficulty::getInstance()->getEnemiesFiringDelay()/2) {
-    }
-
-    BurstTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(), new PathPolicy()),
-                   new BurstFirePolicy(Difficulty::getInstance()->getEnemiesFireInterval()/2, IN_BURST_INTERVAL, NUM_BURST)) {
-      this->setPath(p);
+      if (p) this->setPath(p);
     }
 
     eTankType getTankType () const { return TANK_BURST; }

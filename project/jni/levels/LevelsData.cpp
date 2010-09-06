@@ -8,13 +8,15 @@ Level* levelFromJSON (json_t* json);
 //The currently used levelSerie
 json_t* levelSerie = NULL;
 
+//This will be set to true if a loading error occured in one of this functions. This is checked by levelFromJSON
+static bool loadError = false;
+
 //get from an object, ensuring we don't get NULL
 static json_t* obj_get (json_t* obj, const char* key) {
   json_t* val = json_object_get(obj, key);
   if (!val) {
-    fprintf(stderr, "ERROR getting %s\n", key);
-    //FIXME: no exit() on android, should goto error
-    exit(-1);
+    LOGE("ERROR getting %s", key);
+    loadError = true;
   }
   return val;
 }
@@ -35,9 +37,8 @@ static const char* type2str (json_type t) {
 //check that val is of the given type
 static json_t* expect (json_t* val, json_type expected_type) {
   if (json_typeof(val) != expected_type) {
-    fprintf(stderr, "val type(%s) != expected_type(%s)\n", type2str(json_typeof(val)), type2str(expected_type));
-    //FIXME: no exit() on android, should goto error
-    exit(-1);
+    LOGE("val type(%s) != expected_type(%s)", type2str(json_typeof(val)), type2str(expected_type));
+    loadError = true;
   }
   return val;
 }
@@ -47,9 +48,11 @@ static bool json_bool_value(json_t* val) {
     return true;
   if (json_typeof(val) == JSON_FALSE)
     return false;
-  fprintf(stderr, "json_bool_value : not bool (%i)", json_typeof(val));
-  //FIXME: no exit() on android, should goto error
-  exit(-1);
+  if (json_typeof(val) == JSON_INTEGER)
+    return json_integer_value(val) != 0;
+  LOGE("json_bool_value : not bool (%i)", json_typeof(val));
+  loadError=true;
+  return false;
 }
 
 //return true if the key is set to true, false otherwise (if not set or set to false)
@@ -126,21 +129,23 @@ void loadSerie (const char* serieJSON) {
   }
 }
 
+#define ERRCHK if (loadError) { goto error; }
+
 //Create a Level object from a json representation of the level
 Level* levelFromJSON (json_t* json) {
   CONDITION(json_typeof(json) == JSON_OBJECT, "root JSON element not an object");
   //GENERAL PROPERTIES
   {
-    int xdim = json_integer_value(expect(obj_get(json, "xdim"), JSON_INTEGER));
-    int ydim = json_integer_value(expect(obj_get(json, "ydim"), JSON_INTEGER));
+    int xdim = json_integer_value(expect(obj_get(json, "xdim"), JSON_INTEGER)); ERRCHK;
+    int ydim = json_integer_value(expect(obj_get(json, "ydim"), JSON_INTEGER)); ERRCHK;
 
-    bool shadows = json_bool_value(obj_get(json, "shadows"));
-    bool boss = json_bool_value(obj_get(json, "boss"));
+    bool shadows = json_bool_value(obj_get(json, "shadows")); ERRCHK;
+    bool boss = json_bool_value(obj_get(json, "boss")); ERRCHK;
 
     //TILES
     eTileType* board = new eTileType[xdim*ydim];
 
-    json_t* tiles_arr = obj_get(json, "tiles");
+    json_t* tiles_arr = obj_get(json, "tiles"); ERRCHK;
     CONDITION(tiles_arr && json_typeof(tiles_arr) == JSON_ARRAY, "tiles element not an array");
     CONDITION((int)json_array_size(tiles_arr) == ydim, "tiles array size != ydim");
     for (int y=0; y<ydim; y++) {
@@ -158,7 +163,7 @@ Level* levelFromJSON (json_t* json) {
     }
 
     //TANKS
-    json_t* tanks_arr = obj_get(json, "tanks");
+    json_t* tanks_arr = obj_get(json, "tanks"); ERRCHK;
     CONDITION(tanks_arr && json_typeof(tanks_arr) == JSON_ARRAY, "tanks element not an array");
 
     const int numTanks = json_array_size(tanks_arr);
@@ -167,13 +172,13 @@ Level* levelFromJSON (json_t* json) {
     for (int i=0; i<numTanks; i++) {
       json_t* tank_obj = json_array_get(tanks_arr, i);
       CONDITION(json_typeof(tank_obj) == JSON_OBJECT, "tank element not an object");
-      json_t* coords_obj = obj_get(tank_obj, "coords");
+      json_t* coords_obj = obj_get(tank_obj, "coords"); ERRCHK;
       CONDITION(json_typeof(coords_obj) == JSON_ARRAY && json_array_size(coords_obj) == 2, "tank coord should be an array of size 2");
       int coords[2];
-      coords[0] = json_integer_value(expect(json_array_get(coords_obj, 0), JSON_INTEGER));
-      coords[1] = json_integer_value(expect(json_array_get(coords_obj, 1), JSON_INTEGER));
+      coords[0] = json_integer_value(expect(json_array_get(coords_obj, 0), JSON_INTEGER)); ERRCHK;
+      coords[1] = json_integer_value(expect(json_array_get(coords_obj, 1), JSON_INTEGER)); ERRCHK;
 
-      const char* type = json_string_value(expect(obj_get(tank_obj, "type"), JSON_STRING));
+      const char* type = json_string_value(expect(obj_get(tank_obj, "type"), JSON_STRING)); ERRCHK;
       int tmp = str2ttype(type);
       if (tmp == -1)
         goto error;
@@ -190,8 +195,8 @@ Level* levelFromJSON (json_t* json) {
         for (int j=0; j<pathSize; j++) {
           json_t* wp = json_array_get(path_arr, j);
           CONDITION(json_typeof(wp) == JSON_ARRAY && json_array_size(wp) == 2, "path waypoint element should be arrays of size 2");
-          int x = json_integer_value(expect(json_array_get(wp,0),JSON_INTEGER));
-          int y = json_integer_value(expect(json_array_get(wp,1),JSON_INTEGER));
+          int x = json_integer_value(expect(json_array_get(wp,0),JSON_INTEGER)); ERRCHK;
+          int y = json_integer_value(expect(json_array_get(wp,1),JSON_INTEGER)); ERRCHK;
           pathWp[j] = Vector2(x,y);
         }
         path = new Path(pathSize, pathWp);
@@ -228,6 +233,7 @@ Level* levelFromJSON (json_t* json) {
 
     Level* l = new Level(xdim, ydim, board, tanks, numTanks, shadows, boss, items, reward);
     delete[] board;
+    ERRCHK;
     return l;
   }
 error:

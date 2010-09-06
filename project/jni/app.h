@@ -25,7 +25,8 @@ enum eMenu {
     MENU_WON,
     MENU_LOST,
     MENU_END,
-    MENU_LAST
+    MENU_ERROR,
+    MENU_LAST,
 };
 void showMenu (int id, int currentLevel);
 

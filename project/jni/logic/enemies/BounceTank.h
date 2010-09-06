@@ -9,13 +9,9 @@
 
 class BounceTank : public EnemyTank {
   public:
-    BounceTank (float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(false), new StillPolicy())) {
-    }
-
-    BounceTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : EnemyTank (radius, new TankAI(new AimPolicy(false), new PathPolicy())) {
-      this->setPath(p);
+    BounceTank (Path*p = NULL, float radius=TANK_BCIRCLE_R)
+      : EnemyTank (radius, new TankAI(new AimPolicy(false), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new StillPolicy())) {
+      if (p) this->setPath(p);
     }
 
     virtual eTankType getTankType () const { return TANK_BOUNCE; }

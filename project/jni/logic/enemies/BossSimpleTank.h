@@ -5,10 +5,11 @@
 
 class BossSimpleTank : public EnemyTank {
   public:
-    BossSimpleTank ()
-      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), new SmartPolicy())) {
+    BossSimpleTank (Path* p=NULL)
+      : EnemyTank(BOSS_BCIRCLE_R, new TankAI(new AimPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new SmartPolicy())) {
       setLives(3);
       setFirePolicy(new IntervalFirePolicy(1000));
+      if (p) setPath(p);
     }
 
     eTankType getTankType () const { return BOSS_SIMPLE; }

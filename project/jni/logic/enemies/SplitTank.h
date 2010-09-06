@@ -7,13 +7,9 @@
 
 class SplitTank: public ShieldTank {
   public:
-    SplitTank (float radius=TANK_BCIRCLE_R)
-      : ShieldTank (radius, new TankAI(new AlwaysPolicy(), new StillPolicy())) {
-    }
-
     SplitTank (Path* p, float radius=TANK_BCIRCLE_R)
-      : ShieldTank (radius, new TankAI(new AlwaysPolicy(), new StillPolicy())) {
-      this->setPath(p);
+      : ShieldTank (radius, new TankAI(new AlwaysPolicy(), p?(MovementPolicy*)new PathPolicy():(MovementPolicy*)new StillPolicy())) {
+      if (p) this->setPath(p);
     }
 
     eTankType getTankType () const { return TANK_SPLIT; }

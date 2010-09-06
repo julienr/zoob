@@ -44,6 +44,7 @@ public class Common {
 	// Colors
 	public final static int COLOR_WHITE = Color.WHITE;
 	public final static int COLOR_GREEN = Color.argb(255, 102, 255, 63);
+	public final static int COLOR_RED = Color.argb(255, 255, 48, 48);
 	
 	public static final Intent buyFullIntent () {
 		Uri fullVersionURI = Uri.parse("market://details?id=net.fhtagn.zoobgame");
