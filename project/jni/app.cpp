@@ -373,11 +373,24 @@ void nativePause () {
   }
 }
 
-//FIXME: Only for malinfo, remove
-#include <malloc.h>
+#ifdef ZOOB_DBG_FPS
+static int numFrames = 0;
+static uint64_t lastFPS = Utils::getCurrentTimeMillis();
+#define FPS_REPORT_INTERVAL 1000 //ms
+#endif
 
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
+
+#ifdef ZOOB_DBG_FPS
+  if (lastTime - lastFPS > FPS_REPORT_INTERVAL) {
+    lastFPS = lastTime;
+    const float _secs = FPS_REPORT_INTERVAL/1000.0f;
+    LOGE("%i frames in %f secondes : %f FPS", numFrames, _secs, numFrames/_secs);
+    numFrames = 0;
+  }
+  numFrames++;
+#endif
 
   //Let game manager apply all the transition it has. It normally will have only one, but if during
   //the transition callback, a transition to another state was requested, it might have two or more

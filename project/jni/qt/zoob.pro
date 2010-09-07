@@ -13,6 +13,11 @@ DEFINES += PLATFORM_SDL
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg
 
+#FPS debug
+debug {
+  DEFINES += ZOOB_DBG_FPS
+}
+
 # Input
 #qt specific first
 HEADERS += GameScreen.h MainWindow.h MenuScreen.h InterMenu.h

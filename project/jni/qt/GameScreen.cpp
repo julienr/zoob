@@ -17,7 +17,7 @@ GameScreen::GameScreen (MainWindow* parent, const char* json, const char* apkPat
 }
 
 void GameScreen::keyPressEvent (QKeyEvent* event) {
-  event->accept();
+  LOGE("keyPress");
   switch (event->key()) {
     case Qt::Key_Escape:
       mainWindow->showMenu(MENU_MAIN);

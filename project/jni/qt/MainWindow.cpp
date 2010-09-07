@@ -33,9 +33,11 @@ MainWindow::~MainWindow () {
   delete gameScreen;
 }
 
-void MainWindow::startGame () {
+void MainWindow::startGame (int level) {
   layout->setCurrentWidget(gameScreen);
-  gameScreen->startGame(menuScreen->getSelectedLevel());
+  if (level == -1)
+    level = menuScreen->getSelectedLevel();
+  gameScreen->startGame(level);
 }
 
 void MainWindow::showMenu (eMenu menu, int currentLevel) {

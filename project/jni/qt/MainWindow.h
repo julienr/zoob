@@ -21,7 +21,7 @@ class MainWindow : public QWidget {
     void showMenu (eMenu menu, int currentLevel=-1);
 
   public slots:
-    void startGame ();
+    void startGame (int level=-1);
     void mainLoop ();
 
     void quit ();

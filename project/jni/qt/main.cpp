@@ -52,7 +52,7 @@ InputManager* createInputManager (int useGamepad, int useTrackball) {
 
 int main (int argc, char** argv) {
   if (argc < 3) {
-    LOGE("usage : <json file> <apk file>");
+    LOGE("usage : <json file> <apk file> [lvlnum]");
     exit(-1);
   }
 
@@ -63,6 +63,12 @@ int main (int argc, char** argv) {
   free(json);
   window->resize(640, 480);
   window->show();
+
+  //if we have a lvlnum arg
+  if (argc >= 4) {
+    int level = atoi(argv[3]);
+    window->startGame(level);
+  }
 
   //Fire main loop with a one time timer just after QApplication start
   QTimer _t;
