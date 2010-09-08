@@ -27,10 +27,6 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
           cellVis = PENUMBRA;
         else if (relPos == OUTSIDE && cellVis == VISIBLE)
           cellVis = VISIBLE;
-        /*if (shadows[i]->fullyInside(grid.gridToWorld(x, y), r))
-          cells[x][y]->data.visible = false;
-        else
-          cells[x][y]->data.visible &= true;*/
       }
     }
   }
@@ -91,7 +87,7 @@ Path* VisibilityGrid::pathTo (const Cell* dest) const {
   return new Path(numNodes, nodes);
 }
 
-Path* VisibilityGrid::pathToCenterBiggestHidden () const {
+Path* VisibilityGrid::pathToCenterBiggestHidden (int& outX, int& outY) const {
   vector<Cell*>* biggestGroup = NULL;
   Vector2 biggestCenter; //center (Average of points) of the biggest group
 
@@ -160,7 +156,7 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   }
 
   if (!biggestGroup) {
-    LOGE("no hidden groups");
+    //LOGE("no hidden groups");
     return NULL;
   }
 
@@ -177,10 +173,12 @@ Path* VisibilityGrid::pathToCenterBiggestHidden () const {
   }
   Cell* closest = biggestGroup->get(minIdx);
   delete biggestGroup;
+  outX = closest->x;
+  outY = closest->y;
   return pathTo(closest);
 }
 
-Path* VisibilityGrid::pathToClosest (bool vis) const {
+Path* VisibilityGrid::pathToClosest (bool vis, int& outX, int& outY) const {
   int coords[2] = {-1,-1};
   int closest = MOOB_INF;
 
@@ -199,6 +197,8 @@ Path* VisibilityGrid::pathToClosest (bool vis) const {
     return NULL;
   }
 
+  outX = coords[0];
+  outY = coords[1];
   //LOGE("start[%i,%i], closest[%i,%i]", djikstraStart->x, djikstraStart->y, coords[0], coords[1]);
   return pathTo(cells[coords[0]][coords[1]]);
 }

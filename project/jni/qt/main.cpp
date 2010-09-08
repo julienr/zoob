@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QTimer>
 #include <QObject>
+#include <QMap>
 
 #include "MainWindow.h"
 
@@ -59,6 +60,13 @@ int main (int argc, char** argv) {
   char* json = loadJSON(argv[1]);
 
   QApplication app(argc, argv);
+
+  //Some default values (used by settings)
+  QCoreApplication::setOrganizationName("fhtagn");
+  QCoreApplication::setOrganizationDomain("zoob.fhtagn.net");
+  QCoreApplication::setApplicationName("Zoob");
+
+  //Main window creation
   window = new MainWindow(json, argv[2]);
   free(json);
   window->resize(640, 480);

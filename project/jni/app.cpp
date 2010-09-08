@@ -373,6 +373,17 @@ void nativePause () {
   }
 }
 
+static int debugFlags;
+
+void enableDebug (eDebug what) {
+  LOGE("Enable debug for %i", what);
+  debugFlags |= (int)what;
+}
+
+void disableDebug (eDebug what) {
+  debugFlags &= ~(int)what;
+}
+
 #ifdef ZOOB_DBG_FPS
 static int numFrames = 0;
 static uint64_t lastFPS = Utils::getCurrentTimeMillis();
@@ -441,8 +452,17 @@ void nativeRender () {
     GLW::translate(transX, transY, 0);
 
     gameView->draw();
-    //gameView->debugDraw();
-    //gameView->debugDrawAI();
+    if (debugFlags & DEBUG_COLLISIONS)
+      gameView->debugCollisions();
+    if (debugFlags & DEBUG_SHADOWS)
+      gameView->debugShadows();
+    if (debugFlags & DEBUG_VISIBILITY)
+      gameView->debugVisibility();
+    if (debugFlags & DEBUG_OVERLAYS)
+      gameView->debugDrawOverlays();
+    if (debugFlags & DEBUG_WAYPOINTS)
+      gameView->debugWaypoints();
+
     glPopMatrix();
     
     InputManager::getInstance()->draw();

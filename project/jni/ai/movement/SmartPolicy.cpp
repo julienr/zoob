@@ -16,23 +16,30 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
     if (me->canFire())
       switchMode(AGGRESSIVE);
   }
-  /*if (modeElapsedS > MAX_MODE_TIME - Utils::frand()) {
-    modeElapsedS = 0;
-    mode = (mode==AGGRESSIVE)?DEFENSIVE:AGGRESSIVE;
-    LOGE("new mode %s", (mode==AGGRESSIVE)?"aggressive":"defensive");
-  }*/
-  //mode = AGGRESSIVE;
+  //FIXME: remove
+  mode = DEFENSIVE;
 
   //FIXME: first move should be to avoid rockets
 
+  int destX, destY;
   Path* p;
   if (mode == AGGRESSIVE)
-    p = _aggressiveDir(elapsedS, outDir, game, me);
+    p = _aggressiveDir(elapsedS, outDir, game, me, destX, destY);
   else
-    p = _defensiveDir(elapsedS, outDir, game, me);
+    p = _defensiveDir(elapsedS, outDir, game, me, destX, destY);
 
   if (!p)
     return false;
+
+  game->dbg_addCellOverlay(CellOverlay(destX, destY, VIOLET));
+
+  //If tank is already at destination grid cell, don't move forward
+  const Grid& g = game->getColManager().getGrid();
+  const Vector2& pos = me->getPosition();
+  if (g.getCellX(pos) == destX && g.getCellY(pos) == destY) {
+    LOGE("already at dest");
+    return false;
+  }
 
   //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, tank->getPosition().x, tank->getPosition().y);
   const Vector2 dir = (p->get(0) - me->getPosition()).getNormalized();
@@ -41,15 +48,15 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   return true;
 }
 
-Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank) {
+Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
   //Move to closest visible cell, this should trigger the firing policy to fire
   VisibilityGrid& vgrid = game->getPlayerVisibility();
   vgrid.djikstra(tank->getPosition(), tank);
 
-  return vgrid.pathToClosest(true);
+  return vgrid.pathToClosest(true, outX, outY);
 }
 
-Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank) {
+Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
   //If a rocket is near the tank, cancel all firing and just run away
   //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
   if (TankAI::rocketNear(game, tank, 2 * GRID_CELL_SIZE, NULL))
@@ -66,6 +73,6 @@ Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir
   /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
    * to the biggest (closest ?) hidden group
    */
-  return vgrid.pathToCenterBiggestHidden();
+  return vgrid.pathToCenterBiggestHidden(outX, outY);
 }
 

@@ -26,8 +26,12 @@ class GameView {
     //Draw main game area
     void draw();
 
-    void debugDraw();
-    void debugDrawAI();
+    //Debug draw
+    void debugShadows();
+    void debugDrawOverlays ();
+    void debugCollisions();
+    void debugVisibility();
+    void debugWaypoints ();
   private:
     void _drawGame ();
     void _drawBossIntro();

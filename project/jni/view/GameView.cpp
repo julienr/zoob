@@ -267,7 +267,9 @@ void drawColEntity (Entity* e) {
   glColor4f(1,1,1,1);
 }
 
-void drawPlayerVisibility (const VisibilityGrid& vg) {
+void GameView::debugVisibility () {
+  GLW::disableTextures();
+  const VisibilityGrid& vg = Game::getInstance()->getPlayerVisibility();
   const float cs = vg.getCellSize();
   glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
@@ -297,10 +299,15 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
   }
   glPopMatrix();
   glColor4f(1, 1, 1, 1);
+  GLW::enableTextures();
+}
 
+void GameView::debugWaypoints () {
+  GLW::disableTextures();
+  const VisibilityGrid& vg = Game::getInstance()->getPlayerVisibility();
   //WAYPOINTS
-  /*for (unsigned x = 0; x < vg.getWidth(); x++) {
-    for (unsigned y = 0; y < vg.getHeight(); y++) {
+  for (int x = 0; x < vg.getWidth(); x++) {
+    for (int y = 0; y < vg.getHeight(); y++) {
       glColor4f(1, 1, 1, 1);
       glPointSize(3.0f);
       glBegin(GL_POINTS);
@@ -309,7 +316,8 @@ void drawPlayerVisibility (const VisibilityGrid& vg) {
       glEnd();
       glPointSize(1.0f);
     }
-  }*/
+  }
+  GLW::enableTextures();
 }
 
 void drawGrid (const Grid& g) {
@@ -331,18 +339,38 @@ void drawGrid (const Grid& g) {
   glColor4f(1,1,1,1);
 }
 
-void GameView::debugDrawAI () {
-  GLW::disableTextures();
-  //game->getColManager().foreachEntity(drawColEntity);
-  const vector<ShadowPolygon*>& shadows = Game::getInstance()->getPlayerShadows();
-  for (unsigned i=0; i<shadows.length(); i++)
-    ShadowPolygonView::debugDraw(shadows[i]);
 
-  drawPlayerVisibility(Game::getInstance()->getPlayerVisibility());
+void GameView::debugDrawOverlays () {
+  GLW::disableTextures();
+  const float cs = Game::getInstance()->getColManager().getGrid().getCellSize();
+  glPushMatrix();
+  GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
+
+  list<CellOverlay>& overlays = Game::getInstance()->dbg_getCellOverlays();
+  LIST_FOREACH(CellOverlay, overlays, o) {
+    GLW::color((*o).color, 0.5f);
+    glPushMatrix();
+    GLW::scale(cs,cs,1);
+    GLW::translate((*o).x, (*o).y, 0);
+    Square::draw(false);
+    glPopMatrix();
+  }
+  overlays.clear();
+
+  glPopMatrix();
+  glColor4f(1,1,1,1);
   GLW::enableTextures();
 }
 
-void GameView::debugDraw () {
+void GameView::debugShadows () {
+  GLW::disableTextures();
+  const vector<ShadowPolygon*>& shadows = Game::getInstance()->getPlayerShadows();
+  for (unsigned i=0; i<shadows.length(); i++)
+    ShadowPolygonView::debugDraw(shadows[i]);
+  GLW::enableTextures();
+}
+
+void GameView::debugCollisions () {
   GLW::disableTextures();
   Game::getInstance()->getColManager().foreachEntity(drawColEntity);
   //Draw collision normal

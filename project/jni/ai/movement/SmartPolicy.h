@@ -17,8 +17,8 @@ class SmartPolicy : public MovementPolicy {
     bool requirePlayerVisibility () { return true; }
 
   private:
-    Path* _aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
-    Path* _defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
+    Path* _aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank, int& outX, int& outY);
+    Path* _defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank, int& outX, int& outY);
 
     enum eMode {
       AGGRESSIVE=0,

@@ -45,11 +45,13 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
     //Returns the shortest path to the closest hidden or visible cell (depending on parameter)
     //if visibility is true, return path to visible
     //ASSUME djikstra has been called first (startPos is the one given to djikstra)
-    Path* pathToClosest (bool visibility) const;
+    //Store the coords of the closest cell in x, y
+    Path* pathToClosest (bool visibility, int& outX, int& outY) const;
 
 
     //Returns path to the center of the biggest hidden cells group
-    Path* pathToCenterBiggestHidden () const;
+    //Store the coords of the cell in x, y
+    Path* pathToCenterBiggestHidden (int& outX, int& outY) const;
 
     void print () const;
 

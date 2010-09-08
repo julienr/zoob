@@ -1,14 +1,19 @@
 #include "MainWindow.h"
 
 #include <QApplication>
+#include <QMenuBar>
+#include "DebugAction.h"
 #include "jansson.h"
 
 MainWindow::MainWindow(const char* serieJSON, const char* apkPath) 
-  : menuScreen(new MenuScreen(this)),
+  : QMainWindow(),
+    menuScreen(new MenuScreen(this)),
     gameScreen(new GameScreen(this, serieJSON, apkPath)),
     menuInter(new InterMenu(this)),
     layout(new QStackedLayout) {
-  setLayout(layout);
+  QWidget* container = new QWidget();
+  container->setLayout(layout);
+  this->setCentralWidget(container);
 
   layout->addWidget(menuScreen);
   layout->addWidget(gameScreen);
@@ -25,12 +30,53 @@ MainWindow::MainWindow(const char* serieJSON, const char* apkPath)
     json_decref(levelsArr);
     json_decref(json);
   }
+
+  debugOptions["Visibility"] = DEBUG_VISIBILITY;
+  debugOptions["Waypoints"] = DEBUG_WAYPOINTS;
+  debugOptions["Overlays"] = DEBUG_OVERLAYS;
+  debugOptions["Shadows"] = DEBUG_SHADOWS;
+  debugOptions["Collisions"] = DEBUG_COLLISIONS;
+  createActions();
+  createMenus();
+
+  restoreSettings();
 }
 
 MainWindow::~MainWindow () {
   delete layout;
   delete menuScreen;
   delete gameScreen;
+}
+
+void MainWindow::debugChanged (eDebug what, bool enabled) {
+  LOGE("debugChanged : what=%i, enabled=%i", what, enabled);
+  if (enabled)
+    enableDebug(what);
+  else
+    disableDebug(what);
+  settings.setValue(debugOptions.key(what), enabled);
+}
+
+void MainWindow::restoreSettings () {
+  LOGE("Restoring settings from : %s", settings.fileName().toStdString().data());
+  for (QHash<QString,eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
+    bool val = settings.value(i.key(), false).toBool();
+    debugActions[i.key()]->setChecked(val);
+  }
+}
+
+void MainWindow::createActions () {
+  for (QHash<QString,eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
+    DebugAction* a = new DebugAction(i.key(), this, i.value());
+    debugActions[i.key()] = a;
+    connect(a, SIGNAL(debugChanged(eDebug, bool)), this, SLOT(debugChanged(eDebug, bool)));
+  }
+}
+
+void MainWindow::createMenus () {
+  QMenu* debugMenu = menuBar()->addMenu("Debug");
+  for (QMap<QString, DebugAction*>::iterator i=debugActions.begin(); i!=debugActions.end(); i++) 
+    debugMenu->addAction(i.value());
 }
 
 void MainWindow::startGame (int level) {
@@ -89,3 +135,4 @@ void MainWindow::mainLoop () {
 void MainWindow::quit () {
   running = false;
 }
+

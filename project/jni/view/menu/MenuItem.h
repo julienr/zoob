@@ -4,7 +4,7 @@
 #include "lib/Utils.h"
 #include "def.h"
 #include "view/Sprite.h"
-#include "view/Color.h"
+#include "lib/Color.h"
 
 class MenuItem {
   public:

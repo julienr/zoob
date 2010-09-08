@@ -5,12 +5,21 @@
 #include "GameScreen.h"
 #include "InterMenu.h"
 
+#include "app.h"
+
 #include <QWidget>
 #include <QStackedLayout>
 #include <QTime>
+#include <QMainWindow>
+#include <QAction>
+#include "DebugAction.h"
+#include <QMenu>
+#include <QSettings>
 #include "input/InputManager.h"
+#include <QHash>
+#include <QMap>
 
-class MainWindow : public QWidget {
+class MainWindow : public QMainWindow {
   Q_OBJECT
   public:
     MainWindow (const char* serieJSON, const char* apkPath);
@@ -26,7 +35,13 @@ class MainWindow : public QWidget {
 
     void quit ();
 
+    void debugChanged (eDebug what, bool enabled);
+
   private:
+    void createActions ();
+    void createMenus ();
+    void restoreSettings ();
+
     MenuScreen* menuScreen;
     GameScreen* gameScreen;
     InterMenu* menuInter;
@@ -35,6 +50,15 @@ class MainWindow : public QWidget {
     QTime timer;
 
     bool running;
+
+    QSettings settings;
+
+    //Maps a debug option settings name to the debug flag
+    //Used for settings
+    QHash<QString, eDebug> debugOptions;
+
+    //menu actions
+    QMap<QString, DebugAction*> debugActions;
 };
 
 #endif

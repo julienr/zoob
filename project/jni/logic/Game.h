@@ -14,6 +14,7 @@
 #include "logic/ShadowPolygon.h"
 #include "logic/VisibilityGrid.h"
 #include "ai/algorithms/AStar.h"
+#include "lib/Color.h"
 
 #define TANK_MOVE_SPEED 1.5f
 
@@ -36,6 +37,15 @@ struct ExplosionLocation {
       : position(p), type(t) {}
     Vector2 position;
     eType type;
+};
+
+//DEBUG only: draw an overlay of the given color over a cell
+struct CellOverlay {
+    const int x;
+    const int y;
+    const eColor color;
+    CellOverlay (int x, int y, eColor col)
+      : x(x), y(y), color(col) {}
 };
 
 class Game {
@@ -154,12 +164,17 @@ class Game {
       return introTimeLeft;
     }
 
-    const vector<ShadowPolygon*>& getShadowPolygons () {
-      return playerShadows;
-    }
-
     AStar* getAStar () {
       return &astarGrid;
+    }
+
+    //DEBUG only: returns a list of grid cells to be drawn in overlay
+    list<CellOverlay>& dbg_getCellOverlays () {
+      return dbg_overlays;
+    }
+
+    void dbg_addCellOverlay (CellOverlay o) {
+      dbg_overlays.append(o);
     }
 
   private:
@@ -212,6 +227,9 @@ class Game {
 
     double introTimeLeft;
     bool introDone;
+
+
+    list<CellOverlay> dbg_overlays;
 };
 
 #endif /* GAME_H_ */

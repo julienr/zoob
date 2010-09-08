@@ -2,7 +2,7 @@
 #define GLW_H_
 
 #include "lib/Vector2.h"
-#include "Color.h"
+#include "lib/Color.h"
 #include "def.h"
 
 struct GLW {

@@ -3,8 +3,9 @@
 #include "logic/Level.h"
 #include "lib/Line.h"
 
-//We're using a game screen resolution of 10/15, so 20 will just project our shadows out screen
-#define FARDIST 15
+//We want the shadow to cover everything.. Since the logical game is 15 by 10, 50 will pretty much cover everything
+//beware though, don't put this TOO CLOSE to 15 because shadows might extends in diagonal
+#define FARDIST 50
 
 void ShadowPolygon::_castShadow (const Vector2& lightSource,
                                      const AABBox* bbox,
