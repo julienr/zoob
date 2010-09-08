@@ -33,7 +33,7 @@ MainWindow::MainWindow(const char* serieJSON, const char* apkPath)
 
   debugOptions["Visibility"] = DEBUG_VISIBILITY;
   debugOptions["Waypoints"] = DEBUG_WAYPOINTS;
-  debugOptions["Overlays"] = DEBUG_OVERLAYS;
+  debugOptions["AI"] = DEBUG_AI;
   debugOptions["Shadows"] = DEBUG_SHADOWS;
   debugOptions["Collisions"] = DEBUG_COLLISIONS;
   createActions();

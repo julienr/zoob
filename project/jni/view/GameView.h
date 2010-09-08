@@ -28,7 +28,7 @@ class GameView {
 
     //Debug draw
     void debugShadows();
-    void debugDrawOverlays ();
+    void debugAI ();
     void debugCollisions();
     void debugVisibility();
     void debugWaypoints ();

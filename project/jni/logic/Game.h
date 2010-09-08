@@ -48,6 +48,21 @@ struct CellOverlay {
       : x(x), y(y), color(col) {}
 };
 
+//DEBUG only: a path that can be drawn
+struct DebugPath {
+    const Path* path;
+    const eColor color;
+    DebugPath (Path* path, eColor col)
+      : path(path->copy()), color(col) {}
+
+    ~DebugPath () {
+      delete path;
+    }
+  private:
+    DebugPath (const DebugPath& o)
+      : path(NULL), color(o.color) {}
+};
+
 class Game {
   private:
     static Game* instance;
@@ -177,6 +192,15 @@ class Game {
       dbg_overlays.append(o);
     }
 
+
+    list<DebugPath*>& dbg_getDebugPaths () {
+      return dbg_paths;
+    }
+
+    void dbg_addDebugPath (DebugPath* d) {
+      dbg_paths.append(d);
+    }
+
   private:
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
@@ -230,6 +254,7 @@ class Game {
 
 
     list<CellOverlay> dbg_overlays;
+    list<DebugPath*> dbg_paths;
 };
 
 #endif /* GAME_H_ */

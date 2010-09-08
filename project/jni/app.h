@@ -60,7 +60,7 @@ enum eDebug {
   DEBUG_VISIBILITY=1,
   DEBUG_WAYPOINTS=1<<1,
   DEBUG_SHADOWS=1<<2,
-  DEBUG_OVERLAYS=1<<3,
+  DEBUG_AI=1<<3,
   DEBUG_COLLISIONS=1<<4
 };
 void enableDebug (eDebug what);

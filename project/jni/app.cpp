@@ -458,8 +458,8 @@ void nativeRender () {
       gameView->debugShadows();
     if (debugFlags & DEBUG_VISIBILITY)
       gameView->debugVisibility();
-    if (debugFlags & DEBUG_OVERLAYS)
-      gameView->debugDrawOverlays();
+    if (debugFlags & DEBUG_AI)
+      gameView->debugAI();
     if (debugFlags & DEBUG_WAYPOINTS)
       gameView->debugWaypoints();
 
