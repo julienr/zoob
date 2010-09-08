@@ -28,6 +28,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       playerShadows(10),
       calculateShadows(level->hasShadows()),
       playerVisibility(colManager.getGrid()),
+      astarGrid(colManager.getGrid()),
       introTimeLeft(BOSS_INTRO_TIME),
       introDone(!level->isBoss()) {
   level->addToColManager(colManager);
@@ -60,6 +61,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       t->setPosition(Vector2(desc.x, desc.y));
       enemies.append(t);
       colManager.addEntity(t);
+      calculateShadows |= t->getAI()->requirePlayerVisibility();
     }
   }
 

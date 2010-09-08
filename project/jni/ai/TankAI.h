@@ -27,6 +27,11 @@ class TankAI {
       }
     }
 
+    //should return true if the game should compute player visibility because it will be used by this AI
+    bool requirePlayerVisibility () {
+      return movementPolicy->requirePlayerVisibility();
+    }
+
     bool decideFire (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
       return shootPolicy->decideFire(elapsedS, outDir, game, tank);
     }

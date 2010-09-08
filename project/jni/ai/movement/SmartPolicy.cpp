@@ -43,7 +43,6 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
 
 Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank) {
   //Move to closest visible cell, this should trigger the firing policy to fire
-
   VisibilityGrid& vgrid = game->getPlayerVisibility();
   vgrid.djikstra(tank->getPosition(), tank);
 

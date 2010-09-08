@@ -13,6 +13,7 @@
 #include "containers/vector.h"
 #include "logic/ShadowPolygon.h"
 #include "logic/VisibilityGrid.h"
+#include "ai/algorithms/AStar.h"
 
 #define TANK_MOVE_SPEED 1.5f
 
@@ -62,8 +63,6 @@ class Game {
       delete instance;
       instance = NULL;
     }
-
-
 
     void unpause () {
       gameState = GAME_RUNNING;
@@ -155,6 +154,14 @@ class Game {
       return introTimeLeft;
     }
 
+    const vector<ShadowPolygon*>& getShadowPolygons () {
+      return playerShadows;
+    }
+
+    AStar* getAStar () {
+      return &astarGrid;
+    }
+
   private:
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
@@ -196,9 +203,12 @@ class Game {
     //shadows calculated using the player as a light source
     vector<ShadowPolygon*> playerShadows;
     //Shadow calculations might be disabled
-    const bool calculateShadows;
+    bool calculateShadows;
 
     VisibilityGrid playerVisibility;
+
+    //for AI
+    AStar astarGrid;
 
     double introTimeLeft;
     bool introDone;

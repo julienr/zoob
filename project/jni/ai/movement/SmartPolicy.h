@@ -14,6 +14,8 @@ class SmartPolicy : public MovementPolicy {
 
     bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
 
+    bool requirePlayerVisibility () { return true; }
+
   private:
     Path* _aggressiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
     Path* _defensiveDir(double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);

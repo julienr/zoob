@@ -139,8 +139,10 @@ class Level {
     const AABBox* getBounds () const { return bounds; }
     const Vector2 getCenter () const { return Vector2(width/2.0f, height/2.0f); }
 
+    //wether the shadow effect should be used
     bool hasShadows () const { return drawShadows; }
 
+    //wether the boss intro (??? sign) should be used
     bool isBoss () const { return boss; }
 
   private:

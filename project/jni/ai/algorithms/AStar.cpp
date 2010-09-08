@@ -71,7 +71,6 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos) {
   Cell* end = cells[grid.getCellXBounded(endPos.x)][grid.getCellYBounded(endPos.y)];
   Cell* start = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];
 
-
   ALOGE("\n\n---- AStar from (%i,%i) to (%i,%i)", start->x, start->y, end->x, end->y);
 
 
