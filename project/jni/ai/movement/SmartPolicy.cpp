@@ -28,8 +28,13 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   else
     p = _defensiveDir(elapsedS, outDir, game, me, destX, destY);
 
+  //Find the path using AStar
+  AStar* astar = game->getAStar();
+  const Grid& grid = game->getColManager().getGrid();
+  p = astar->shortestWay(me->getPosition(), grid.gridToWorld(destX, destY), me);
+
   if (!p) {
-    LOGE("No path found");
+    //LOGE("No path found");
     return false;
   }
 

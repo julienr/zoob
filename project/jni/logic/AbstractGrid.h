@@ -57,6 +57,14 @@ class AbstractGrid {
       return grid.getCellSize();
     }
 
+    //Return cell at (x,y) OR NULL if (x,y) is outside
+    Cell* getCellAt (int x, int y) const {
+      if (x<0 || y<0 ||
+          x>=gridW || y>=gridH)
+        return NULL;
+      return cells[x][y];
+    }
+
   protected:
     const Grid& grid;
     const int gridW;

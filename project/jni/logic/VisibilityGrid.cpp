@@ -39,6 +39,9 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
 bool VisibilityGrid::isSquareWalkable (int tlX, int tlY, int size) {
   for (int nx=0; nx<size; nx++) {
     for (int ny=0; ny<size; ny++) {
+      if (tlX+nx >= grid.getWidth() ||
+          tlY+ny >= grid.getHeight())
+        continue;
       if (!walkable(cells[tlX+nx][tlY+ny]))
         return false;
     }
@@ -49,7 +52,33 @@ bool VisibilityGrid::isSquareWalkable (int tlX, int tlY, int size) {
 //See http://harablog.wordpress.com/2009/01/29/clearance-based-pathfinding/
 void VisibilityGrid::calculateClearance () {
   const int maxSquare = MIN(gridW, gridH);
-  for (int x=0; x<gridW; x++) {
+
+  //By starting with lower-right cell (which will either have clearance of 1 if walkable or -1 otherwise), we first
+  //scan by line and then move the the previous line
+  //a cell clearance is the min of the clearance of the adjacent cells plus one
+  for (int y=gridH-1; y>=0; y--) {
+    for (int x=gridW-1; x>=0; x--) {
+      if (!walkable(cells[x][y])) {
+        cells[x][y]->data.clearance = -1;
+      } else {
+        Cell* adj1 = getCellAt(x+1,y);
+        Cell* adj2 = getCellAt(x, y+1);
+        Cell* adj3 = getCellAt(x+1, y+1);
+        if (adj1 && adj2 && adj3) {
+          int min = adj1->data.clearance;
+          min = MIN(min, adj2->data.clearance);
+          min = MIN(min, adj3->data.clearance);
+          if (min == -1)
+            cells[x][y]->data.clearance = 1;
+          else
+            cells[x][y]->data.clearance = min + 1;
+        } else { //this is a border cell => clearance = 1
+          cells[x][y]->data.clearance = 1;
+        }
+      }
+    }
+  }
+/*  for (int x=0; x<gridW; x++) {
     for (int y=0; y<gridH; y++) {
       if (!walkable(cells[x][y])) {
         cells[x][y]->data.clearance = -1;
@@ -65,7 +94,7 @@ void VisibilityGrid::calculateClearance () {
       }
       cells[x][y]->data.clearance = sq-1;
     }
-  }
+  }*/
 }
 
 void VisibilityGrid::_resetCells () {

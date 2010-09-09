@@ -345,14 +345,16 @@ void GameView::debugAI () {
 
   //Clearance
   const NumberView* numberView = NumberView::getInstance();
-  const VisibilityGrid& vg = Game::getInstance()->getPlayerVisibility();
+  const AStar* astar = Game::getInstance()->getAStar();
+  glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
-  for (int x = 0; x < vg.getWidth(); x++) {
-    for (int y = 0; y < vg.getHeight(); y++) {
+
+  for (int x = 0; x < astar->getWidth(); x++) {
+    for (int y = 0; y < astar->getHeight(); y++) {
       glPushMatrix();
       GLW::scale(cs, cs, 1);
       GLW::translate(x, y, 0);
-      const int clearance = vg.getClearance(x,y);
+      const int clearance = astar->getClearance(x,y);
       if (clearance != -1)
         numberView->drawInt(clearance, Vector2(0, 0), Vector2(1, 1));
       glPopMatrix();
@@ -362,8 +364,6 @@ void GameView::debugAI () {
   GLW::disableTextures();
 
   //overlays
-  glPushMatrix();
-  GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
   list<CellOverlay>& overlays = Game::getInstance()->dbg_getCellOverlays();
   LIST_FOREACH(CellOverlay, overlays, o) {
     GLW::color((*o).color, 0.5f);

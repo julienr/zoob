@@ -66,8 +66,8 @@ extern zip* APKArchive;
 //FIXME: move to a logic-specific include ?
 #define TILE_SIZE 1.0
 #define GRID_CELL_SIZE 0.5f
-#define TANK_BCIRCLE_R 0.4f
-#define BOSS_BCIRCLE_R 0.5f
+#define TANK_BCIRCLE_R 0.35f
+#define BOSS_BCIRCLE_R 0.45f
 #define ROCKET_BCIRCLE_R 0.2f
 #define BOMB_BCIRCLE_R 0.4f
 

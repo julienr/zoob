@@ -112,6 +112,7 @@ void Game::update (const double elapsedS) {
 
   _updatePlayer(elapsedS);
 
+  astarGrid.calculateClearance();
   if (calculateShadows) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);
