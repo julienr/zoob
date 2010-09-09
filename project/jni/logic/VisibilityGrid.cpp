@@ -67,6 +67,7 @@ Path* VisibilityGrid::pathTo (const Cell* dest) const {
   if (numNodes == 0) {
     //We might be on the same logical cell as dest, but not be quite at dest yet
     //FIXME: is this really the pathfinder job to do that ?
+    //FIXME: this is now checked in smart policy, can we remove ?
     if (djikstraStartPos != dest->data.waypoint) {
       Vector2* nodes = new Vector2[1];
       nodes[0] = dest->data.waypoint;
@@ -216,8 +217,17 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
     d = 0; //same cell
   else if ((c1->x == c2->x) || (c1->y == c2->y))
     d = 10;//horiz/vert
-  else
-    d = 14;//diagonal
+  else {
+    //diagonal
+    //We disallow diagonal movement if the diagonal would cross a !walkable cell
+
+    int dx = c2->x-c1->x;
+    int dy = c2->y-c1->y;
+    if (!isWalkable(c1->x+dx, c1->y) || !isWalkable(c1->x, c1->y+dy))
+      d = 50;
+    else
+      d = 14;
+  }
 
   //Penalty if the cell is visible
   if (c1->data.visibility != HIDDEN)
@@ -254,7 +264,6 @@ void VisibilityGrid::_adaptWaypoint (const Cell* c, float unitSize) {
 
       const Vector2 dir = Vector2(nx,ny).getNormalized();
       const Vector2 neighVertex = c->data.waypoint + Vector2(nx*hcs, ny*hcs);
-
       const float dist = (neigh->data.waypoint-neighVertex).length();
       neigh->data.waypoint += dir*(unitSize-dist);
     }
@@ -277,10 +286,10 @@ void VisibilityGrid::_adaptWaypoints (float unitSize) {
 
 void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
   _resetCells();
-  if (source) {
+  /*if (source) {
     ASSERT(source->getBVolume()->getType() == TYPE_CIRCLE);
     _adaptWaypoints(source->getBVolume()->getWidth()/2.0f);
-  }
+  }*/
   djikstraStartPos = startPos;
   djikstraSource = source;
   djikstraStart = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];

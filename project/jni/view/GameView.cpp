@@ -343,10 +343,10 @@ void drawGrid (const Grid& g) {
 void GameView::debugAI () {
   GLW::disableTextures();
   const float cs = Game::getInstance()->getColManager().getGrid().getCellSize();
-  glPushMatrix();
-  GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
 
   //overlays
+  glPushMatrix();
+  GLW::translate(-(1-cs)/2.0f, -(1-cs)/2.0f,0);
   list<CellOverlay>& overlays = Game::getInstance()->dbg_getCellOverlays();
   LIST_FOREACH(CellOverlay, overlays, o) {
     GLW::color((*o).color, 0.5f);
@@ -357,6 +357,7 @@ void GameView::debugAI () {
     glPopMatrix();
   }
   overlays.clear();
+  glPopMatrix();
 
   //paths
   list<DebugPath*>& paths = Game::getInstance()->dbg_getDebugPaths();
@@ -376,7 +377,6 @@ void GameView::debugAI () {
   }
   paths.clear();
 
-  glPopMatrix();
   glColor4f(1,1,1,1);
   GLW::enableTextures();
 }

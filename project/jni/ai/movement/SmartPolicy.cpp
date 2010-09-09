@@ -38,11 +38,10 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   const Grid& g = game->getColManager().getGrid();
   const Vector2& pos = me->getPosition();
   if (g.getCellX(pos) == destX && g.getCellY(pos) == destY) {
-    LOGE("already at dest");
     return false;
   }
 
-  //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, tank->getPosition().x, tank->getPosition().y);
+  //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, me->getPosition().x, me->getPosition().y);
   const Vector2 dir = (p->get(0) - me->getPosition()).getNormalized();
   outDir->set(dir);
   delete p;
