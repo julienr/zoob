@@ -26,6 +26,10 @@ struct VisCell {
    */
   Vector2 waypoint;
 
+  //clearance represent the maximum size (in cells) an entity might have to pass
+  //through this cell
+  int clearance;
+
   void reset (const Vector2& center) {
     parent = NULL;
     closed = false;
@@ -64,6 +68,10 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
       return walkable(cells[x][y]);
     }
 
+    int getClearance (int x, int y) const {
+      return cells[x][y]->data.clearance;
+    }
+
     const Vector2& getWaypoint (int x, int y) const {
       ASSERT(inside(x,y));
       return cells[x][y]->data.waypoint;
@@ -71,6 +79,9 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
 
   protected:
     void calculateVisibility (const Game* game);
+
+    void calculateClearance ();
+    bool isSquareWalkable (int tlX, int tlY, int size);
 
     //source is the source given in djikstra
     Path* pathTo (const Cell* dest) const;
@@ -80,7 +91,7 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
 
     void _adaptWaypoints (float unitSize);
     void _adaptWaypoint (const Cell* c, float unitSize);
-    int neighDist (const Cell* c1, const Cell* c2);
+    int neighDist (const Cell* c1, const Cell* c2, int size);
 
     Vector2 djikstraStartPos;
     Cell* djikstraStart; //contains the last cell used to start a djikstra

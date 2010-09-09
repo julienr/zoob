@@ -20,7 +20,7 @@ NumberView::~NumberView () {
     delete numbers[i];
 }
 
-void NumberView::drawInt (const int v, const Vector2& pos, const Vector2& size) {
+void NumberView::drawInt (const int v, const Vector2& pos, const Vector2& size) const {
   int val = v;
   int numDigits = 0;
   do {

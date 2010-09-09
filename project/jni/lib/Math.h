@@ -41,6 +41,10 @@ struct Math {
   static float cos (float angle) {
     return cosf(angle);
   }
+
+  static float ceil (float x) {
+    return ceilf(x);
+  }
 };
 
 #endif /* MATH_H_ */

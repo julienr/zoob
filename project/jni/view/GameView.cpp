@@ -341,8 +341,25 @@ void drawGrid (const Grid& g) {
 
 
 void GameView::debugAI () {
-  GLW::disableTextures();
   const float cs = Game::getInstance()->getColManager().getGrid().getCellSize();
+
+  //Clearance
+  const NumberView* numberView = NumberView::getInstance();
+  const VisibilityGrid& vg = Game::getInstance()->getPlayerVisibility();
+  GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
+  for (int x = 0; x < vg.getWidth(); x++) {
+    for (int y = 0; y < vg.getHeight(); y++) {
+      glPushMatrix();
+      GLW::scale(cs, cs, 1);
+      GLW::translate(x, y, 0);
+      const int clearance = vg.getClearance(x,y);
+      if (clearance != -1)
+        numberView->drawInt(clearance, Vector2(0, 0), Vector2(1, 1));
+      glPopMatrix();
+    }
+  }
+
+  GLW::disableTextures();
 
   //overlays
   glPushMatrix();

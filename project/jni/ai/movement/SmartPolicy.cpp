@@ -28,8 +28,10 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   else
     p = _defensiveDir(elapsedS, outDir, game, me, destX, destY);
 
-  if (!p)
+  if (!p) {
+    LOGE("No path found");
     return false;
+  }
 
   game->dbg_addCellOverlay(CellOverlay(destX, destY, WHITE));
   game->dbg_addDebugPath(new DebugPath(p, VIOLET));

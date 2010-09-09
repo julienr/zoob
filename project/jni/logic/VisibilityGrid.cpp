@@ -30,6 +30,42 @@ void VisibilityGrid::calculateVisibility (const Game* game) {
       }
     }
   }
+
+  calculateClearance();
+}
+
+//Returns true if the virtual square starting at cell (tlX, tlY) and extending
+//towards bottom-left by a given size contains only walkable cells
+bool VisibilityGrid::isSquareWalkable (int tlX, int tlY, int size) {
+  for (int nx=0; nx<size; nx++) {
+    for (int ny=0; ny<size; ny++) {
+      if (!walkable(cells[tlX+nx][tlY+ny]))
+        return false;
+    }
+  }
+  return true;
+}
+
+//See http://harablog.wordpress.com/2009/01/29/clearance-based-pathfinding/
+void VisibilityGrid::calculateClearance () {
+  const int maxSquare = MIN(gridW, gridH);
+  for (int x=0; x<gridW; x++) {
+    for (int y=0; y<gridH; y++) {
+      if (!walkable(cells[x][y])) {
+        cells[x][y]->data.clearance = -1;
+        continue;
+      }
+
+      //for this cell, try to extend a square as much as possible.
+      //as long as the square does only contains walkable cells, we are fine
+      int sq=1;
+      for (; sq<maxSquare; sq++) {
+        if (!isSquareWalkable(x,y,sq))
+          break;
+      }
+      cells[x][y]->data.clearance = sq-1;
+    }
+  }
 }
 
 void VisibilityGrid::_resetCells () {
@@ -208,7 +244,7 @@ Path* VisibilityGrid::pathToClosest (bool vis, int& outX, int& outY) const {
 /**For all the distance calculation, we consider one cell to be 10 width. This means
  * that a horizontal or vertical move will cost 10. A diagonal move will cost sqrt(20) ~= 14.14 = 14
  */
-int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
+int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2, int size) {
   //should only be used for neighbouring cells
   ASSERT(abs(c1->x-c2->x) <= 1 && abs(c1->y-c2->y) <= 1);
 
@@ -219,13 +255,14 @@ int VisibilityGrid::neighDist (const Cell* c1, const Cell* c2) {
     d = 10;//horiz/vert
   else {
     //diagonal
-    //We disallow diagonal movement if the diagonal would cross a !walkable cell
-
-    int dx = c2->x-c1->x;
+    //We disallow diagonal movement if the diagonal would cross a !walkable cell or
+    //a cell with insufficient clearance
+    /*int dx = c2->x-c1->x;
     int dy = c2->y-c1->y;
-    if (!isWalkable(c1->x+dx, c1->y) || !isWalkable(c1->x, c1->y+dy))
+    if (!isWalkable(c1->x+dx, c1->y) || cells[c1->x+dx][c1->y]->data.clearance < size ||
+        !isWalkable(c1->x, c1->y+dy) || cells[c1->x][c1->y+dy]->data.clearance < size)
       d = 50;
-    else
+    else*/
       d = 14;
   }
 
@@ -290,6 +327,11 @@ void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
     ASSERT(source->getBVolume()->getType() == TYPE_CIRCLE);
     _adaptWaypoints(source->getBVolume()->getWidth()/2.0f);
   }*/
+  //Calculate source size
+  ASSERT(source->getBVolume()->getType() == TYPE_CIRCLE);
+  const BCircle* circle = static_cast<const BCircle*>(source->getBVolume());
+  const int entitySize = (int)Math::ceil(2*circle->getRadius()/grid.getCellSize());
+
   djikstraStartPos = startPos;
   djikstraSource = source;
   djikstraStart = cells[grid.getCellX(startPos.x)][grid.getCellY(startPos.y)];
@@ -300,7 +342,8 @@ void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
   //Insert all cells in open set
   for (int x=0; x<gridW; x++)
     for (int y=0; y<gridH; y++)
-      openset.insert(cells[x][y]);
+      if (walkable(cells[x][y]) && cells[x][y]->data.clearance >= entitySize)
+        openset.insert(cells[x][y]);
 
   while (openset.size() > 0) {
     //LOGE("openset size : %i", openset.size());
@@ -323,10 +366,10 @@ void VisibilityGrid::djikstra (const Vector2& startPos, const Entity* source) {
 
         Cell* neigh = cells[x][y];
 
-        if (neigh->data.closed || !walkable(neigh))
+        if (neigh->data.closed || !walkable(neigh) || neigh->data.clearance < entitySize)
           continue;
 
-        int alt = current->data.dist + neighDist(current, neigh);
+        int alt = current->data.dist + neighDist(current, neigh, entitySize);
         if (alt < neigh->data.dist) {
           neigh->data.dist = alt;
           neigh->data.parent = current;

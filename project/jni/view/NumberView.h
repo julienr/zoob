@@ -18,7 +18,7 @@ class NumberView {
     /* if multiple digits need to be rendered, they will all have size 'size'
      * and be centered in 'pos'
      */
-    void drawInt (int val, const Vector2& pos, const Vector2& size);
+    void drawInt (int val, const Vector2& pos, const Vector2& size) const;
 
   private:
     static NumberView* instance;
