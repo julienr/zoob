@@ -67,6 +67,8 @@ extern zip* APKArchive;
 #define TILE_SIZE 1.0
 #define GRID_CELL_SIZE 0.5f
 #define TANK_BCIRCLE_R 0.35f
+//DONT use bcircle radius that would be multiple of cell size, this can create bugs with pathfinding and coldet because of rounding (pathfinding finds a path
+//but the collision detection forbids it)
 #define BOSS_BCIRCLE_R 0.45f
 #define ROCKET_BCIRCLE_R 0.2f
 #define BOMB_BCIRCLE_R 0.4f

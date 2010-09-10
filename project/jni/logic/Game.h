@@ -150,7 +150,7 @@ class Game {
       playerTank->startShield();
     }
 
-    //Set tank movement direction. Set to (0,0) for now move
+    //Set tank movement direction. Set to (0,0) for no move
     void setTankMoveDir (const Vector2& dir) {
       tankMoveDir.set(dir.x,dir.y);
     }

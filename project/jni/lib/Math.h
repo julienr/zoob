@@ -45,6 +45,10 @@ struct Math {
   static float ceil (float x) {
     return ceilf(x);
   }
+
+  static float abs (float x) {
+    return fabs(x);
+  }
 };
 
 #endif /* MATH_H_ */

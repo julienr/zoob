@@ -42,17 +42,15 @@ class AStar : public AbstractGrid<AStarCell> {
       return cells[x][y]->data.clearance;
     }
 
-    void calculateClearance ();
+    void calculateClearance (Entity* entity);
   protected:
     void _resetCells ();
-
-    bool isSquareWalkable (int tlX, int tlY, int size);
 
     Path* reconstructPath (const Cell* c);
 
     //Returns true if the given cell is free from obstacle, false otherwise
-    bool walkable (const Cell* c, int entitySize);
-    bool isSolid (const Cell* c);
+    bool walkable (const Cell* c, int entitySize, Entity* entity);
+    bool isSolid (const Cell* c, Entity* entity);
 
     int neighDist (const Cell* c1, const Cell* c2, int entitySize);
     static int heuristicDist (const Cell* c1, const Cell* c2);

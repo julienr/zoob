@@ -4,11 +4,10 @@
 AStar::AStar (const Grid& grid) 
   : AbstractGrid<AStarCell>(grid), openset(10) {
   _resetCells();
-  calculateClearance ();
 }
 
 Path* AStar::reconstructPath (const Cell* c) {
-  //calculate number of nodes in path
+  //calculate number of nodes in pathentity
   int numNodes = 0;
   const Cell* curr = c;
   while (curr->data.parent) {
@@ -35,16 +34,21 @@ Path* AStar::reconstructPath (const Cell* c) {
 }
 
 //See http://harablog.wordpress.com/2009/01/29/clearance-based-pathfinding/
-void AStar::calculateClearance () {
+//For each cell, clearance gives the maximum width (or height) of a square that would
+//extend from the cell to the down-right direction. This indicates how big a unit can
+//be and still be able to pass through this cell
+//
+//We require an entity parameter because we tank entities into accounts and therefore,
+//we don't want our own entity to block us
+void AStar::calculateClearance (Entity* entity) {
   const int maxSquare = MIN(gridW, gridH);
-
 
   //By starting with lower-right cell (which will either have clearance of 1 if walkable or -1 otherwise), we first
   //scan by line and then move the the previous line
   //a cell clearance is the min of the clearance of the adjacent cells plus one
   for (int y=gridH-1; y>=0; y--) {
     for (int x=gridW-1; x>=0; x--) {
-      if (isSolid(cells[x][y])) {
+      if (isSolid(cells[x][y], entity)) {
         cells[x][y]->data.clearance = -1;
       } else {
         Cell* adj1 = getCellAt(x+1,y);
@@ -64,39 +68,6 @@ void AStar::calculateClearance () {
       }
     }
   }
-/*
-  for (int x=0; x<gridW; x++) {
-    for (int y=0; y<gridH; y++) {
-      if (!walkable(cells[x][y])) {
-        cells[x][y]->data.clearance = -1;
-        continue;
-      }
-
-      //for this cell, try to extend a square as much as possible.
-      //as long as the square does only contains walkable cells, we are fine
-      int sq=1;
-      for (; sq<maxSquare; sq++) {
-        if (!isSquareWalkable(x,y,sq))
-          break;
-      }
-      cells[x][y]->data.clearance = sq-1;
-    }
-  }*/
-}
-
-//Returns true if the virtual square starting at cell (tlX, tlY) and extending
-//towards bottom-left by a given size contains only walkable cells
-bool AStar::isSquareWalkable (int tlX, int tlY, int size) {
-  for (int nx=0; nx<size; nx++) {
-    for (int ny=0; ny<size; ny++) {
-      if (tlX+nx >= grid.getWidth() ||
-          tlY+ny >= grid.getHeight())
-        continue;
-      if (isSolid(cells[tlX+nx][tlY+ny]))
-        return false;
-    }
-  }
-  return true;
 }
 
 /**For all the distance calculation, we consider one cell to be 10 width. This means
@@ -110,16 +81,9 @@ int AStar::neighDist (const Cell* c1, const Cell* c2, int entitySize) {
   else if ((c1->x == c2->x) || (c1->y == c2->y))
     return 10;//horiz/vert
   else {
-    /*Cell* d1 = getCellAt(c2->x+1, c2->y+);
-    Cell* d2 = getCellAt(c2->x, c2->y-dy);
-    //Disalow diagonal when there is a potential obstacle
-    //Or the surrounding cells might not have a big enough clearance
-    if ((d1 && (isSolid(d1) || d1->data.clearance < entitySize-1)) ||
-        (d2 && (isSolid(d2) || d2->data.clearance < entitySize-1)))
-      return 1000;
-    else
-      return 14;//diagonal*/
-    //FIXME: looks like it doesn't really work...
+    //return 14;
+    //Diagonal moves are forbidden...
+    LOGE("AStar::neightDist : Trying to move in diagonal from (%i,%i) to (%i,%i)", c1->x, c1->y, c2->x, c2->y);
     return 100000;
   }
 }
@@ -138,13 +102,13 @@ void AStar::_resetCells () {
   openset.clear();
 }
 
-bool AStar::isSolid (const Cell* c) {
+bool AStar::isSolid (const Cell* c, Entity* entity) {
   //FIXME: should consider tanks as solid
-  return grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET);
+  return grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET | ENTITY_TANK, entity);
 }
 
-bool AStar::walkable (const Cell* c, int entitySize) {
-  return !isSolid(c) && c->data.clearance >= entitySize;
+bool AStar::walkable (const Cell* c, int entitySize, Entity* entity) {
+  return !isSolid(c, entity) && c->data.clearance >= entitySize;
 }
 
 //#define ALOGE(...) LOGE(__VA_ARGS__)
@@ -163,6 +127,7 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity
 
   ALOGE("\n\n---- AStar from (%i,%i) to (%i,%i)", start->x, start->y, end->x, end->y);
 
+  calculateClearance(e);
 
   start->data.gCost = 0;
   start->data.hCost = heuristicDist(start, end);
@@ -184,6 +149,9 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity
             x < 0 || y < 0 || x >= gridW || y >= gridH)
           continue;
 
+        if (Math::abs(nx) == Math::abs(ny)) //no diagonal moves
+          continue;
+
         Cell* neigh = cells[x][y];
         ALOGE("\tneigh (%i,%i) : walkable : %i, content : %i", neigh->x, neigh->y,
                walkable(neigh, entitySize),
@@ -192,7 +160,7 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity
         /** There is a special case here. If neigh is end, we have to add it to openset
          * because we'll often run our algorithms and target an unreacheable cell (containing another tank)
          */
-        if (!(*neigh == *end) && (neigh->data.closed || !walkable(neigh, entitySize))) {
+        if (!(*neigh == *end) && (neigh->data.closed || !walkable(neigh, entitySize, e))) {
           ALOGE("\t\tunwalkable : closed %i", neigh->closed);
           continue;
         }
