@@ -256,18 +256,40 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
   }
 }
 
+#include "containers/pair.h"
+
+typedef pair<Vector2, const AABBox* > Occluder;
+struct DistToPlayerCmp : public Compare<Occluder> {
+  DistToPlayerCmp (Vector2 playerPos)
+    : playerPos(playerPos) {}
+
+  virtual int operator () (const Occluder& t1, const Occluder& t2) const {
+    const float d1 = (t1.first - playerPos).length();
+    const float d2 = (t2.first - playerPos).length();
+    if (d1 < d2) return -1;
+    else if (Math::epsilonEq(d1, d2)) return 0;
+    else return 1;
+  }
+
+  Vector2 playerPos;
+};
+
 void Game::_calculatePlayerShadows () {
   for (size_t i=0; i<playerShadows.length(); i++)
     delete playerShadows[i];
   playerShadows.clear();
+
   const Vector2& lightSource = playerTank->getPosition();
+
+  //First step is we find all potential occluders and keep them in a vector
+  vector<Occluder> occluders(10);
+
   const unsigned w = level->getWidth();
   const unsigned h = level->getHeight();
   for (unsigned x=0; x<w; x++) {
     for (unsigned y=0; y<h; y++) {
       const Tile* tile = level->getTile(x,y);
       const eTileType type = tile->getType();
-
 
       /** Discard border tiles that cannot cast shadows.
        * For example, if we are on the right border, only R tiles cannot
@@ -284,7 +306,37 @@ void Game::_calculatePlayerShadows () {
       ASSERT(tile->getEntity()->getBVolume()->getType() == TYPE_AABBOX);
 
       const AABBox* bbox = static_cast<const AABBox*>(tile->getEntity()->getBVolume());
-      playerShadows.append(new ShadowPolygon(lightSource, bbox, tile->getEntity()->getPosition()));
+      occluders.append(Occluder(tile->getEntity()->getPosition(), bbox));
+      //playerShadows.append(new ShadowPolygon(lightSource, bbox, tile->getEntity()->getPosition()));
+    }
+  }
+
+  //Second step is sorting the occluders vector based on the distance to the player
+  //The idea is that the occluders closer to the player will create bigger shadows
+  //and will therefore be more likely to include other shadows (see step 3)
+  occluders.sort(DistToPlayerCmp(lightSource));
+
+  //Third step is actually creating the shadows. For each newly created shadow, we check
+  //if it isn't already contained in a previous shadow. We cannot check all shadows against each
+  //other because this would be too costly, but since the biggest shadows are created first, this
+  //works not too bad
+  const size_t len = occluders.size();
+  for (size_t i=0; i<len; i++) {
+    const Occluder& occ = occluders[i];
+    const Vector2& position = occ.first;
+    const AABBox* bbox = occ.second;
+
+    //check if it's covered by previous shadow
+    bool covered = false;
+    for (size_t j=0; j<playerShadows.size(); j++) {
+      if (playerShadows[j]->inside(position, *bbox)) {
+        covered = true;
+        break;
+      }
+    }
+
+    if (!covered) {
+      playerShadows.append(new ShadowPolygon(lightSource, bbox, position));
     }
   }
 }

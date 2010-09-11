@@ -58,10 +58,9 @@ extern InputManager* createInputManager (int useGamepad, int useTrackball);
 //DEBUG functions
 enum eDebug {
   DEBUG_VISIBILITY=1,
-  DEBUG_WAYPOINTS=1<<1,
-  DEBUG_SHADOWS=1<<2,
-  DEBUG_AI=1<<3,
-  DEBUG_COLLISIONS=1<<4
+  DEBUG_SHADOWS=1<<1,
+  DEBUG_AI=1<<2,
+  DEBUG_COLLISIONS=1<<3
 };
 void enableDebug (eDebug what);
 void disableDebug (eDebug what);

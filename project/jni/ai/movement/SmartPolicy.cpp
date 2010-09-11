@@ -57,10 +57,11 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
 
 Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
   //Move to closest visible cell, this should trigger the firing policy to fire
-  VisibilityGrid& vgrid = game->getPlayerVisibility();
+  /*VisibilityGrid& vgrid = game->getPlayerVisibility();
   vgrid.djikstra(tank->getPosition(), tank);
 
-  return vgrid.pathToClosest(true, outX, outY);
+  return vgrid.pathToClosest(true, outX, outY);*/
+  return NULL;
 }
 
 Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
@@ -74,12 +75,14 @@ Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir
    return false;*/
 
   VisibilityGrid& vgrid = game->getPlayerVisibility();
-  vgrid.djikstra(tank->getPosition(), tank);
+  //vgrid.djikstra(tank->getPosition(), tank);
 
   //Path* shortestWay = vgrid.pathToClosest(false);
   /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
    * to the biggest (closest ?) hidden group
    */
-  return vgrid.pathToCenterBiggestHidden(outX, outY);
+  bool found = vgrid.findCenterBiggestHidden(tank, outX, outY);
+  //FIXME: if found is FALSE, we shouldn't move
+  return NULL;
 }
 

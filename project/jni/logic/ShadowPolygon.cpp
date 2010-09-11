@@ -47,6 +47,15 @@ bool ShadowPolygon::inside (const Vector2& p) const {
   return true;
 }
 
+bool ShadowPolygon::inside (const Vector2& pos, const AABBox& bbox) const {
+  Vector2 corners[4];
+  bbox.getCorners(pos, corners);
+  for (int i=0; i<4; i++)
+    if (!inside(corners[i]))
+      return false;
+  return true;
+}
+
 eRelativePos ShadowPolygon::classifyCircle (const Vector2& center, float r) const {
   bool inside = true;
   for (int i=0; i<4; i++) {

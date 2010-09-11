@@ -6,6 +6,7 @@
 #include "def.h"
 
 #define LIST_FOREACH(type,listname,itername) for (list<type>::iterator itername = listname.begin(); itername.hasNext(); itername++)
+#define LIST_FOREACH_CONST(type,listname,itername) for (list<type>::const_iterator itername = listname.begin(); itername.hasNext(); itername++)
 
 //Double linked list
 //This is a wrapper around utlist.h

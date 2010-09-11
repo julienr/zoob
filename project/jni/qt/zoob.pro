@@ -18,6 +18,8 @@ debug {
   DEFINES += ZOOB_DBG_FPS
 }
 
+QMAKE_CXX = colorgcc
+
 # Input
 #qt specific first
 HEADERS += GameScreen.h MainWindow.h MenuScreen.h InterMenu.h DebugAction.h

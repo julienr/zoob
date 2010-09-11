@@ -15,7 +15,7 @@ LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
 LOCAL_SRC_FILES := \
 		app.cpp \
-    app-android.cpp \
+    containers/sort.cpp \
     lib/Vector2.cpp \
     lib/TimerManager.cpp \
     logic/Viewable.cpp \

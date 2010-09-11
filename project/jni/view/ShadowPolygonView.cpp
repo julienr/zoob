@@ -46,7 +46,7 @@ void ShadowPolygonView::drawLine (const ShadowPolygon* poly, const Line* line,
 }
 
 void ShadowPolygonView::debugDraw (const ShadowPolygon* poly) {
-  const Line* const* lines = poly->getLines();
+  const Line* const* lines = poly->getSides();
   /*glPointSize(5.0f);
   const Vector2* verts = poly->getVerts();
   GLW::color(BLACK);

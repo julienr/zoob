@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "def.h"
+#include "sort.h"
 
 template <class T>
 class vector {
@@ -83,6 +84,10 @@ class vector {
     T& operator [] (size_t i) const {
       ASSERT(i < used);
       return data[i];
+    }
+
+    void sort (const Compare<T>& cmp) {
+      ::sort(data, used, cmp);
     }
   private:
     vector (const vector<T>& other):capacityIncr(0) { ASSERT(false); }

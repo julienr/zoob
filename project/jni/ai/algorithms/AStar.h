@@ -49,8 +49,8 @@ class AStar : public AbstractGrid<AStarCell> {
     Path* reconstructPath (const Cell* c);
 
     //Returns true if the given cell is free from obstacle, false otherwise
-    bool walkable (const Cell* c, int entitySize, Entity* entity);
-    bool isSolid (const Cell* c, Entity* entity);
+    bool walkable (const Cell* c, int entitySize, const Entity* entity) const;
+    bool isSolid (const Cell* c, const Entity* entity) const;
 
     int neighDist (const Cell* c1, const Cell* c2, int entitySize);
     static int heuristicDist (const Cell* c1, const Cell* c2);

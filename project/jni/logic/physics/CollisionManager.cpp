@@ -6,7 +6,7 @@
  * http://physics.hardwire.cz/mirror/html/n_tutor_a/N%20Tutorials%20-%20Collision%20Detection%20and%20Response.html
  */
 
-bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult* r) {
+static bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult* r) {
   //0 is still
   if (max1 < min0) { //1 is on lhs of 0
     //LOGE("1 on lhs of 0");
@@ -51,7 +51,8 @@ bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
   return true;
 }
 
-bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, Vector2* backoff) {
+//static overlap test with backoff calculation
+static bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, Vector2* backoff) {
   //The two objects are separated on this axis
   if (max1 < min0 || min1 > max0)
     return false;
@@ -66,6 +67,11 @@ bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, flo
       backoff->set(axis*amount);
   }
   return true;
+}
+
+//static overlap test without backoff calculation
+static bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1) {
+  return !(max1 < min0 || min1 > max0);
 }
 
 bool CollisionManager::MovingAgainstStill (const Vector2& stillPos,
@@ -144,9 +150,9 @@ bool CollisionManager::LineAgainstCircle (const Vector2& circlePos,
   }
 }
 
-#define FILL_PROJ_MIN_MAX(min,max,rect) float min = axis[i]*rect[0]; \
+#define FILL_PROJ_MIN_MAX(min,max,rect,num) float min = axis[i]*rect[0]; \
     float max = axis[i]*rect[0]; \
-    for(short j=1;j<4;j++) { \
+    for(short j=1;j<num;j++) { \
       float tmp = axis[i]*rect[j]; \
       if (tmp<min) \
         min = tmp; \
@@ -184,8 +190,8 @@ bool CollisionManager::MovingAABBAgainstAABB (const Vector2& stillPos,
     const float speed = axis[i]*move;
 
     //Projected min/max on axis for both boxes
-    FILL_PROJ_MIN_MAX(min0,max0,corners[0])
-    FILL_PROJ_MIN_MAX(min1,max1,corners[1])
+    FILL_PROJ_MIN_MAX(min0,max0,corners[0],4)
+    FILL_PROJ_MIN_MAX(min1,max1,corners[1],4)
 
     //LOGE("axis(%f,%f) min0=%f,max0=%f  min1=%f,max1=%f   speed=%f", axis[i].x, axis[i].y, min0, max0, min1, max1, speed);
 
@@ -197,11 +203,45 @@ bool CollisionManager::MovingAABBAgainstAABB (const Vector2& stillPos,
   return (r->tFirst <= 1.0f);
 }
 
+bool CollisionManager::PolyAgainstPoly (const Polygon& p1,
+                                        const Polygon& p2) {
+  const int num1 = p1.getNumSides();
+  const int numAxis = num1+p2.getNumSides();
+  //The separating axis are orthogonal to both polygon's normals
+  Vector2* axis = new Vector2[numAxis];
+  for (int i=0; i<num1; i++)
+    axis[i] = p1.getSides()[i]->getNormal();
+  for (int i=num1; i<numAxis; i++)
+    axis[i] = p2.getSides()[i-num1]->getNormal();
+
+  const int nv1 = p1.getNumVerts();
+  const Vector2* v1 = p1.getVerts();
+
+  const int nv2 = p2.getNumVerts();
+  const Vector2* v2 = p2.getVerts();
+
+  bool result = true;
+  //SAT
+  for (int i=0; i<numAxis; i++) {
+    //Projected min/max on axis for both polys
+    FILL_PROJ_MIN_MAX(min0,max0,v1,nv1)
+    FILL_PROJ_MIN_MAX(min1,max1,v2,nv2)
+
+    if (!overlapOnAxis(axis[i], min0, max0, min1, max1)) {
+      result = false;
+      break;
+    }
+  }
+
+  delete [] axis;
+  return result;
+}
+
 bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
-                                             const AABBox* box,
-                                             const Vector2& lineStart,
-                                             const Vector2& lineMove,
-                                             CollisionResult* r) {
+                                        const AABBox* box,
+                                        const Vector2& lineStart,
+                                        const Vector2& lineMove,
+                                        CollisionResult* r) {
   r->tFirst = 0.0f;
   r->tLast = MOOB_INF;
 
@@ -222,8 +262,8 @@ bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
   for (int i=0; i<4; i++) {
     const float speed = axis[i]*lineMove;
 
-    //Projected min/max on axis for both boxes
-    FILL_PROJ_MIN_MAX(min0,max0,corners)
+    //Projected min/max on axis for the boxe
+    FILL_PROJ_MIN_MAX(min0,max0,corners,4)
     float min1 = lineStart*axis[i];
     float max1 = min1;
 
@@ -367,7 +407,7 @@ bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
     const float speed = axis[i]*move;
 
     //Projected min/max on axis for both boxes
-    FILL_PROJ_MIN_MAX(min0,max0,corners)
+    FILL_PROJ_MIN_MAX(min0,max0,corners,4)
     //For circle, min/max is always position +- radius
     const float min1 = (movingPos*axis[i])-moving->getRadius();
     const float max1 = (movingPos*axis[i])+moving->getRadius();

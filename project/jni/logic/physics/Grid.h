@@ -71,7 +71,6 @@ class Grid {
 
     bool traceRay (const Entity* source, const Vector2& start, const Vector2& move, CollisionResult* result, int entityMask) const;
     bool traceCircle (Entity* source, const Vector2& start, const Vector2& move, float radius, CollisionResult* result, int entityMask) const;
-    bool trace (const BCircle* circle, const Vector2& move, CollisionResult* result, int entityMask) const;
 
     unsigned getWidth () const {
       return width;
@@ -149,12 +148,17 @@ class Grid {
 
     //Returns if the given grid cell contains at least one entity of type. "source" isn't taken into account
     bool containsEntity (int x, int y, int entityMask, const Entity* source=NULL) const {
-      ASSERT(inside(x,y));
-      LIST_FOREACH(Entity*, grid[x][y]->entities, iter) {
-        if ((*iter != source) && ((*iter)->getType() & entityMask))
-          return true;
+      const list<Entity*>& l = grid[x][y]->entities;
+      if (l.empty()) { //early stopping saves some time because iterator creation is kind of costly
+        return false;
+      } else {
+        ASSERT(inside(x,y));
+        LIST_FOREACH_CONST(Entity*, l, iter) {
+          if ((*iter != source) && ((*iter)->getType() & entityMask))
+            return true;
+        }
+        return false;
       }
-      return false;
     }
 
     const Vector2& getOrigin () const { return origin; }

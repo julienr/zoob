@@ -4,15 +4,10 @@
 #include "def.h"
 #include "logic/physics/AABBox.h"
 #include "lib/Line.h"
+#include "lib/Polygon.h"
 
 class Tile;
 class Level;
-
-enum eRelativePos {
-    INSIDE = 0,
-    OUTSIDE,
-    INTERSECT
-};
 
 /**
  * This represent the shadow "volume" casted by a 2d-polygon.
@@ -20,7 +15,7 @@ enum eRelativePos {
  * and two are the far points (the end of the polygon).
  * In zoob, a shadow polygon always extends to the whole level.
  */
-class ShadowPolygon {
+class ShadowPolygon : public Polygon {
   public:
     /** Create a shadow polygon for the shadow casted by lightSource and the given aabbox
      * */
@@ -46,13 +41,19 @@ class ShadowPolygon {
 
     //Test if a point is inside this volume
     bool inside (const Vector2& p) const;
+
+    //Test if a bbox is inside this volume
+    bool inside (const Vector2& pos, const AABBox& bbox) const;
+
     //Test if a circle is FULLY inside this polygon
     eRelativePos classifyCircle (const Vector2& center, float r) const;
 
+    size_t getNumVerts () const { return 6; }
     //The vertices, returned in an order suitable for drawing (NEAR_0,FAR_0,FAR_1,NEAR_1)
     const Vector2* getVerts () const { return verts; }
 
-    const Line* const* getLines () const { return lines; }
+    size_t getNumSides () const { return 4; }
+    const Line* const* getSides () const { return lines; }
 
   private:
     void _castShadow (const Vector2& lightSource,

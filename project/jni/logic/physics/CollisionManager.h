@@ -2,6 +2,7 @@
 #define COLLISIONMANAGER_H_
 
 #include "lib/Vector2.h"
+#include "lib/Polygon.h"
 #include "logic/Entity.h"
 #include "containers/list.h"
 #include "def.h"
@@ -61,6 +62,9 @@ class CollisionManager {
                                        const BCircle* c1,
                                        const Vector2& c2Pos,
                                        const BCircle* c2);
+
+    static bool PolyAgainstPoly (const Polygon& p1,
+                                 const Polygon& p2);
 
     CollisionManager (int width, int height, float cellSize)
       : grid(Vector2(-TILE_SIZE/2, -TILE_SIZE/2),width,height,cellSize) {}

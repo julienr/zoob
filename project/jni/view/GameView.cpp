@@ -302,24 +302,6 @@ void GameView::debugVisibility () {
   GLW::enableTextures();
 }
 
-void GameView::debugWaypoints () {
-  GLW::disableTextures();
-  const VisibilityGrid& vg = Game::getInstance()->getPlayerVisibility();
-  //WAYPOINTS
-  for (int x = 0; x < vg.getWidth(); x++) {
-    for (int y = 0; y < vg.getHeight(); y++) {
-      glColor4f(1, 1, 1, 1);
-      glPointSize(3.0f);
-      glBegin(GL_POINTS);
-      const Vector2& p = vg.getWaypoint(x, y);
-      glVertex3f(p.x, p.y, 0);
-      glEnd();
-      glPointSize(1.0f);
-    }
-  }
-  GLW::enableTextures();
-}
-
 void drawGrid (const Grid& g) {
   const float cs = g.getCellSize();
   glPushMatrix();

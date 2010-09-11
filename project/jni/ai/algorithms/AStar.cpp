@@ -74,6 +74,10 @@ void AStar::calculateClearance (Entity* entity) {
  * that a horizontal or vertical move will cost 10. A diagonal move will cost sqrt(20) ~= 14.14 = 14
  */
 int AStar::neighDist (const Cell* c1, const Cell* c2, int entitySize) {
+  //FIXME: couldn't we simply get rid of the clearance stuff by simply simulating a movement
+  //between c1 and c2 using collision manager ? Then we can determine if the move is ok
+
+
   //should only be used for neighbouring cells
   ASSERT(abs(c1->x-c2->x) <= 1 && abs(c1->y-c2->y) <= 1);
   if ((*c1) == (*c2))
@@ -102,12 +106,11 @@ void AStar::_resetCells () {
   openset.clear();
 }
 
-bool AStar::isSolid (const Cell* c, Entity* entity) {
-  //FIXME: should consider tanks as solid
+bool AStar::isSolid (const Cell* c, const Entity* entity) const {
   return grid.containsEntity(c->x, c->y, ENTITY_WALL | ENTITY_ROCKET | ENTITY_TANK, entity);
 }
 
-bool AStar::walkable (const Cell* c, int entitySize, Entity* entity) {
+bool AStar::walkable (const Cell* c, int entitySize, const Entity* entity) const {
   return !isSolid(c, entity) && c->data.clearance >= entitySize;
 }
 
