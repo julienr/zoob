@@ -5,6 +5,17 @@
 
 #define MAX_MODE_TIME 5
 
+struct StopAtVisible : public AStar::StopCondition {
+  const VisibilityGrid& vgrid;
+
+  StopAtVisible (Game* game)
+    : vgrid (game->getPlayerVisibility()) {}
+
+  bool stopAt (const AStar::Cell* c) {
+    return vgrid.getVisibility(c->x, c->y) == VISIBLE;
+  }
+};
+
 bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* me) {
   modeElapsedS += elapsedS;
 
@@ -16,22 +27,30 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
     if (me->canFire())
       switchMode(AGGRESSIVE);
   }
-  //FIXME: remove
-  mode = DEFENSIVE;
 
   //FIXME: first move should be to avoid rockets
 
   int destX, destY;
-  Path* p;
-  if (mode == AGGRESSIVE)
-    p = _aggressiveDir(elapsedS, outDir, game, me, destX, destY);
-  else
-    p = _defensiveDir(elapsedS, outDir, game, me, destX, destY);
+  Path* p = NULL;
+  if (mode == AGGRESSIVE) {
+    //Aggressive : move towards player an stop at the first visible cell (this will allow us to fire)
+    AStar* astar = game->getAStar();
+    StopAtVisible cond(game);
+    p = astar->shortestWay(me->getPosition(), game->getPlayerTank()->getPosition(), me, &cond);
+  } else {
+    //Defensive : move to the center of the biggest shadowed part of the map
+    if (TankAI::rocketNear(game, me, 2 * GRID_CELL_SIZE, NULL))
+      me->cancelFiring();
 
-  //Find the path using AStar
-  AStar* astar = game->getAStar();
-  const Grid& grid = game->getColManager().getGrid();
-  p = astar->shortestWay(me->getPosition(), grid.gridToWorld(destX, destY), me);
+    VisibilityGrid& vgrid = game->getPlayerVisibility();
+    bool found = vgrid.findCenterBiggestHidden(me, destX, destY);
+    if (found) {
+      //Find the path using AStar
+      AStar* astar = game->getAStar();
+      const Grid& grid = game->getColManager().getGrid();
+      p = astar->shortestWay(me->getPosition(), grid.gridToWorld(destX, destY), me);
+    }
+  }
 
   if (!p) {
     //LOGE("No path found");
@@ -53,36 +72,5 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   outDir->set(dir);
   delete p;
   return true;
-}
-
-Path* SmartPolicy::_aggressiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
-  //Move to closest visible cell, this should trigger the firing policy to fire
-  /*VisibilityGrid& vgrid = game->getPlayerVisibility();
-  vgrid.djikstra(tank->getPosition(), tank);
-
-  return vgrid.pathToClosest(true, outX, outY);*/
-  return NULL;
-}
-
-Path* SmartPolicy::_defensiveDir(double UNUSED(elapsedS), Vector2* UNUSED(outDir), Game* game, EnemyTank* tank, int& outX, int& outY) {
-  //If a rocket is near the tank, cancel all firing and just run away
-  //FIXME: shouldn't we delegate that to a third policy or to the firing policy ?
-  if (TankAI::rocketNear(game, tank, 2 * GRID_CELL_SIZE, NULL))
-    tank->cancelFiring();
-
-  //Stop moving while the tank is preparing to fire
-  /*if (tank->isPreparingFire())
-   return false;*/
-
-  VisibilityGrid& vgrid = game->getPlayerVisibility();
-  //vgrid.djikstra(tank->getPosition(), tank);
-
-  //Path* shortestWay = vgrid.pathToClosest(false);
-  /** If we are in a hidden group, we should go for the center of it. Otherwise, we should go
-   * to the biggest (closest ?) hidden group
-   */
-  bool found = vgrid.findCenterBiggestHidden(tank, outX, outY);
-  //FIXME: if found is FALSE, we shouldn't move
-  return NULL;
 }
 

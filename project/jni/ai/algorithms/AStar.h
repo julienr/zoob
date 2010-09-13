@@ -31,12 +31,18 @@ struct AStarCell {
  */
 class AStar : public AbstractGrid<AStarCell> {
   public:
+    //This can be used to early-stop AStar based on some condition (like check if the current cell is
+    // visible, then no need to go further, just stop)
+    struct StopCondition {
+      virtual bool stopAt (const Cell* UNUSED(c)) { return false; }
+    };
+  public:
     AStar (const Grid& grid);
 
     //Returns a newly allocated (to be freed by caller) path representing the
     //shortest path between start and end. (Positions stored in path are in the middle of cells)
     //Returns NULL if no path can be found
-    Path* shortestWay (const Vector2& start, const Vector2& end, Entity* e=NULL);
+    Path* shortestWay (const Vector2& start, const Vector2& end, Entity* e, StopCondition* cond=NULL);
 
     int getClearance (int x, int y) const {
       return cells[x][y]->data.clearance;

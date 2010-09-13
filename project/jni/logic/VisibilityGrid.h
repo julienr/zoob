@@ -24,7 +24,7 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
   public:
     VisibilityGrid(const Grid& grid);
 
-    //FIXME: This is simply an Astar going from the tank to the player with an early stopping on the first
+    //TODO: This is simply an Astar going from the tank to the player with an early stopping on the first
     //visible cell
     Path* pathToClosest (bool visibility, int& outX, int& outY) const;
 

@@ -27,7 +27,7 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
 
   //AStar astar(game->getColManager().getGrid());
   AStar* astar = game->getAStar();
-  Path* shortestWay = astar->shortestWay(tank->getPosition(), path->get(current));
+  Path* shortestWay = astar->shortestWay(tank->getPosition(), path->get(current), tank);
   if (!shortestWay) {
     //cannot find a way, we're either on the waypoint or we cannot reach it => skip
 

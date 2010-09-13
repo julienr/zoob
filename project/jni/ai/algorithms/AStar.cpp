@@ -41,8 +41,6 @@ Path* AStar::reconstructPath (const Cell* c) {
 //We require an entity parameter because we tank entities into accounts and therefore,
 //we don't want our own entity to block us
 void AStar::calculateClearance (Entity* entity) {
-  const int maxSquare = MIN(gridW, gridH);
-
   //By starting with lower-right cell (which will either have clearance of 1 if walkable or -1 otherwise), we first
   //scan by line and then move the the previous line
   //a cell clearance is the min of the clearance of the adjacent cells plus one
@@ -73,7 +71,7 @@ void AStar::calculateClearance (Entity* entity) {
 /**For all the distance calculation, we consider one cell to be 10 width. This means
  * that a horizontal or vertical move will cost 10. A diagonal move will cost sqrt(20) ~= 14.14 = 14
  */
-int AStar::neighDist (const Cell* c1, const Cell* c2, int entitySize) {
+int AStar::neighDist (const Cell* c1, const Cell* c2, int UNUSED(entitySize)) {
   //FIXME: couldn't we simply get rid of the clearance stuff by simply simulating a movement
   //between c1 and c2 using collision manager ? Then we can determine if the move is ok
 
@@ -116,7 +114,7 @@ bool AStar::walkable (const Cell* c, int entitySize, const Entity* entity) const
 
 //#define ALOGE(...) LOGE(__VA_ARGS__)
 #define ALOGE(...)
-Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity* e) {
+Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity* e, StopCondition* cond) {
   //Calculate source size
   int entitySize = 1;
   if (e != NULL) {
@@ -139,8 +137,9 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity
   while (openset.size() > 0) {
     //current is the cell with lowest F cost
     Cell* current = openset.removeRoot();
-    if (*current == *end)
+    if (*current == *end || (cond && cond->stopAt(current)))
       return reconstructPath(current);
+
     ALOGE("current (%i,%i) g=%u, h=%u", current->x, current->y, current->data.gCost, current->data.hCost);
     current->data.closed = true;
     //For all 8 neighbours

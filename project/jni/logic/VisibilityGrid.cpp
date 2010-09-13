@@ -126,6 +126,7 @@ bool VisibilityGrid::findCenterBiggestHidden (const Entity* source, int& outX, i
 }
 
 Path* VisibilityGrid::pathToClosest (bool vis, int& outX, int& outY) const {
+  //TODO
 /*  int coords[2] = {-1,-1};
   int closest = MOOB_INF;
 

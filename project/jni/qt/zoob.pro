@@ -9,6 +9,8 @@ INCLUDEPATH += . ../ /usr/include/GL/
 QT += opengl
 LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson
 DEFINES += PLATFORM_SDL
+#Android doesn't support exceptions, so zoob isn't using them
+QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions
 #PROFILING
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg
