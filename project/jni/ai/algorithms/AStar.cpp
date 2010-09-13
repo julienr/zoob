@@ -188,7 +188,7 @@ Path* AStar::shortestWay (const Vector2& startPos, const Vector2& endPos, Entity
       }
     }
   }
-  LOGE("NO path found");
+  ALOGE("NO path found");
   _resetCells();
   return NULL;
 }

@@ -53,8 +53,7 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   }
 
   if (!p) {
-    //LOGE("No path found");
-    return false;
+    return adjustForFiring(outDir, game, me);
   }
 
   game->dbg_addCellOverlay(CellOverlay(destX, destY, WHITE));
@@ -64,7 +63,7 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   const Grid& g = game->getColManager().getGrid();
   const Vector2& pos = me->getPosition();
   if (g.getCellX(pos) == destX && g.getCellY(pos) == destY) {
-    return false;
+    return adjustForFiring(outDir, game, me);
   }
 
   //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, me->getPosition().x, me->getPosition().y);
@@ -72,5 +71,23 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
   outDir->set(dir);
   delete p;
   return true;
+}
+
+bool SmartPolicy::adjustForFiring (Vector2* outDir, Game* game, EnemyTank* me) {
+  const VisibilityGrid& vgrid = game->getPlayerVisibility();
+  const Grid& grid = game->getColManager().getGrid();
+  const Vector2& pos = me->getPosition();
+  if (vgrid.getVisibility(grid.getCellX(pos), grid.getCellY(pos)) == VISIBLE) {
+    //If we reach this point,no approaching rockets, try to fire to player
+    const Vector2 dirToTank = game->getPlayerTank()->getPosition()-pos;
+    CollisionResult r;
+    if (game->getColManager().traceCircle(me, pos, dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)
+          && r.collidedEntity != game->getPlayerTank()) {
+      //collided against something => move in the direction of the col normal
+      outDir->set(r.normal);
+      return true;
+    }
+  }
+  return false;
 }
 
