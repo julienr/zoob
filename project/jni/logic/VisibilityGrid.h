@@ -24,10 +24,6 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
   public:
     VisibilityGrid(const Grid& grid);
 
-    //TODO: This is simply an Astar going from the tank to the player with an early stopping on the first
-    //visible cell
-    Path* pathToClosest (bool visibility, int& outX, int& outY) const;
-
     //Fill (outX, outY) with the center of the biggest area invisible to the player
     //Returns false if no bigget group is found (whole map visible)
     bool findCenterBiggestHidden (const Entity* source, int& outX, int& outY) const;
@@ -37,6 +33,7 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
       return cells[x][y]->data.visibility;
     }
 
+    //DEBUG only
     bool isWalkable (int x, int y) const {
       return walkable(cells[x][y], NULL);
     }

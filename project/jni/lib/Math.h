@@ -49,6 +49,10 @@ struct Math {
   static float abs (float x) {
     return fabs(x);
   }
+
+  static float round (float x) {
+    return roundf(x);
+  }
 };
 
 #endif /* MATH_H_ */

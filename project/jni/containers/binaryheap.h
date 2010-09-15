@@ -96,6 +96,8 @@ class binaryheap {
     }
 
   protected:
+    binaryheap (const binaryheap<T, Compare>& other) {}
+
     void swap (size_t i1, size_t i2) {
       T tmp = array[i1];
       array[i1] = array[i2];
