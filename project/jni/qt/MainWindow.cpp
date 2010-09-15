@@ -35,6 +35,7 @@ MainWindow::MainWindow(const char* serieJSON, const char* apkPath)
   debugOptions["AI"] = DEBUG_AI;
   debugOptions["Shadows"] = DEBUG_SHADOWS;
   debugOptions["Collisions"] = DEBUG_COLLISIONS;
+  debugOptions["Overlays"] = DEBUG_OVERLAYS;
   createActions();
   createMenus();
 

@@ -63,6 +63,13 @@ struct DebugPath {
       : path(NULL), color(o.color) {}
 };
 
+struct DebugPolygon {
+    const Polygon poly;
+    const eColor color;
+    DebugPolygon (const Polygon& p, eColor col)
+      : poly(p), color(col) {}
+};
+
 class Game {
   private:
     static Game* instance;
@@ -201,6 +208,14 @@ class Game {
       dbg_paths.append(d);
     }
 
+    void dbg_addDebugPolygon (DebugPolygon d) {
+      dbg_polys.append(d);
+    }
+
+    list<DebugPolygon>& dbg_getDebugPolygons () {
+      return dbg_polys;
+    }
+
   private:
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
@@ -255,6 +270,7 @@ class Game {
 
     list<CellOverlay> dbg_overlays;
     list<DebugPath*> dbg_paths;
+    list<DebugPolygon> dbg_polys;
 };
 
 #endif /* GAME_H_ */

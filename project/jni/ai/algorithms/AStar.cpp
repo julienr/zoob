@@ -4,6 +4,9 @@
 AStar::AStar (const Grid& grid) 
   : AbstractGrid<AStarCell>(grid), openset(10) {
   _resetCells();
+  for (int y=gridH-1; y>=0; y--)
+    for (int x=gridW-1; x>=0; x--)
+      cells[x][y]->data.clearance = -1;
 }
 
 Path* AStar::reconstructPath (const Cell* c) {
@@ -72,10 +75,6 @@ void AStar::calculateClearance (Entity* entity) {
  * that a horizontal or vertical move will cost 10. A diagonal move will cost sqrt(20) ~= 14.14 = 14
  */
 int AStar::neighDist (const Cell* c1, const Cell* c2, int UNUSED(entitySize)) {
-  //FIXME: couldn't we simply get rid of the clearance stuff by simply simulating a movement
-  //between c1 and c2 using collision manager ? Then we can determine if the move is ok
-
-
   //should only be used for neighbouring cells
   ASSERT(abs(c1->x-c2->x) <= 1 && abs(c1->y-c2->y) <= 1);
   if ((*c1) == (*c2))

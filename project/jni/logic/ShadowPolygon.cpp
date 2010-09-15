@@ -41,7 +41,7 @@ void ShadowPolygon::_castShadow (const Vector2& lightSource,
 
 bool ShadowPolygon::inside (const Vector2& p) const {
   for (int i=0; i<4; i++) {
-    if (lines[i]->getRelativePosition(p) > 0)
+    if (lines[i].getRelativePosition(p) > 0)
       return false;
   }
   return true;
@@ -59,13 +59,22 @@ bool ShadowPolygon::inside (const Vector2& pos, const AABBox& bbox) const {
 eRelativePos ShadowPolygon::classifyCircle (const Vector2& center, float r) const {
   bool inside = true;
   for (int i=0; i<4; i++) {
-    const float d = lines[i]->distance(center);
+    const float d = lines[i].distance(center);
     if (d > r)
       return OUTSIDE;
     else if (d > -r)
       inside = false;
   }
   return inside?INSIDE:INTERSECT;
+}
+
+Polygon ShadowPolygon::toPolygon () const {
+  vector<Vector2> v(4);
+  v.append(verts[NEAR_0]);
+  v.append(verts[PENUMBRA_0]);
+  v.append(verts[PENUMBRA_1]);
+  v.append(verts[NEAR_1]);
+  return Polygon(v);
 }
 
 void ShadowPolygon::_calculateFar (const Vector2& lightSource,
@@ -104,19 +113,19 @@ ShadowPolygon::ShadowPolygon (const Vector2& lightSource,
   _calculateFar(lightSource, FAR_0);
   _calculateFar(lightSource, FAR_1);
 
-  lines[0] = new Line(verts[NEAR_0], verts[PENUMBRA_0]);
-  lines[1] = new Line(verts[PENUMBRA_0], verts[PENUMBRA_1]);
-  lines[2] = new Line(verts[PENUMBRA_1], verts[NEAR_1]);
-  lines[3] = new Line(verts[NEAR_1], verts[NEAR_0]);
+  lines[0] = Line::fromPoints(verts[NEAR_0], verts[PENUMBRA_0]);
+  lines[1] = Line::fromPoints(verts[PENUMBRA_0], verts[PENUMBRA_1]);
+  lines[2] = Line::fromPoints(verts[PENUMBRA_1], verts[NEAR_1]);
+  lines[3] = Line::fromPoints(verts[NEAR_1], verts[NEAR_0]);
 
   //Make sure all line normals are pointing outwards the volume
   //To check that, we construct the vector going from PENUMBRA_1 to the middle of (PENUMBRA_0,NEAR_0). This
   //vector should have the same direction (angle between them > 0 and < M_PI) as the line normal.
   //If this isn't the case, flip all normals
   const Vector2 ctrl = ((verts[PENUMBRA_0] + verts[NEAR_0])/2.0f - verts[PENUMBRA_1]).getNormalized();
-  float angle = ctrl*lines[0]->getNormal();
+  float angle = ctrl*lines[0].getNormal();
   if (angle < 0 || angle > M_PI) {
     for (int i=0; i<4; i++)
-      lines[i]->flipNormal();
+      lines[i].flipNormal();
   }
 }

@@ -85,6 +85,10 @@ class Grid {
       return getCellX(point.x);
     }
 
+    int getCellXBounded (const Vector2& point) const {
+      return getCellXBounded(point.x);
+    }
+
     int getCellX (float px) const {
       const int x = (int)((px-origin.x)/cellSize);
       if (x < 0 || x >= (int)width)
@@ -102,6 +106,10 @@ class Grid {
     //returns -1 if outside grid
     int getCellY (const Vector2& point) const {
       return getCellY(point.y);
+    }
+
+    int getCellYBounded (const Vector2& point) const {
+      return getCellYBounded(point.y);
     }
 
     int getCellY (float py) const {

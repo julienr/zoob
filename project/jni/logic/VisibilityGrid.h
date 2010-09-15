@@ -41,7 +41,7 @@ class VisibilityGrid : public AbstractGrid<VisCell> {
       return walkable(cells[x][y], NULL);
     }
   protected:
-    void calculateVisibility (const Game* game);
+    void calculateVisibility (Game* game);
 
     bool walkable (const Cell* c, const Entity* e) const;
 };

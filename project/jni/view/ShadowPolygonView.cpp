@@ -23,7 +23,7 @@ void ShadowPolygonView::draw (const ShadowPolygon* poly) {
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 }
 
-void ShadowPolygonView::drawLine (const ShadowPolygon* poly, const Line* line,
+void ShadowPolygonView::drawLine (const ShadowPolygon* poly, const Line& line,
                         ShadowPolygon::eVert from, ShadowPolygon::eVert to) {
   const Vector2* verts = poly->getVerts();
   MGL_DATATYPE glverts[6] = {
@@ -35,7 +35,7 @@ void ShadowPolygonView::drawLine (const ShadowPolygon* poly, const Line* line,
   glDrawArrays(GL_LINES, 0, 2);
 
   const Vector2 center = (verts[to]+verts[from])/2.0f;
-  const Vector2 nto = center + line->getNormal();
+  const Vector2 nto = center + line.getNormal();
   MGL_DATATYPE nverts[6] = {
       fX(center.x), fX(center.y), 0,
       fX(nto.x), fX(nto.y), 0
@@ -46,7 +46,7 @@ void ShadowPolygonView::drawLine (const ShadowPolygon* poly, const Line* line,
 }
 
 void ShadowPolygonView::debugDraw (const ShadowPolygon* poly) {
-  const Line* const* lines = poly->getSides();
+  const Line* lines = poly->getSides();
   /*glPointSize(5.0f);
   const Vector2* verts = poly->getVerts();
   GLW::color(BLACK);

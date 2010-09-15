@@ -17,7 +17,7 @@ class vector {
     }
 
     //COPY elements from an existing array
-    vector (size_t len, T* arr)
+    vector (size_t len, const T* arr)
       : used(len), capacity(len), capacityIncr(len) {
       data = (T*)malloc(sizeof(T)*capacity);
       memcpy(data, arr, sizeof(T)*len);
@@ -26,6 +26,12 @@ class vector {
 
     ~vector () {
       free(data);
+    }
+
+    //append content of this vector in another vector (
+    void appendTo (vector<T>& other) const {
+      for (size_t i=0; i<used; i++)
+        other.append(data[i]);
     }
 
     void append (T elem) {

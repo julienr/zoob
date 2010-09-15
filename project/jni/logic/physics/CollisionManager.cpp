@@ -203,7 +203,8 @@ bool CollisionManager::MovingAABBAgainstAABB (const Vector2& stillPos,
   return (r->tFirst <= 1.0f);
 }
 
-bool CollisionManager::PolyAgainstPoly (const Polygon& p1,
+/* FIXME: untested
+ * bool CollisionManager::PolyAgainstPoly (const Polygon& p1,
                                         const Polygon& p2) {
   const int num1 = p1.getNumSides();
   const int numAxis = num1+p2.getNumSides();
@@ -235,7 +236,7 @@ bool CollisionManager::PolyAgainstPoly (const Polygon& p1,
 
   delete [] axis;
   return result;
-}
+}*/
 
 bool CollisionManager::LineAgainstAABB (const Vector2& boxPos,
                                         const AABBox* box,

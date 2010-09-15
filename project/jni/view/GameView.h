@@ -31,6 +31,7 @@ class GameView {
     void debugAI ();
     void debugCollisions();
     void debugVisibility();
+    void debugOverlays ();
   private:
     void _drawGame ();
     void _drawBossIntro();

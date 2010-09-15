@@ -8,7 +8,7 @@ class ShadowPolygonView {
   public:
     static void draw (const ShadowPolygon* poly);
 
-    static void drawLine (const ShadowPolygon* poly, const Line* line,
+    static void drawLine (const ShadowPolygon* poly, const Line& line,
                             ShadowPolygon::eVert from, ShadowPolygon::eVert to);
 
     static void debugDraw (const ShadowPolygon* poly);

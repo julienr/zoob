@@ -90,6 +90,11 @@ struct Vector2 {
     y *= f;
   }
 
+  void operator /= (float f) {
+    x /= f;
+    y /= f;
+  }
+
   Vector2 operator - (const Vector2& o) const {
     return Vector2(x-o.x, y-o.y);
   }

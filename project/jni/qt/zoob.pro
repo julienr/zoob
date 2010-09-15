@@ -31,6 +31,8 @@ LOCAL_SRC_FILES = \
 		app.cpp \
     lib/Vector2.cpp \
     lib/TimerManager.cpp \
+    lib/Polygon.cpp \
+    lib/Line.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \

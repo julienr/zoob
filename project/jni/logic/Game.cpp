@@ -61,7 +61,9 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       t->setPosition(Vector2(desc.x, desc.y));
       enemies.append(t);
       colManager.addEntity(t);
-      calculateShadows |= t->getAI()->requirePlayerVisibility();
+      //calculateShadows |= t->getAI()->requirePlayerVisibility();
+      //FIXME: remove
+      calculateShadows = true;
     }
   }
 

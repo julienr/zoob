@@ -460,6 +460,8 @@ void nativeRender () {
       gameView->debugVisibility();
     if (debugFlags & DEBUG_AI)
       gameView->debugAI();
+    if (debugFlags & DEBUG_OVERLAYS)
+      gameView->debugOverlays();
 
     glPopMatrix();
     

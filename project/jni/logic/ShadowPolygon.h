@@ -14,19 +14,16 @@ class Level;
  * A shadow polygon consist of 4 points. two are the "near" points (from which shadow is casted)
  * and two are the far points (the end of the polygon).
  * In zoob, a shadow polygon always extends to the whole level.
+ *
+ * The real polygon taken into account for inside test and geometry is (NEAR,PENUMBRA). FAR is only useful for drawing
  */
-class ShadowPolygon : public Polygon {
+class ShadowPolygon {
   public:
     /** Create a shadow polygon for the shadow casted by lightSource and the given aabbox
      * */
     ShadowPolygon (const Vector2& lightSource,
                      const AABBox* bbox,
                      const Vector2& bboxPos);
-
-    ~ShadowPolygon () {
-      for (int i=0; i<4; i++)
-        delete lines[i];
-    }
 
     enum eVert {
         NEAR_0 = 0,
@@ -53,7 +50,10 @@ class ShadowPolygon : public Polygon {
     const Vector2* getVerts () const { return verts; }
 
     size_t getNumSides () const { return 4; }
-    const Line* const* getSides () const { return lines; }
+    const Line* getSides () const { return lines; }
+
+    //Returns a polygon formed by NEAR and FAR points
+    Polygon toPolygon () const;
 
   private:
     void _castShadow (const Vector2& lightSource,
@@ -66,7 +66,7 @@ class ShadowPolygon : public Polygon {
                                 const Vector2& bboxPos,
                                 eVert penum);
     Vector2 verts[6];
-    Line* lines[4]; //the four lines that delimit this shadow polygon
+    Line lines[4]; //the four lines that delimit this shadow polygon
 };
 
 #endif /* SHADOWPOLYGON_H_ */

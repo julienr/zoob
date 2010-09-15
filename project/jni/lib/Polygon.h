@@ -1,6 +1,7 @@
 #ifndef POLYGON_H_
 #define POLYGON_H_
 
+#include "containers/vector.h"
 #include "lib/Line.h"
 
 enum eRelativePos {
@@ -11,17 +12,30 @@ enum eRelativePos {
 
 class Polygon {
   public:
-    //Test if a point is inside this volume
-    virtual bool inside (const Vector2& p) const = 0;
+    Polygon (const vector<Vector2>& verts);
+    //create a polygon by COPYING the vertices in verts
+    Polygon (const Vector2* verts, size_t numVerts);
+    Polygon (const Polygon& other);
+    ~Polygon ();
 
-    //Test if a circle is FULLY inside this polygon
-    virtual eRelativePos classifyCircle (const Vector2& center, float r) const = 0;
+    size_t getNumVerts () const { return numVerts; }
+    const Vector2* getVerts () const { return verts; }
 
-    virtual size_t getNumVerts () const = 0;
-    virtual const Vector2* getVerts () const = 0;
+    size_t getNumSides () const { return numVerts; }
+    const Line* getSides () { return sides; }
 
-    virtual size_t getNumSides () const = 0;
-    virtual const Line* const* getSides () const = 0;
+
+    //clip the polygon. The clipping region is delimited by clipLines. What lies IN_FRONT of this lines will
+    //be clipped (normals should be facing OUTWARD the clipping region)
+    //Returns a newly allocated polygon
+    Polygon clip(Line* clipLines, int numClipLines);
+
+  protected:
+    void _calculateSides ();
+    const size_t numVerts;
+    Vector2* verts;
+    Line* sides;
+
 };
 
 #endif /* POLYGON_H_ */
