@@ -10,11 +10,17 @@ VisibilityGrid::VisibilityGrid(const Grid& grid)
 struct EdgeInfo {
   int ymin,ymax;
   const bool vertical;
+
+  //BEGIN valid if vertical = falsed
   //y=m*x+b edge equation
   float m;
   float b;
+  Vector2 normal;
+  //END vertical = false
 
+  //BEGIN valid if vertical = true
   int x;
+  //END vertical = true
 
   EdgeInfo(const int x1, const int y1, const int x2, const int y2)
     : vertical(false) {
@@ -27,6 +33,8 @@ struct EdgeInfo {
       ymax = y2;
       m = (y2-y1)/(float)(x2-x1);
     }
+    //normal.set(-(y2-y1), (x2-x1));
+    normal.set((x2-x1), -(y2-y1));
     b = y1-m*x1;
     //LOGE("b(1)=%f\tb(2)=%f", y1-m*x1, y2-m*x2);
     ASSERT(Math::epsilonEq(y1-m*x1, y2-m*x2));
@@ -60,6 +68,8 @@ struct IntCompare {
   }
 };
 
+//#define VLOGE(...) LOGE(__VA_ARGS__)
+#define VLOGE(...)
 void VisibilityGrid::calculateVisibility (Game* game) {
   //This is polygon filling, so we use the scanline rendering algorithm
   const vector<ShadowPolygon*>& shadows = game->getPlayerShadows();
@@ -90,8 +100,8 @@ void VisibilityGrid::calculateVisibility (Game* game) {
   //and it is sorted from by ymin
   list<EdgeInfo>* edgeTable = new list<EdgeInfo>[gridH];
 
-  LOGE("--calculateVisibility");
-  LOGE("gridH : %i, gridW : %i", gridH, gridW);
+  VLOGE("--calculateVisibility");
+  VLOGE("gridH : %i, gridW : %i", gridH, gridW);
 
   int numEdges = 0;
 
@@ -116,7 +126,7 @@ void VisibilityGrid::calculateVisibility (Game* game) {
       game->dbg_addCellOverlay(CellOverlay(x1, y1, ORANGE));
       if (x1 != x2 && y1 != y2) {
         const EdgeInfo e(x1,y1,x2,y2);
-        LOGE("edge going from (%i,%i) to (%i,%i) => ymin=%i,m=%f,b=%f", x1, y1, x2, y2, e.ymin, e.m, e.b);
+        VLOGE("edge going from (%i,%i) to (%i,%i) => ymin=%i,m=%f,b=%f", x1, y1, x2, y2, e.ymin, e.m, e.b);
         edgeTable[e.ymin].append(e);
         game->dbg_addCellOverlay(CellOverlay(0, e.b, WHITE));
         numEdges++;
@@ -126,12 +136,12 @@ void VisibilityGrid::calculateVisibility (Game* game) {
         if (x1 == x2 && y1 != y2) {
           //vertical edge => use dedicated EdgeInfo constructor
           const EdgeInfo e(x1, y1, y2);
-          LOGE("vertical edge going from (%i,%i) to (%i,%i) => ymin=%i,x=%i", x1, y1, x2, y2, e.ymin, e.x);
+          VLOGE("vertical edge going from (%i,%i) to (%i,%i) => ymin=%i,x=%i", x1, y1, x2, y2, e.ymin, e.x);
           edgeTable[e.ymin].append(e);
           minY = MIN(minY, e.ymin);
           maxY = MAX(maxY, e.ymax);
         } else if (y1 == y2 && x1 != x2) {
-          LOGE("horizontal edge going from (%i,%i) to (%i,%i) => filling immediatly", x1, y1, x2, y2);
+          VLOGE("horizontal edge going from (%i,%i) to (%i,%i) => filling immediatly", x1, y1, x2, y2);
           //horizontal edge => fill right now
           for (int x=x1; x<=x2;x++)
             cells[x][y1]->data.visibility = HIDDEN;
@@ -159,11 +169,27 @@ void VisibilityGrid::calculateVisibility (Game* game) {
       int x;
       if (e.vertical) {
         x = e.x;
-        LOGE("intersection with scanline y=%i and vertical edge with x=%i", y, e.x);
+        VLOGE("intersection with scanline y=%i and vertical edge with x=%i", y, e.x);
       } else {
+        //We prefer to cover "too much" than "not enough" of the area.
+        //Therefore, rounding is done based on the direction of the edge normal x component
+        /*const float y1 = y;
+        const float y2 = y-0.9f;
+        const float xf1 = (y1-e.b)/e.m;
+        const float xf2 = (y2-e.b)/e.m;
+
+        LOGE("y1=%f => xf1=%f, y2=%f => xf2=%f", y1, xf1, y2, xf2);*/
+
+        const float xf = (y-e.b)/e.m;
+        if (Math::signum(e.normal.x) == -1) {
+          x = (int)xf;
+        } else {
+          x = (int)Math::ceil(xf);
+        }
+        //LOGE("xf=%f => x=%i", xf, x);
         //FIXME: should round to ceil if on the right and to floor if on the left of the edge
-        x = (int)Math::round((y-e.b)/e.m);
-        LOGE("intersection with scanline y=%i and edge with m=%f, b=%f \t=> x=%i", y, e.m, e.b, x);
+        //x = (int)Math::round((y-e.b)/e.m);
+        VLOGE("intersection with scanline y=%i and edge with m=%f, b=%f \t=> x=%i", y, e.m, e.b, x);
       }
       if (x >= 0 && x < gridW) {
         intersections.insert(IntersectionInfo(x, e.ymin));
@@ -178,7 +204,7 @@ void VisibilityGrid::calculateVisibility (Game* game) {
     }
 
     if (intersections.size() == 0) {
-      LOGE("no intersections with scanline y=%i", y);
+      VLOGE("no intersections with scanline y=%i", y);
       break;
     }
 
