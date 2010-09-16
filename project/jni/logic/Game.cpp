@@ -322,6 +322,7 @@ void Game::_calculatePlayerShadows () {
   //if it isn't already contained in a previous shadow. We cannot check all shadows against each
   //other because this would be too costly, but since the biggest shadows are created first, this
   //works not too bad
+  //int numCovered = 0;
   const size_t len = occluders.size();
   for (size_t i=0; i<len; i++) {
     const Occluder& occ = occluders[i];
@@ -333,6 +334,7 @@ void Game::_calculatePlayerShadows () {
     for (size_t j=0; j<playerShadows.size(); j++) {
       if (playerShadows[j]->inside(position, *bbox)) {
         covered = true;
+        //numCovered++;
         break;
       }
     }
@@ -341,6 +343,7 @@ void Game::_calculatePlayerShadows () {
       playerShadows.append(new ShadowPolygon(lightSource, bbox, position));
     }
   }
+  //LOGE("shadow casting : %i occluders, %i discarded because already covered", occluders.size(), numCovered);
 }
 
 void Game::playerFire (const Vector2& cursorPosition) {

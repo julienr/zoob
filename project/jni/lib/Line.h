@@ -21,13 +21,16 @@ class Line {
   public:
     Line () {}
 
+    Line (const Line& other)
+      : p1(other.p1), normal(other.normal), c(other.c) {}
+
     static Line fromPoints (const Vector2& p1, const Vector2& p2) {
       const Vector2& d = (p1-p2).getNormalized();
       return Line(p1, Vector2(d.y, -d.x));
     }
 
     static Line fromPointAndNormal(const Vector2& p1, const Vector2& normal) {
-      return Line(p1, normal);
+      return Line(p1, normal.getNormalized());
     }
 
     //1 = in front, 0 = on line, -1 = behind

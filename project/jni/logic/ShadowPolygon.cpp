@@ -41,7 +41,7 @@ void ShadowPolygon::_castShadow (const Vector2& lightSource,
 
 bool ShadowPolygon::inside (const Vector2& p) const {
   for (int i=0; i<4; i++) {
-    if (lines[i].getRelativePosition(p) > 0)
+    if (lines[i].getRelativePosition(p) == IN_FRONT)
       return false;
   }
   return true;
