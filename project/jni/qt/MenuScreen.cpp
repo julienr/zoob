@@ -7,6 +7,7 @@
 
 MenuScreen::MenuScreen(MainWindow* window) : QWidget(window) {
   QPushButton* playBtn = new QPushButton("play");
+  playBtn->setDefault(true);
   connect(playBtn, SIGNAL(clicked()), window, SLOT(startGame()));
 
   levelsSpin = new QSpinBox();

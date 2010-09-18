@@ -75,7 +75,8 @@ int main (int argc, char** argv) {
   //if we have a lvlnum arg
   if (argc >= 4) {
     int level = atoi(argv[3]);
-    window->startGame(level);
+    window->selectLevel(level);
+    window->startGame();
   }
 
   //Fire main loop with a one time timer just after QApplication start

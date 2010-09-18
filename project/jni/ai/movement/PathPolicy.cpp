@@ -22,6 +22,7 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
     current = (current+1)%path->length();
   }
 
+  game->dbg_addDebugPath(new DebugPath(path, RED));
   /*outDir->set((path->get(current) - tank->getPosition()).getNormalized());
   return true;*/
 

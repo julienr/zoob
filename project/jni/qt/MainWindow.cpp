@@ -79,10 +79,9 @@ void MainWindow::createMenus () {
     debugMenu->addAction(i.value());
 }
 
-void MainWindow::startGame (int level) {
+void MainWindow::startGame () {
   layout->setCurrentWidget(gameScreen);
-  if (level == -1)
-    level = menuScreen->getSelectedLevel();
+  int level = menuScreen->getSelectedLevel();
   gameScreen->startGame(level);
 }
 

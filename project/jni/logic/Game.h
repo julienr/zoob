@@ -164,6 +164,7 @@ class Game {
 
     void toggleGodMode () {
       godMode = !godMode;
+      LOGE("god mode : %i", godMode);
     }
 
     bool hasShadows () const {

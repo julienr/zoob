@@ -29,8 +29,10 @@ class MainWindow : public QMainWindow {
 
     void showMenu (eMenu menu, int currentLevel=-1);
 
+    void selectLevel (int lvl) { menuScreen->selectLevel(lvl); }
+
   public slots:
-    void startGame (int level=-1);
+    void startGame ();
     void mainLoop ();
 
     void quit ();

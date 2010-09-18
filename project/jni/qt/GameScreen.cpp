@@ -22,6 +22,9 @@ void GameScreen::keyPressEvent (QKeyEvent* event) {
     case Qt::Key_Escape:
       mainWindow->showMenu(MENU_MAIN);
       break;
+    case Qt::Key_G:
+      toggleGodMode();
+      break;
   }
 }
 

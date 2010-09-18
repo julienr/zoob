@@ -189,10 +189,8 @@ void GameView::_drawGame () {
     GLW::colorWhite();
   }
 
-  //FIXME: re-enable
   if (game->getLevel()->hasShadows())
     _drawShadows();
-  //FIXME: shadows should be gray
 
   //Manage explosions life
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
@@ -206,23 +204,6 @@ void GameView::_drawGame () {
       i++;
     }
   }
-
-  /*if (game->isMovingCursor())
-    cursorView.draw();
-
-  if (game->isMovingTank()) {
-    const Vector2 touchPoint = game->getTankMoveTouchPoint();
-    const Vector2 cursorSize = Vector2(1.0f, 1.0f);
-    Vector2 dir = game->getTankMoveDir();
-    dir.normalize();
-
-
-    //FIXME: paint line
-
-    //Dot product is e [0,pi], so we multiply by relative orientation of the vectors
-    float angle = acos(dir*Vector2::X_AXIS) * Vector2::X_AXIS.relativeOrientation(dir);
-    arrowEnd.draw(touchPoint, cursorSize, angle);
-  }*/
 }
 
 void drawColEntity (Entity* e) {
@@ -380,6 +361,7 @@ void GameView::debugAI () {
   }
 
   //paths
+  GLW::disableTextures();
   list<DebugPath*>& paths = Game::getInstance()->dbg_getDebugPaths();
   LIST_FOREACH(DebugPath*, paths, p) {
     DebugPath* dp = *p;
@@ -396,6 +378,7 @@ void GameView::debugAI () {
     delete dp;
   }
   paths.clear();
+  GLW::enableTextures();
 
   glPopMatrix();
 }
