@@ -14,9 +14,11 @@ LOCAL_CFLAGS := -Wall -DANDROID_NDK -Wno-psabi
 LOCAL_DEFAULT_CPP_EXTENSION := cpp 
 
 LOCAL_SRC_FILES := \
+		app-android.cpp \
 		app.cpp \
-    containers/sort.cpp \
     lib/Vector2.cpp \
+    lib/Polygon.cpp \
+    lib/Line.cpp \
     lib/TimerManager.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
