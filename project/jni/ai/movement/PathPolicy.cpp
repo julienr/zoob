@@ -3,6 +3,12 @@
 #include "ai/algorithms/AStar.h"
 #include "logic/Game.h"
 
+//How often we will test for give up on our path
+#define GIVE_UP_INTERVAL 1000
+
+//We give up if we have travalled at only 1/4 of our max speed
+const float giveUpDist = TANK_MOVE_SPEED/(4*(1000.0f/GIVE_UP_INTERVAL));
+
 bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
   Path* path = tank->getPath();
   if (!path)
@@ -14,24 +20,37 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
     tank->cancelFiring();*/
 
   //Stop moving while the tank is preparing to fire
-  if (tank->isPreparingFire())
+  if (tank->isPreparingFire()) {
+    prevSec = Utils::getCurrentTimeMillis();
+    prevSecPos = tank->getPosition();
     return false;
+  }
 
-  //Did we arrive to the waypoint
+  //Did we arrive to the waypoint ?
   if (tank->getPosition() == path->get(current)) {
     current = (current+1)%path->length();
   }
 
-  game->dbg_addDebugPath(new DebugPath(path, RED));
-  /*outDir->set((path->get(current) - tank->getPosition()).getNormalized());
-  return true;*/
+  //Here, we have a "give up condition" on the waypoint.
+  //If during a given interval, we have only travelled a given amount that is small,
+  //this means we are probably stuck in some kind of race condition with other tanks
+  const uint64_t now = Utils::getCurrentTimeMillis();
+  if (now - prevSec > GIVE_UP_INTERVAL) {
+    const float distCovered = (tank->getPosition()-prevSecPos).length();
 
-  //AStar astar(game->getColManager().getGrid());
+    //LOGE("distCovered : %f, tank move speed : %f, giveup dist %f", distCovered, TANK_MOVE_SPEED, giveUpDist);
+    if (distCovered < giveUpDist) {
+      //LOGE("giving up on waypoint %i, heading to next", current);
+      current = (current+1)%path->length();
+    }
+    prevSecPos = tank->getPosition();
+    prevSec = now;
+  }
+
   AStar* astar = game->getAStar();
   Path* shortestWay = astar->shortestWay(tank->getPosition(), path->get(current), tank);
   if (!shortestWay) {
     //cannot find a way, we're either on the waypoint or we cannot reach it => skip
-
     //We might be on the same logical cell as dest, but not be quite at dest yet
     if ((tank->getPosition() - path->get(current)).length() > 0.1) {
       Vector2* nodes = new Vector2[1];
@@ -43,6 +62,9 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
       return false;
     }
   }
+
+  //game->dbg_addDebugPath(new DebugPath(shortestWay, RED));
+
   Vector2 dir = shortestWay->get(0) - tank->getPosition();
   outDir->set(dir.getNormalized());
   delete shortestWay;

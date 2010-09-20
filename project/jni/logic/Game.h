@@ -16,8 +16,6 @@
 #include "ai/algorithms/AStar.h"
 #include "lib/Color.h"
 
-#define TANK_MOVE_SPEED 1.5f
-
 //Each boss level start with an intro. This is the duration of the intro
 #define BOSS_INTRO_TIME 3
 
