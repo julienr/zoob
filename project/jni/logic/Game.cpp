@@ -105,6 +105,8 @@ void Game::update (const double elapsedS) {
       gameWonCallback();
   }
 
+  level->removeExplodedWalls(colManager);
+
   if (!godMode && playerTank->hasExploded()) {
     playerTank->unmarkExploded();
     gameOverCallback();
@@ -112,7 +114,6 @@ void Game::update (const double elapsedS) {
 
   _updatePlayer(elapsedS);
 
-  //astarGrid.calculateClearance();
   if (calculateShadows) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);
@@ -367,13 +368,16 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   const eEntityType t1 = e1->getType();
   const eEntityType t2 = e2->getType();
   //tank-wall and tank-tank
-  if ((t1 == ENTITY_TANK || t1 == ENTITY_WALL) &&
+  /*if ((t1 == ENTITY_TANK || t1 == ENTITY_WALL) &&
       (t2 == ENTITY_TANK || t2 == ENTITY_WALL))
-    return;
+    return;*/
+
   //rocket-wall
-  if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
-      (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
+  if (!e1->acceptsTouch(e2) || !e2->acceptsTouch(e1))
     return;
+  /*if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
+      (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
+    return;*/
 
   //Notify entities about the explosion
   const bool effect1 = e1->explode(e2, colPoint);

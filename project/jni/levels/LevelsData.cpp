@@ -118,6 +118,7 @@ size_t getNumLevels () {
 }
 
 void loadSerie (const char* serieJSON) {
+  //FIXME: if serie JSON is invalid, the program just crash
   if (levelSerie != NULL) {
     json_decref(levelSerie);
     levelSerie = NULL;
@@ -164,6 +165,23 @@ Level* levelFromJSON (json_t* json) {
         if (ttype == -1)
           goto error;
         board[y*xdim+x] = (eTileType)ttype;
+      }
+    }
+
+    //BREAKABLE tiles
+    bool* breakable = new bool[xdim*ydim];
+    memset(breakable, 0, sizeof(bool)*xdim*ydim);
+
+    json_t* breakable_arr = json_object_get(json, "breakable"); ERRCHK;
+    if (breakable_arr && json_typeof(breakable_arr) == JSON_ARRAY) {
+      CONDITION((int)json_array_size(breakable_arr) == ydim, "breakable array size != ydim");
+      for (int y=0; y<ydim; y++) {
+        json_t* row = json_array_get(breakable_arr, y);
+        CONDITION((int)json_array_size(row) == xdim, "breakable row size != xdim");
+        for (int x=0; x<xdim; x++) {
+          bool b = json_bool_value(json_array_get(row, x)); ERRCHK;
+          breakable[y*xdim+x] = b;
+        }
       }
     }
 
@@ -236,8 +254,9 @@ Level* levelFromJSON (json_t* json) {
     if (opt_istrue(json, "reward_firing"))
       reward = REWARD_FIRING;
 
-    Level* l = new Level(xdim, ydim, board, tanks, numTanks, shadows, boss, items, reward);
+    Level* l = new Level(xdim, ydim, board, breakable, tanks, numTanks, shadows, boss, items, reward);
     delete[] board;
+    delete[] breakable;
     ERRCHK;
     return l;
   }

@@ -39,6 +39,11 @@ class Entity: public Moveable {
     //The value returned is used to give visual feedback on the explosion effects
     virtual bool explode (Entity* other, const Vector2& colPoint) = 0;
 
+    //Called when an other entity should touch this. If this function returns false, the touch is simply ignored
+    virtual bool acceptsTouch (Entity* UNUSED(other)) {
+      return true;
+    }
+
     /**
      * This function is called before a touch/explode can occur on both entities.
      * If it returns true, the "other" entity will bounce against this one instead

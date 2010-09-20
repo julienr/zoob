@@ -11,9 +11,13 @@
 
 class WallEntity : public Entity {
   public:
-    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h) {}
+    WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h), breakable(false), exploded(false) {}
     eEntityType getType () const { return ENTITY_WALL; }
-    bool explode (Entity* UNUSED(e), const Vector2& UNUSED(colPoint)) { return false; }
+
+    bool explode (Entity* UNUSED(e), const Vector2& UNUSED(colPoint)) {
+      exploded = true;
+      return true;
+    }
 
     float getWidth() const {
       return width;
@@ -23,12 +27,27 @@ class WallEntity : public Entity {
       return height;
     }
 
+    bool acceptsTouch (Entity* other) {
+      if (breakable && other->getType() == ENTITY_ROCKET)
+        return true;
+      else
+        return false;
+    }
+
     bool bounce (Entity* other, const Vector2& UNUSED(colPoint)) {
+      if (breakable)
+        return false;
+
       if (other->getType() == ENTITY_ROCKET)
         return true;
       else
         return false;
     }
+
+    void setBreakable (bool b) { breakable = b; }
+    bool isBreakable () { return breakable; }
+
+    bool hasExploded () const { return exploded; }
 
   private:
     //We store our own width/height (used for display) separate from the width/height used for aabbox
@@ -36,6 +55,9 @@ class WallEntity : public Entity {
     //to colmanager, a level tile spawns 5 cells
     const float width;
     const float height;
+
+    bool breakable;
+    bool exploded;
 };
 
 /**
@@ -71,10 +93,13 @@ class Tile {
     eTileType getType () const { return type; }
 
     //Returns associated entity, MIGHT be NULL if this tile is not solid
-    Entity* getEntity () const { return entity; }
+    WallEntity* getEntity () const { return entity; }
+
+    void deleteEntity () { delete entity; entity = NULL; }
+
   private:
     eTileType type;
-    Entity* entity;
+    WallEntity* entity;
 };
 
 /* This structure is used to provide some "advanced" description for tanks such as
@@ -113,9 +138,9 @@ class Level {
 
     //Level take ownership of the tanks array
     //board should be FREED BY CALLER
-    Level (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks, bool drawShadows, bool boss, uint8_t items, eReward reward)
+    Level (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, bool drawShadows, bool boss, uint8_t items, eReward reward)
       : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss), reward(reward), items(items) {
-      _initBoard(w,h,board, tanks, numTanks);
+      _initBoard(w,h,board, breakable, tanks, numTanks);
     }
 
     ~Level ();
@@ -137,6 +162,8 @@ class Level {
 
     void addToColManager (CollisionManager& colManager);
 
+    void removeExplodedWalls (CollisionManager& colManager);
+
     const TankDescription* getTanks () const { return tanks; }
     size_t getNumTanks () const { return numTanks; }
 
@@ -150,10 +177,9 @@ class Level {
     bool isBoss () const { return boss; }
 
   private:
-    void _initBoard (unsigned w, unsigned h, eTileType* board, TankDescription* tanks, size_t numTanks);
+    void _initBoard (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks);
     unsigned width;
     unsigned height;
-    //eTileType** board;
     Tile*** board;
 
     const TankDescription* tanks;

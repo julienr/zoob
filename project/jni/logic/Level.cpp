@@ -1,6 +1,6 @@
 #include "Level.h"
 
-Tile::Tile(int x, int y, eTileType t): type(t) {
+Tile::Tile(int x, int y, eTileType t): type(t){
   switch(t) {
     case W: entity = new WallEntity(1, 1, Vector2(x,y)); break;
     case E: entity = NULL; break;
@@ -28,7 +28,7 @@ Level::~Level() {
   delete[] tanks;
 }
 
-void Level::_initBoard (unsigned w, unsigned h, eTileType* b, TankDescription* UNUSED(tanks), size_t numTanks) {
+void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, TankDescription* UNUSED(tanks), size_t numTanks) {
   //first entry in tank description must be player
   ASSERT(numTanks >= 1);
   width = w;
@@ -42,19 +42,31 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b, TankDescription* U
       //b is row-major, board is col-major
       const eTileType t = b[y*w+x];
       board[x][y] = new Tile(x, y, t);
+      //FIXME: sets ALL tiles to breakable, this is really just for testing
+      if (board[x][y]->getEntity())
+      /*if (breakable[y*w+x])*/
+        board[x][y]->getEntity()->setBreakable(true);
     }
   }
 }
 
 void Level::addToColManager(CollisionManager& colManager) {
-  //LOGE("addToColManager");
   for (unsigned y = 0; y < height; y++) {
     for (unsigned x = 0; x < width; x++) {
       if (board[x][y]->getEntity())
         colManager.addEntity(board[x][y]->getEntity());
-        //colManager.addWallFromPosition(board[x][y]->getEntity());
-        //colManager.setGridCellSolid(x,y,true);
     }
   }
-  //LOGE("addToColManager");
+}
+
+void Level::removeExplodedWalls (CollisionManager& colManager) {
+  //FIXME: put exploded walls in a list instead of polling ??
+  for (unsigned x=0; x<width; x++) {
+    for (unsigned y=0; y<height; y++) {
+      if (board[x][y]->getEntity() && board[x][y]->getEntity()->hasExploded()) {
+        colManager.removeEntity(board[x][y]->getEntity());
+        board[x][y]->deleteEntity();
+      }
+    }
+  }
 }
