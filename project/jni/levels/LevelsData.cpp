@@ -64,20 +64,25 @@ static bool opt_istrue (json_t* obj, const char* key) {
     return true;
 }
 
-static int str2tile (char c) {
-  switch (c) {
-    case 'W': return W;
-    case 'T': return T;
-    case 'E': return E;
-    case 'R': return R;
-    case 'L': return L;
-    case 'B': return B;
-    case 'M': return M;
-    default: LOGE("str2tile, unknown character %c", c); return -1;
-  }
+#define TT_CASE(x, ret) if (strcmp(x, str) == 0) { return ret; }
+static int str2tile (const char* str) {
+  TT_CASE("W", W);
+  TT_CASE("T", T);
+  TT_CASE("E", E);
+  TT_CASE("R", R);
+  TT_CASE("L", L);
+  TT_CASE("B", B);
+  TT_CASE("M", M);
+  TT_CASE("TL", TL);
+  TT_CASE("TR", TR);
+  TT_CASE("BR", BR);
+  TT_CASE("BL", BL);
+
+  LOGE("str2tile, unknown tile %s", str); return -1;
+  return -1;
 }
 
-#define TT_CASE(x, ret) if (strcmp(x, str) == 0) { return ret; }
+
 static int str2ttype (const char* str) {
   TT_CASE("player", TANK_PLAYER)
   TT_CASE("static", TANK_STATIC)
@@ -155,7 +160,7 @@ Level* levelFromJSON (json_t* json) {
         json_t* val = json_array_get(row, x);
         CONDITION(json_typeof(val) == JSON_STRING, "tile element type not a string");
         const char* t = json_string_value(val);
-        int ttype = str2tile(t[0]);
+        int ttype = str2tile(t);
         if (ttype == -1)
           goto error;
         board[y*xdim+x] = (eTileType)ttype;

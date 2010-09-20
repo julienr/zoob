@@ -467,7 +467,7 @@ void Game::slideMove(Entity* e, Vector2 move) {
     }
 
     //move entity as close as possible to collider
-    colManager.translate(e, (r.colPoint-e->getPosition())*0.99);
+    colManager.translate(e, (r.colPoint-e->getPosition())*0.9);
 
     //now that we have moved the entity, we have "used" part (r.tFirst) of the move
     move *= (1-r.tFirst);

@@ -386,14 +386,20 @@ void disableDebug (eDebug what) {
 
 #ifdef ZOOB_DBG_FPS
 static int numFrames = 0;
+static int numPhysicFrames = 0;
 static uint64_t lastFPS = Utils::getCurrentTimeMillis();
 #define FPS_REPORT_INTERVAL 1000 //ms
 #endif
 
-#define MAX_REFRESH_RATE 1000/10 //10 FPS
-
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
+  //We run physics simulation by chuncks of dt. So the physics framerate is independent
+  //from the rendering framerate. See Gaffer's "Fix your timestep" article :
+  // http://gafferongames.com/game-physics/fix-your-timestep/
+  //We could improve on the current implementation by integration "The final touch" (from the article),
+  //but this doesn't seem really needed as temporal aliasing is not visible
+  static const double dt = 1/30.0f; //Physics frequency is 60hz
+  static double accumulator = 0;
 
   //Let game manager apply all the transition it has. It normally will have only one, but if during
   //the transition callback, a transition to another state was requested, it might have two or more
@@ -406,22 +412,25 @@ void nativeRender () {
   //FIXME: should move this whole timing stuff to timer or similar
   uint64_t now = Utils::getCurrentTimeMillis();
 
-  //FIXME: we don't really need max refresh rate..
-  //FIXME: AI could be refreshed much less often
-  /*if (now - lastTime < MAX_REFRESH_RATE)
+  double elapsedS = (now-lastTime)/1000.0;
+
+  //DEBUG only : simulate slow
+  /*if (elapsedS < 0.1)
     return;*/
 
-  double elapsedS = (now-lastTime)/1000.0;
+  //Only happen if the framerate is REALLY high. Maybe with Moore's law ten years from now :-)
   if (Math::epsilonEq(elapsedS, 0))
     return;
+
   lastTime = now;
 
 #ifdef ZOOB_DBG_FPS
   if (lastTime - lastFPS > FPS_REPORT_INTERVAL) {
     lastFPS = lastTime;
     const float _secs = FPS_REPORT_INTERVAL/1000.0f;
-    LOGE("%i frames in %f secondes : %f FPS", numFrames, _secs, numFrames/_secs);
+    LOGE("%i frames (%i physic frames) in %f secondes : %f FPS", numFrames, numPhysicFrames, _secs, numFrames/_secs);
     numFrames = 0;
+    numPhysicFrames = 0;
   }
   numFrames++;
 #endif
@@ -433,12 +442,22 @@ void nativeRender () {
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  if (GameManager::getInstance()->getState() == STATE_NONE)
+  if (GameManager::getInstance()->getState() == STATE_NONE) {
+    accumulator = 0;
     return;
+  }
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
-    if (!GameManager::getInstance()->paused())
-      Game::getInstance()->update(elapsedS);
+    if (!GameManager::getInstance()->paused()) {
+      accumulator += elapsedS;
+      while (accumulator >= dt) { //empty accumulator as much as possible
+        Game::getInstance()->update(dt);
+        accumulator -= dt;
+        numPhysicFrames++;
+      }
+    } else {
+      accumulator = 0;
+    }
 
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);

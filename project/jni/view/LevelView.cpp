@@ -20,12 +20,7 @@ void LevelView::drawWalls () {
     for (unsigned y=0; y<level->getHeight(); y++) {
       switch (level->getTile(x,y)->getType()) {
         case E: /*emptySprite.draw(Vector2(x,y), Vector2(1,1));*/ break;
-        case W:
-        case R:
-        case B:
-        case L:
-        case T:
-        case M:{
+        default:{
           Entity* tileEntity = level->getTile(x,y)->getEntity();
           ASSERT(tileEntity != NULL);
           wallSprite.draw(tileEntity->getPosition(), tileEntity->getSize());

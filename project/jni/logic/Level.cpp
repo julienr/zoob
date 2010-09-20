@@ -10,6 +10,11 @@ Tile::Tile(int x, int y, eTileType t): type(t) {
     //FIXME: have to use 0.24f instead of 0.25f to avoid rendering glitches...
     case R: entity = new WallEntity(0.5f, 1, Vector2(x+0.24f,y)); break;
     case M: entity = new WallEntity(0.5f, 0.5f, Vector2(x,y)); break;
+    case TL: entity = new WallEntity(0.5f, 0.5f, Vector2(x-0.25f,y-0.25f)); break;
+    case TR: entity = new WallEntity(0.5f, 0.5f, Vector2(x+0.25f,y-0.25f)); break;
+    case BL: entity = new WallEntity(0.5f, 0.5f, Vector2(x-0.25f,y+0.25f)); break;
+    case BR: entity = new WallEntity(0.5f, 0.5f, Vector2(x+0.25f,y+0.25f)); break;
+    default: LOGE("Unhandled tile type :%i", t); break;
   }
 }
 

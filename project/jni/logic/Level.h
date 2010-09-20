@@ -48,13 +48,17 @@ class WallEntity : public Entity {
  * M: only small block in the middle
  */
 enum eTileType {
-    E=1<<0,
-    W=1<<1,
-    T=1<<2,
-    L=1<<3,
-    B=1<<4,
-    R=1<<5,
-    M=1<<6
+    E=1,
+    W, //wall
+    T, //hafl top
+    L, //hafl left
+    B, //half bottom
+    R, //half right
+    M, //middle
+    TL, //top left corner
+    TR, //top right corner
+    BL, //bottom left corner
+    BR, //bottom right corner
 };
 
 class Tile {
