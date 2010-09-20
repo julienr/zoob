@@ -390,8 +390,31 @@ static uint64_t lastFPS = Utils::getCurrentTimeMillis();
 #define FPS_REPORT_INTERVAL 1000 //ms
 #endif
 
+#define MAX_REFRESH_RATE 1000/10 //10 FPS
+
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
+
+  //Let game manager apply all the transition it has. It normally will have only one, but if during
+  //the transition callback, a transition to another state was requested, it might have two or more
+  GameManager* gm = GameManager::getInstance();
+  do {
+    gm->applyTransition();
+  } while (gm->inTransition() && gm->getTransitionDelay() <= 0);
+
+  //BEGIN time management
+  //FIXME: should move this whole timing stuff to timer or similar
+  uint64_t now = Utils::getCurrentTimeMillis();
+
+  //FIXME: we don't really need max refresh rate..
+  //FIXME: AI could be refreshed much less often
+  /*if (now - lastTime < MAX_REFRESH_RATE)
+    return;*/
+
+  double elapsedS = (now-lastTime)/1000.0;
+  if (Math::epsilonEq(elapsedS, 0))
+    return;
+  lastTime = now;
 
 #ifdef ZOOB_DBG_FPS
   if (lastTime - lastFPS > FPS_REPORT_INTERVAL) {
@@ -403,33 +426,12 @@ void nativeRender () {
   numFrames++;
 #endif
 
-  //Let game manager apply all the transition it has. It normally will have only one, but if during
-  //the transition callback, a transition to another state was requested, it might have two or more
-  GameManager* gm = GameManager::getInstance();
-  do {
-    gm->applyTransition();
-  } while (gm->inTransition() && gm->getTransitionDelay() <= 0);
-
-  glClear(GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
-
-  //BEGIN time management
-  //FIXME: should move this whole timing stuff to timer or similar
-  uint64_t now = Utils::getCurrentTimeMillis();
-
-  //FIXME: we don't really need max refresh rate..
-  //FIXME: AI could be refreshed much less often
-  if (lastTime - now < 50)
-    return;
-
-  double elapsedS = (now-lastTime)/1000.0;
-  if (Math::epsilonEq(elapsedS, 0))
-    return;
-  lastTime = now;
-
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
   InputManager::getInstance()->think(elapsedS);
+
+  glClear(GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
 
   if (GameManager::getInstance()->getState() == STATE_NONE)
     return;
