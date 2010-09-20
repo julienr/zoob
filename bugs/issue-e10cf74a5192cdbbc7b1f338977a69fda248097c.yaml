@@ -5,8 +5,8 @@ type: :feature
 component: zoob
 release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2010-05-02 13:21:08.525419 Z
 references: []
 
@@ -19,4 +19,8 @@ log_events:
 - - 2010-05-20 13:16:37.313395 Z
   - Julien Rebetez <julien@fhtagn.net>
   - assigned to release post-market from unassigned
+  - ""
+- - 2010-09-20 20:55:19.473874 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
   - ""

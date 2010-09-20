@@ -7,12 +7,16 @@ components:
 releases: 
 - !ditz.rubyforge.org,2008-03-06/release 
   name: android market
-  status: :unreleased
-  release_time: 
+  status: :released
+  release_time: 2010-09-20 20:55:03.567144 Z
   log_events: 
   - - 2010-05-02 13:21:20.357320 Z
     - Julien Rebetez <julien@fhtagn.net>
     - created
+    - ""
+  - - 2010-09-20 20:55:03.567163 Z
+    - Julien Rebetez <julien@fhtagn.net>
+    - released
     - ""
 - !ditz.rubyforge.org,2008-03-06/release 
   name: post-market
