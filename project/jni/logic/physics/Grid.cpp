@@ -21,11 +21,9 @@ void Grid::unmarkCollided () {
   }
 }
 
-void Grid::moveEntity (Entity* e, const Vector2& move) {
+void Grid::entityMoved (Entity* e) {
   ASSERT(e->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* bcircle = static_cast<const BCircle *>(e->getBVolume());
-  const Vector2& p = e->getPosition();
-  const Vector2 end = p+move;
 
   //Remove from old cells
   for (list<GridCell*>::iterator i = e->touchedCells.begin(); i.hasNext(); i++)
@@ -34,7 +32,7 @@ void Grid::moveEntity (Entity* e, const Vector2& move) {
 
   //Add to new
   _clearTouched(); 
-  touchCells(bcircle, end);
+  touchCells(bcircle, e->getPosition());
   for (unsigned i=0; i<tmpTouched->length(); i++) {
     e->touchedCells.append(tmpTouched->get(i));
     tmpTouched->get(i)->entities.append(e);

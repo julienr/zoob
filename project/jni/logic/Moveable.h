@@ -42,9 +42,23 @@ class Moveable : public Viewable {
     const Vector2& getPosition () const {
       return position;
     }
+
+    //See comment below on lastSafePosition. Should only be used for collision handling
+    const Vector2& getLastSafePosition () const {
+      return lastSafePosition;
+    }
+
+    //save the current position as the last safe position
+    void saveSafePosition () {
+      lastSafePosition = position;
+    }
   private:
     Vector2 position;
     float rotation; //relative to center
+
+    //This is used in collision handling. In case this moveable is found to be stuck, its last safe position will be restored
+    //this last safe position should NEVER be used for something outside of collision handling
+    Vector2 lastSafePosition;
 };
 
 #endif /* MOVEABLE_H_ */

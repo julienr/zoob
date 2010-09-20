@@ -85,6 +85,11 @@ struct Vector2 {
     y += o.y;
   }
 
+  void operator -= (const Vector2& o) {
+    x -= o.x;
+    y -= o.y;
+  }
+
   void operator *= (float f) {
     x *= f;
     y *= f;

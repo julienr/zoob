@@ -61,9 +61,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       t->setPosition(Vector2(desc.x, desc.y));
       enemies.append(t);
       colManager.addEntity(t);
-      //calculateShadows |= t->getAI()->requirePlayerVisibility();
-      //FIXME: remove
-      calculateShadows = true;
+      calculateShadows |= t->getAI()->requirePlayerVisibility();
     }
   }
 
@@ -119,18 +117,6 @@ void Game::update (const double elapsedS) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);
   }
-
-  //FIXME: remove
-  /*LIST_FOREACH(EnemyTank*, enemies, i) {
-    EnemyTank* t = *i;
-    if (!t->isAlive())
-      continue;
-
-    for (size_t i=0; i<playerShadows.length(); i++) {
-      if (playerShadows[i]->fullyInside(t->getPosition(), t->getBVolume()->getWidth()/2.0f))
-        LOGE("EnemyTank %p in shadow %i", t, i);
-    }
-  }*/
 }
 
 void Game::_updateRockets (double elapsedS) {
@@ -450,6 +436,79 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
   colManager.translate(rocket, move);
 }
 
+//Heavily inspired by Q3's PM_SlideMove
+//see http://www.soclose.de/q3doc/bg__slidemove_8c-source.htm
+//for a discussion : http://www.gamedev.net/community/forums/topic.asp?topic_id=532258
+#define MAX_BOUNCES 4
+
+#define OVERCLIP 1.001f
+
+void Game::slideMove(Entity* e, Vector2 move) {
+  //Used to store the backoffs of previous iterations, so we don't go
+  //against a backoff we've already taken into account
+  Vector2 backoffs[MAX_BOUNCES];
+
+  //avoid going back against original velocity
+  backoffs[0] = move.getNormalized();
+
+  CollisionResult r;
+  for (size_t bounces=1; bounces < MAX_BOUNCES; bounces++) {
+    if (!colManager.trace(e, move, &r))
+      break;
+
+    //touch management
+    if (!e->bounce(r.collidedEntity, r.colPoint))
+      touch(e, r.collidedEntity, r.colPoint);
+
+    if (r.tFirst == 0) {
+      //Probably stuck, restore last safe position
+      colManager.moveTo(e, e->getLastSafePosition());
+      return;
+    }
+
+    //move entity as close as possible to collider
+    colManager.translate(e, (r.colPoint-e->getPosition())*0.99);
+
+    //now that we have moved the entity, we have "used" part (r.tFirst) of the move
+    move *= (1-r.tFirst);
+    move -= r.normal*(move*r.normal)*OVERCLIP; //remove all components of the velociyt along the collision normal
+
+    backoffs[bounces] = r.normal;
+
+    //Check that we aren't going against a previous backoff
+    for (size_t j = 0; j < bounces; j++) {
+      //if cos(angle between move and backoff) is in [0,1], we have an angle between
+      //-90 and 90
+      //cos = (vel*normals[i]/(||vel||*||normals[i]||)
+      //but since we only care about the sign of the cos, we can forget division
+      if (move * backoffs[j] >= 0)
+        continue;
+
+      //If we reach this point, we're going against backoffs[j], just add it once more to correct this
+      //move += backoffs[j];
+      move -= backoffs[j]*(move*backoffs[j])*OVERCLIP;
+      //LOGE("move+=backoffs[%u](%f,%f)", j, backoffs[j].x, backoffs[j].y);
+
+      //Check that our new corrected move doesn't go AGAIN against another previous backoff
+      for (size_t k = 0; k < bounces; k++) {
+        if (k == j)
+          continue;
+
+        if (move * backoffs[k] >= 0)
+          continue;
+
+        //LOGE("Going against backoffs[%u] : unable to find a way out!", k);
+        //We're going against 2 previous backoff, just cancel the move
+        move.set(0, 0);
+        return;
+      }
+    }
+  }
+  colManager.translate(e, move);
+  e->saveSafePosition();
+}
+
+#if 0
 #define MAX_BOUNCES 4
 void Game::slideMove (Entity* e, Vector2 move) {
   const Vector2 origMove = move;
@@ -465,13 +524,17 @@ void Game::slideMove (Entity* e, Vector2 move) {
     if (!e->bounce(r.collidedEntity, r.colPoint))
       touch(e, r.collidedEntity, r.colPoint);
 
+    //FIXME: should check if r.tFirst == 0, which would mean we're INSIDE an obstacle. What should we do in this case (probably just zero out the move)
+    //or push in someway that gets us out of the obstacle
+
     //LOGE("position(%f,%f)\tmove(%f,%f)\ttFirst %f\ttLast %f", e->getPosition().x, e->getPosition().y, move.x, move.y, r.tFirst, r.tLast);
 
     const Vector2 newPos = e->getPosition()+move;
     float backAmount = (r.colPoint - newPos)*r.normal;
     //multiplication by 1.1 is to have some safety margin. If we just add backoff, we might actually go inside the 
     //wall because of rounding errors or stuff. 
-    Vector2 backoff = (backAmount*r.normal)*1.1;
+    //Vector2 backoff = (backAmount*r.normal)*1.1;
+    Vector2 backoff = (backAmount*r.normal);
     move += backoff;
 
     backoffs[bounces] = backoff;
@@ -508,3 +571,4 @@ void Game::slideMove (Entity* e, Vector2 move) {
 end:
   colManager.translate(e, move);
 }
+#endif

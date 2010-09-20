@@ -53,7 +53,8 @@ class Grid {
     //It is ASSUMED that entity position is the one obtained after the last call to moveEntity
     void removeEntity (Entity* e);
 
-    void moveEntity (Entity* e, const Vector2& move);
+    //Must be called when an entity has been moved. Will update its grid position
+    void entityMoved (Entity* e);
 
     void dbg_clearTouched ();
 

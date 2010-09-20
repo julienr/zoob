@@ -5,7 +5,6 @@
  * Good resource : N collision detection tutorial
  * http://physics.hardwire.cz/mirror/html/n_tutor_a/N%20Tutorials%20-%20Collision%20Detection%20and%20Response.html
  */
-
 static bool collideOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, float speed, CollisionResult* r) {
   //0 is still
   if (max1 < min0) { //1 is on lhs of 0
@@ -31,12 +30,12 @@ static bool collideOnAxis (const Vector2& axis, float min0, float max0, float mi
     if (T < r->tLast) r->tLast = T;
     if (r->tFirst > r->tLast) return false;
   } else { //boxes overlapping
-    //LOGE("overlap");
     if (speed >= 0) {
       float T = (max0-min1)/speed;
       if (T < r->tLast) {
         r->tLast = T;
         //Cannot calculate normal on overlap (we dunno if this is the first axis of intersection)
+        //FIXME: how to handle this ?
       }
       if (r->tFirst > r->tLast) return false;
     } else { //speed < 0
@@ -300,6 +299,7 @@ bool CollisionManager::MovingCircleAgainstCircle (const Vector2& stillPos,
 
   if (dist <= 0) {
     //overlap
+    //FIXME: should set normal
     r->tFirst = 0.0f;
     r->tLast = (dist+still->getRadius())/moveC;
     return true;

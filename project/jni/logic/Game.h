@@ -230,6 +230,7 @@ class Game {
 
     //translate the given entity of <move>, sliding against collider
     void slideMove (Entity* e, Vector2 move);
+
     //translate the given rocket, bouncing against wall (and registering the bounce in the rocket)
     void bounceMove (Rocket* r, Vector2 move);
 

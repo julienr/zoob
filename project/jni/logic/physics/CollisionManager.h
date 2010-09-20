@@ -100,7 +100,12 @@ class CollisionManager {
     //Calls e->translate and modify the entities
     void translate (Entity* e, const Vector2& move) {
       e->translate(move);
-      grid.moveEntity(e, move);
+      grid.entityMoved(e);
+    }
+
+    void moveTo (Entity* e, const Vector2& newPosition) {
+      e->setPosition(newPosition);
+      grid.entityMoved(e);
     }
 
     //Perform a trace and put the result in "result"
