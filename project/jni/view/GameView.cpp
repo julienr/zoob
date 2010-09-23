@@ -303,14 +303,15 @@ void drawGrid (const Grid& g) {
 }
 
 void GameView::debugOverlays () {
+#ifdef DEBUG
   const float cs = Game::getInstance()->getColManager().getGrid().getCellSize();
   glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
   GLW::disableTextures();
 
   //overlays
-  list<CellOverlay>& overlays = Game::getInstance()->dbg_getCellOverlays();
-  LIST_FOREACH(CellOverlay, overlays, o) {
+  const list<CellOverlay>& overlays = Game::getInstance()->dbg_getCellOverlays();
+  LIST_FOREACH_CONST(CellOverlay, overlays, o) {
     GLW::color((*o).color, 0.5f);
     glPushMatrix();
     GLW::scale(cs, cs, 1);
@@ -318,24 +319,24 @@ void GameView::debugOverlays () {
     Square::draw(false);
     glPopMatrix();
   }
-  overlays.clear();
   glPopMatrix();
 
   //polygons
-  list<DebugPolygon>& polys = Game::getInstance()->dbg_getDebugPolygons();
-  LIST_FOREACH(DebugPolygon, polys, p) {
-    DebugPolygon poly = *p;
-
+  const list<DebugPolygon>& polys = Game::getInstance()->dbg_getDebugPolygons();
+  LIST_FOREACH_CONST(DebugPolygon, polys, p) {
+    const DebugPolygon& poly = *p;
     glPushMatrix();
     GLW::color(poly.color, 0.7f);
     glVertexPointer(2, MGL_TYPE, 0, poly.poly.getVerts());
     glDrawArrays(GL_TRIANGLE_FAN, 0, poly.poly.getNumVerts());
     glPopMatrix();
   }
-  polys.clear();
 
   glColor4f(1, 1, 1, 1);
   GLW::enableTextures();
+#else
+  LOGE("debugOverlays: DEBUG flag not turned on");
+#endif
 }
 
 
@@ -360,10 +361,11 @@ void GameView::debugAI () {
     }
   }
 
+#ifdef DEBUG
   //paths
   GLW::disableTextures();
-  list<DebugPath*>& paths = Game::getInstance()->dbg_getDebugPaths();
-  LIST_FOREACH(DebugPath*, paths, p) {
+  const list<DebugPath*>& paths = Game::getInstance()->dbg_getDebugPaths();
+  LIST_FOREACH_CONST(DebugPath*, paths, p) {
     DebugPath* dp = *p;
     GLW::color(dp->color, 0.7f);
     const Path* path = dp->path;
@@ -375,10 +377,9 @@ void GameView::debugAI () {
       Square::draw(false);
       glPopMatrix();
     }
-    delete dp;
   }
-  paths.clear();
   GLW::enableTextures();
+#endif
 
   glPopMatrix();
 }

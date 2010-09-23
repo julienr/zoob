@@ -56,8 +56,10 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
     return adjustForFiring(outDir, game, me);
   }
 
+#ifdef DEBUG
   game->dbg_addCellOverlay(CellOverlay(destX, destY, WHITE));
   game->dbg_addDebugPath(new DebugPath(p, VIOLET));
+#endif
 
   //If tank is already at destination grid cell, don't move forward
   const Grid& g = game->getColManager().getGrid();

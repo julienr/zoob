@@ -190,7 +190,8 @@ class Game {
     }
 
     //DEBUG only: returns a list of grid cells to be drawn in overlay
-    list<CellOverlay>& dbg_getCellOverlays () {
+#ifdef DEBUG
+    const list<CellOverlay>& dbg_getCellOverlays () {
       return dbg_overlays;
     }
 
@@ -199,7 +200,7 @@ class Game {
     }
 
 
-    list<DebugPath*>& dbg_getDebugPaths () {
+    const list<DebugPath*>& dbg_getDebugPaths () {
       return dbg_paths;
     }
 
@@ -211,9 +212,10 @@ class Game {
       dbg_polys.append(d);
     }
 
-    list<DebugPolygon>& dbg_getDebugPolygons () {
+    const list<DebugPolygon>& dbg_getDebugPolygons () {
       return dbg_polys;
     }
+#endif
 
   private:
     void _updateRockets (double elapsedS);
@@ -267,10 +269,12 @@ class Game {
     double introTimeLeft;
     bool introDone;
 
-
+#ifdef DEBUG
+    void dbg_clear ();
     list<CellOverlay> dbg_overlays;
     list<DebugPath*> dbg_paths;
     list<DebugPolygon> dbg_polys;
+#endif
 };
 
 #endif /* GAME_H_ */

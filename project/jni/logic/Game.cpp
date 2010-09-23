@@ -90,6 +90,8 @@ void Game::update (const double elapsedS) {
   if (gameState == GAME_PAUSED)
     return;
 
+  dbg_clear(); //clear debug information
+
   if (!introDone) {
     introTimeLeft -= elapsedS;
     if (introTimeLeft <= 0)
@@ -511,6 +513,19 @@ void Game::slideMove(Entity* e, Vector2 move) {
   colManager.translate(e, move);
   e->saveSafePosition();
 }
+
+#ifdef DEBUG
+void Game::dbg_clear () {
+  dbg_overlays.clear();
+
+  LIST_FOREACH(DebugPath*, dbg_paths, i) {
+    delete (*i);
+  }
+  dbg_paths.clear();
+
+  dbg_polys.clear();
+}
+#endif
 
 #if 0
 #define MAX_BOUNCES 4
