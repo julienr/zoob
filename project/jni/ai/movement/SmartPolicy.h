@@ -10,7 +10,7 @@ class EnemyTank;
 
 class SmartPolicy : public MovementPolicy {
   public:
-    SmartPolicy () : MovementPolicy(), mode(DEFENSIVE), modeElapsedS(0) {}
+    SmartPolicy () : MovementPolicy(), mode(DEFENSIVE), modeElapsedS(0), shortestWay(NULL) {}
 
     bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* me);
 
@@ -22,6 +22,8 @@ class SmartPolicy : public MovementPolicy {
     //This ONLY work if the tank (me) is on a VISIBLE cell
     //returns true if a move is needed, false otherwise
     bool adjustForFiring (Vector2* outDir, Game* game, EnemyTank* me);
+
+    void planPath (Game* game, EnemyTank* me);
 
     enum eMode {
       AGGRESSIVE=0,
@@ -35,6 +37,9 @@ class SmartPolicy : public MovementPolicy {
 
     eMode mode;
     double modeElapsedS;
+
+    //the path currently being followed
+    Path* shortestWay;
 };
 
 #endif /* SMARTPOLICY_H_ */

@@ -28,7 +28,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       playerShadows(10),
       calculateShadows(level->hasShadows()),
       playerVisibility(colManager.getGrid()),
-      astarGrid(colManager.getGrid()),
+      pathFinder(colManager.getGrid()),
       introTimeLeft(BOSS_INTRO_TIME),
       introDone(!level->isBoss()) {
   level->addToColManager(colManager);

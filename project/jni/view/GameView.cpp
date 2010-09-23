@@ -341,20 +341,21 @@ void GameView::debugOverlays () {
 
 
 void GameView::debugAI () {
-  const float cs = Game::getInstance()->getColManager().getGrid().getCellSize();
+  const Grid& grid = Game::getInstance()->getColManager().getGrid();
+  const float cs = grid.getCellSize();
 
   //Clearance
   const NumberView* numberView = NumberView::getInstance();
-  const AStar* astar = Game::getInstance()->getAStar();
+  const PathFinder* pathFinder = Game::getInstance()->getPathFinder();
   glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
 
-  for (int x = 0; x < astar->getWidth(); x++) {
-    for (int y = 0; y < astar->getHeight(); y++) {
+  for (int x = 0; x < grid.getWidth(); x++) {
+    for (int y = 0; y < grid.getHeight(); y++) {
       glPushMatrix();
       GLW::scale(cs, cs, 1);
       GLW::translate(x, y, 0);
-      const int clearance = astar->getClearance(x,y);
+      const int clearance = pathFinder->getClearance(x,y);
       if (clearance != -1)
         numberView->drawInt(clearance, Vector2(0, 0), Vector2(1, 1));
       glPopMatrix();

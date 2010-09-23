@@ -1,6 +1,7 @@
 #ifndef PATH_H_
 #define PATH_H_
 
+#include "lib/Vector2.h"
 #include "containers/vector.h"
 
 //A path on the level that a tank can follow

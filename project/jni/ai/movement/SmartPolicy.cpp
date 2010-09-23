@@ -5,7 +5,7 @@
 
 #define MAX_MODE_TIME 5
 
-struct StopAtVisible : public AStar::StopCondition {
+struct StopAtVisible : public PathFinder::StopCondition {
   const VisibilityGrid& vgrid;
 
   StopAtVisible (Game* game)
@@ -21,58 +21,68 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
 
   //This mode switching algorithms will maximize fire and the tank is hidding only when he can't fire
   if (mode == AGGRESSIVE) {
-    if (!me->canFire())
+    if (!me->canFire()) {
       switchMode(DEFENSIVE);
+      planPath(game, me);
+    }
   } else {
-    if (me->canFire())
+    if (me->canFire()) {
       switchMode(AGGRESSIVE);
+      planPath(game, me);
+    }
   }
 
   //FIXME: first move should be to avoid rockets
 
-  int destX, destY;
-  Path* p = NULL;
+  PathFinder* pathFinder = game->getPathFinder();
+  if (pathFinder->needsReplanning(me)) {
+    planPath(game,me);
+  }
+
+  if (!shortestWay) {
+    return adjustForFiring(outDir, game, me);
+  }
+
+#ifdef DEBUG
+  //game->dbg_addCellOverlay(CellOverlay(destX, destY, WHITE));
+  game->dbg_addDebugPath(new DebugPath(shortestWay, VIOLET));
+#endif
+
+  //If tank is already at destination grid cell, don't move forward
+  /*const Grid& g = game->getColManager().getGrid();
+  const Vector2& pos = me->getPosition();
+  if (g.getCellX(pos) == destX && g.getCellY(pos) == destY) {
+    return adjustForFiring(outDir, game, me);
+  }*/
+
+  //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, me->getPosition().x, me->getPosition().y);
+  const Vector2 dir = (shortestWay->get(0) - me->getPosition()).getNormalized();
+  outDir->set(dir);
+  return true;
+}
+
+void SmartPolicy::planPath (Game* game, EnemyTank* me) {
+  PathFinder* pathFinder = game->getPathFinder();
+  delete shortestWay;
   if (mode == AGGRESSIVE) {
-    //Aggressive : move towards player an stop at the first visible cell (this will allow us to fire)
-    AStar* astar = game->getAStar();
+    //Aggressive : move towards player and stop at the first visible cell (this will allow us to fire)
     StopAtVisible cond(game);
-    p = astar->shortestWay(me->getPosition(), game->getPlayerTank()->getPosition(), me, &cond);
+    shortestWay = pathFinder->findPath(me->getPosition(), game->getPlayerTank()->getPosition(), me, &cond);
   } else {
     //Defensive : move to the center of the biggest shadowed part of the map
     if (TankAI::rocketNear(game, me, 2 * GRID_CELL_SIZE, NULL))
       me->cancelFiring();
 
     VisibilityGrid& vgrid = game->getPlayerVisibility();
+    int destX, destY;
     bool found = vgrid.findCenterBiggestHidden(me, destX, destY);
     if (found) {
-      //Find the path using AStar
-      AStar* astar = game->getAStar();
       const Grid& grid = game->getColManager().getGrid();
-      p = astar->shortestWay(me->getPosition(), grid.gridToWorld(destX, destY), me);
+      shortestWay = pathFinder->findPath(me->getPosition(), grid.gridToWorld(destX, destY), me);
+    } else {
+      shortestWay = NULL;
     }
   }
-
-  if (!p) {
-    return adjustForFiring(outDir, game, me);
-  }
-
-#ifdef DEBUG
-  game->dbg_addCellOverlay(CellOverlay(destX, destY, WHITE));
-  game->dbg_addDebugPath(new DebugPath(p, VIOLET));
-#endif
-
-  //If tank is already at destination grid cell, don't move forward
-  const Grid& g = game->getColManager().getGrid();
-  const Vector2& pos = me->getPosition();
-  if (g.getCellX(pos) == destX && g.getCellY(pos) == destY) {
-    return adjustForFiring(outDir, game, me);
-  }
-
-  //LOGE("p(0) (%f,%f), tank position (%f,%f)", p->get(0).x, p->get(0).y, me->getPosition().x, me->getPosition().y);
-  const Vector2 dir = (p->get(0) - me->getPosition()).getNormalized();
-  outDir->set(dir);
-  delete p;
-  return true;
 }
 
 bool SmartPolicy::adjustForFiring (Vector2* outDir, Game* game, EnemyTank* me) {

@@ -47,26 +47,30 @@ bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyT
     prevSec = now;
   }
 
-  AStar* astar = game->getAStar();
-  Path* shortestWay = astar->shortestWay(tank->getPosition(), path->get(current), tank);
-  if (!shortestWay) {
-    //cannot find a way, we're either on the waypoint or we cannot reach it => skip
-    //We might be on the same logical cell as dest, but not be quite at dest yet
-    if ((tank->getPosition() - path->get(current)).length() > 0.1) {
-      Vector2* nodes = new Vector2[1];
-      nodes[0] = path->get(current);
-      shortestWay = new Path(1, nodes);
-    } else {
-      //skip to next
-      current = (current+1)%path->length();
-      return false;
+  PathFinder* pathFinder = game->getPathFinder();
+  if (pathFinder->needsReplanning(tank)) {
+    delete shortestWay;
+    shortestWay = pathFinder->findPath(tank->getPosition(), path->get(current), tank);
+    if (!shortestWay) {
+      //cannot find a way, we're either on the waypoint or we cannot reach it => skip
+      //We might be on the same logical cell as dest, but not be quite at dest yet
+      if ((tank->getPosition() - path->get(current)).length() > 0.1) {
+        Vector2* nodes = new Vector2[1];
+        nodes[0] = path->get(current);
+        shortestWay = new Path(1, nodes);
+      } else {
+        //skip to next
+        current = (current+1)%path->length();
+      }
     }
   }
 
   //game->dbg_addDebugPath(new DebugPath(shortestWay, RED));
 
+  if (!shortestWay)
+    return false;
+
   Vector2 dir = shortestWay->get(0) - tank->getPosition();
   outDir->set(dir.getNormalized());
-  delete shortestWay;
   return true;
 }

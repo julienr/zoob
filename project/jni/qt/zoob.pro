@@ -68,6 +68,7 @@ LOCAL_SRC_FILES = \
     ai/movement/SmartPolicy.cpp \
     ai/TankAI.cpp \
     ai/algorithms/AStar.cpp \
+    ai/algorithms/PathFinder.cpp \
     logic/VisibilityGrid.cpp \
     input/AndroidInputManager.cpp \
     input/PlayerFormControl.cpp \

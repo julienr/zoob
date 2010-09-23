@@ -6,11 +6,12 @@
 #include "containers/vector.h"
 #include "MovementPolicy.h"
 #include "lib/Utils.h"
+#include "logic/Path.h"
 
 class PathPolicy : public MovementPolicy {
   public:
     PathPolicy ()
-      : current(0), prevSec(Utils::getCurrentTimeMillis()) {}
+      : current(0), prevSec(Utils::getCurrentTimeMillis()), shortestWay(NULL){}
 
     bool decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank);
 
@@ -24,6 +25,9 @@ class PathPolicy : public MovementPolicy {
      */
     uint64_t prevSec;
     Vector2 prevSecPos;
+
+    //The path we are currently following
+    Path* shortestWay;
 };
 
 #endif /* PATHPOLICY_H_ */

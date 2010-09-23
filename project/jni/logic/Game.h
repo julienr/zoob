@@ -13,7 +13,7 @@
 #include "containers/vector.h"
 #include "logic/ShadowPolygon.h"
 #include "logic/VisibilityGrid.h"
-#include "ai/algorithms/AStar.h"
+#include "ai/algorithms/PathFinder.h"
 #include "lib/Color.h"
 
 //Each boss level start with an intro. This is the duration of the intro
@@ -185,8 +185,8 @@ class Game {
       return introTimeLeft;
     }
 
-    AStar* getAStar () {
-      return &astarGrid;
+    PathFinder* getPathFinder () {
+      return &pathFinder;
     }
 
     //DEBUG only: returns a list of grid cells to be drawn in overlay
@@ -264,7 +264,7 @@ class Game {
     VisibilityGrid playerVisibility;
 
     //for AI
-    AStar astarGrid;
+    PathFinder pathFinder;
 
     double introTimeLeft;
     bool introDone;
