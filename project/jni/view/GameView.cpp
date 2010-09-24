@@ -109,7 +109,7 @@ void GameView::_drawShadows() const {
 }
 
 #define INTRO_LIGHT_TOGGLE_TIME 0.5f
-void GameView::_drawBossIntro () {
+void GameView::_drawBossIntro (double elapsedS) {
   levelView.drawBackground();
   const double timeLeft = Game::getInstance()->getIntroTimeLeft();
   if (lastLightToggle - timeLeft> INTRO_LIGHT_TOGGLE_TIME) {
@@ -119,7 +119,7 @@ void GameView::_drawBossIntro () {
 
   _drawLighting();
   levelView.drawWalls();
-  playerTankView.draw(Game::getInstance()->getLastFrameElapsed());
+  playerTankView.draw(elapsedS);
   wtf.draw(Game::getInstance()->getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
 
   GLW::colorWhite();
@@ -128,15 +128,15 @@ void GameView::_drawBossIntro () {
 
 }
 
-void GameView::draw() {
+void GameView::draw(double elapsedS) {
  if (Game::getInstance()->inIntro())
-   _drawBossIntro();
+   _drawBossIntro(elapsedS);
  else {
-   _drawGame();
+   _drawGame(elapsedS);
  }
 }
 
-void GameView::_drawGame () {
+void GameView::_drawGame (double elapsedS) {
   Game* game = Game::getInstance();
   //Create new explosions
   list<ExplosionLocation>& gameExpls = game->getExplosions();
@@ -174,7 +174,7 @@ void GameView::_drawGame () {
     NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
-  playerTankView.draw(game->getLastFrameElapsed());
+  playerTankView.draw(elapsedS);
   for (size_t i=0; i<enemiesView.length(); i++)
     enemiesView[i]->draw();
   //FIXME: colManager.debugDraw()
@@ -195,7 +195,7 @@ void GameView::_drawGame () {
   //Manage explosions life
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
     Explosion* e = *i;
-    e->think(game->getLastFrameElapsed());
+    e->think(elapsedS);
     if (e->getTimeLeft() <= 0) {
       delete *i;
       i = explosions.remove(i);

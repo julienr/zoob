@@ -24,7 +24,7 @@ class GameView {
     void drawLevelIndicator () const;
 
     //Draw main game area
-    void draw();
+    void draw(double elapsedS);
 
     //Debug draw
     void debugShadows();
@@ -33,8 +33,8 @@ class GameView {
     void debugVisibility();
     void debugOverlays ();
   private:
-    void _drawGame ();
-    void _drawBossIntro();
+    void _drawGame (double elapsedS);
+    void _drawBossIntro(double elapsedS);
     //Draw a lighting gradient around the player tank
     void _drawLighting() const;
     //Draw the shadows projected by the walls

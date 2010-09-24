@@ -472,7 +472,7 @@ void nativeRender () {
     glPushMatrix();
     GLW::translate(transX, transY, 0);
 
-    gameView->draw();
+    gameView->draw(elapsedS);
     if (debugFlags & DEBUG_COLLISIONS)
       gameView->debugCollisions();
     if (debugFlags & DEBUG_SHADOWS)

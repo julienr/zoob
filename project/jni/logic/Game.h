@@ -140,10 +140,6 @@ class Game {
       return explosions;
     }
 
-    double getLastFrameElapsed () const {
-      return elapsedS;
-    }
-
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
     void update(const double elapsedS);
