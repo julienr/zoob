@@ -34,6 +34,10 @@ struct Utils {
     return tv.tv_sec*1000 + tv.tv_usec/1000;
   }
 
+  static double getCurrentTimeSeconds () {
+    return getCurrentTimeMillis()/1000.0;
+  }
+
   //rand in [0,1]
   static float frand () {
     return rand()/(float)RAND_MAX;

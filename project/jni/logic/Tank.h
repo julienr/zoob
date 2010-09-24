@@ -28,12 +28,15 @@ enum eTankType {
     BOSS_SPLIT
 };
 
+
+#define TANK_MOVE_SPEED 1.5f
+
 class CollisionManager;
 
 class Tank: public Entity {
   public:
     //radius is the radius of the tank
-    Tank (float radius, FireRatePolicy* pol)
+    Tank (float radius, FireRatePolicy* pol, float speed=TANK_MOVE_SPEED)
       : Entity(new BCircle(radius)),
         maxLives(1),
         numLives(1),
@@ -45,7 +48,8 @@ class Tank: public Entity {
         bombPolicy(new IntervalFirePolicy(1000)), //FIXME: should this be client-configurable ?
         path(NULL),
         numMines(0),
-        forceDirTimer(0.3){
+        forceDirTimer(0.3),
+        speed(speed) {
       ASSERT(pol != NULL);
     }
 
@@ -86,6 +90,10 @@ class Tank: public Entity {
       path = p;
     }
 
+    virtual bool acceptsTouch (Entity* other) {
+      return other->getType() == ENTITY_ROCKET; 
+    }
+
     //returns NULL if none
     Path* getPath () {
       return path;
@@ -114,6 +122,8 @@ class Tank: public Entity {
 
     unsigned getLivesLeft () const { return numLives; }
     unsigned getMaxLives () const { return maxLives; }
+
+    float getSpeed () const { return speed; }
 
   protected:
     virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) = 0;
@@ -151,6 +161,8 @@ class Tank: public Entity {
     //This is a timer just used to force the direction in which the tank is viewing after it has fired (to have a visual feedback
     //of the direction in which the tank just fired)
     Timer forceDirTimer;
+
+    const float speed; //movement speed
 };
 
 #endif /* TANK_H_ */

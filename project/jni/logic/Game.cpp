@@ -362,7 +362,7 @@ void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
   dir.normalize();
   t->setRotationFromDir(dir);
 
-  const Vector2 move = dir*TANK_MOVE_SPEED*elapsedS;
+  const Vector2 move = dir*t->getSpeed()*elapsedS;
   slideMove(t, move);
 }
 
@@ -374,9 +374,10 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
       (t2 == ENTITY_TANK || t2 == ENTITY_WALL))
     return;*/
 
-  //rocket-wall
   if (!e1->acceptsTouch(e2) || !e2->acceptsTouch(e1))
     return;
+
+  //rocket-wall
   /*if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
       (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
     return;*/

@@ -56,6 +56,7 @@ class Moveable : public Viewable {
     Vector2 position;
     float rotation; //relative to center
 
+
     //This is used in collision handling. In case this moveable is found to be stuck, its last safe position will be restored
     //this last safe position should NEVER be used for something outside of collision handling
     Vector2 lastSafePosition;
