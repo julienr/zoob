@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: it's possible to pass through walls
+desc: ""
+type: :bugfix
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :closed
+disposition: :fixed
+creation_time: 2010-05-02 13:24:10.916392 Z
+references: []
+
+id: af0ed0f0d2337de6d78effc489ecf14b26a68c01
+log_events: 
+- - 2010-05-02 13:24:11.116271 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
+- - 2010-05-02 15:14:16.161343 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
+  - ""

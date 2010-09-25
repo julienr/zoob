@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: enemies that start moving when getting hit
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :closed
+disposition: :wontfix
+creation_time: 2010-05-02 13:22:02.132390 Z
+references: []
+
+id: 26b2d796f6d61848493503767f9fa0ed33c40b27
+log_events: 
+- - 2010-05-02 13:22:02.352287 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
+- - 2010-05-20 11:35:55.529185 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition wontfix
+  - ""

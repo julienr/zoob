@@ -1,0 +1,26 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: multiple life enemies
+desc: ""
+type: :feature
+component: zoob
+release: android market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :closed
+disposition: :fixed
+creation_time: 2010-05-02 13:21:41.516386 Z
+references: []
+
+id: c26b019f1a4a8501f9d1a8537a41c6c5e453440c
+log_events: 
+- - 2010-05-02 13:21:42.796265 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
+- - 2010-05-07 13:37:45.489030 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition wontfix
+  - ""
+- - 2010-05-07 13:37:49.978262 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
+  - ""
