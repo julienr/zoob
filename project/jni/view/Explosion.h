@@ -5,23 +5,15 @@
 #include "lib/Vector2.h"
 #include "Sprite.h"
 #include "logic/Game.h"
+#include "Animation.h"
 
 //Explosion life in seconds
-#define EXPLOSION_LIFE 0.5f
+#define EXPLOSION_LIFE 0.8f
 
 class Explosion {
   public:
-    Explosion (const ExplosionLocation& loc) :
-      timeLeft(EXPLOSION_LIFE),
-      boomSprite("assets/sprites/boom.png", TEX_GROUP_GAME),
-      poofSprite("assets/sprites/rocket.png", TEX_GROUP_GAME),
-      location(loc) {}
-
-    void draw ();
-
-    void think (float elapsed) {
-      timeLeft -= elapsed;
-    }
+    Explosion (const ExplosionLocation& loc);
+    void draw (float elapsed);
 
     float getTimeLeft () {
       return timeLeft;
@@ -31,6 +23,7 @@ class Explosion {
     float timeLeft;
     Sprite boomSprite;
     Sprite poofSprite;
+    Animation fireExpl;
     const ExplosionLocation location;
 };
 

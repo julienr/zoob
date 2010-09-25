@@ -34,6 +34,10 @@ struct GLW {
 #endif
     }
 
+    static void scale (const Vector2& v) {
+      scale(v.x,v.y,1);
+    }
+
     static void ortho (float left, float right, float bottom, float top, float near, float far) {
 #ifdef PLATFORM_SDL
       glOrtho(left, right, bottom, top, near, far);

@@ -41,12 +41,13 @@ LOCAL_SRC_FILES = \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \
     levels/LevelsData.cpp \
-    levels/levelgen.cpp \
     view/textures/TextureManager.cpp \
     view/textures/TextureGroup.cpp \
     view/textures/Texture.cpp \
     view/Sprite.cpp \
-    view/Square.cpp \
+    view/Animation.cpp \
+    view/primitives/Square.cpp \
+    view/primitives/Circle.cpp \
     view/LevelView.cpp \
     view/GameView.cpp \
     view/Explosion.cpp \

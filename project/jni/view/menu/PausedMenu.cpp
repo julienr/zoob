@@ -1,7 +1,7 @@
 #include "PausedMenu.h"
 #include "view/GameManager.h"
 #include "view/GLW.h"
-#include "view/Square.h"
+#include "view/primitives/Square.h"
 
 PausedMenu::PausedMenu (GameManager* gm)
   : Menu (gm),

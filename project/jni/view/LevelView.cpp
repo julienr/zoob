@@ -1,6 +1,6 @@
 #include "LevelView.h"
 #include "GLW.h"
-#include "Square.h"
+#include "view/primitives/Square.h"
 #include "GameManager.h"
 
 void LevelView::drawBackground() {

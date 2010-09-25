@@ -28,13 +28,14 @@ LOCAL_SRC_FILES := \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \
     levels/LevelsData.cpp \
-    levels/levelgen.cpp \
     view/textures/TextureManager.cpp \
     view/textures/TextureGroup.cpp \
     view/textures/Texture.cpp \
     view/Sprite.cpp \
-    view/Square.cpp \
+    view/primitives/Square.cpp \
+    view/primitives/Circle.cpp \
     view/LevelView.cpp \
+    view/Animation.cpp \
     view/GameView.cpp \
     view/Explosion.cpp \
     view/GameManager.cpp \
@@ -55,6 +56,7 @@ LOCAL_SRC_FILES := \
     ai/movement/SmartPolicy.cpp \
     ai/TankAI.cpp \
     ai/algorithms/AStar.cpp \
+    ai/algorithms/PathFinder.cpp \
     logic/VisibilityGrid.cpp \
     input/AndroidInputManager.cpp \
     input/PlayerFormControl.cpp \

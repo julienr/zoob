@@ -99,7 +99,7 @@ void AndroidInputManager::setUseGamepad(bool use) {
   shieldButton.setBB(shieldButton.getPosition(), buttonSize);
 }
 
-#include "view/Square.h"
+#include "view/primitives/Square.h"
 
 void AndroidInputManager::draw () {
   const uint64_t now = Utils::getCurrentTimeMillis();

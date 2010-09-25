@@ -1,6 +1,6 @@
 #include "MenuItem.h"
 #include "view/GLW.h"
-#include "view/Square.h"
+#include "view/primitives/Square.h"
 
 //draw bounding box around objects
 void MenuItem::drawBB (const Vector2& pos, const Vector2& size) {

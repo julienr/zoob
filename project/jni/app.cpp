@@ -13,7 +13,7 @@
 #include "input/AndroidInputManager.h"
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
-#include "view/Square.h"
+#include "view/primitives/Square.h"
 
 zip* APKArchive;
 
@@ -453,7 +453,9 @@ void nativeRender () {
       while (accumulator >= dt) { //empty accumulator as much as possible
         Game::getInstance()->update(dt);
         accumulator -= dt;
+#ifdef ZOOB_DBG_FPS
         numPhysicFrames++;
+#endif
       }
     } else {
       accumulator = 0;

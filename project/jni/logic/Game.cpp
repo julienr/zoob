@@ -90,7 +90,9 @@ void Game::update (const double elapsedS) {
   if (gameState == GAME_PAUSED)
     return;
 
+#ifdef DEBUG
   dbg_clear(); //clear debug information
+#endif
 
   if (!introDone) {
     introTimeLeft -= elapsedS;

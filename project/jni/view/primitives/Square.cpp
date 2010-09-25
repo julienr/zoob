@@ -1,6 +1,6 @@
 #include "Square.h"
 
-MGL_DATATYPE verts[12] = {
+static MGL_DATATYPE verts[12] = {
     fX(-0.5), fX(-0.5), 0,
     fX(0.5), fX(-0.5), 0,
     fX(-0.5), fX(0.5), 0,
@@ -11,14 +11,14 @@ MGL_DATATYPE verts[12] = {
     fX(1.0),fX(1.0),0*/
 };
 
-MGL_DATATYPE texCoords[8] = {
+static MGL_DATATYPE texCoords[8] = {
     0, fX(1),
     fX(1), fX(1),
     0,0,
     fX(1),0
 };
 
-uint8_t lineIndices[4] = {
+static uint8_t lineIndices[4] = {
     0,1,3,2
 };
 

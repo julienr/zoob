@@ -1,6 +1,6 @@
 #include "GameView.h"
 #include "view/GLW.h"
-#include "view/Square.h"
+#include "view/primitives/Square.h"
 #include "logic/physics/Grid.h"
 #include "EnemyTankView.h"
 #include <logic/Bomb.h>
@@ -195,12 +195,11 @@ void GameView::_drawGame (double elapsedS) {
   //Manage explosions life
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
     Explosion* e = *i;
-    e->think(elapsedS);
     if (e->getTimeLeft() <= 0) {
       delete *i;
       i = explosions.remove(i);
     } else {
-      e->draw();
+      e->draw(elapsedS);
       i++;
     }
   }

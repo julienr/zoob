@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include "view/GLW.h"
-#include "Square.h"
+#include "view/primitives/Square.h"
 
 void Sprite::draw (const Viewable& viewable, float rotation, float scale) const {
   bind();
