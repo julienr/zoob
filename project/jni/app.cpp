@@ -14,6 +14,7 @@
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
 #include "view/primitives/Square.h"
+#include "view/primitives/Circle.h"
 
 zip* APKArchive;
 
@@ -181,6 +182,9 @@ void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
     gm->setStateCallback(STATE_PAUSED, toPauseState);
 
     InputManager::registerInstance(createInputManager(useGamepad, useTrackball));
+
+    Square::create();
+    Circle::create();
 
     /*printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);

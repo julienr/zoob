@@ -1,6 +1,7 @@
 #include "GameView.h"
 #include "view/GLW.h"
 #include "view/primitives/Square.h"
+#include "view/primitives/Circle.h"
 #include "logic/physics/Grid.h"
 #include "EnemyTankView.h"
 #include <logic/Bomb.h>
@@ -61,35 +62,14 @@ void GameView::_drawLighting() const {
                              Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
 
    //Lighting
-   const int numSubdiv = 20;
-   const int numVerts = numSubdiv + 2;
-   const float angleIncr = 2.0f * M_PI / (float) numSubdiv;
-   //FIXME: this is somehow ugly, but this is to cover the whole level
-   const float radius = 15.0f;
-   //FIXME: make the lighting circle static (like Square) and simply move it around to foolow player's tank
-   MGL_DATATYPE lightingVerts[3 * numVerts];
-   MGL_DATATYPE lightingCoords[2 * numVerts];
    const Vector2& center = Game::getInstance()->getPlayerTank()->getPosition();
-   lightingVerts[0] = fX(center.x);
-   lightingVerts[1] = fX(center.y);
-   lightingVerts[2] = 0;
-   lightingCoords[0] = lightingCoords[1] = 0;
-   float angle = 0;
-   for (int i = 1; i < numVerts; i++, angle += angleIncr) {
-     const Vector2 pos = center + Vector2(radius * cosf(angle), radius * sinf(
-         angle));
-     lightingVerts[3 * i] = fX(pos.x);
-     lightingVerts[3 * i + 1] = fX(pos.y);
-     lightingVerts[3 * i + 2] = 0;
-
-     lightingCoords[2 * i] = fX(1);
-     lightingCoords[2 * i + 1] = 0;
-   }
-
    light.bind();
-   glVertexPointer(3, MGL_TYPE, 0, lightingVerts);
-   glTexCoordPointer(2, MGL_TYPE, 0, lightingCoords);
-   glDrawArrays(GL_TRIANGLE_FAN, 0, numVerts);
+   glPushMatrix();
+   GLW::translate(center);
+   GLW::scale(15,15,1);
+   Circle::draw(true);
+   glPopMatrix();
+
    glDisable(GL_SCISSOR_TEST);
 }
 

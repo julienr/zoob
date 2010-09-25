@@ -2,11 +2,15 @@
 #include "lib/Math.h"
 
 static size_t nverts;
-static MGL_DATATYPE* verts;
-static MGL_DATATYPE* texcoords;
+static MGL_DATATYPE* verts = NULL;
+static MGL_DATATYPE* texcoords = NULL;
 
 void Circle::create (unsigned numSubdiv) {
   //FIXME: Create VBOs
+  if (verts != NULL) {
+    delete [] verts;
+    delete [] texcoords;
+  }
   nverts = numSubdiv+2;
   verts = new MGL_DATATYPE[nverts*3];
   texcoords = new MGL_DATATYPE[nverts*2];
