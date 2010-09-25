@@ -179,6 +179,8 @@ bool collideAgainstCell (GridCell* cell,
                          int entityMask=0) {
   CollisionResult r;
 
+  bool collided = false;
+
   //Check collision against cell entities list
   for (list<Entity*>::iterator iter = cell->entities.begin(); iter.hasNext(); iter++) {
     Entity* otherEnt = *iter;
@@ -196,11 +198,10 @@ bool collideAgainstCell (GridCell* cell,
       (*result) = r;
       result->collidedEntity = otherEnt;
       result->colPoint = startPos+move*r.tFirst;
-      //FIXME: we shouldn't return here, we might still collide
-      return true;
+      collided = true;
     }
   }
-  return false;
+  return collided;
 }
 
 bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* result, int entityMask) const {
@@ -350,7 +351,6 @@ bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& 
 
 #undef DEBUG_TRACE
 #ifdef DEBUG_TRACE_CIRCLE
-//FIXME: just for debug
 vector<Vector2> debugPoints(2);
 vector<Vector2> debugMoves(2);
 #endif
