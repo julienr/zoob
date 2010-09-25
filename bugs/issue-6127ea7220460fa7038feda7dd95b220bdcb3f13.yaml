@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: bosses can get stuck into walls
+desc: ""
+type: :bugfix
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-09-25 14:48:17.916874 Z
+references: []
+
+id: 6127ea7220460fa7038feda7dd95b220bdcb3f13
+log_events: 
+- - 2010-09-25 14:48:18.392748 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

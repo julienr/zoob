@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: when gaining rewards, have to restart the game for the reward to become active
+desc: ""
+type: :bugfix
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-09-25 14:48:00.681355 Z
+references: []
+
+id: f376e2c0b32c47fa7728ed9a7b3e85977fa36702
+log_events: 
+- - 2010-09-25 14:48:01.108742 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

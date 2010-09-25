@@ -24,8 +24,8 @@ void Circle::create (unsigned numSubdiv) {
   //texcoords[0] = texcoords[1] = 0.5f;
   float angle = 0;
   for (size_t i=1; i<nverts; i++, angle+=angleIncr) {
-    verts[3 * i] = fX(cosf(angle));
-    verts[3 * i + 1] = fX(sinf(angle));
+    verts[3 * i] = fX(0.5f*cosf(angle));
+    verts[3 * i + 1] = fX(0.5f*sinf(angle));
     verts[3 * i + 2] = 0;
 
     texcoords[2 * i] = fX(1);

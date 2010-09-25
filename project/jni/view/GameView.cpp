@@ -56,21 +56,13 @@ void GameView::drawLevelIndicator () const {
 }
 
 void GameView::_drawLighting() const {
-  //Use scissor so shadows are clipped to the level area
-   glEnable(GL_SCISSOR_TEST);
-   glScissor(XGS(0), YGS(0), Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
-                             Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
-
-   //Lighting
    const Vector2& center = Game::getInstance()->getPlayerTank()->getPosition();
    light.bind();
    glPushMatrix();
    GLW::translate(center);
-   GLW::scale(15,15,1);
+   GLW::scale(25,25,1);
    Circle::draw(true);
    glPopMatrix();
-
-   glDisable(GL_SCISSOR_TEST);
 }
 
 void GameView::_drawShadows() const {
@@ -111,7 +103,7 @@ void GameView::_drawBossIntro (double elapsedS) {
 void GameView::draw(double elapsedS) {
  if (Game::getInstance()->inIntro())
    _drawBossIntro(elapsedS);
- else {
+ else { 
    _drawGame(elapsedS);
  }
 }
@@ -127,7 +119,28 @@ void GameView::_drawGame (double elapsedS) {
 
   levelView.drawBackground();
 
+  //Enable scissor for lighting rendering
+  glEnable(GL_SCISSOR_TEST);
+  glScissor(XGS(0), YGS(0), 
+            Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
+            Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
+
   _drawLighting();
+
+  //Manage explosions life and draw explosions lighting
+  for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
+    Explosion* e = *i;
+    e->think(elapsedS);
+    if (e->getTimeLeft() <= 0) {
+      delete *i;
+      i = explosions.remove(i);
+    } else {
+      e->drawLighting();
+      i++;
+    }
+  }
+
+  glDisable(GL_SCISSOR_TEST);
 
   levelView.drawWalls();
 
@@ -172,16 +185,10 @@ void GameView::_drawGame (double elapsedS) {
   if (game->getLevel()->hasShadows())
     _drawShadows();
 
-  //Manage explosions life
-  for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();) {
+  //Draw explosions
+  for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext();i++) {
     Explosion* e = *i;
-    if (e->getTimeLeft() <= 0) {
-      delete *i;
-      i = explosions.remove(i);
-    } else {
-      e->draw(elapsedS);
-      i++;
-    }
+    e->draw();
   }
 }
 

@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: use GL_TRIANGLE_STRIP instead of GL_TRIANGLE_FAN since STRIP is what the hardware usually support directly,while fan requires some transforms
+desc: ""
+type: :bugfix
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-09-24 16:28:18.423283 Z
+references: []
+
+id: 6eaa5db1312999edae8fd8776f106a5da73e71af
+log_events: 
+- - 2010-09-24 16:28:20.110721 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

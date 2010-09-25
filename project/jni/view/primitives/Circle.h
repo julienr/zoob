@@ -3,6 +3,7 @@
 
 #include "def.h"
 
+//A circle with a radius of 0.5 (unit size diameter)
 class Circle {
   public:
     static void create (unsigned numSubdiv=20);

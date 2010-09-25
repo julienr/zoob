@@ -7,22 +7,29 @@
 #include "logic/Game.h"
 #include "Animation.h"
 
-//Explosion life in seconds
-#define EXPLOSION_LIFE 0.8f
-
 class Explosion {
   public:
     Explosion (const ExplosionLocation& loc);
-    void draw (float elapsed);
+
+    void drawLighting ();
+    void draw ();
+
+    //think should be called BEFORE any draw functions
+    void think (float elapsed) {
+      timeLeft -= elapsed;
+      this->elapsed = elapsed;
+    }
 
     float getTimeLeft () {
       return timeLeft;
     }
 
   private:
+    float elapsed;
     float timeLeft;
     Sprite boomSprite;
     Sprite poofSprite;
+    Sprite explLight;
     Animation fireExpl;
     const ExplosionLocation location;
 };
