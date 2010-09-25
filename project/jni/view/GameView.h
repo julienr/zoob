@@ -11,6 +11,9 @@
 
 class GameView {
   public:
+    static void drawAABBox (const AABBox* box, const Vector2& position);
+    static void drawBCircle (const BCircle* circle, const Vector2& position);
+  public:
     GameView ();
     ~GameView ();
 

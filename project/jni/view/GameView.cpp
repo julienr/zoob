@@ -60,7 +60,7 @@ void GameView::_drawLighting() const {
    light.bind();
    glPushMatrix();
    GLW::translate(center);
-   GLW::scale(25,25,1);
+   GLW::scale(30,30,1);
    Circle::draw(true);
    glPopMatrix();
 }
@@ -192,6 +192,40 @@ void GameView::_drawGame (double elapsedS) {
   }
 }
 
+void GameView::drawAABBox (const AABBox* box, const Vector2& position) {
+  MGL_DATATYPE verts[12];
+  Vector2 corners[4];
+  box->getCorners(position, corners);
+  for (int i=0; i<4; i++) {
+    verts[3*i] = fX(corners[i].x);
+    verts[3*i+1] = fX(corners[i].y);
+    verts[3*i+2] = 0;
+    //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
+  }
+  glPushMatrix();
+  glVertexPointer(3, MGL_TYPE, 0, verts);
+  glDrawArrays(GL_LINE_LOOP, 0, 4);
+  glPopMatrix();
+}
+
+void GameView::drawBCircle (const BCircle* circle, const Vector2& position) {
+  const unsigned numVerts = 10;
+  MGL_DATATYPE verts[numVerts*3];
+
+  for (unsigned i=0; i<numVerts; i++) {
+    const float angle = i*2*M_PI/(float)numVerts;
+    const Vector2 v(circle->getRadius()*cosf(angle), circle->getRadius()*sinf(angle));
+    verts[3*i] = fX(v.x);
+    verts[3*i+1] = fX(v.y);
+    verts[3*i+2] = 0;
+  }
+  glPushMatrix();
+  GLW::translate(position.x, position.y, 0);
+  glVertexPointer(3, MGL_TYPE, 0, verts);
+  glDrawArrays(GL_LINE_LOOP, 0, numVerts);
+  glPopMatrix();
+}
+
 void drawColEntity (Entity* e) {
   if (e->collided)
     glColor4f(1,0,0,1);
@@ -200,37 +234,11 @@ void drawColEntity (Entity* e) {
 
   if (e->getBVolume()->getType() == TYPE_AABBOX) {
     const AABBox* box = static_cast<const AABBox*>(e->getBVolume());
-    MGL_DATATYPE verts[12];
-    Vector2 corners[4];
-    box->getCorners(e->getPosition(), corners);
-    for (int i=0; i<4; i++) {
-      verts[3*i] = fX(corners[i].x);
-      verts[3*i+1] = fX(corners[i].y);
-      verts[3*i+2] = 0;
-      //LOGE("corners[%i] : (%f,%f)", i, corners[i].x, corners[i].y);
-    }
-    glPushMatrix();
-    glVertexPointer(3, MGL_TYPE, 0, verts);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
-    glPopMatrix();
+    GameView::drawAABBox(box, e->getPosition());
   } else { //BCircle
     const BCircle* circle = static_cast<const BCircle*>(e->getBVolume());
-    const unsigned numVerts = 10;
-    MGL_DATATYPE verts[numVerts*3];
-
-    for (unsigned i=0; i<numVerts; i++) {
-      const float angle = i*2*M_PI/(float)numVerts;
-      const Vector2 v(circle->getRadius()*cosf(angle), circle->getRadius()*sinf(angle));
-      verts[3*i] = fX(v.x);
-      verts[3*i+1] = fX(v.y);
-      verts[3*i+2] = 0;
-    }
-    glPushMatrix();
-    GLW::translate(e->getPosition().x, e->getPosition().y, 0);
-    glVertexPointer(3, MGL_TYPE, 0, verts);
-    glDrawArrays(GL_LINE_LOOP, 0, numVerts);
-    glPopMatrix();
-  }
+    GameView::drawBCircle(circle, e->getPosition());
+   }
   glColor4f(1,1,1,1);
 }
 

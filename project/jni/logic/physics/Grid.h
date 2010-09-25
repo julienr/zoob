@@ -20,33 +20,14 @@ struct GridCell {
   list<Entity*> entities;
 };
 
+class WallEntity;
+
 class Grid {
   public:
     //We have to subdivise the area [width, height] in cells of size cellSize
     //Origin is the origin of the coordinate systems wolrd objects to be placed in the grid are in
-    Grid (const Vector2& origin, unsigned w, unsigned h, float cellSize) :
-      origin(origin), width(w/cellSize), height(h/cellSize), cellSize(cellSize) {
-      grid = new GridCell**[width];
-      for (unsigned x=0; x<width; x++) {
-        grid[x] = new GridCell*[height];
-        for (unsigned y=0; y<height; y++) {
-          grid[x][y] = new GridCell(x,y);
-        }
-      }
-      tmpTouched = new vector<GridCell*>(20);
-      _touchedCells = new bool[width*height];
-    }
-
-    ~Grid () {
-      for (unsigned x=0; x<width; x++) {
-        for (unsigned y=0; y<height; y++)
-          delete grid[x][y];
-          delete [] grid[x];
-      }
-      delete [] _touchedCells;
-      delete [] grid;
-      delete tmpTouched;
-    }
+    Grid (const Vector2& origin, unsigned w, unsigned h, float cellSize);
+    ~Grid ();
 
     void addEntity (Entity* e);
 
@@ -180,6 +161,18 @@ class Grid {
     const unsigned height;
     const float cellSize;
 
+    //Outer invisible border (surrounding the grid, o is the grid origin)
+    //  |-------------|
+    //  |    b0       |
+    //  |-o---------|-|
+    //  |b|  grid   |b|
+    //  |3|         |1|
+    //  |-|---------|-|
+    //  |  b2         |
+    //  |-------------|
+    //
+    WallEntity* borders[4]; 
+
     GridCell* getCell (const Vector2& p) const {
       int x = getCellX(p);
       int y = getCellY(p);
@@ -187,6 +180,8 @@ class Grid {
         return NULL;
       return grid[x][y];
     }
+
+    bool collideBorders (const Vector2& startPos, const BoundingVolume* mover, const Vector2& move, CollisionResult* result) const;
 
     //Adds the cells touched by circle at position to touchedCells, using count as counter
     void touchCells (const BCircle* circle, const Vector2& position) const;

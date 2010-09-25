@@ -25,7 +25,8 @@ class AABBox: public BoundingVolume {
       return height;
     }
   private:
-    float width, height;
+    const float width;
+    const float height;
 };
 
 #endif /* BOUDINGBOX_H_ */

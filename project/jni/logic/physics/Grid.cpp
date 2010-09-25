@@ -3,6 +3,43 @@
 #include "CollisionManager.h"
 #include "BLine.h"
 #include "lib/Utils.h"
+#include "logic/Level.h"
+
+//We have to subdivise the area [width, height] in cells of size cellSize
+//Origin is the origin of the coordinate systems wolrd objects to be placed in the grid are in
+Grid::Grid (const Vector2& origin, unsigned w, unsigned h, float cellSize) 
+  : origin(origin), width(w/cellSize), height(h/cellSize), cellSize(cellSize) {
+  grid = new GridCell**[width];
+  for (unsigned x=0; x<width; x++) {
+    grid[x] = new GridCell*[height];
+    for (unsigned y=0; y<height; y++) {
+      grid[x][y] = new GridCell(x,y);
+    }
+  }
+  tmpTouched = new vector<GridCell*>(20);
+  _touchedCells = new bool[width*height];
+
+  borders[0] = new WallEntity(w, 1, Vector2(origin.x+w/2.0f, origin.y-cellSize));
+  borders[1] = new WallEntity(1, h, Vector2(origin.x+w+cellSize, origin.y+h/2.0f));
+  borders[2] = new WallEntity(w, 1, Vector2(origin.x+w/2.0f, origin.y+h+cellSize));
+  borders[3] = new WallEntity(1, h, Vector2(origin.x-cellSize, origin.y+h/2.0f));
+}
+
+Grid::~Grid () {
+  for (unsigned x=0; x<width; x++) {
+    for (unsigned y=0; y<height; y++)
+      delete grid[x][y];
+    delete [] grid[x];
+  }
+  delete [] _touchedCells;
+  delete [] grid;
+  delete tmpTouched;
+
+  for (int i=0; i<4; i++)
+    delete borders[i];
+}
+
+
 
 void Grid::dbg_clearTouched () {
   for (unsigned x=0; x<width; x++) {
@@ -115,15 +152,31 @@ void Grid::findTouchedCells (const Vector2& start, const Vector2& move) const {
     _addTouched(grid[endX][endY]);
 }
 
+bool Grid::collideBorders (const Vector2& startPos, const BoundingVolume* mover, const Vector2& move, CollisionResult* result) const {
+  bool collided = false;
+  for (int i=0; i<4; i++) {
+    CollisionResult r;
+    bool col = CollisionManager::MovingAgainstStill(borders[i]->getPosition(), borders[i]->getBVolume(), startPos, mover, move, &r);
+    if (col && (r.tFirst < result->tFirst)) {
+      (*result) = r;
+      result->collidedEntity = borders[i];
+      result->colPoint = startPos+move*r.tFirst;
+      collided = true;
+    }
+  }
+  return collided;
+}
+
+
 //entityMask determine which entities WON'T be collided against
 //(0~ENTITY_ROCKET) won't collide against rocket for example
 bool collideAgainstCell (GridCell* cell,
-                            const Entity* sourceEntity,
-                            const Vector2& startPos,
-                            const BoundingVolume* mover,
-                            const Vector2& move,
-                            CollisionResult* result,
-                            int entityMask=0) {
+                         const Entity* sourceEntity,
+                         const Vector2& startPos,
+                         const BoundingVolume* mover,
+                         const Vector2& move,
+                         CollisionResult* result,
+                         int entityMask=0) {
   CollisionResult r;
 
   //Check collision against cell entities list
@@ -143,6 +196,7 @@ bool collideAgainstCell (GridCell* cell,
       (*result) = r;
       result->collidedEntity = otherEnt;
       result->colPoint = startPos+move*r.tFirst;
+      //FIXME: we shouldn't return here, we might still collide
       return true;
     }
   }
@@ -153,7 +207,7 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
   ASSERT(mover->getBVolume()->getType() == TYPE_CIRCLE);
   const BCircle* circle = static_cast<const BCircle*>(mover->getBVolume());
 
-  // To calculate cells covered by movement, we decompose the move in small moves whos length
+  // To calculate cells covered by movement, we decompose the move in small moves whose length
   // don't exceed cellSize. We just merge the set of cells touched by each of these small moves
   _clearTouched();
   // Start position
@@ -187,6 +241,7 @@ bool Grid::push(const Entity* mover, const Vector2& move, CollisionResult* resul
                                    result,
                                    entityMask);
   }
+  collided |= collideBorders(mover->getPosition(), mover->getBVolume(), move, result);
   return collided;
 }
 
@@ -289,6 +344,7 @@ bool Grid::traceRay (const Entity* source, const Vector2& start, const Vector2& 
                                    result,
                                    entityMask);
   }
+  collided |= collideBorders (start, source->getBVolume(), move, result);
   return collided;
 }
 
@@ -332,8 +388,11 @@ bool Grid::traceCircle (Entity* source, const Vector2& start, const Vector2& mov
     collided |= collideAgainstCell(tmpTouched->get(j), source, start, &circle,
                                    move, result, entityMask);
   }
+  collided |= collideBorders(start, source->getBVolume(), move, result);
   return collided;
 }
+
+#include "view/GameView.h"
 
 void Grid::debugDraw () const {
 #ifdef DEBUG_TRACE_CIRCLE
@@ -355,4 +414,7 @@ void Grid::debugDraw () const {
   debugMoves.clear();
   debugPoints.clear();
 #endif
+  GLW::colorWhite();
+  for (int i=0; i<4; i++)
+    GameView::drawAABBox(static_cast<const AABBox*>(borders[i]->getBVolume()), borders[i]->getPosition());
 }
