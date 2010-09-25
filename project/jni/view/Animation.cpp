@@ -42,22 +42,36 @@ void Animation::draw (const Vector2& position, const Vector2& size, float elapse
 
   texture->bind();
 
-  glMatrixMode(GL_TEXTURE);
+  //Looks like some android devices don't really support the texture matrix.
+  //Therefore, we have to change the texcoords 
+  
+  const float u = currentFrame%atlasSize;
+  const float v = (atlasSize-1)-currentFrame/atlasSize;
+  MGL_DATATYPE texCoords[8] = {
+    fX(texScale*u), fX(texScale*(v+1)),
+    fX(texScale*(u+1)), fX(texScale*(v+1)),
+    fX(texScale*u), fX(texScale*v),
+    fX(texScale*(u+1)),fX(texScale*v)
+  };
+
+/*  glMatrixMode(GL_TEXTURE);
   glPushMatrix();
   glScalef(texScale, texScale, 1);
   const float u = currentFrame%atlasSize;
   const float v = (atlasSize-1)-currentFrame/atlasSize;
   glTranslatef(u, v, 0);
 
-  glMatrixMode(GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);*/
   glPushMatrix();
   GLW::translate(position);
   GLW::scale(size);
-  Square::draw(true);
+
+  glTexCoordPointer(2, MGL_TYPE, 0, texCoords);
+  Square::draw(false);
   glPopMatrix();
 
-  glMatrixMode(GL_TEXTURE);
+/*  glMatrixMode(GL_TEXTURE);
   glPopMatrix();
 
-  glMatrixMode(GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);*/
 }
