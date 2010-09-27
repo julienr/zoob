@@ -42,9 +42,8 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, T
       //b is row-major, board is col-major
       const eTileType t = b[y*w+x];
       board[x][y] = new Tile(x, y, t);
-      //FIXME: sets ALL tiles to breakable, this is really just for testing
-      if (board[x][y]->getEntity())
-      /*if (breakable[y*w+x])*/
+      //checking for entity is just some sanity check
+      if (board[x][y]->getEntity() && breakable[y*w+x])
         board[x][y]->getEntity()->setBreakable(true);
     }
   }

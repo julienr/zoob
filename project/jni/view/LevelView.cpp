@@ -16,11 +16,20 @@ void LevelView::drawBackground() {
 }
 
 void LevelView::drawWalls () {
+  //We use a white texture for the walls so we can color them.
+  //By default, walls are black
+  GLW::color(BLACK);
   for (unsigned x=0; x<level->getWidth(); x++) {
     for (unsigned y=0; y<level->getHeight(); y++) {
-      Entity* tileEntity = level->getTile(x,y)->getEntity();
-      if (tileEntity != NULL)
+      WallEntity* tileEntity = level->getTile(x,y)->getEntity();
+      if (tileEntity != NULL) {
+        if (tileEntity->isBreakable())
+          GLW::color(DARK_GREY);
         wallSprite.draw(tileEntity->getPosition(), tileEntity->getSize());
+        if (tileEntity->isBreakable())
+          GLW::color(BLACK);
+      }
     }
   }
+  GLW::color(WHITE);
 }

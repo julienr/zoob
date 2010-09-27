@@ -9,8 +9,7 @@ class LevelView {
   public:
     LevelView (const Level* lvl)
       : level(lvl),
-        wallSprite("assets/sprites/crate.png", TEX_GROUP_GAME),
-        spawnSprite("assets/sprites/earth.png", TEX_GROUP_GAME){}
+        wallSprite("assets/sprites/wall.png", TEX_GROUP_GAME) {}
 
     void drawWalls ();
     void drawBackground ();
@@ -27,7 +26,6 @@ class LevelView {
   private:
     const Level* level;
     const Sprite wallSprite;
-    const Sprite spawnSprite;
 };
 
 #endif /* LEVELVIEW_H_ */

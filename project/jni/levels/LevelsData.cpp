@@ -150,6 +150,8 @@ Level* levelFromJSON (json_t* json) {
 
     //TILES
     eTileType* board = new eTileType[xdim*ydim];
+    bool* breakable = new bool[xdim*ydim];
+    memset(breakable, 0, sizeof(bool)*xdim*ydim);
 
     json_t* tiles_arr = obj_get(json, "tiles"); ERRCHK;
     CONDITION(tiles_arr && json_typeof(tiles_arr) == JSON_ARRAY, "tiles element not an array");
@@ -158,30 +160,24 @@ Level* levelFromJSON (json_t* json) {
       json_t* row = json_array_get(tiles_arr, y);
       CONDITION((int)json_array_size(row) == xdim, "tiles row size != xdim");
       for (int x=0; x<xdim; x++) {
+        const char* t;
         json_t* val = json_array_get(row, x);
-        CONDITION(json_typeof(val) == JSON_STRING, "tile element type not a string");
-        const char* t = json_string_value(val);
+        //Basic tiles have the type directly
+        //Advanced tiles might have options (like breakable or triggers)
+        if (json_typeof(val) == JSON_STRING) {
+          t = json_string_value(val);
+        } else if (json_typeof(val) == JSON_OBJECT) {
+          t = json_string_value(expect(obj_get(val, "type"), JSON_STRING)); ERRCHK;
+          const bool brk = opt_istrue(val, "brk"); //breakable
+          breakable[y*xdim+x] = brk;
+          if (brk)
+            LOGE("tile (%i,%i) is breakable", x, y);
+        }
         int ttype = str2tile(t);
         if (ttype == -1)
           goto error;
         board[y*xdim+x] = (eTileType)ttype;
-      }
-    }
 
-    //BREAKABLE tiles
-    bool* breakable = new bool[xdim*ydim];
-    memset(breakable, 0, sizeof(bool)*xdim*ydim);
-
-    json_t* breakable_arr = json_object_get(json, "breakable"); ERRCHK;
-    if (breakable_arr && json_typeof(breakable_arr) == JSON_ARRAY) {
-      CONDITION((int)json_array_size(breakable_arr) == ydim, "breakable array size != ydim");
-      for (int y=0; y<ydim; y++) {
-        json_t* row = json_array_get(breakable_arr, y);
-        CONDITION((int)json_array_size(row) == xdim, "breakable row size != xdim");
-        for (int x=0; x<xdim; x++) {
-          bool b = json_bool_value(json_array_get(row, x)); ERRCHK;
-          breakable[y*xdim+x] = b;
-        }
       }
     }
 
