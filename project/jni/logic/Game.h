@@ -214,6 +214,7 @@ class Game {
 #endif
 
   private:
+    void _handleTriggers ();
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
     int _updateEnemies (double elapsedS);

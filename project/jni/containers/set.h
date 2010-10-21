@@ -12,8 +12,6 @@ class set {
       UT_hash_handle hh;
     };
 
-    _Entry* entries;
-
   public:
     class iterator {
       public:
@@ -26,7 +24,7 @@ class set {
         }
 
         void operator ++ (int) { //postfix ++
-          current = current->hh.next;
+          current = (_Entry*)current->hh.next;
         }
 
         bool hasNext () const {
@@ -36,7 +34,29 @@ class set {
         _Entry* current;
     };
 
-    set () : entries(NULL) {} 
+    class const_iterator {
+      public:
+        friend class set;
+        const_iterator (_Entry* head)
+          : current(head) {}
+
+        const T& operator * () {
+          return current->key;
+        }
+
+        void operator ++ (int) { //postfix ++
+          current = (_Entry*)current->hh.next;
+        }
+
+        bool hasNext () const {
+          return (current != NULL);
+        }
+      private:
+        _Entry* current;
+    };
+
+
+    set () : entries(NULL), _size(0) {} 
 
     void insert (const T& what) {
       if (contains(what))
@@ -44,19 +64,39 @@ class set {
       _Entry* e = new _Entry();
       e->key = what;
       HASH_ADD_KEYPTR(hh, entries, &e->key, sizeof(T), e);
+      _size++;
     }
 
     bool contains (const T& what) {
-      _Entry e;
-      e.key = what;
       _Entry* p = NULL;
-      HASH_FIND(hh, entries, &e.key, sizeof(T), p);
+      HASH_FIND(hh, entries, &what, sizeof(T), p);
       return p != NULL;
     }
 
-    iterator iterate () {
+    void remove (const T& what) {
+      _Entry* p = NULL;
+      HASH_FIND(hh, entries, &what, sizeof(T), p);
+      if (p != NULL) {
+        HASH_DELETE(hh, entries, p);
+        _size--;
+      }
+    }
+
+    size_t size() const {
+      return _size;
+    }
+
+    iterator begin () {
       return iterator(entries);
     }
+
+    const_iterator begin () const {
+      return const_iterator(entries);
+    }
+
+  private:
+    _Entry* entries;
+    size_t _size;
 };
 
 #endif

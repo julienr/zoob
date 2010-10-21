@@ -1,5 +1,5 @@
 #!/bin/bash
-testClasses=(containers/SetTest.h)
+testClasses=(containers/SetTest.h containers/ListTest.h)
 
 GCC_OPTS="-DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/"
 

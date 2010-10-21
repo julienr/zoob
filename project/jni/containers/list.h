@@ -64,7 +64,7 @@ class list {
         _Element* current;
     };
   public:
-    list () : head(NULL) {}
+    list () : head(NULL), _size(0) {}
     ~list() {
       for (_Element* e=head; e; ) {
         _Element* next = e->next;
@@ -89,16 +89,19 @@ class list {
          delete e;
          e = next;
        }
+      _size = 0;
     }
 
     void prepend (T d) {
       _Element* add = new _Element(d);
       DL_PREPEND(head, add);
+      _size++;
     }
 
     void append (T d) {
       _Element* add = new _Element(d);
       DL_APPEND(head, add);
+      _size++;
     }
 
     T firstElement () const {
@@ -115,6 +118,7 @@ class list {
       _Element* del = head;
       DL_DELETE(head, del);
       delete del;
+      _size--;
     }
 
     /** Remove element "pointer" by the iterator i
@@ -127,6 +131,7 @@ class list {
       _Element* next = del->next;
       DL_DELETE(head, del);
       delete del;
+      _size--;
       return iterator(next);
     }
 
@@ -141,10 +146,15 @@ class list {
         if (e->data == d) {
           DL_DELETE(head, e);
           delete e;
+          _size--;
         }
         e = next;
       }
       return count;
+    }
+
+    size_t size () const {
+      return _size; 
     }
 
     iterator begin () {
@@ -157,6 +167,7 @@ class list {
   private:
     list(const list& other) { ASSERT(false); }
     _Element* head;
+    size_t _size;
 };
 
 #endif /* LIST_H_ */

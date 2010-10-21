@@ -7,6 +7,7 @@
 #include "physics/CollisionManager.h"
 #include "physics/AABBox.h"
 #include "containers/vector.h"
+#include "containers/set.h"
 #include "logic/Tank.h"
 
 class Trigger;
@@ -101,7 +102,11 @@ class Tile {
       triggers.append(t);
     }
 
-    const list<const Trigger*>& getTrigger () const {
+    void removeTrigger (const Trigger* t) {
+      triggers.remove(t);
+    }
+
+    const list<const Trigger*>& getTriggers () const {
       return triggers;
     }
 
@@ -194,6 +199,16 @@ class Level {
     //wether the boss intro (??? sign) should be used
     bool isBoss () const { return boss; }
 
+    void removeTrigger (Tile* tile, const Trigger* trigger) {
+      tile->removeTrigger(trigger);
+      if (tile->getTriggers().size() == 0)
+        tilesWithTrigger.remove(tile);
+    }
+
+    const set<Tile*>& getTilesWithTrigger () {
+      return tilesWithTrigger;
+    }
+
   private:
     void _initBoard (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers);
     unsigned width;
@@ -209,7 +224,7 @@ class Level {
     eReward reward;
     uint8_t items;
     //This is just for fast access. Contains a pointer to ALL the tiles that have a trigger attached to them
-    set<Tile*> triggeredTiles;
+    set<Tile*> tilesWithTrigger;
 };
 
 #endif /* LEVEL_H_ */

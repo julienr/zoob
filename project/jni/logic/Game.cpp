@@ -13,6 +13,7 @@
 #include "ai/algorithms/AStar.h"
 #include "Bomb.h"
 #include "lib/TimerManager.h"
+#include "logic/Trigger.h"
 
 Game* Game::instance = NULL;
 
@@ -121,12 +122,25 @@ void Game::update (const double elapsedS) {
   _updatePlayer(elapsedS);
 
   //triggers
-  
+  _handleTriggers(); 
 
   //shadows
   if (calculateShadows) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);
+  }
+}
+
+void Game::_handleTriggers () {
+  const set<Tile*> tiles = level->getTilesWithTrigger();
+  for (set<Tile*>::const_iterator i=tiles.begin(); i.hasNext(); i++) {
+    Tile* tile = *i;
+    const list<const Trigger*>& triggers = tile->getTriggers();
+    for (list<const Trigger*>::const_iterator j=triggers.begin(); j.hasNext(); j++) {
+      const Trigger* trigger = *j;
+      if (trigger->think(tile))
+        level->removeTrigger(tile, trigger);
+    }
   }
 }
 
