@@ -1,6 +1,7 @@
 #include "Level.h"
+#include "Trigger.h"
 
-Tile::Tile(int x, int y, eTileType t): type(t){
+Tile::Tile(int x, int y, eTileType t): type(t) {
   switch(t) {
     case W: entity = new WallEntity(1, 1, Vector2(x,y)); break;
     case E: entity = NULL; break;
@@ -18,6 +19,13 @@ Tile::Tile(int x, int y, eTileType t): type(t){
   }
 }
 
+Tile::~Tile () {
+  delete entity;
+  LIST_FOREACH(const Trigger*, triggers, i) {
+    delete (*i);
+  }
+}
+
 Level::~Level() {
   for (unsigned x=0; x<width; x++) {
     for (unsigned y=0; y<height; y++)
@@ -28,7 +36,7 @@ Level::~Level() {
   delete[] tanks;
 }
 
-void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, TankDescription* UNUSED(tanks), size_t numTanks) {
+void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, TankDescription* UNUSED(tanks), size_t numTanks, const list<TriggerDesc>& triggers) {
   //first entry in tank description must be player
   ASSERT(numTanks >= 1);
   width = w;
@@ -46,6 +54,12 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, T
       if (board[x][y]->getEntity() && breakable[y*w+x])
         board[x][y]->getEntity()->setBreakable(true);
     }
+  }
+
+  //Add triggers to corresponding tiles
+  LIST_FOREACH_CONST(TriggerDesc, triggers, i) {
+    const TriggerDesc& d = *i;
+    board[d.x][d.y]->addTrigger(d.trigger);
   }
 }
 

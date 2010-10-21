@@ -2,6 +2,12 @@
 #include <zip.h>
 #include <jansson.h>
 #include "logic/Level.h"
+#include "logic/Trigger.h"
+#include "logic/triggers/Condition.h"
+#include "logic/triggers/ConditionBreak.h"
+#include "logic/triggers/Action.h"
+#include "logic/triggers/ActionSpawn.h"
+#include "regex.h"
 
 Level* levelFromJSON (json_t* json);
 
@@ -36,11 +42,25 @@ static const char* type2str (json_type t) {
 
 //check that val is of the given type
 static json_t* expect (json_t* val, json_type expected_type) {
-  if (json_typeof(val) != expected_type) {
-    LOGE("val type(%s) != expected_type(%s)", type2str(json_typeof(val)), type2str(expected_type));
+  if (loadError || val == NULL || (json_typeof(val) != expected_type)) {
+    if (val != NULL)
+      LOGE("val type(%s) != expected_type(%s)", type2str(json_typeof(val)), type2str(expected_type));
+    else
+      LOGE("val = NULL");
     loadError = true;
   }
   return val;
+}
+
+//if val != NULL, returns json_string_value, otherwise sets loadError = true 
+static const char* json2string (json_t* val) {
+  if (loadError || val == NULL) {
+    LOGE("json2string : val = NULL");
+    loadError = true;
+    return NULL;
+  } else {
+    return json_string_value(val);
+  }
 }
 
 static bool json_bool_value(json_t* val) {
@@ -135,6 +155,42 @@ void loadSerie (const char* serieJSON) {
   }
 }
 
+#define RETONERR if (loadError) { return NULL; }
+
+#define IF_STR_EQ(str, cond) if(strcmp(str, cond)==0)
+static Condition* createCondition (const char* condStr) {
+  IF_STR_EQ(condStr, "break") {
+    return new ConditionBreak();
+  } else {
+    LOGE("Unknown condition %s", condStr);
+    return NULL;
+  }
+}
+
+static Action* createAction (const char* type, json_t* actionJSON) {
+  IF_STR_EQ(type, "spawn_enemy") {
+    const int dx = json_integer_value(expect(obj_get(actionJSON, "dx"), JSON_INTEGER)); RETONERR;
+    const int dy = json_integer_value(expect(obj_get(actionJSON, "dy"), JSON_INTEGER)); RETONERR;
+    return new ActionSpawn(dx, dy);
+  }
+}
+
+Trigger* handle_trigger(json_t* tileObj) {
+  json_t* trigger = json_object_get(tileObj, "trigger");
+  if (trigger == NULL || json_typeof(trigger) != JSON_OBJECT)
+    return NULL;
+  const char* conditionStr = json2string(expect(obj_get(trigger, "condition"), JSON_STRING)); RETONERR;
+  json_t* action = expect(obj_get(trigger, "action"), JSON_OBJECT); RETONERR;
+  const char* actionType = json2string(expect(obj_get(action, "type"), JSON_STRING)); RETONERR;
+
+  LOGE("condition=%s, action=%s", conditionStr, actionType);
+
+  Condition* cond = createCondition(conditionStr); RETONERR;
+  Action* act = createAction(actionType, action); RETONERR;
+
+  return new Trigger(act, cond); 
+}
+
 #define ERRCHK if (loadError) { goto error; }
 
 //Create a Level object from a json representation of the level
@@ -153,6 +209,8 @@ Level* levelFromJSON (json_t* json) {
     bool* breakable = new bool[xdim*ydim];
     memset(breakable, 0, sizeof(bool)*xdim*ydim);
 
+    list<TriggerDesc> triggers;
+
     json_t* tiles_arr = obj_get(json, "tiles"); ERRCHK;
     CONDITION(tiles_arr && json_typeof(tiles_arr) == JSON_ARRAY, "tiles element not an array");
     CONDITION((int)json_array_size(tiles_arr) == ydim, "tiles array size != ydim");
@@ -163,15 +221,19 @@ Level* levelFromJSON (json_t* json) {
         const char* t;
         json_t* val = json_array_get(row, x);
         //Basic tiles have the type directly
-        //Advanced tiles might have options (like breakable or triggers)
+        //Advanced tiles might have options (like breakable or triggers) and be therefore an object instead of a string
         if (json_typeof(val) == JSON_STRING) {
           t = json_string_value(val);
         } else if (json_typeof(val) == JSON_OBJECT) {
           t = json_string_value(expect(obj_get(val, "type"), JSON_STRING)); ERRCHK;
+          //breakable tiles
           const bool brk = opt_istrue(val, "brk"); //breakable
           breakable[y*xdim+x] = brk;
-          if (brk)
-            LOGE("tile (%i,%i) is breakable", x, y);
+          
+          //trigger
+          const Trigger* trigger = handle_trigger(val); ERRCHK;
+          if (trigger != NULL)
+            triggers.append(TriggerDesc(trigger, x, y));
         }
         int ttype = str2tile(t);
         if (ttype == -1)
@@ -250,7 +312,7 @@ Level* levelFromJSON (json_t* json) {
     if (opt_istrue(json, "reward_firing"))
       reward = REWARD_FIRING;
 
-    Level* l = new Level(xdim, ydim, board, breakable, tanks, numTanks, shadows, boss, items, reward);
+    Level* l = new Level(xdim, ydim, board, breakable, tanks, numTanks, triggers, shadows, boss, items, reward);
     delete[] board;
     delete[] breakable;
     ERRCHK;

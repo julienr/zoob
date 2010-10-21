@@ -9,6 +9,8 @@
 #include "containers/vector.h"
 #include "logic/Tank.h"
 
+class Trigger;
+
 class WallEntity : public Entity {
   public:
     WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h), breakable(false), exploded(false) {}
@@ -86,9 +88,7 @@ enum eTileType {
 class Tile {
   public:
     Tile(int x, int y, eTileType t);
-    ~Tile () {
-      delete entity;
-    }
+    ~Tile ();
 
     eTileType getType () const { return type; }
 
@@ -97,9 +97,18 @@ class Tile {
 
     void deleteEntity () { delete entity; entity = NULL; }
 
+    void addTrigger (const Trigger* t) {
+      triggers.append(t);
+    }
+
+    const list<const Trigger*>& getTrigger () const {
+      return triggers;
+    }
+
   private:
     eTileType type;
     WallEntity* entity;
+    list<const Trigger*> triggers;
 };
 
 /* This structure is used to provide some "advanced" description for tanks such as
@@ -112,6 +121,15 @@ struct TankDescription {
   int x, y; //tank start position
   eTankType tankType; //should be _1 or _2
   Path* path;
+};
+
+//Struct used when loading triggers
+struct TriggerDesc {
+  TriggerDesc (const Trigger* trigger, const int x, const int y)
+    : x(x), y(y), trigger(trigger) {}
+  const int x;
+  const int y;
+  const Trigger* trigger;
 };
 
 //items available in the level
@@ -138,9 +156,9 @@ class Level {
 
     //Level take ownership of the tanks array
     //board should be FREED BY CALLER
-    Level (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, bool drawShadows, bool boss, uint8_t items, eReward reward)
+    Level (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers, bool drawShadows, bool boss, uint8_t items, eReward reward)
       : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss), reward(reward), items(items) {
-      _initBoard(w,h,board, breakable, tanks, numTanks);
+      _initBoard(w,h,board, breakable, tanks, numTanks, triggers);
     }
 
     ~Level ();
@@ -177,7 +195,7 @@ class Level {
     bool isBoss () const { return boss; }
 
   private:
-    void _initBoard (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks);
+    void _initBoard (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers);
     unsigned width;
     unsigned height;
     Tile*** board;

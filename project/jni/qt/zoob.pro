@@ -8,7 +8,7 @@ DEPENDPATH += .
 INCLUDEPATH += . ../ /usr/include/GL/
 QT += opengl
 LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson
-DEFINES += PLATFORM_SDL
+DEFINES += PLATFORM_SDL ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
 QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions
 #PROFILING
@@ -20,7 +20,8 @@ debug {
   DEFINES += ZOOB_DBG_FPS
 }
 
-QMAKE_CXX = colorgcc
+#QMAKE_CXX = colorgcc
+QMAKE_CXX = gcc
 
 # Input
 #qt specific first

@@ -1,2 +1,2 @@
 #!/bin/sh
-./zoob ../../../levels/original.json ../../bin/Zoob.apk
+./zoob ../../../levels/test2.json ../../bin/Zoob.apk
