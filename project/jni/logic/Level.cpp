@@ -60,6 +60,7 @@ void Level::_initBoard (unsigned w, unsigned h, eTileType* b, bool* breakable, T
   LIST_FOREACH_CONST(TriggerDesc, triggers, i) {
     const TriggerDesc& d = *i;
     board[d.x][d.y]->addTrigger(d.trigger);
+    triggeredTiles.append(board[d.x][d.y]);
   }
 }
 

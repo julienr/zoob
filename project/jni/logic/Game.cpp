@@ -100,6 +100,7 @@ void Game::update (const double elapsedS) {
       introDone = true;
   }
 
+  //rockets and enemies
   colManager.unmarkCollided();
   if (introDone) {
     _updateRockets(elapsedS);
@@ -111,6 +112,7 @@ void Game::update (const double elapsedS) {
 
   level->removeExplodedWalls(colManager);
 
+  //player
   if (!godMode && playerTank->hasExploded()) {
     playerTank->unmarkExploded();
     gameOverCallback();
@@ -118,6 +120,10 @@ void Game::update (const double elapsedS) {
 
   _updatePlayer(elapsedS);
 
+  //triggers
+  
+
+  //shadows
   if (calculateShadows) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);

@@ -208,6 +208,8 @@ class Level {
     bool boss;
     eReward reward;
     uint8_t items;
+    //This is just for fast access. Contains a pointer to ALL the tiles that have a trigger attached to them
+    set<Tile*> triggeredTiles;
 };
 
 #endif /* LEVEL_H_ */

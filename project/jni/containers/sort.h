@@ -17,7 +17,7 @@ void sort (T* arr, const int len, const Compare<T>& cmp) {
 
 #define SWAP(i,j) do { _tmp=arr[i]; arr[i]=arr[j]; arr[j]=_tmp; } while(0);
 
-//sort arr[from,to[
+//merge sort arr[from,to[
 template <class T>
 static void _sort (T* arr, const int from, const int to, const Compare<T>& cmp) {
   T _tmp; //used by SWAP
