@@ -45,7 +45,7 @@
 					    style="@style/Menu.Button" 
 					    android:layout_below="@id/lvlgallery"
 					    android:layout_centerHorizontal="true"
-					    android:text="start"/>
+					    android:text="@string/start"/>
 					    
 					  <Gallery android:id="@+id/diffgallery"
 					    android:layout_below="@id/start"
@@ -57,7 +57,7 @@
 					    android:layout_below="@id/diffgallery"
 					    android:layout_centerHorizontal="true"
 				      style="@style/Menu.Button" 
-				      android:text="options"/>
+				      android:text="@string/options"/>
 		      </RelativeLayout>
       </ScrollView>
       

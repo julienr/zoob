@@ -136,7 +136,10 @@ public class MainMenuView extends FrameLayout {
    
    Gallery diffGallery = (Gallery)findViewById(R.id.diffgallery);
    diffGallery.setUnselectedAlpha(0.3f);
-   String[] difficulties = {"easy", "medium", "hard"};
+      
+   String[] difficulties = {getResources().getString(R.string.easy),
+   		 											getResources().getString(R.string.medium), 
+   		 											getResources().getString(R.string.hard)};
    diffGallery.setAdapter(new GalleryTextAdapter(difficulties));
    diffGallery.setSelection(app.getDifficulty());
    diffGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
