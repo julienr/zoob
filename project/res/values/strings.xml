@@ -16,6 +16,13 @@
     <string name="title_trackball_preference">Trackball</string>
     <string name="summary_trackball_preference">Enable trackball to aim and fire</string>
     
+    <!-- Main menu -->
+    <string name="start">start</string> 
+    <string name="options">options</string>
+    <string name="easy">easy</string>
+    <string name="medium">medium</string>
+    <string name="hard">hard</string>
+    
     <!-- In-game screens -->
     <string name="lvl_complete">level complete!</string>
     <string name="tap_continue">tap to continue</string>
