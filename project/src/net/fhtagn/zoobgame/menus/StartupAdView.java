@@ -28,7 +28,7 @@ public class StartupAdView extends FrameLayout {
     this.setClickable(true);
     
     LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	  this.addView(inflater.inflate(R.layout.get_full, null), 
+	  this.addView(inflater.inflate(R.layout.startupad, null), 
 	  		new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 	  
 	  /*ScrollView container = (ScrollView)findViewById(R.id.container);
