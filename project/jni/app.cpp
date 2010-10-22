@@ -51,7 +51,7 @@ GameView* gameView = NULL;
 
 #define WON_LOST_DELAY 1000
 
-void startGame (GameManager* manager) {
+void startGameCallback (GameManager* manager) {
   manager->setState(STATE_PLAYING);
 }
 
@@ -83,9 +83,9 @@ void toPlayingState () {
       return;
     }
 
+    ProgressionManager::getInstance()->changedLevel(lvl);
     Game::create(gameOverCallback, gameWonCallback, lvl);
     gameView = new GameView();
-    ProgressionManager::getInstance()->changedLevel();
 
     InputManager::getInstance()->reset();
 
@@ -120,19 +120,6 @@ void toWonState () {
   }
   toMenuState();
   GameManager::getInstance()->setState(STATE_NONE);
-
-  /*if (!GameManager::getInstance()->hasMoreLevels()) {
-#if FULL_VERSION
-    GameManager::getInstance()->setState(STATE_END);
-#else
-    GameManager::getInstance()->setState(STATE_BUY_FULL);
-#endif
-  } else {
-    toMenuState();
-    saveProgress(GameManager::getInstance()->getCurrentLevel()+1);
-    if (ProgressionManager::getInstance()->getLastReward() != REWARD_NONE)
-       GameManager::getInstance()->setState(STATE_REWARD);
-  }*/
 }
 
 void toLostState () {
@@ -166,14 +153,13 @@ void nativeLoadSerie (const char* serie) {
  * just in context recreation (true) */
 bool initialised = false;
 
-
 void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
   if (!initialised) {
     initialised = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGame, gameUnPauseCallback, level);
+    GameManager::create(startGameCallback, gameUnPauseCallback, level);
     GameManager* gm = GameManager::getInstance();
     gm->setStateCallback(STATE_WON, toWonState);
     gm->setStateCallback(STATE_LOST, toLostState);
@@ -185,6 +171,11 @@ void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
 
     Square::create();
     Circle::create();
+
+
+    //To avoid noticeable disk access on first explosion, preload them here
+    TextureManager::getInstance()->getGroup(TEX_GROUP_GAME)->get("assets/sprites/expl_light.png");
+    TextureManager::getInstance()->getGroup(TEX_GROUP_GAME)->get("assets/sprites/expl2.png");
 
     /*printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);

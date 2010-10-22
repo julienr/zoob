@@ -7,7 +7,6 @@
 #include "logic/triggers/ConditionBreak.h"
 #include "logic/triggers/Action.h"
 #include "logic/triggers/ActionSpawn.h"
-#include "regex.h"
 
 Level* levelFromJSON (json_t* json);
 
@@ -173,6 +172,7 @@ static Action* createAction (const char* type, json_t* actionJSON) {
     const int dy = json_integer_value(expect(obj_get(actionJSON, "dy"), JSON_INTEGER)); RETONERR;
     return new ActionSpawn(dx, dy);
   }
+  return NULL;
 }
 
 Trigger* handle_trigger(json_t* tileObj) {
@@ -218,7 +218,7 @@ Level* levelFromJSON (json_t* json) {
       json_t* row = json_array_get(tiles_arr, y);
       CONDITION((int)json_array_size(row) == xdim, "tiles row size != xdim");
       for (int x=0; x<xdim; x++) {
-        const char* t;
+        const char* t = "";
         json_t* val = json_array_get(row, x);
         //Basic tiles have the type directly
         //Advanced tiles might have options (like breakable or triggers) and be therefore an object instead of a string
@@ -286,9 +286,9 @@ Level* levelFromJSON (json_t* json) {
       }
       tanks[i] = TankDescription(coords[0], coords[1], ttype, path);
     }
-    char* jsonText = json_dumps(json,0);
+    /*char* jsonText = json_dumps(json,0);
     LOGE("loading level from json : %s", jsonText);
-    free(jsonText);
+    free(jsonText);*/
 
     //Determine available items
     uint8_t items = 0;

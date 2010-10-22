@@ -27,7 +27,7 @@ class Explosion {
   private:
     float elapsed;
     float timeLeft;
-    Sprite boomSprite;
+    //Sprite boomSprite;
     Sprite poofSprite;
     Sprite explLight;
     Animation fireExpl;

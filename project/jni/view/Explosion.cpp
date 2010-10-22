@@ -13,7 +13,7 @@
 #define BOOM_LIFE 0.8f
 
 Explosion::Explosion (const ExplosionLocation& loc) 
-  : boomSprite("assets/sprites/boom.png", TEX_GROUP_GAME),
+  : /*boomSprite("assets/sprites/boom.png", TEX_GROUP_GAME),*/
     poofSprite("assets/sprites/rocket.png", TEX_GROUP_GAME),
     explLight("assets/sprites/expl_light.png", TEX_GROUP_GAME),
     fireExpl("assets/sprites/expl2.png", TEX_GROUP_GAME, 16, new Animation::LinearInterpolator(), BOOM_LIFE, false),

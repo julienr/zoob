@@ -5,8 +5,8 @@ type: :bugfix
 component: zoob
 release: post-market
 reporter: Julien Rebetez <julien@fhtagn.net>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2010-09-25 14:48:00.681355 Z
 references: []
 
@@ -15,4 +15,8 @@ log_events:
 - - 2010-09-25 14:48:01.108742 Z
   - Julien Rebetez <julien@fhtagn.net>
   - created
+  - ""
+- - 2010-10-22 08:19:15.550566 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - closed with disposition fixed
   - ""

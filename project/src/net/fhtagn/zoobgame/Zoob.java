@@ -102,12 +102,6 @@ public class Zoob extends Activity {
 		parseIntent(getIntent());
 		
 		flipper = new ViewAnimator(this);
-		/*Animation fadeIn = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-		fadeIn.setDuration(1000);
-		Animation fadeOut = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
-		fadeOut.setDuration(1000);
-		flipper.setInAnimation(fadeIn);
-		flipper.setOutAnimation(fadeOut);*/
 		setContentView(flipper);
 		
     //Force landscape

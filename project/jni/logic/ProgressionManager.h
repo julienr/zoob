@@ -44,7 +44,7 @@ class ProgressionManager {
     }
 
     //called when the level has changed
-    void changedLevel ();
+    void changedLevel (const Level* newLevel);
 
     bool hasBombs () const;
 

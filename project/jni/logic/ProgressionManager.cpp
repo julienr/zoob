@@ -49,16 +49,15 @@ eReward ProgressionManager::getLastReward () const {
 }
 
 #define AV_FORM(f) availablePlayerForms.append(f)
-void ProgressionManager::changedLevel () {
+void ProgressionManager::changedLevel (const Level* newLevel) {
   availablePlayerForms.clear();
   AV_FORM(FORM_SIMPLE);
-  if (_level()->hasItem(ITEM_BOUNCE))
+  if (newLevel->hasItem(ITEM_BOUNCE))
     AV_FORM(FORM_BOUNCE);
 
-  const Level* l = _level();
-  items[0] = l->hasItem(ITEM_BOMB);
-  items[1] = l->hasItem(ITEM_SHIELD);
-  items[2] = l->hasItem(ITEM_BOUNCE);
-  items[3] = l->hasItem(ITEM_FIRING);
-  LOGE("bombs : %i, shield : %i, bounce : %i, firing : %i, reward : %i", items[0], items[1], items[2], items[3], l->getReward());
+  items[0] = newLevel->hasItem(ITEM_BOMB);
+  items[1] = newLevel->hasItem(ITEM_SHIELD);
+  items[2] = newLevel->hasItem(ITEM_BOUNCE);
+  items[3] = newLevel->hasItem(ITEM_FIRING);
+  LOGE("bombs : %i, shield : %i, bounce : %i, firing : %i, reward : %i", items[0], items[1], items[2], items[3], newLevel->getReward());
 }
