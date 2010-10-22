@@ -99,7 +99,8 @@ void startGame (int level) {
   GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
-void toMenuState () {
+static void cleanupGame () {
+  GameManager::getInstance()->setState(STATE_NONE);
   delete lvl;
   lvl = NULL;
   Game::destroy();
@@ -112,26 +113,23 @@ void toWonState () {
   LOGE("toWonState");
   int currentLevel = GameManager::getInstance()->getCurrentLevel();
   saveProgress(currentLevel+1);
+  cleanupGame();
   const eReward reward = ProgressionManager::getInstance()->getLastReward();
   if (reward != REWARD_NONE) {
     showMenu(reward, currentLevel);
   } else {
     showMenu(MENU_WON, currentLevel);
   }
-  toMenuState();
-  GameManager::getInstance()->setState(STATE_NONE);
 }
 
 void toLostState () {
-  toMenuState();
+  cleanupGame();
   showMenu(MENU_LOST, GameManager::getInstance()->getCurrentLevel());
-  GameManager::getInstance()->setState(STATE_NONE);
 }
 
 void toEndState () {
-  toMenuState();
+  cleanupGame();
   showMenu(MENU_END, GameManager::getInstance()->getCurrentLevel());
-  GameManager::getInstance()->setState(STATE_NONE);
 }
 
 void toPauseState () {
@@ -366,6 +364,11 @@ void nativePause () {
   if (GameManager::getInstance()->getState() == STATE_PLAYING) {
     GameManager::getInstance()->setState(STATE_PAUSED);
   }
+}
+
+//Call to switch to STATE_NONE and wait for a new game to be started
+void nativeStopGame () {
+  cleanupGame();
 }
 
 static int debugFlags;

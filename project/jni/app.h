@@ -11,6 +11,7 @@ void nativeQuit ();
 void nativeResize (int w, int h);
 void nativeRender ();
 void nativePause ();
+void nativeStopGame ();
 
 void startGame (int level);
 

@@ -217,6 +217,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 						nativePause();
 						break;
 					case EVENT_MENU:
+						nativeStopGame();
 						context.showMenu(Zoob.MENU_MAIN, -1);
 						break;
 					case EVENT_TRACKBALL:
@@ -260,6 +261,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	public static native void touchEventSecondaryMove (float x, float y);
 	
 	private static native void nativePause();
+	private static native void nativeStopGame();
 	
 	//These are stubs for upcall from JNI because the Application object isn't in the 
 	//same thread as the JNI stuff (nativeRender) and this can lead to random crashes

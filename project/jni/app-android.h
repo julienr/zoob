@@ -58,6 +58,14 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
 
 /*
  * Class:     net_fhtagn_zoob_zoobGLSurface
+ * Method:    nativeStopGame
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStopGame
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_fhtagn_zoob_zoobGLSurface
  * Method:    event callbacks
  * Signature: (FF)V
  */

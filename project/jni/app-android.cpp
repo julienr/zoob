@@ -95,6 +95,11 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativePause
   nativePause();
 }
 
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStopGame
+  (JNIEnv *, jclass) {
+  nativeStopGame();
+}
+
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_touchEventDown
   (JNIEnv *, jclass, jfloat x, jfloat y) {
   inputManager->touchEventDown(x,y);
