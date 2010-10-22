@@ -21,8 +21,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class GetFullView extends FrameLayout {
-	public GetFullView(final Context context) {
+public class StartupAdView extends FrameLayout {
+	public StartupAdView(final Context context) {
     super(context);
     
     this.setClickable(true);

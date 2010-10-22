@@ -11,7 +11,7 @@ import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.menus.Common;
 import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.ErrorView;
-import net.fhtagn.zoobgame.menus.GetFullView;
+import net.fhtagn.zoobgame.menus.StartupAdView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
 import net.fhtagn.zoobgame.menus.MainMenuView;
@@ -89,7 +89,7 @@ public class Zoob extends Activity {
 	private ErrorView errorView;
 	private RewardView[] rewardViews = new RewardView[4]; 
 	
-	private GetFullView getFullView;
+	private StartupAdView startupAdView;
 	
 	static {
 		System.loadLibrary("zoob");
@@ -154,8 +154,8 @@ public class Zoob extends Activity {
 			flipper.addView(rewardViews[i], MENU_REWARD_BOMB+i);
 		}
 		
-		getFullView = new GetFullView(this);
-		getFullView.setOnTouchListener(new OnTouchListener() {
+		startupAdView = new StartupAdView(this);
+		startupAdView.setOnTouchListener(new OnTouchListener() {
 			@Override
       public boolean onTouch(View view, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_CANCEL ||
@@ -166,7 +166,7 @@ public class Zoob extends Activity {
 	      return false;
       }
 		});
-		flipper.addView(getFullView, MENU_GET_FULL);
+		flipper.addView(startupAdView, MENU_GET_FULL);
 		
 		flipper.addView(mGLView, MENU_PLAY);
 		

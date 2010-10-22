@@ -113,8 +113,8 @@ void toWonState () {
   LOGE("toWonState");
   int currentLevel = GameManager::getInstance()->getCurrentLevel();
   saveProgress(currentLevel+1);
-  cleanupGame();
   const eReward reward = ProgressionManager::getInstance()->getLastReward();
+  cleanupGame();
   if (reward != REWARD_NONE) {
     showMenu(reward, currentLevel);
   } else {
