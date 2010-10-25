@@ -113,12 +113,14 @@ class list {
       return head == NULL;
     }
 
-    void removeFirst () {
+    T removeFirst () {
       ASSERT(head != NULL);
       _Element* del = head;
+      const T val = del->data;
       DL_DELETE(head, del);
       delete del;
       _size--;
+      return val;
     }
 
     /** Remove element "pointer" by the iterator i

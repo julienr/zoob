@@ -1,7 +1,8 @@
 #!/bin/bash
-testClasses=(containers/SetTest.h containers/ListTest.h)
+testClasses=(containers/SetTest.h containers/ListTest.h containers/BlockingQueueTest.h)
 
-GCC_OPTS="-DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/"
+
+GCC_OPTS="-DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/ -lpthread"
 
 for class in ${testClasses[@]}
 do

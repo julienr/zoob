@@ -42,6 +42,7 @@ int MenuScreen::getSelectedLevel () {
   return levelsSpin->value();
 }
 
-eGameType MenuScreen::getGameType() {
+eGameType MenuScreen
+::getGameType() {
   return (eGameType)gameType->itemData(gameType->currentIndex()).toInt();
 }
