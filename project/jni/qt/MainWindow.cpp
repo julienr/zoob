@@ -82,7 +82,18 @@ void MainWindow::createMenus () {
 void MainWindow::startGame () {
   layout->setCurrentWidget(gameScreen);
   int level = menuScreen->getSelectedLevel();
-  gameScreen->startGame(level);
+  eGameType type = menuScreen->getGameType();
+  switch (type) {
+    case LOCAL:
+      gameScreen->startGame(level);
+      break;
+    case SERVER:
+      gameScreen->startMultiplayerGame(level, true);
+      break;
+    case CLIENT:
+      gameScreen->startMultiplayerGame(level, false);
+      break;
+  }
 }
 
 void MainWindow::showMenu (eMenu menu, int currentLevel) {

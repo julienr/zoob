@@ -3,8 +3,15 @@
 
 #include <QWidget>
 #include <QSpinBox>
+#include <QComboBox>
 
 class MainWindow;
+
+enum eGameType {
+  LOCAL=0,
+  SERVER=1,
+  CLIENT=2
+};
 
 class MenuScreen : public QWidget {
   public:
@@ -13,11 +20,13 @@ class MenuScreen : public QWidget {
     void setLevelsRange (int min, int max);
 
     int getSelectedLevel ();
+    eGameType getGameType();
 
     void selectLevel (int level);
     void nextLevel ();
   private:
     QSpinBox* levelsSpin;
+    QComboBox* gameType;
 };
 
 #endif

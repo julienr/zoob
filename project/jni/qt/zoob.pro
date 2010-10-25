@@ -5,9 +5,9 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
-INCLUDEPATH += . ../ /usr/include/GL/
+INCLUDEPATH += . ../ /usr/include/GL/ /home/julien/android/libenet/jni/
 QT += opengl
-LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson
+LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet
 DEFINES += PLATFORM_SDL ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
 QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions
@@ -34,6 +34,8 @@ LOCAL_SRC_FILES = \
     lib/TimerManager.cpp \
     lib/Polygon.cpp \
     lib/Line.cpp \
+    net/Server.cpp \
+    net/Client.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \

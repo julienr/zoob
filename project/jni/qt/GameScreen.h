@@ -26,6 +26,7 @@ class GameScreen : public QGLWidget {
     }
 
     void startGame (int level);
+    void startMultiplayerGame (int level, bool server);
   protected:
     void initializeGL();
     void resizeGL (int width, int height);

@@ -13,6 +13,9 @@ void nativeRender ();
 void nativePause ();
 void nativeStopGame ();
 
+void nativeStartServer ();
+void nativeStartClient ();
+
 void startGame (int level);
 
 void toggleGodMode ();

@@ -15,6 +15,8 @@
 #include "view/NumberView.h"
 #include "view/primitives/Square.h"
 #include "view/primitives/Circle.h"
+#include "net/Server.h"
+#include "net/Client.h"
 
 zip* APKArchive;
 
@@ -45,6 +47,7 @@ static void loadAPK (const char* apkPath) {
 
 void centerGameInViewport ();
 #include "levels/LevelsData.h"
+#include "net/Server.h"
 Level* lvl = NULL;
 GameView* gameView = NULL;
 
@@ -134,6 +137,16 @@ void toEndState () {
 
 void toPauseState () {
   Game::getInstance()->pause();
+}
+
+void nativeStartServer () {
+  LOGI("Starting server...");
+  Server::getInstance()->start();
+}
+
+void nativeStartClient () {
+  LOGI("Starting client...");
+  Client::getInstance()->start();
 }
 
 void nativeInit (const char* apkPath, const char* serie) {
