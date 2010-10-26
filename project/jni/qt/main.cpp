@@ -2,6 +2,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QMap>
+#include <unistd.h>
 
 #include "MainWindow.h"
 
@@ -72,11 +73,30 @@ int main (int argc, char** argv) {
   window->resize(640, 480);
   window->show();
 
-  //if we have a lvlnum arg
-  if (argc >= 4) {
-    int level = atoi(argv[3]);
-    window->selectLevel(level);
-    window->startGame();
+  //Parse optional arguments :
+  //-l1 specify the level
+  //-s specify start as network server
+  //-c specify start as network client
+  int opt;
+  while ((opt = getopt(argc, argv, "l:sc")) != -1) {
+    switch (opt) {
+      case 'l': {
+        int level = atoi(optarg);
+        window->selectLevel(level);
+        window->startGame();
+        break;
+      }
+      case 's': {
+        window->setServer();
+        window->startGame();
+        break;
+      }
+      case 'c': {
+        window->setClient();
+        window->startGame();
+        break;
+      }
+    }
   }
 
   //Fire main loop with a one time timer just after QApplication start

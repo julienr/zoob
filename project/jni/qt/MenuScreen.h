@@ -22,6 +22,10 @@ class MenuScreen : public QWidget {
     int getSelectedLevel ();
     eGameType getGameType();
 
+    void setGameType (eGameType t) {
+      gameType->setCurrentIndex(gameType->findData(t));
+    }
+
     void selectLevel (int level);
     void nextLevel ();
   private:

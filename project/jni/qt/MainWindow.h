@@ -30,6 +30,8 @@ class MainWindow : public QMainWindow {
     void showMenu (eMenu menu, int currentLevel=-1);
 
     void selectLevel (int lvl) { menuScreen->selectLevel(lvl); }
+    void setServer () { menuScreen->setGameType(SERVER); }
+    void setClient () { menuScreen->setGameType(CLIENT); }
 
   public slots:
     void startGame ();

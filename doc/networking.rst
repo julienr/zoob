@@ -46,6 +46,9 @@ When a new client connects to the server, it will first request the current leve
 
 After the client has received the level, the server will start to send the client updates. Most of the update are gamestate updates (basically sending the entities positions and velocity). End-of-round and End-of-game updates are also possible. Finally, when changing level, the server will also send an update to the client.
 
+Players are uniquely identified by an ID that is delivered by the server when the client first connects. 
+This is the same for other entities.
+
 Below, message are marked with a (r) when they should be reliable. The #x before a message block indicates the order. If only # is present, this means that the message block have no order.
 
 Client is CONNECTING
@@ -57,7 +60,7 @@ Client          Server
   -> HELLO (r)
 #2
   <- CURRENT_LEVEL + CURRENT_STATE (warmup, roundstart, inround) (r)
-  <- SERVER_FULL (r)
+  <- KICKED (r)
 #3 if serverstate == warmup || serverstate == roundstart. Otherwise, go in spectating client state
   -> JOIN (r)
   <- JOINED (r)
@@ -71,7 +74,7 @@ Client is PLAYING/SPECTATING
 (important remark regarding gamestate : we distinguish two types of gamestate informations. Some are important
 and should therefore use reliable packets while other a not so important and can safely be discarded if a more
 up to date similar command arrives. We use libenet features for sequencing and reliability)
-  <- IMPORTANT GAMESTATE (explosions, damage, death, ...) (r)
+  <- IMPORTANT GAMESTATE (spawn, explosions, damage, death, ...) (r)
   <- SEQUENCED UNRELIABLE GAMESTATE (players positions, velocities) 
 
   <- SERVER_STATE (WARMUP, ROUNDSTART, INROUND, GAME_FINISHED)  (r)

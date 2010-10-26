@@ -5,9 +5,9 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
-INCLUDEPATH += . ../ /usr/include/GL/ /home/julien/android/libenet/jni/
+INCLUDEPATH += . ../ /usr/include/GL/ /home/julien/android/libenet/jni/ /home/julien/programs/protobuf/include/
 QT += opengl
-LIBS += -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet
+LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet -L/home/julien/programs/protobuf/lib -lprotobuf-lite
 DEFINES += PLATFORM_SDL ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
 QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions

@@ -1,4 +1,5 @@
 package zoob;
+option optimize_for = LITE_RUNTIME;
 
 enum ServerState {
   WARM_UP=0;
