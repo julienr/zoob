@@ -2,7 +2,7 @@
 #define	_SERVER_H
 
 #include "def.h"
-#include "protobuf/zoob.pb.h"
+#include "Messages.h"
 #include "NetController.h"
 
 /**
