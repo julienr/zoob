@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    levels
+   networking
 
 Indices and tables
 ==================
