@@ -38,7 +38,12 @@ protected:
     //These are callbacks for the various events that can happen on server-side.
     //These are called in the server thread
     void handleConnect (uint64_t peerID);
-    void handleReceive (uint64_t peerID);
+
+    //Handles for various messages
+    void handleMessage(const ::google::protobuf::MessageLite& msg);
+    void handleMessage(const zoobmsg::Hello& msg);
+    void handleMessage(const zoobmsg::Join& msg);
+    void handleMessage(const zoobmsg::PlayerCommand& msg);
     void handleDisconnect (uint64_t peerID);
     
   private:

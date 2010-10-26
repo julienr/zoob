@@ -36,6 +36,7 @@ LOCAL_SRC_FILES = \
     lib/Line.cpp \
     net/Server.cpp \
     net/Client.cpp \
+    net/ENetServer.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \

@@ -2,6 +2,7 @@
 #define	_ENETSERVER_H
 
 #include "Server.h"
+#include "enet/enet.h"
 
 class ENetServer : public Server {
   public:

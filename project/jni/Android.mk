@@ -20,6 +20,9 @@ LOCAL_SRC_FILES := \
     lib/Polygon.cpp \
     lib/Line.cpp \
     lib/TimerManager.cpp \
+		net/Server.cpp \
+		net/ENetServer.cpp \
+		net/Client.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
