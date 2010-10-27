@@ -1,69 +1,73 @@
 #!/usr/bin/python
 import sys
 
-#messagesDef=[
-#  {'name':'BytesArray','fields':{'array':('char','bytes')}},
-#  {'name':'Vector','fields':{'float':'x','float':'y'}},
-#  {'name':'Damage','fields':{'uint16_t':'entityID','uint16_t':'damages'}},
-#  {'name':'RocketInfo','fields':{'uint16_t':'rocketID','Vector':'position','Vector':'velocity'}},
-#  {'name':'MineInfo','fields':{'uint16_t':'mineID','Vector':'position'}},
-#  {'name':'PlayerInfo','fields':
-#    {'uint16_t':'playerID',
-#     'Vector':'position',
-#     'Vector':'velocity',
-#     'array':('RocketInfo','rocketInfos'),
-#     'array':('MineInfo','mineInfos')}},
-#  {'name':'Hello','fields':
-#    {'String':'nickname'}},
-#  {'name':'Welcome','fields':
-#    {'BytesArray':'level',
-#      'ServerState':'serverState',
-#      'uint16_t':'playerID'}},
-#  {'name':'Kicked','fields':
-#    {'String':'reason'}},
-#  {'name':'Join','fields':
-#    {}},
-#  {'name':'Joined','fields':
-#    {}},
-#  {'name':'NotJoined','fields':
-#    {}},
-#  {'name':'Spawn','fields':
-#    {'Vector':'position'}},
-#  {'name':'Explosion','fields':
-#    {'Vector':'position',
-#     'uint16_t':'exploderID',
-#     'bool':'destroyExploder',
-#     'array':('Damage','damages')}},
-#  {'name':'GameState','fields':
-#    {'array':('PlayerInfo','playerInfos')}},
-#  {'name':'StateChange','fields':
-#    {'uint8_t':'newState',
-#     'uint8_t':'stateDuration'}}
-#]
+#A message definition has two attributes. A name and a set of fields. 
+#Message that are only used as component for other messages (and are therefore NEVER sent on their
+#own) must set their 'component' attribute to true. No message identifier will be generated for those
 
-messagesDef = [
-   {'name':'BytesArray','fields':{'array':('char','bytes')}},
-   {'name':'Test', 'fields':
-     {'array':('float','floats'),
-      'String':'testStr'}},
+messagesDef=[
+  {'name':'BytesArray','fields':{'array':('char','bytes')},'component':True},
+  {'name':'Vector','fields':{'float':'x','float':'y'},'component':True},
+  {'name':'Damage','fields':{'uint16_t':'entityID','uint16_t':'damages'},'component':True},
+  {'name':'RocketInfo','fields':{'uint16_t':'rocketID','Vector':'position','Vector':'velocity'},'component':True},
+  {'name':'MineInfo','fields':{'uint16_t':'mineID','Vector':'position'},'component':True},
+  {'name':'PlayerInfo','fields':
+    {'uint16_t':'playerID',
+     'Vector':'position',
+     'Vector':'velocity',
+     'array':('RocketInfo','rocketInfos'),
+     'array':('MineInfo','mineInfos')},'component':True},
+  {'name':'Hello','fields':
+    {'String':'nickname'}},
+  {'name':'Welcome','fields':
+    {'BytesArray':'level',
+      'ServerState':'serverState',
+      'uint16_t':'playerID'}},
+  {'name':'Kicked','fields':
+    {'String':'reason'}},
+  {'name':'Join','fields':
+    {}},
+  {'name':'Joined','fields':
+    {}},
+  {'name':'NotJoined','fields':
+    {}},
+  {'name':'Spawn','fields':
+    {'Vector':'position'}},
+  {'name':'Explosion','fields':
+    {'Vector':'position',
+     'uint16_t':'exploderID',
+     'bool':'destroyExploder',
+     'array':('Damage','damages')}},
+  {'name':'GameState','fields':
+    {'array':('PlayerInfo','playerInfos')}},
+  {'name':'StateChange','fields':
+    {'uint8_t':'newState',
+     'uint8_t':'stateDuration'}}
 ]
+
+#messagesDef = [
+#   {'name':'BytesArray','fields':{'array':('char','bytes')},'component':True},
+#   {'name':'Test', 'fields':
+#     {'array':('float','floats'),
+#      'String':'testStr'}},
+#]
 
 # DO NOT TOUCH ANY FURTHER
 
 def writeUnserialize(out, name, type, numTabs):
   for i in range(numTabs):
     out.write(' ')
-  out.write('loaded |= ')
+  out.write('loaded &= ')
   if type == 'bool':
-    out.write('readBool(len, data, offset, %s);\n'%name)
+    out.write('readBool(len, data, offset, %s); ERR_CHK\n'%name)
   elif type == 'uint16_t':
-    out.write('readUint16_t(len, data, offset, %s);\n'%name)
+    out.write('readUint16_t(len, data, offset, %s); ERR_CHK\n'%name)
   elif type == 'float':
-    out.write('readFloat(len, data, offset, %s);\n'%name)
+    out.write('readFloat(len, data, offset, %s); ERR_CHK\n'%name)
   elif type == 'char':
-    out.write('readChar(len, data, offset, %s);\n'%name)
+    out.write('readChar(len, data, offset, %s); ERR_CHK\n'%name)
   else:
-    out.write('%s._unserialize(len, data, offset);\n'%name)
+    out.write('%s.unserialize(len, data, offset); ERR_CHK\n'%name)
 
 def writeSerialize(out, name, type, numTabs):
   for i in range(numTabs):
@@ -77,7 +81,7 @@ def writeSerialize(out, name, type, numTabs):
   elif type == 'char':
     out.write('writeChar(data, offset, %s);\n'%name)
   else:
-    out.write('%s._serialize(data, offset);\n'%name)
+    out.write('%s.serialize(data, offset);\n'%name)
 
 def writeSerializedSize(out, name, type, numTabs):
   for i in range(numTabs):
@@ -134,7 +138,7 @@ class ArrayField(Field):
     out.write('  %s* %s;\n'%(self.type, self.name))
 
   def writeUnserialize(self, out):
-    out.write('  loaded |= readUint16_t(len, data, offset, %s);\n'%self.counterName)
+    out.write('  loaded &= readUint16_t(len, data, offset, %s); ERR_CHK\n'%self.counterName)
     out.write('  delete [] %s; //avoid memory leak\n'%self.name)
     out.write('  %s = new %s[%s];\n'%(self.name, self.type, self.counterName))
     out.write('  for (uint16_t i=0; i<%s; i++) {\n'%self.counterName)
@@ -157,11 +161,13 @@ class ArrayField(Field):
     out.write('  delete [] %s;\n'%self.name);
 
   def writeConstructorDefault(self, out):
-    out.write('%s(NULL),%s(0)'%(self.name,self.counterName))
+    out.write('%s(0),%s(NULL)'%(self.counterName,self.name))
+
 
 class Message:
   def __init__(self, dict):
     self.name = dict['name']
+    self.component = dict.get('component', False)
     self.fields = []
     fields = dict['fields']
     for type,name in fields.items():
@@ -184,15 +190,16 @@ class Message:
 
     out.write('  virtual ~%s ();\n'%self.name)
     out.write('\n  //methods\n')
-    out.write('  size_t serializedSize();\n')
-    out.write('  void _serialize (char* data, size_t& offset);\n')
-    out.write('  bool _unserialize (size_t len, const char* data, size_t& offset);\n')
+    out.write('  MessageIdentifier getIdentifier() const;\n')
+    out.write('  size_t serializedSize() const;\n')
+    out.write('  void serialize (char* data, size_t& offset) const;\n')
+    out.write('  bool unserialize (size_t len, const char* data, size_t& offset);\n')
     out.write('\n  //loading flags\n')
 
     # forbid copy constructor and assignment
     out.write('private:\n')
     out.write('  %s (const %s& o) {}\n'%(self.name, self.name))
-    out.write('  %s& operator = (const %s& o) {}\n'%(self.name, self.name))
+    out.write('  %s& operator = (const %s& o) { return *this; }\n'%(self.name, self.name))
     out.write('};\n\n')
 
     #Really ugly hack to have a String struct that simply inherits BytesArray
@@ -200,21 +207,22 @@ class Message:
       out.write('struct String : public BytesArray {};\n')
 
   def _writeUnserialize(self, out):
-    out.write('bool %s::_unserialize (size_t len, const char* data, size_t& offset) {\n'%self.name)
+    out.write('bool %s::unserialize (size_t len, const char* data, size_t& offset) {\n'%self.name)
     out.write('  bool loaded=true;\n')
     for f in self.fields:
       f.writeUnserialize(out)
+    out.write('  error:\n')
     out.write('  return loaded;\n')
     out.write('}\n\n')
 
   def _writeSerialize(self, out):
-    out.write('void %s::_serialize (char* data, size_t& offset) {\n'%self.name)
+    out.write('void %s::serialize (char* data, size_t& offset) const {\n'%self.name)
     for f in self.fields:
       f.writeSerialize(out)
     out.write('}\n\n')
 
   def _writeSerializedSize(self, out):
-    out.write('size_t %s::serializedSize () {\n'%self.name)
+    out.write('size_t %s::serializedSize () const {\n'%self.name)
     out.write('  size_t size = 0;\n')
     for f in self.fields:
       f.writeSerializedSize(out)
@@ -227,31 +235,98 @@ class Message:
       f.writeDestructor(out)
     out.write('}\n\n')
 
+  def writeGetIdentifier(self, out):
+    out.write('MessageIdentifier %s::getIdentifier() const {\n'%self.name)
+    if self.component:
+      out.write('  return MESSAGE_IDENTIFIER_COMPONENT;\n')
+    else:
+      out.write('  return %s;\n'%self.name.upper())
+    out.write('}\n\n')
+
+
+  def writeNewFunc(self, out):
+    out.write('Message* _new%s () {\n'%self.name)
+    out.write('  return new %s();\n'%self.name)
+    out.write('}\n\n')
+
   def writeImpl(self, out):
+    self.writeGetIdentifier(out)
     self._writeUnserialize(out)
     self._writeSerialize(out)
     self._writeSerializedSize(out)
     self.writeDestructor(out)
+    if not self.component:
+      self.writeNewFunc(out)
+
+decodeMessage = """
+Message* decodeMessage (size_t dataLen, const char* data, size_t& offset) {
+  uint8_t msgID = data[offset++];
+  if (msgID >= MESSAGE_IDENTIFIER_COUNT) {
+    LOGE("Unknown msgID : %u", msgID);
+    return NULL;
+  }
+  Message* msg = msgFuncs[msgID]();
+  if (!msg->unserialize(dataLen, data, offset)) {
+    LOGE("Error unserializing message with ID %u", msgID);
+    delete msg;
+    return NULL;
+  }
+  return msg;
+}
+
+void encodeMessage (const Message* msg, char* data, size_t& offset) {
+  MessageIdentifier id = msg->getIdentifier();
+  if (id >= MESSAGE_IDENTIFIER_COUNT) {
+    LOGE("Error : trying to encode unhandled message id : %u", id);
+    return;
+  }
+  uint8_t msgID = (uint8_t)id;
+  writeUint8_t(data, offset, msgID);
+  msg->serialize(data, offset);
+}
+
+"""
+
+def writeIndirectionTable(out, messages):
+  out.write('typedef Message* (*newMsgFunc) ();\n')
+  out.write('newMsgFunc msgFuncs[MESSAGE_IDENTIFIER_COUNT] = {\n')
+  firstLevelMessages = [m for m in messages if not m.component]
+  firstLevelMessages.sort(key=lambda x: x.identifier)
+  for message in messages:
+    if not message.component:
+      out.write('_new%s,\n'%message.name)
+  out.write('};\n\n')
+
+  out.write('')
+  out.write(decodeMessage) 
+
 
 declStaticCode = """
+
 struct Message {
+  virtual MessageIdentifier getIdentifier() const = 0;
   //unserialize the given data of given len. Returns true on success, false if the unserialization failed
-  bool unserialize (size_t len, const char* data);
-  void serialize (char* data);
+  //serialize this message into the given structure. The given data MUST have a size of at least serializedSize
+  virtual void serialize (char* data, size_t& offset) const = 0;
+  virtual bool unserialize (size_t len, const char* data, size_t& offset) = 0;
 
   //size of this structure when serialized
-  virtual size_t serializedSize () = 0;
-  //serialize this message into the given structure. The given data MUST have a size of at least serializedSize
-  protected:
-  virtual void _serialize (char* data, size_t& offset) = 0;
-  virtual bool _unserialize (size_t len, const char* data, size_t& offset) = 0;
+  virtual size_t serializedSize () const = 0;
 };
+
+
+//This function will decode the message contained in the block of data of size dataLen
+//starting at the given offset. The offset will be modified so it point to the byte just after the last read.
+//This can return NULL on failure (if data doesn't contain a valid message for example)
+//On success, returns a newly allocated Message. The caller is responsible for deallocation
+Message* decodeMessage (size_t dataLen, const char* data, size_t& offset);
+
+//Encode the given message in the given datablock. Data MUST be large enough to contain serializedSize()+1 bytes.
+void encodeMessage (const Message* msg, char* data, size_t& offset);
 
 """
 
 implStaticCode = """
-#include "msg.h"
-
 static inline void endian_swap(uint16_t& x) {
   x = (x >> 8) |
       (x << 8);
@@ -285,7 +360,7 @@ static inline int is_big_endian() {
 }
 
 #define CHECK_LOAD_ERROR(size) if (offset+size > len) { \\
-    LOGE("Error in readUint16_t, offset(%i) > len(%i)", (offset+size), len); \\
+    LOGE("Error in readUint16_t, offset(%lu) > len(%lu)", (offset+size), len); \\
     return false; \\
   } 
 
@@ -293,18 +368,21 @@ static inline bool readBool (size_t len, const char* data, size_t& offset, bool&
   CHECK_LOAD_ERROR(sizeof(char))
   var = data[offset] != 0;
   offset++;
+  return true;
 }
 
 static inline bool readUint8_t (size_t len, const char* data, size_t& offset, uint8_t& var) {
   CHECK_LOAD_ERROR(sizeof(uint8_t))
   var = *(uint8_t*)&data[offset];
   offset += sizeof(uint8_t);
+  return true;
 }
 
 static inline bool readChar (size_t len, const char* data, size_t& offset, char& var) {
   CHECK_LOAD_ERROR(sizeof(char))
   var = data[offset];
   offset += sizeof(char);
+  return true;
 }
 
 static inline bool readUint16_t (size_t len, const char* data, size_t& offset, uint16_t& var) {
@@ -313,6 +391,7 @@ static inline bool readUint16_t (size_t len, const char* data, size_t& offset, u
   offset += sizeof(uint16_t);
   if (!is_big_endian())
     endian_swap(var);
+  return true;
 }
 
 static inline bool readFloat (size_t len, const char* data, size_t& offset, float& var) {
@@ -322,6 +401,7 @@ static inline bool readFloat (size_t len, const char* data, size_t& offset, floa
     endian_swap(tmp);
   var = tmp/1000.0f;
   offset+=sizeof(uint32_t);
+  return true;
 }
 
 static inline void writeBool (char* data, size_t& offset, bool var) {
@@ -355,15 +435,7 @@ static inline void writeFloat (char* data, size_t& offset, float var) {
   offset += sizeof(uint32_t);
 }
 
-bool Message::unserialize (size_t len, const char* data) {
-  size_t offset = 0;
-  return _unserialize(len, data, offset);
-}
-
-void Message::serialize (char* data) {
-  size_t offset = 0;
-  _serialize(data, offset);
-}
+#define ERR_CHK if(!loaded) { LOGE("Deserialization error at %s:%u", __FILE__, __LINE__); goto error; }
 
 """
 
@@ -373,24 +445,43 @@ def main():
   for message in messagesDef:
     messages.append(Message(message))
 
+  #HEADER
   out = open("msg.h",'w')
   out.write("#ifndef _MESSAGES_H\n#define _MESSAGES_H\n#include \"def.h\"\n\n")
+  out.write("namespace zoobmsg {\n")
+  #First, output message identifier enum
+  out.write("enum MessageIdentifier {\n")
+  idCount = 0
+  for message in messages:
+    if not message.component:
+      out.write("  %s=%i,\n"%(message.name.upper(), idCount))
+      message.identifier = idCount
+      idCount += 1
+  out.write("  MESSAGE_IDENTIFIER_COUNT=%i,\n"%idCount)
+  out.write("  MESSAGE_IDENTIFIER_COMPONENT=%i\n"%(idCount+1))
+  out.write("};\n")
   out.write(declStaticCode)
   for message in messages:
     message.writeDecl(out)
+  out.write("} //zoobmsg\n")
   out.write("#endif\n")
   out.close()
 
+  #CPP
   out = open("msg.cpp",'w')
+  out.write('#include "msg.h"\n')
+  out.write('namespace zoobmsg {\n')
   out.write(implStaticCode)
   for message in messages:
     message.writeImpl(out)
+  writeIndirectionTable(out, messages)
+  out.write('} //zoobmsg\n')
   out.close()
 
-  print '-- checking msg.h syntax'
-  os.system('cat msg.h | gcc -x c++ -fsyntax-only -')
-  print '\n-- checking msg.cpp syntax'
-  os.system('cat msg.cpp | gcc -x c++ -fsyntax-only -')
+#  print '-- checking msg.h syntax'
+#  os.system('cat msg.h | gcc -x c++ -fsyntax-only -')
+#  print '\n-- checking msg.cpp syntax'
+#  os.system('cat msg.cpp | gcc -x c++ -fsyntax-only -')
 
 if __name__ == '__main__':
   main()
