@@ -2,6 +2,16 @@
 #include <pthread.h>
 #include <unistd.h>
 
+map<uint64_t, ENetPeer*> peers;
+
+static uint64_t toUID (ENetPeer* peer) {
+  return ((uint64_t)peer->address.host << 32) | (uint64_t)peer->address.port;
+}
+
+static ENetPeer* toPeer (uint64_t uid) {
+  return peers.get(uid);
+}
+
 static void* serverThread (void* args) {
   if (enet_initialize() != 0) {
     LOGE("An error occured while initializing ENET");
@@ -39,6 +49,7 @@ static void* serverThread (void* args) {
                                                       ENET_PACKET_FLAG_RELIABLE);
             enet_peer_send(event.peer, 0, packet);
             enet_host_flush(server);
+            peers.insert(toUID(event.peer), event.peer);
           break;
         }
         case ENET_EVENT_TYPE_RECEIVE: {
@@ -53,6 +64,7 @@ static void* serverThread (void* args) {
         case ENET_EVENT_TYPE_DISCONNECT: {
           LOGE("%s disconnected", event.peer->data);
           event.peer->data = NULL;
+          peers.remove(toUID(event.peer));
         }
       }
     }
@@ -64,4 +76,19 @@ static void* serverThread (void* args) {
 
 void ENetServer::start () {
   pthread_create(&threadID, NULL, serverThread, NULL);
+}
+
+//To send a message, we first calculate its size. We add one because the first
+//byte will store the message id.
+#define SEND_MESSAGE(flags, msgType, channel) \
+  const size_t size = msgType::packedSize(msg)+1; \
+  ENetPacket* packet = enet_packet_create(NULL, size, flags); \
+  packet->data[0] = msgType::messageID; \
+  size_t offset = 1; \
+  msgType::pack(size, packet->data, offset, msg); \
+  enet_peer_send (toPeer(peerID), 0, packet)
+
+
+void ENetServer::sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) {
+  SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Welcome, 0);
 }

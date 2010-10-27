@@ -3,20 +3,15 @@
 
 #include "Server.h"
 #include "enet/enet.h"
+#include "containers/map.h"
 
 class ENetServer : public Server {
   public:
     void start ();
+  protected:
+    void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg);
+
   private:
-    uint64_t toUID (ENetPeer* peer) {
-      return (peer->address.host << 32) | peer->address.port;
-    }
-
-    void toAddress (uint64_t uid, ENetAddress* addr) {
-      addr->host = (uid >> 32)&0xffffffff;
-      addr->port = (uid)&0xffff;
-    }
-
     pthread_t threadID;
 };
 

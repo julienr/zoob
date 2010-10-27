@@ -17,6 +17,10 @@ messagesDef=[
      'velocity':'Vector',
      'rocketInfos':('array','RocketInfo'),
      'mineInfos':('array','MineInfo')},'component':True},
+  {'name':'PlayerCommands','fields':
+    {'playerID':'uint16_t',
+     'moveDir':'Vector',
+     'aimDir':'Vector'}},
   {'name':'Hello','fields':
     {'nickname':'BytesArray'}},
   {'name':'Version','fields':
@@ -59,35 +63,36 @@ messagesDef=[
 def writeUnserialize(out, name, type, numTabs):
   for i in range(numTabs):
     out.write(' ')
-  out.write('loaded &= ')
+  out.write('success &= ')
   if type == 'bool':
-    out.write('readBool(len, data, offset, %s); ERR_CHK\n'%name)
+    out.write('readBool(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'uint8_t':
-    out.write('readUint8_t(len, data, offset, %s); ERR_CHK\n'%name)
+    out.write('readUint8_t(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'uint16_t':
-    out.write('readUint16_t(len, data, offset, %s); ERR_CHK\n'%name)
+    out.write('readUint16_t(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'float':
-    out.write('readFloat(len, data, offset, %s); ERR_CHK\n'%name)
+    out.write('readFloat(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'char':
-    out.write('readChar(len, data, offset, %s); ERR_CHK\n'%name)
+    out.write('readChar(len, data, offset, msg.%s); ERR_CHK\n'%name)
   else:
-    out.write('%s.unserialize(len, data, offset); ERR_CHK\n'%name)
+    out.write('%s::unpack(len, data, offset, msg.%s); ERR_CHK\n'%(type, name))
 
 def writeSerialize(out, name, type, numTabs):
   for i in range(numTabs):
     out.write(' ')
+  out.write('success &= ')
   if type == 'bool':
-    out.write('writeBool(data, offset, %s);\n'%name)
+    out.write('writeBool(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'uint8_t':
-    out.write('writeUint8_t(data, offset, %s);\n'%name)
+    out.write('writeUint8_t(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'uint16_t':
-    out.write('writeUint16_t(data, offset, %s);\n'%name)
+    out.write('writeUint16_t(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'float':
-    out.write('writeFloat(data, offset, %s);\n'%name)
+    out.write('writeFloat(len, data, offset, msg.%s); ERR_CHK\n'%name)
   elif type == 'char':
-    out.write('writeChar(data, offset, %s);\n'%name)
+    out.write('writeChar(len, data, offset, msg.%s); ERR_CHK\n'%name)
   else:
-    out.write('%s.serialize(data, offset);\n'%name)
+    out.write('%s::pack(len, data, offset, msg.%s); ERR_CHK\n'%(type, name))
 
 def writeSerializedSize(out, name, type, numTabs):
   for i in range(numTabs):
@@ -104,7 +109,7 @@ def writeSerializedSize(out, name, type, numTabs):
   elif type == 'char':
     out.write('sizeof(char);\n')
   else:
-    out.write('%s.serializedSize();\n'%name)
+    out.write('%s::packedSize(msg.%s);\n'%(type, name))
 
 
 
@@ -143,22 +148,22 @@ class ArrayField(Field):
     out.write('  %s* %s;\n'%(self.type, self.name))
 
   def writeUnserialize(self, out):
-    out.write('  loaded &= readUint16_t(len, data, offset, %s); ERR_CHK\n'%self.counterName)
-    out.write('  delete [] %s; //avoid memory leak\n'%self.name)
-    out.write('  %s = new %s[%s];\n'%(self.name, self.type, self.counterName))
-    out.write('  for (uint16_t i=0; i<%s; i++) {\n'%self.counterName)
+    out.write('  success &= readUint16_t(len, data, offset, msg.%s); ERR_CHK\n'%self.counterName)
+    out.write('  delete [] msg.%s; //avoid memory leak\n'%self.name)
+    out.write('  msg.%s = new %s[msg.%s];\n'%(self.name, self.type, self.counterName))
+    out.write('  for (uint16_t i=0; i<msg.%s; i++) {\n'%self.counterName)
     writeUnserialize(out, '%s[i]'%self.name, self.type, 4)
     out.write('  }\n')
 
   def writeSerialize(self, out):
-    out.write('  writeUint16_t(data, offset, %s);\n'%self.counterName)
-    out.write('  for (uint16_t i=0; i<%s; i++) {\n'%self.counterName)
+    out.write('  success &= writeUint16_t(len, data, offset, msg.%s);\n'%self.counterName)
+    out.write('  for (uint16_t i=0; i<msg.%s; i++) {\n'%self.counterName)
     writeSerialize(out, '%s[i]'%self.name, self.type, 4)
     out.write('  }\n')
 
   def writeSerializedSize(self, out):
     out.write('  size += sizeof(uint16_t);\n')
-    out.write('  for (uint16_t i=0; i<%s; i++) {\n'%self.counterName)
+    out.write('  for (uint16_t i=0; i<msg.%s; i++) {\n'%self.counterName)
     writeSerializedSize(out, '%s[i]'%self.name, self.type, 4)
     out.write('  }\n')
 
@@ -181,8 +186,8 @@ class Message:
       else:
         self.fields.append(Field(t, name))
 
-  def writeDecl(self, out):
-    out.write('struct %s : public Message {\n'%self.name)
+  def writeDecl(self, out, count):
+    out.write('struct %s {\n'%self.name)
     for f in self.fields:
       f.writeDecl(out)
 
@@ -197,38 +202,42 @@ class Message:
       out.write(':%s'%(','.join(defaults)))
     out.write('{}\n')
 
+    #type
+    if not self.component:
+      out.write('  static const uint8_t messageID = %i;\n'%count)
     # methods
     out.write('  virtual ~%s ();\n'%self.name)
     out.write('\n  //methods\n')
-    out.write('  MessageIdentifier getIdentifier() const;\n')
-    out.write('  size_t serializedSize() const;\n')
-    out.write('  void serialize (char* data, size_t& offset) const;\n')
-    out.write('  bool unserialize (size_t len, const char* data, size_t& offset);\n')
-    out.write('\n  //loading flags\n')
+    out.write('  static size_t packedSize (const %s& msg);\n'%self.name)
+    out.write('  static bool unpack (size_t len, const uint8_t* data, size_t& offset, %s& msg);\n'%self.name)
+    out.write('  static bool pack (size_t len, uint8_t* data, size_t& offset, const %s& msg);\n'%self.name)
 
     # forbid copy constructor and assignment
     out.write('private:\n')
-    out.write('  %s (const %s& o) {}\n'%(self.name, self.name))
-    out.write('  %s& operator = (const %s& o) { return *this; }\n'%(self.name, self.name))
+    out.write('  %s (const %s& UNUSED(o)) {}\n'%(self.name, self.name))
+    out.write('  %s& operator = (const %s& UNUSED(o)) { return *this; }\n'%(self.name, self.name))
     out.write('};\n\n')
 
   def _writeUnserialize(self, out):
-    out.write('bool %s::unserialize (size_t len, const char* data, size_t& offset) {\n'%self.name)
-    out.write('  bool loaded=true;\n')
+    out.write('bool %s::unpack (size_t len, const uint8_t* data, size_t& offset, %s& msg) {\n'%(self.name, self.name))
+    out.write('  bool success=true;\n')
     for f in self.fields:
       f.writeUnserialize(out)
     out.write('  error:\n')
-    out.write('  return loaded;\n')
+    out.write('  return success;\n')
     out.write('}\n\n')
 
   def _writeSerialize(self, out):
-    out.write('void %s::serialize (char* data, size_t& offset) const {\n'%self.name)
+    out.write('bool %s::pack (size_t len, uint8_t* data, size_t& offset, const %s& msg) {\n'%(self.name, self.name))
+    out.write('  bool success=true;\n')
     for f in self.fields:
       f.writeSerialize(out)
+    out.write('  error:\n')
+    out.write('  return success;\n')
     out.write('}\n\n')
 
   def _writeSerializedSize(self, out):
-    out.write('size_t %s::serializedSize () const {\n'%self.name)
+    out.write('size_t %s::packedSize (const %s& msg) {\n'%(self.name, self.name))
     out.write('  size_t size = 0;\n')
     for f in self.fields:
       f.writeSerializedSize(out)
@@ -241,31 +250,14 @@ class Message:
       f.writeDestructor(out)
     out.write('}\n\n')
 
-  def writeGetIdentifier(self, out):
-    out.write('MessageIdentifier %s::getIdentifier() const {\n'%self.name)
-    if self.component:
-      out.write('  return MESSAGE_IDENTIFIER_COMPONENT;\n')
-    else:
-      out.write('  return %s;\n'%self.name.upper())
-    out.write('}\n\n')
-
-
-  def writeNewFunc(self, out):
-    out.write('Message* _new%s () {\n'%self.name)
-    out.write('  return new %s();\n'%self.name)
-    out.write('}\n\n')
-
   def writeImpl(self, out):
-    self.writeGetIdentifier(out)
     self._writeUnserialize(out)
     self._writeSerialize(out)
     self._writeSerializedSize(out)
     self.writeDestructor(out)
-    if not self.component:
-      self.writeNewFunc(out)
 
 decodeMessage = """
-Message* decodeMessage (size_t dataLen, const char* data, size_t& offset) {
+/*Message* decodeMessage (size_t dataLen, const char* data, size_t& offset) {
   uint8_t msgID = data[offset++];
   if (msgID >= MESSAGE_IDENTIFIER_COUNT) {
     LOGE("Unknown msgID : %u", msgID);
@@ -289,23 +281,9 @@ void encodeMessage (const Message* msg, char* data, size_t& offset) {
   uint8_t msgID = (uint8_t)id;
   writeUint8_t(data, offset, msgID);
   msg->serialize(data, offset);
-}
+}*/
 
 """
-
-def writeIndirectionTable(out, messages):
-  out.write('typedef Message* (*newMsgFunc) ();\n')
-  out.write('newMsgFunc msgFuncs[MESSAGE_IDENTIFIER_COUNT] = {\n')
-  firstLevelMessages = [m for m in messages if not m.component]
-  firstLevelMessages.sort(key=lambda x: x.identifier)
-  for message in messages:
-    if not message.component:
-      out.write('_new%s,\n'%message.name)
-  out.write('};\n\n')
-
-  out.write('')
-  out.write(decodeMessage) 
-
 
 declStaticCode = """
 
@@ -316,27 +294,6 @@ enum ServerState {
   IN_ROUND=2,
   GAME_FINISHED=3
 };
-
-struct Message {
-  virtual MessageIdentifier getIdentifier() const = 0;
-  //unserialize the given data of given len. Returns true on success, false if the unserialization failed
-  //serialize this message into the given structure. The given data MUST have a size of at least serializedSize
-  virtual void serialize (char* data, size_t& offset) const = 0;
-  virtual bool unserialize (size_t len, const char* data, size_t& offset) = 0;
-
-  //size of this structure when serialized
-  virtual size_t serializedSize () const = 0;
-};
-
-
-//This function will decode the message contained in the block of data of size dataLen
-//starting at the given offset. The offset will be modified so it point to the byte just after the last read.
-//This can return NULL on failure (if data doesn't contain a valid message for example)
-//On success, returns a newly allocated Message. The caller is responsible for deallocation
-Message* decodeMessage (size_t dataLen, const char* data, size_t& offset);
-
-//Encode the given message in the given datablock. Data MUST be large enough to contain serializedSize()+1 bytes.
-void encodeMessage (const Message* msg, char* data, size_t& offset);
 
 """
 
@@ -373,34 +330,34 @@ static inline int is_big_endian() {
     return bint.c[0] == 1; 
 }
 
-#define CHECK_LOAD_ERROR(size) if (offset+size > len) { \\
-    LOGE("Error in readUint16_t, offset(%lu) > len(%lu)", (offset+size), len); \\
+#define CHECK_BUF_SIZE(size) if (offset+size > len) { \\
+    LOGE("Buffer overflow at %s:%i, offset(%lu) > len(%lu)", __FILE__, __LINE__, (offset+size), len); \\
     return false; \\
   } 
 
-static inline bool readBool (size_t len, const char* data, size_t& offset, bool& var) {
-  CHECK_LOAD_ERROR(sizeof(char))
+static inline bool readBool (size_t len, const uint8_t* data, size_t& offset, bool& var) {
+  CHECK_BUF_SIZE(sizeof(char))
   var = data[offset] != 0;
   offset++;
   return true;
 }
 
-static inline bool readUint8_t (size_t len, const char* data, size_t& offset, uint8_t& var) {
-  CHECK_LOAD_ERROR(sizeof(uint8_t))
+static inline bool readUint8_t (size_t len, const uint8_t* data, size_t& offset, uint8_t& var) {
+  CHECK_BUF_SIZE(sizeof(uint8_t))
   var = *(uint8_t*)&data[offset];
   offset += sizeof(uint8_t);
   return true;
 }
 
-static inline bool readChar (size_t len, const char* data, size_t& offset, char& var) {
-  CHECK_LOAD_ERROR(sizeof(char))
+static inline bool readChar (size_t len, const uint8_t* data, size_t& offset, char& var) {
+  CHECK_BUF_SIZE(sizeof(char))
   var = data[offset];
   offset += sizeof(char);
   return true;
 }
 
-static inline bool readUint16_t (size_t len, const char* data, size_t& offset, uint16_t& var) {
-  CHECK_LOAD_ERROR(sizeof(uint16_t))
+static inline bool readUint16_t (size_t len, const uint8_t* data, size_t& offset, uint16_t& var) {
+  CHECK_BUF_SIZE(sizeof(uint16_t))
   var = *(uint16_t*)&data[offset];
   offset += sizeof(uint16_t);
   if (!is_big_endian())
@@ -408,8 +365,8 @@ static inline bool readUint16_t (size_t len, const char* data, size_t& offset, u
   return true;
 }
 
-static inline bool readFloat (size_t len, const char* data, size_t& offset, float& var) {
-  CHECK_LOAD_ERROR(sizeof(uint32_t))
+static inline bool readFloat (size_t len, const uint8_t* data, size_t& offset, float& var) {
+  CHECK_BUF_SIZE(sizeof(uint32_t))
   uint32_t tmp = *(uint32_t*)&data[offset];
   if (!is_big_endian())
     endian_swap(tmp);
@@ -418,19 +375,26 @@ static inline bool readFloat (size_t len, const char* data, size_t& offset, floa
   return true;
 }
 
-static inline void writeBool (char* data, size_t& offset, bool var) {
+static inline bool writeBool (size_t len, uint8_t* data, size_t& offset, bool var) {
+  CHECK_BUF_SIZE(1);
   data[offset++] = var?(char)1:(char)0;
+  return true;
 }
 
-static inline void writeUint8_t (char* data, size_t& offset, uint8_t var) {
+static inline bool writeUint8_t (size_t len, uint8_t* data, size_t& offset, uint8_t var) {
+  CHECK_BUF_SIZE(1);
   data[offset++] = *(char*)&var;
+  return true;
 }
 
-static inline void writeChar (char* data, size_t& offset, char var) {
+static inline bool writeChar (size_t len, uint8_t* data, size_t& offset, char var) {
+  CHECK_BUF_SIZE(1);
   data[offset++] = var;
+  return true;
 }
 
-static inline void writeUint16_t (char* data, size_t& offset, uint16_t var) {
+static inline bool writeUint16_t (size_t len, uint8_t* data, size_t& offset, uint16_t var) {
+  CHECK_BUF_SIZE(1);
   if (!is_big_endian()) {
     uint16_t tmp = var;
     endian_swap(tmp);
@@ -439,17 +403,20 @@ static inline void writeUint16_t (char* data, size_t& offset, uint16_t var) {
     *(uint16_t*)&data[offset] = var;
   }
   offset += sizeof(uint16_t);
+  return true;
 }
 
-static inline void writeFloat (char* data, size_t& offset, float var) {
+static inline bool writeFloat (size_t len, uint8_t* data, size_t& offset, float var) {
+  CHECK_BUF_SIZE(1);
   uint32_t tmp = var*1000;
   if (!is_big_endian())
     endian_swap(tmp);
   *(uint32_t*)&data[offset] = tmp;
   offset += sizeof(uint32_t);
+  return true;
 }
 
-#define ERR_CHK if(!loaded) { LOGE("Deserialization error at %s:%u", __FILE__, __LINE__); goto error; }
+#define ERR_CHK if(!success) { LOGE("Error at %s:%u", __FILE__, __LINE__); goto error; }
 
 """
 
@@ -464,19 +431,25 @@ def main():
   out.write("#ifndef _MESSAGES_H\n#define _MESSAGES_H\n#include \"def.h\"\n\n")
   out.write("namespace zoobmsg {\n")
   #First, output message identifier enum
-  out.write("enum MessageIdentifier {\n")
+#  out.write("enum MessageIdentifier {\n")
+#  idCount = 0
+#  for message in messages:
+#    if not message.component:
+#      out.write("  %s=%i,\n"%(message.name.upper(), idCount))
+#      message.identifier = idCount
+#      idCount += 1
+#  out.write("  MESSAGE_IDENTIFIER_COUNT=%i,\n"%idCount)
+#  out.write("  MESSAGE_IDENTIFIER_COMPONENT=%i\n"%(idCount+1))
+#  out.write("};\n")
+#  out.write(declStaticCode)
+
   idCount = 0
   for message in messages:
+    message.writeDecl(out, idCount)
     if not message.component:
-      out.write("  %s=%i,\n"%(message.name.upper(), idCount))
-      message.identifier = idCount
       idCount += 1
-  out.write("  MESSAGE_IDENTIFIER_COUNT=%i,\n"%idCount)
-  out.write("  MESSAGE_IDENTIFIER_COMPONENT=%i\n"%(idCount+1))
-  out.write("};\n")
-  out.write(declStaticCode)
-  for message in messages:
-    message.writeDecl(out)
+
+  out.write("const uint8_t numMessages = %i;\n"%idCount)
   out.write("} //zoobmsg\n")
   out.write("#endif\n")
   out.close()
@@ -488,7 +461,6 @@ def main():
   out.write(implStaticCode)
   for message in messages:
     message.writeImpl(out)
-  writeIndirectionTable(out, messages)
   out.write('} //zoobmsg\n')
   out.close()
 

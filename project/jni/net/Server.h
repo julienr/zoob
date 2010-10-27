@@ -37,14 +37,17 @@ class Server : public NetController {
 protected:
     //These are callbacks for the various events that can happen on server-side.
     //These are called in the server thread
-    void handleConnect (uint64_t peerID);
+    void handleConnect (const uint64_t& peerID);
 
     //Handles for various messages
-    void handleMessage(const ::google::protobuf::MessageLite& msg);
-    void handleMessage(const zoobmsg::Hello& msg);
-    void handleMessage(const zoobmsg::Join& msg);
-    void handleMessage(const zoobmsg::PlayerCommand& msg);
-    void handleDisconnect (uint64_t peerID);
+    void handleMsgHello (size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgJoin (size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgPlayerCommand (size_t dataLen, const uint8_t* data, size_t offset);
+    
+    void handleDisconnect (const uint64_t& peerID);
+
+    //Implemented by subclass for efficiency (avoid buffer copies)
+    virtual void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) = 0;
     
   private:
     void registerInstance (Server* i) {

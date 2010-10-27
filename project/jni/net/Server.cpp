@@ -2,28 +2,28 @@
 
 Server* Server::instance = NULL;
 
-void Server::handleConnect (uint64_t peerID) {
+void Server::handleConnect (const uint64_t& peerID) {
 
 }
 
-void Server::handleMessage(const ::google::protobuf::MessageLite& msg) {
-  LOGE("Receive unhandled message of type %s", msg.GetTypeName().data());
+void Server::handleMsgHello (size_t dataLen, const uint8_t* data, size_t offset) {
+  zoobmsg::Hello hello;
+  zoobmsg::Hello::unpack(dataLen, data, offset, hello);
 }
 
-void Server::handleMessage(const zoobmsg::Hello& msg) {
-
+void Server::handleMsgJoin (size_t dataLen, const uint8_t* data, size_t offset) {
+  zoobmsg::Join join;
+  zoobmsg::Join::unpack(dataLen, data, offset, join);
 }
 
-void Server::handleMessage(const zoobmsg::Join& msg) {
-
+void Server::handleMsgPlayerCommand (size_t dataLen, const uint8_t* data, size_t offset) {
+  zoobmsg::PlayerCommands commands;
+  zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
 }
 
-void Server::handleMessage(const zoobmsg::PlayerCommand& msg) {
-
-}
-
-void Server::handleDisconnect (uint64_t peerID) {
+void Server::handleDisconnect (const uint64_t& peerID) {
   
 }
+
 
 

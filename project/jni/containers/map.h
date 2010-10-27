@@ -1,26 +1,31 @@
-#ifndef _SET_H
-#define _SET_H
+#ifndef _MAP_H
+#define	_MAP_H
 
 #include "def.h"
 #include "uthash.h"
 
-template <class T>
-class set {
+template <class K, class V>
+class map {
   private:
     struct _Entry {
-      T key;
+      K key;
+      V value;
       UT_hash_handle hh;
     };
 
   public:
     class iterator {
       public:
-        friend class set;
+        friend class map;
         iterator (_Entry* head)
           : current(head) {}
 
-        T operator * () const {
+        K key () const {
           return current->key;
+        }
+
+        V value () const {
+          return current->value;
         }
 
         void operator ++ (int) { //postfix ++
@@ -36,12 +41,16 @@ class set {
 
     class const_iterator {
       public:
-        friend class set;
+        friend class map;
         const_iterator (_Entry* head)
           : current(head) {}
 
-        const T& operator * () const {
+        const K& key () const {
           return current->key;
+        }
+
+        const V& value () const {
+          return current->value;
         }
 
         void operator ++ (int) { //postfix ++
@@ -55,34 +64,47 @@ class set {
         _Entry* current;
     };
 
+    map () : entries(NULL), _size(0) {}
 
-    set () : entries(NULL), _size(0) {} 
-
-    void insert (const T& what) {
-      if (contains(what))
+    void insert (const K& key, const V& val) {
+      if (contains(key))
         return;
       _Entry* e = new _Entry();
-      e->key = what;
-      HASH_ADD_KEYPTR(hh, entries, &e->key, sizeof(T), e);
+      e->key = key;
+      e->value = val;
+      HASH_ADD_KEYPTR(hh, entries, &e->key, sizeof(K), e);
       _size++;
     }
 
-    bool contains (const T& what) {
+    bool contains (const K& key) const {
       _Entry* p = NULL;
-      HASH_FIND(hh, entries, &what, sizeof(T), p);
+      HASH_FIND(hh, entries, &key, sizeof(K), p);
       return p != NULL;
     }
 
-    void remove (const T& what) {
+
+    //get the object associated with the given key. If there is no such association,
+    //an association is created with the default value
+    const V& get (const K& key) {
       _Entry* p = NULL;
-      HASH_FIND(hh, entries, &what, sizeof(T), p);
+      HASH_FIND(hh, entries, &key, sizeof(K), p);
+      if (p == NULL) {
+        insert(key, V());
+        HASH_FIND(hh, entries, &key, sizeof(K), p);
+      }
+      return p->value;
+    }
+
+    void remove (const K& key) {
+      _Entry* p = NULL;
+      HASH_FIND(hh, entries, &key, sizeof(K), p);
       if (p != NULL) {
         HASH_DELETE(hh, entries, p);
         _size--;
       }
     }
 
-    size_t size() const {
+    size_t size () const {
       return _size;
     }
 
@@ -93,10 +115,11 @@ class set {
     const_iterator begin () const {
       return const_iterator(entries);
     }
-
+    
   private:
     _Entry* entries;
     size_t _size;
 };
 
-#endif
+#endif	/* _MAP_H */
+
