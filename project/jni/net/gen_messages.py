@@ -18,13 +18,15 @@ messagesDef=[
      'rocketInfos':('array','RocketInfo'),
      'mineInfos':('array','MineInfo')},'component':True},
   {'name':'Hello','fields':
-    {'nickname':'String'}},
+    {'nickname':'BytesArray'}},
+  {'name':'Version','fields':
+    {'version':'uint16_t'}},
   {'name':'Welcome','fields':
     {'level':'BytesArray',
      'serverState':'uint8_t',
      'playerID':'uint16_t'}},
   {'name':'Kicked','fields':
-    {'reason':'String'}},
+    {'reason':'BytesArray'}},
   {'name':'Join','fields':
     {}},
   {'name':'Joined','fields':
@@ -210,10 +212,6 @@ class Message:
     out.write('  %s& operator = (const %s& o) { return *this; }\n'%(self.name, self.name))
     out.write('};\n\n')
 
-    #Really ugly hack to have a String struct that simply inherits BytesArray
-    if self.name == 'BytesArray':
-      out.write('struct String : public BytesArray {};\n')
-
   def _writeUnserialize(self, out):
     out.write('bool %s::unserialize (size_t len, const char* data, size_t& offset) {\n'%self.name)
     out.write('  bool loaded=true;\n')
@@ -310,6 +308,14 @@ def writeIndirectionTable(out, messages):
 
 
 declStaticCode = """
+
+//TYPES DEF
+enum ServerState {
+  WARM_UP=0,
+  ROUND_WARM_UP=1,
+  IN_ROUND=2,
+  GAME_FINISHED=3
+};
 
 struct Message {
   virtual MessageIdentifier getIdentifier() const = 0;
@@ -454,7 +460,7 @@ def main():
     messages.append(Message(message))
 
   #HEADER
-  out = open("msg.h",'w')
+  out = open("Messages.h",'w')
   out.write("#ifndef _MESSAGES_H\n#define _MESSAGES_H\n#include \"def.h\"\n\n")
   out.write("namespace zoobmsg {\n")
   #First, output message identifier enum
@@ -476,8 +482,8 @@ def main():
   out.close()
 
   #CPP
-  out = open("msg.cpp",'w')
-  out.write('#include "msg.h"\n')
+  out = open("Messages.cpp",'w')
+  out.write('#include "Messages.h"\n')
   out.write('namespace zoobmsg {\n')
   out.write(implStaticCode)
   for message in messages:

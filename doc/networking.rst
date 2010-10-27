@@ -59,9 +59,11 @@ Client          Server
 #1
   -> HELLO (r)
 #2
+  <- VERSION (version information)
+#3
   <- CURRENT_LEVEL + CURRENT_STATE (warmup, roundstart, inround) (r)
   <- KICKED (r)
-#3 if serverstate == warmup || serverstate == roundstart. Otherwise, go in spectating client state
+#4 if serverstate == warmup || serverstate == roundstart. Otherwise, go in spectating client state
   -> JOIN (r)
   <- JOINED (r)
   <- NOT_JOINED (in case the round started before) (r)
