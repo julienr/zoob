@@ -2,7 +2,7 @@
 #testClasses=(containers/SetTest.h containers/ListTest.h containers/BlockingQueueTest.h)
 testClasses=(net/MessagesTest.h)
 
-GCC_OPTS="-DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/ -lpthread"
+GCC_OPTS="-Wall -DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/ -lpthread"
 
 ADD_SOURCES="net/msg.cpp"
 

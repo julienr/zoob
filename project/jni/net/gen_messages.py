@@ -6,25 +6,25 @@ import sys
 #own) must set their 'component' attribute to true. No message identifier will be generated for those
 
 messagesDef=[
-  {'name':'BytesArray','fields':{'array':('char','bytes')},'component':True},
-  {'name':'Vector','fields':{'float':'x','float':'y'},'component':True},
-  {'name':'Damage','fields':{'uint16_t':'entityID','uint16_t':'damages'},'component':True},
-  {'name':'RocketInfo','fields':{'uint16_t':'rocketID','Vector':'position','Vector':'velocity'},'component':True},
-  {'name':'MineInfo','fields':{'uint16_t':'mineID','Vector':'position'},'component':True},
+  {'name':'BytesArray','fields':{'bytes':('array','char')},'component':True},
+  {'name':'Vector','fields':{'x':'float','y':'float'},'component':True},
+  {'name':'Damage','fields':{'entityID':'uint16_t','damages':'uint16_t'},'component':True},
+  {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector'},'component':True},
+  {'name':'MineInfo','fields':{'mineID':'uint16_t','position':'Vector'},'component':True},
   {'name':'PlayerInfo','fields':
-    {'uint16_t':'playerID',
-     'Vector':'position',
-     'Vector':'velocity',
-     'array':('RocketInfo','rocketInfos'),
-     'array':('MineInfo','mineInfos')},'component':True},
+    {'playerID':'uint16_t',
+     'position':'Vector',
+     'velocity':'Vector',
+     'rocketInfos':('array','RocketInfo'),
+     'mineInfos':('array','MineInfo')},'component':True},
   {'name':'Hello','fields':
-    {'String':'nickname'}},
+    {'nickname':'String'}},
   {'name':'Welcome','fields':
-    {'BytesArray':'level',
-      'ServerState':'serverState',
-      'uint16_t':'playerID'}},
+    {'level':'BytesArray',
+     'serverState':'uint8_t',
+     'playerID':'uint16_t'}},
   {'name':'Kicked','fields':
-    {'String':'reason'}},
+    {'reason':'String'}},
   {'name':'Join','fields':
     {}},
   {'name':'Joined','fields':
@@ -32,17 +32,17 @@ messagesDef=[
   {'name':'NotJoined','fields':
     {}},
   {'name':'Spawn','fields':
-    {'Vector':'position'}},
+    {'position':'Vector'}},
   {'name':'Explosion','fields':
-    {'Vector':'position',
-     'uint16_t':'exploderID',
-     'bool':'destroyExploder',
-     'array':('Damage','damages')}},
+    {'position':'Vector',
+     'exploderID':'uint16_t',
+     'destroyExploder':'bool',
+     'damages':('array','Damage')}},
   {'name':'GameState','fields':
-    {'array':('PlayerInfo','playerInfos')}},
+    {'playerInfos':('array','PlayerInfo')}},
   {'name':'StateChange','fields':
-    {'uint8_t':'newState',
-     'uint8_t':'stateDuration'}}
+    {'newState':'uint8_t',
+     'stateDuration':'uint8_t'}}
 ]
 
 #messagesDef = [
@@ -60,6 +60,8 @@ def writeUnserialize(out, name, type, numTabs):
   out.write('loaded &= ')
   if type == 'bool':
     out.write('readBool(len, data, offset, %s); ERR_CHK\n'%name)
+  elif type == 'uint8_t':
+    out.write('readUint8_t(len, data, offset, %s); ERR_CHK\n'%name)
   elif type == 'uint16_t':
     out.write('readUint16_t(len, data, offset, %s); ERR_CHK\n'%name)
   elif type == 'float':
@@ -74,6 +76,8 @@ def writeSerialize(out, name, type, numTabs):
     out.write(' ')
   if type == 'bool':
     out.write('writeBool(data, offset, %s);\n'%name)
+  elif type == 'uint8_t':
+    out.write('writeUint8_t(data, offset, %s);\n'%name)
   elif type == 'uint16_t':
     out.write('writeUint16_t(data, offset, %s);\n'%name)
   elif type == 'float':
@@ -89,6 +93,8 @@ def writeSerializedSize(out, name, type, numTabs):
   out.write('size += ')
   if type == 'bool':
     out.write('sizeof(char);\n')
+  elif type == 'uint8_t':
+    out.write('sizeof(uint8_t);\n')
   elif type == 'uint16_t':
     out.write('sizeof(uint16_t);\n')
   elif type == 'float':
@@ -119,9 +125,6 @@ class Field:
   def writeDestructor(self, out):
     pass
 
-  def writeConstructorDefault(self, out):
-    pass
-
 #An array field actually encompasses two fields :
 #If T is the type of the elements in the array and N the name of the array, it will have
 #first a counter then the actual array
@@ -129,8 +132,8 @@ class Field:
 #T* N;
 class ArrayField(Field):
   def __init__(self, type, name):
-    self.type = name[0]
-    self.name = name[1]
+    self.type = type[1]
+    self.name = name
     self.counterName = "num%s%s"%(self.name[0].upper(), self.name[1:])
 
   def writeDecl(self, out):
@@ -160,8 +163,8 @@ class ArrayField(Field):
   def writeDestructor(self, out):
     out.write('  delete [] %s;\n'%self.name);
 
-  def writeConstructorDefault(self, out):
-    out.write('%s(0),%s(NULL)'%(self.counterName,self.name))
+  def constructorDefault(self):
+    return '%s(0),%s(NULL)'%(self.counterName,self.name)
 
 
 class Message:
@@ -170,11 +173,11 @@ class Message:
     self.component = dict.get('component', False)
     self.fields = []
     fields = dict['fields']
-    for type,name in fields.items():
-      if type == 'array':
-        self.fields.append(ArrayField(type, name))
+    for name,t in fields.items():
+      if type(t) is tuple and t[0] == 'array':
+        self.fields.append(ArrayField(t, name))
       else:
-        self.fields.append(Field(type, name))
+        self.fields.append(Field(t, name))
 
   def writeDecl(self, out):
     out.write('struct %s : public Message {\n'%self.name)
@@ -183,11 +186,16 @@ class Message:
 
     # constructor
     out.write('\n')
-    out.write('  %s () : '%self.name)
-    for f in self.fields:
-      f.writeConstructorDefault(out)
+    out.write('  %s ()'%self.name)
+    fieldsToInitialize = [f for f in self.fields if "constructorDefault" in dir(f)]
+    if (len(fieldsToInitialize) > 0):
+      defaults = []
+      for f in fieldsToInitialize:
+        defaults.append(f.constructorDefault())
+      out.write(':%s'%(','.join(defaults)))
     out.write('{}\n')
 
+    # methods
     out.write('  virtual ~%s ();\n'%self.name)
     out.write('\n  //methods\n')
     out.write('  MessageIdentifier getIdentifier() const;\n')
