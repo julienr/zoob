@@ -4,6 +4,7 @@
 
 map<uint64_t, ENetPeer*> peers;
 
+
 static uint64_t toUID (ENetPeer* peer) {
   return ((uint64_t)peer->address.host << 32) | (uint64_t)peer->address.port;
 }
@@ -58,6 +59,11 @@ static void* serverThread (void* args) {
                   event.packet->data,
                   event.peer->data,
                   event.channelID);
+          if (event.packet->dataLength < 1) {
+            LOGE("Dropping packet with length %u", event.packet->dataLength);
+            break;
+          }
+          uint8_t msgType = event.packet->data[0];
           enet_packet_destroy(event.packet);
           break;
         }

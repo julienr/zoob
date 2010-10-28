@@ -74,18 +74,20 @@ static void* clientThread (void* args) {
           break;
         }
          case ENET_EVENT_TYPE_RECEIVE: {
-          LOGE("Packet of length %u with content %s received from %s on channel %u",
+          LOGE("Packet of length %lu with content %s received from %s on channel %u",
                   event.packet->dataLength,
-                  event.packet->data,
-                  event.peer->data,
+                  (char*)event.packet->data,
+                  (char*)event.peer->data,
                   event.channelID);
           enet_packet_destroy(event.packet);
           break;
         }
         case ENET_EVENT_TYPE_DISCONNECT: {
-          LOGE("%s disconnected", event.peer->data);
+          LOGE("%s disconnected", (char*)event.peer->data);
           event.peer->data = NULL;
+          break;
         }
+        case ENET_EVENT_TYPE_NONE: break;
       }
     }
   }

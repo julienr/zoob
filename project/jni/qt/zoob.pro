@@ -10,7 +10,7 @@ QT += opengl
 LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet -L/home/julien/programs/protobuf/lib -lprotobuf-lite
 DEFINES += PLATFORM_SDL ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
-QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions
+QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions -Wno-unused-parameter -Wno-unused-label
 #PROFILING
 QMAKE_CXXFLAGS_DEBUG += -pg -DDEBUG
 QMAKE_LFLAGS_DEBUG += -pg

@@ -370,7 +370,7 @@ static inline bool readFloat (size_t len, const uint8_t* data, size_t& offset, f
   uint32_t tmp = *(uint32_t*)&data[offset];
   if (!is_big_endian())
     endian_swap(tmp);
-  var = tmp/1000.0f;
+  var = ((int32_t)tmp)/1000.0f;
   offset+=sizeof(uint32_t);
   return true;
 }
@@ -408,7 +408,7 @@ static inline bool writeUint16_t (size_t len, uint8_t* data, size_t& offset, uin
 
 static inline bool writeFloat (size_t len, uint8_t* data, size_t& offset, float var) {
   CHECK_BUF_SIZE(1);
-  uint32_t tmp = var*1000;
+  uint32_t tmp = (uint32_t)(var*(int32_t)1000);
   if (!is_big_endian())
     endian_swap(tmp);
   *(uint32_t*)&data[offset] = tmp;

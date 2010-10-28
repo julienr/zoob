@@ -1,5 +1,7 @@
 #!/bin/bash
-testClasses=(containers/SetTest.h containers/ListTest.h containers/BlockingQueueTest.h net/MessagesTest.h)
+#testClasses=(containers/SetTest.h containers/ListTest.h containers/BlockingQueueTest.h net/MessagesTest.h)
+testClasses=(net/MessagesTest.h)
+
 
 GCC_OPTS=" -DPLATFORM_SDL -fno-rtti -fno-exceptions  -I. -I/usr/include/GL/ -lpthread"
 
