@@ -33,6 +33,15 @@ public:
                   hello.nickname.numBytes, hello.nickname.bytes);
   }
 
+  void testVersion () {
+    zoobmsg::Version version;
+    version.version = 1;
+    ENCODE_DECODE_MSG(zoobmsg::Version, version, version2, 2);
+
+    LOGI("version2.version = %i", version2.version);
+    ASSERT(version.version == version2.version);
+  }
+
   void testGameState () {
     zoobmsg::GameState gamestate;
     gamestate.numPlayerInfos = 2;

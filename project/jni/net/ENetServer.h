@@ -10,6 +10,7 @@ class ENetServer : public Server {
     void start ();
   protected:
     void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg);
+    void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg);
 
   private:
     pthread_t threadID;

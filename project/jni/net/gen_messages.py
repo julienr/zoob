@@ -256,35 +256,6 @@ class Message:
     self._writeSerializedSize(out)
     self.writeDestructor(out)
 
-decodeMessage = """
-/*Message* decodeMessage (size_t dataLen, const char* data, size_t& offset) {
-  uint8_t msgID = data[offset++];
-  if (msgID >= MESSAGE_IDENTIFIER_COUNT) {
-    LOGE("Unknown msgID : %u", msgID);
-    return NULL;
-  }
-  Message* msg = msgFuncs[msgID]();
-  if (!msg->unserialize(dataLen, data, offset)) {
-    LOGE("Error unserializing message with ID %u", msgID);
-    delete msg;
-    return NULL;
-  }
-  return msg;
-}
-
-void encodeMessage (const Message* msg, char* data, size_t& offset) {
-  MessageIdentifier id = msg->getIdentifier();
-  if (id >= MESSAGE_IDENTIFIER_COUNT) {
-    LOGE("Error : trying to encode unhandled message id : %u", id);
-    return;
-  }
-  uint8_t msgID = (uint8_t)id;
-  writeUint8_t(data, offset, msgID);
-  msg->serialize(data, offset);
-}*/
-
-"""
-
 declStaticCode = """
 
 //TYPES DEF
@@ -441,7 +412,7 @@ def main():
 #  out.write("  MESSAGE_IDENTIFIER_COUNT=%i,\n"%idCount)
 #  out.write("  MESSAGE_IDENTIFIER_COMPONENT=%i\n"%(idCount+1))
 #  out.write("};\n")
-#  out.write(declStaticCode)
+  out.write(declStaticCode)
 
   idCount = 0
   for message in messages:

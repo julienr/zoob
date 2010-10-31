@@ -23,9 +23,16 @@ class Server : public NetController {
   public:
     static Server* getInstance() {
       if (!instance)
-        LOGE("Server::getInstance() before registerInstance() called");
+        LOGE("Server::getInstance() before registerInstance()");
       return instance;
     }
+
+    static void registerInstance (Server* i) {
+      instance = i;
+    }
+
+
+    Server () : playerIDGen(0), state(zoobmsg::WARM_UP) {}
 
     /**
      * This method should be implemented by the transport-specific subclass
@@ -34,26 +41,28 @@ class Server : public NetController {
      */
     virtual void start () = 0;
 
-protected:
     //These are callbacks for the various events that can happen on server-side.
     //These are called in the server thread
     void handleConnect (const uint64_t& peerID);
 
     //Handles for various messages
-    void handleMsgHello (size_t dataLen, const uint8_t* data, size_t offset);
-    void handleMsgJoin (size_t dataLen, const uint8_t* data, size_t offset);
-    void handleMsgPlayerCommand (size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgJoin (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgPlayerCommand (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
     
     void handleDisconnect (const uint64_t& peerID);
 
+
+  protected:
     //Implemented by subclass for efficiency (avoid buffer copies)
     virtual void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) = 0;
-    
+    virtual void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) = 0;
+
   private:
-    void registerInstance (Server* i) {
-      instance = i;
-    }
     static Server* instance;
+
+    uint16_t playerIDGen;
+    zoobmsg::ServerState state;
 };
 
 #endif	/* _SERVER_H */

@@ -130,6 +130,12 @@ Level* loadAPKLevel (int levelNum) {
   return levelFromJSON(json_array_get(levels, levelNum));
 }
 
+char* getLevel (int levelNum) {
+  ASSERT(levelSerie != NULL && levelNum < (int)getNumLevels());
+  json_t* levels = obj_get(levelSerie, "levels");
+  return json_dumps(json_array_get(levels, levelNum), JSON_COMPACT);
+}
+
 size_t getNumLevels () {
   ASSERT(levelSerie != NULL);
   json_t* levels = obj_get(levelSerie, "levels");

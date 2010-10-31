@@ -4,7 +4,6 @@
 
 map<uint64_t, ENetPeer*> peers;
 
-
 static uint64_t toUID (ENetPeer* peer) {
   return ((uint64_t)peer->address.host << 32) | (uint64_t)peer->address.port;
 }
@@ -54,21 +53,32 @@ static void* serverThread (void* args) {
           break;
         }
         case ENET_EVENT_TYPE_RECEIVE: {
-          LOGE("Packet of length %u with content %s received from %s on channel %u",
+          /*LOGE("Packet of length %lu with content %s received from %s on channel %u",
                   event.packet->dataLength,
-                  event.packet->data,
+                  (char*)event.packet->data,
                   event.peer->data,
-                  event.channelID);
+                  event.channelID);*/
           if (event.packet->dataLength < 1) {
-            LOGE("Dropping packet with length %u", event.packet->dataLength);
+            LOGE("Dropping packet with length %lu", event.packet->dataLength);
             break;
           }
           uint8_t msgType = event.packet->data[0];
+#define MSG_CALLBACK(type, cbName) \
+          case zoobmsg::type::messageID: \
+            Server::getInstance()->cbName(toUID(event.peer), event.packet->dataLength, event.packet->data, 1); \
+            break;
+
+
+          switch (msgType) {
+            MSG_CALLBACK(Hello, handleMsgHello)
+            MSG_CALLBACK(Join, handleMsgJoin)
+            MSG_CALLBACK(PlayerCommands, handleMsgPlayerCommand)
+          }
           enet_packet_destroy(event.packet);
           break;
         }
         case ENET_EVENT_TYPE_DISCONNECT: {
-          LOGE("%s disconnected", event.peer->data);
+          LOGE("%s disconnected", (char*)event.peer->data);
           event.peer->data = NULL;
           peers.remove(toUID(event.peer));
         }
@@ -97,4 +107,8 @@ void ENetServer::start () {
 
 void ENetServer::sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) {
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Welcome, 0);
+}
+
+void ENetServer::sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) {
+  SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Version, 0);
 }

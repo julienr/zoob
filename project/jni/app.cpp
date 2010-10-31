@@ -17,13 +17,16 @@
 #include "view/primitives/Circle.h"
 #include "net/Server.h"
 #include "net/Client.h"
+#include "net/ENetServer.h"
+#include "net/ENetClient.h"
+
 
 zip* APKArchive;
 
-static void printGLString(const char *name, GLenum s) {
+/*static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
     LOGI("GL %s = %s\n", name, v);
-}
+}*/
 
 static void loadAPK (const char* apkPath) {
   LOGI("Loading APK %s", apkPath);
@@ -141,11 +144,13 @@ void toPauseState () {
 
 void nativeStartServer () {
   LOGI("Starting server...");
+  Server::registerInstance(new ENetServer());
   Server::getInstance()->start();
 }
 
 void nativeStartClient () {
   LOGI("Starting client...");
+  Client::registerInstance(new ENetClient());
   Client::getInstance()->start();
 }
 
