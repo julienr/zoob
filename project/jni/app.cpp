@@ -82,7 +82,7 @@ void toPlayingState () {
     Game::destroy();
     delete gameView;
 
-    lvl = loadAPKLevel(GameManager::getInstance()->getCurrentLevel());
+    lvl = LevelManager::getInstance()->loadLevel(GameManager::getInstance()->getCurrentLevel());
     if (lvl == NULL) {
       showMenu(MENU_ERROR, -1);
       GameManager::getInstance()->setState(STATE_NONE);
@@ -161,7 +161,7 @@ void nativeInit (const char* apkPath, const char* serie) {
 }
 
 void nativeLoadSerie (const char* serie) {
-  loadSerie(serie);
+  LevelManager::registerInstance(new LevelSerieManager(serie));
 }
 
 /** Since nativeInitGL will be called on app creation AND each time the opengl 

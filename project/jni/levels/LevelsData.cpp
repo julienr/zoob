@@ -10,9 +10,6 @@
 
 Level* levelFromJSON (json_t* json);
 
-//The currently used levelSerie
-json_t* levelSerie = NULL;
-
 //This will be set to true if a loading error occured in one of this functions. This is checked by levelFromJSON
 static bool loadError = false;
 
@@ -22,8 +19,59 @@ static json_t* obj_get (json_t* obj, const char* key) {
   if (!val) {
     LOGE("ERROR getting %s", key);
     loadError = true;
+    return NULL;
   }
   return val;
+}
+
+//The currently used levelSerie
+json_t* levelSerie = NULL;
+
+LevelManager* LevelManager::instance = NULL;
+
+SingleLevelManager::SingleLevelManager (const char* levelJSON) : LevelManager () {
+  json_error_t error;
+  level = json_loads(levelJSON, &error);
+  if (!level) {
+    LOGE("Error loading json at line %i: %s", error.line, error.text);
+    setError();
+  } 
+}
+
+Level* SingleLevelManager::loadLevel (int levelNum) const {
+  if (levelNum != 0) 
+    LOGI("[SingleLevelManager::loadLevel] requested level %i, returning level 0", levelNum);
+  return levelFromJSON(level);
+}
+
+char* SingleLevelManager::getLevel (int levelNum) const {
+  return json_dumps(level, JSON_COMPACT);
+}
+
+LevelSerieManager::LevelSerieManager (const char* serieJSON) : LevelManager () {
+  json_error_t error;
+  serie = json_loads(serieJSON, &error);
+  if (!serie) {
+    LOGE("Error loading json at line %i: %s", error.line, error.text);
+    setError();
+  } else {
+    json_t* levels = obj_get(serie, "levels");
+    if (levels == NULL)
+      setError();
+    numLevels = json_array_size(levels);
+  }
+}
+
+Level* LevelSerieManager::loadLevel (int levelNum) const {
+  ASSERT(serie != NULL && levelNum < (int)getNumLevels());
+  json_t* levels = obj_get(serie, "levels");
+  return levelFromJSON(json_array_get(levels, levelNum));
+}
+
+char* LevelSerieManager::getLevel (int levelNum) const {
+  ASSERT(serie != NULL && levelNum < (int)getNumLevels());
+  json_t* levels = obj_get(serie, "levels");
+  return json_dumps(json_array_get(levels, levelNum), JSON_COMPACT);
 }
 
 static const char* type2str (json_type t) {
@@ -124,7 +172,7 @@ static int str2ttype (const char* str) {
 
 //Loads a level from the APK (an original level)
 //Return NULL if an error occurs during loading
-Level* loadAPKLevel (int levelNum) {
+/*Level* loadAPKLevel (int levelNum) {
   ASSERT(levelSerie != NULL && levelNum < (int)getNumLevels());
   json_t* levels = obj_get(levelSerie, "levels");
   return levelFromJSON(json_array_get(levels, levelNum));
@@ -158,7 +206,7 @@ void loadSerie (const char* serieJSON) {
     //FIXME: should goto error => create a global levelLoadError function that display the error menu
     levelSerie = NULL;
   }
-}
+}*/
 
 #define RETONERR if (loadError) { return NULL; }
 

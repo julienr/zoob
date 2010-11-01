@@ -344,8 +344,8 @@ void GameView::debugAI () {
   glPushMatrix();
   GLW::translate(-(1 - cs) / 2.0f, -(1 - cs) / 2.0f, 0);
 
-  for (int x = 0; x < grid.getWidth(); x++) {
-    for (int y = 0; y < grid.getHeight(); y++) {
+  for (unsigned x = 0; x < grid.getWidth(); x++) {
+    for (unsigned y = 0; y < grid.getHeight(); y++) {
       glPushMatrix();
       GLW::scale(cs, cs, 1);
       GLW::translate(x, y, 0);

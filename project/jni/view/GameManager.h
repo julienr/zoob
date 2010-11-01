@@ -147,7 +147,7 @@ class GameManager {
 
     inline
     bool hasMoreLevels () {
-      return currentLevel < getNumLevels()-1;
+      return currentLevel < LevelManager::getInstance()->getNumLevels()-1;
     }
 
     inline

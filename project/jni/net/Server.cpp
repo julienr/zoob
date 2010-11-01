@@ -22,7 +22,7 @@ void Server::handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8
   zoobmsg::Welcome welcome;
   welcome.playerID = playerIDGen++;
   welcome.serverState = state;
-  char* level = getLevel(GameManager::getInstance()->getCurrentLevel());
+  char* level = LevelManager::getInstance()->getLevel(GameManager::getInstance()->getCurrentLevel());
   size_t len = strlen(level)+1;
   welcome.level.numBytes = len;
   welcome.level.bytes = new char[len];

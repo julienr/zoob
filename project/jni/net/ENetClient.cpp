@@ -117,6 +117,6 @@ void ENetClient::start () {
   enet_peer_send (serverPeer, 0, packet)
 
 void ENetClient::sendMsgHello(const zoobmsg::Hello& msg) {
-  LOGI("[sendMsgHello] msg size : %u", zoobmsg::Hello::packedSize(msg));
+  LOGI("[sendMsgHello] msg size : %lu", zoobmsg::Hello::packedSize(msg));
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Hello, 0);
 }
