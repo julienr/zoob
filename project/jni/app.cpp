@@ -19,6 +19,7 @@
 #include "net/Client.h"
 #include "net/ENetServer.h"
 #include "net/ENetClient.h"
+#include "logic/PlayerCommand.h"
 
 
 zip* APKArchive;
@@ -453,8 +454,7 @@ void nativeRender () {
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
-  InputManager::getInstance()->think(elapsedS);
-
+ 
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
@@ -467,6 +467,9 @@ void nativeRender () {
     if (!GameManager::getInstance()->paused()) {
       accumulator += elapsedS;
       while (accumulator >= dt) { //empty accumulator as much as possible
+        PlayerCommand localPlayerCmd;
+        InputManager::getInstance()->think(elapsedS, localPlayerCmd);
+        Game::getInstance()->applyLocalCommands(localPlayerCmd);
         Game::getInstance()->update(dt);
         accumulator -= dt;
 #ifdef ZOOB_DBG_FPS

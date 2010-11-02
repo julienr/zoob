@@ -15,6 +15,7 @@
 #include "logic/VisibilityGrid.h"
 #include "ai/algorithms/PathFinder.h"
 #include "lib/Color.h"
+#include "logic/PlayerCommand.h"
 
 //Each boss level start with an intro. This is the duration of the intro
 #define BOSS_INTRO_TIME 3
@@ -106,6 +107,8 @@ class Game {
       return gameState == GAME_PAUSED;
     }
 
+    void applyLocalCommands (const PlayerCommand& cmd);
+
     PlayerTank* getPlayerTank () const {
       return playerTank;
     }
@@ -143,18 +146,6 @@ class Game {
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
     void update(const double elapsedS);
-
-    void playerFire (const Vector2& cursorPosition);
-    void playerDropBomb ();
-
-    void playerActivateShield () {
-      playerTank->startShield();
-    }
-
-    //Set tank movement direction. Set to (0,0) for no move
-    void setTankMoveDir (const Vector2& dir) {
-      tankMoveDir.set(dir.x,dir.y);
-    }
 
     void toggleGodMode () {
       godMode = !godMode;
@@ -219,6 +210,19 @@ class Game {
     void _updateBombs (double elapsedS);
     int _updateEnemies (double elapsedS);
     void _updatePlayer (double elapsedS);
+
+    void playerFire (const Vector2& cursorPosition);
+    void playerDropBomb ();
+
+    void playerActivateShield () {
+      playerTank->startShield();
+    }
+
+    //Set tank movement direction. Set to (0,0) for no move
+    void setTankMoveDir (const Vector2& dir) {
+      tankMoveDir.set(dir.x,dir.y);
+    }
+
 
     //Move and rotate the tank according to dir and calls slideMove
     void doTankMove (Tank* t, Vector2 dir, double elapsedS);

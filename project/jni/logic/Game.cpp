@@ -86,6 +86,16 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
+void Game::applyLocalCommands (const PlayerCommand& cmd) {
+  if (cmd.fire)
+    playerFire(cmd.fireDir);
+  if (cmd.mine)
+    playerDropBomb();
+  if (cmd.shield)
+    playerActivateShield();
+  setTankMoveDir(cmd.moveDir);
+}
+
 void Game::update (const double elapsedS) {
   this->elapsedS = elapsedS;
   if (gameState == GAME_PAUSED)

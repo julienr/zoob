@@ -153,18 +153,17 @@ bool inGamePad (Vector2 p) {
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
     case MOVING_TANK:
-      Game::getInstance()->setTankMoveDir(touchPosition-Game::getInstance()->getPlayerTank()->getPosition());
+      playerCommand.moveDir = touchPosition-Game::getInstance()->getPlayerTank()->getPosition();
       break;
     case MOVING_TANK_PAD: {
       //the -(0.5,0.5) to gamePadPos is just because the gamepad is on the left. When touching the gamepad with a left finger,
       //we'll most likely get the touch event a bit too much to the left than what the user would. Therefore, we translate gamePadPos
       //Basically, this is just a usability hack
-      const Vector2 dir = touchPosition+Vector2(transX, transY) - (gamePadPos-Vector2(0.5,0.5));
-      Game::getInstance()->setTankMoveDir(dir);
+      playerCommand.moveDir = touchPosition+Vector2(transX, transY) - (gamePadPos-Vector2(0.5,0.5));
       break;
     }
     default:
-      Game::getInstance()->setTankMoveDir(Vector2::ZERO);
+      playerCommand.moveDir.set(0,0);
       break;
   }
 }
@@ -179,34 +178,35 @@ void AndroidInputManager::setMoveTouchPoint (const Vector2& pos) {
 }
 
 void AndroidInputManager::stopMoving () {
-  Game* game = Game::getInstance();
-  if (!game) {
-    LOGE("stopMoving with game = NULL");
-    return;
-  }
-  game->setTankMoveDir(Vector2::ZERO);
+  playerCommand.moveDir.set(0,0);
   state = STATE_DEFAULT;
 }
 
-void AndroidInputManager::think (double UNUSED(elapsedS)) {
+void AndroidInputManager::think (double UNUSED(elapsedS), PlayerCommand& command) {
   const uint64_t now = Utils::getCurrentTimeMillis();
   const uint64_t elapsed = now - lastButtonPressTime;
 
   /*if (pressedItem != -1)
     LOGE("elapsed : %llu, pressedItem : %i, pressedItemUp: %i", elapsed, pressedItem, pressedItemUp);*/
 
+  command = playerCommand;
   if ((elapsed > DOUBLETAP_TIME) && pressedItem != -1) {
     if (pressedItem == BOMB_BUTTON_ID) {
-      Game::getInstance()->playerDropBomb();
+      command.mine = true;
       bombButtonTimer.start();
     } else if (pressedItem == SHIELD_BUTTON_ID) {
-      Game::getInstance()->playerActivateShield();
+      command.shield = true;
       shieldButtonTimer.start();
     }
     bombButton.setPressed(false);
     shieldButton.setPressed(false);
     _setPressedItem(-1);
   }
+  //clear one-time event flag. Don't clear moveDir since stopMoving will do it and we should
+  //continue moving towards the touched point if we have no event
+  playerCommand.mine = false;
+  playerCommand.shield = false;
+  playerCommand.fire = false;
 }
 
 void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pNoTrans) {
@@ -221,7 +221,7 @@ void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pN
       _setPressedItem(-1);
       startMoving(MOVING_TANK_PAD, p);
     } else if (!useTrackball) {
-      Game::getInstance()->playerFire(p);
+      playerCommand.setFire(p);
     } else
       _setPressedItem(-1);
   } else {
@@ -250,7 +250,7 @@ void AndroidInputManager::touchEventDown (float x, float y) {
     rocketButton.setPressed(true);
   } else if (!useGamepad) {
     if (!useTrackball && (tapDist < DOUBLETAP_DIST) && (elapsed < DOUBLETAP_TIME))
-      Game::getInstance()->playerFire(p);
+      playerCommand.setFire(p);
     updatePressedItem(p, pNoTrans);
   } else {
     updatePressedItem(p, pNoTrans);
@@ -284,9 +284,9 @@ void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
   } else if (shieldButton.inside(pNoTrans) && !shieldButtonTimer.isActive() && _progMan()->hasShield()) {
     _setPressedItem(SHIELD_BUTTON_ID);
   } else if (!useTrackball && !useGamepad) {
-    Game::getInstance()->playerFire(p);
+    playerCommand.setFire(p);
   } else if (!useTrackball && useGamepad && !inGamePad(pNoTrans)) {
-    Game::getInstance()->playerFire(p);
+    playerCommand.setFire(p);
   }
 }
 
@@ -302,14 +302,14 @@ void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
     const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
     if (state == FIRING_MODE) {
-      Game::getInstance()->playerFire(Vector2(XSG(x),YSG(y)));
+      playerCommand.setFire(Vector2(XSG(x),YSG(y)));
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
     } else {
       if (rocketButton.isPressed() && rocketButton.inside(pNoTrans)) {
         state = FIRING_MODE;
         LOGE("switching to firing mode");
-        Game::getInstance()->setTankMoveDir(Vector2::ZERO);
+        playerCommand.moveDir.set(0,0);
       } else {
         rocketButton.setPressed(false);
         if ((pressedItem == BOMB_BUTTON_ID && bombButton.inside(pNoTrans)) ||
@@ -341,6 +341,6 @@ void AndroidInputManager::trackballMove (float rx, float ry) {
 void AndroidInputManager::trackballClick (float rx, float ry) {
   if (GameManager::getInstance()->inGame() && useTrackball) {
     cursorPosition += Vector2(rx,ry);
-    Game::getInstance()->playerFire(cursorPosition-Vector2(transX, transY));
+    playerCommand.setFire(cursorPosition-Vector2(transX, transY));
   }
 }

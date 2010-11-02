@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "PlayerFormControl.h"
 #include "lib/Timer.h"
+#include "logic/PlayerCommand.h"
 
 #undef FORM_CONTROL
 
@@ -30,7 +31,7 @@ class AndroidInputManager : public InputManager {
     //reset all states
     void reset ();
 
-    void think (double elapsedS);
+    void think (double elapsedS, PlayerCommand& command);
 
     void setUseGamepad (bool use);
 
@@ -96,6 +97,9 @@ class AndroidInputManager : public InputManager {
 
     bool useGamepad;
     bool useTrackball;
+
+    //We use a local playerCommand to register player's actions
+    PlayerCommand playerCommand;
 };
 
 #endif /* ANDROIDINPUTMANAGER_H_ */

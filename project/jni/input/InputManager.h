@@ -28,7 +28,7 @@ class InputManager {
   public:
     //This can be used to draw input-method specific stuff on the screen (such as a virtual gamepad)
     virtual void draw () {}
-    virtual void think (double UNUSED(elapsedS)) {}
+    virtual void think (double UNUSED(elapsedS), PlayerCommand& UNUSED(command)) {}
     virtual void reset () {}
 
 };
