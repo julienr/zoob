@@ -40,7 +40,11 @@ class Server : public NetController {
      * The handleXXX callbacks should be called from this thread.
      */
     virtual void start () = 0;
+ 
+    void update(NetworkedGame& game);
+    void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
 
+  
     //These are callbacks for the various events that can happen on server-side.
     //These are called in the server thread
     void handleConnect (const uint64_t& peerID);
@@ -53,10 +57,10 @@ class Server : public NetController {
     void handleDisconnect (const uint64_t& peerID);
 
 
-  protected:
     //Implemented by subclass for efficiency (avoid buffer copies)
     virtual void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) = 0;
     virtual void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) = 0;
+    virtual void sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg) = 0;
 
   private:
     static Server* instance;

@@ -289,9 +289,12 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
 
 void Game::addRocket (Rocket* r) {
   rockets.append(r);
+  r->getOwner()->addRocket(r);
 }
 
 list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
+  Rocket* r = *i;
+  r->getOwner()->removeRocket(r);
   return rockets.remove(i);
 }
 
@@ -305,9 +308,12 @@ list<Tank*>::iterator Game::deleteTank (const list<Tank*>::iterator& i) {
 
 void Game::addBomb (Bomb* b) {
   bombs.append(b);
+  b->getOwner()->addBomb(b);
 }
 
 list<Bomb*>::iterator Game::deleteBomb (const list<Bomb*>::iterator& i) {
+  Bomb* b = *i;
+  b->getOwner()->removeBomb(b);
   return bombs.remove(i);
 }
 

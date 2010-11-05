@@ -11,6 +11,7 @@
 #include "lib/Timer.h"
 #include "ai/TankAI.h" 
 #include "Difficulty.h"
+#include "containers/set.h"
 
 
 class Rocket;
@@ -153,7 +154,7 @@ class Tank: public Entity {
       moveDir.set(v);
     }
 
-    const Vector2& getMoveDir () {
+    const Vector2& getMoveDir () const {
       return moveDir;
     }
 
@@ -161,6 +162,38 @@ class Tank: public Entity {
     unsigned getMaxLives () const { return maxLives; }
 
     float getSpeed () const { return speed; }
+
+    void addRocket (Rocket* r) {
+      rockets.insert(r);
+    }
+
+    void removeRocket (Rocket* r) {
+      rockets.remove(r);
+    }
+
+    void addBomb (Bomb* b) {
+      bombs.insert(b);
+    }
+
+    void removeBomb (Bomb* b) {
+      bombs.remove(b);
+    }
+
+    size_t getNumRockets () const {
+      return rockets.size();
+    }
+
+    set<Rocket*>::const_iterator getRockets () const {
+      return rockets.begin();
+    }
+
+    size_t getNumBombs () const {
+      return bombs.size();
+    }
+
+    set<Bomb*>::const_iterator getBombs () const {
+      return bombs.begin();
+    }
 
   protected:
     virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) = 0;
@@ -203,6 +236,10 @@ class Tank: public Entity {
     Timer shieldTimer;
 
     const float speed; //movement speed
+
+    //rockets and bombs owned by this tank
+    set<Rocket*> rockets;
+    set<Bomb*> bombs;
 };
 
 #endif /* TANK_H_ */

@@ -10,13 +10,13 @@ messagesDef=[
   {'name':'Vector','fields':{'x':'float','y':'float'},'component':True},
   {'name':'Damage','fields':{'entityID':'uint16_t','damages':'uint16_t'},'component':True},
   {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector', 'speed':'float'},'component':True},
-  {'name':'MineInfo','fields':{'mineID':'uint16_t','position':'Vector','timeleft':'float'},'component':True},
+  {'name':'BombInfo','fields':{'bombID':'uint16_t','position':'Vector','timeleft':'float'},'component':True},
   {'name':'PlayerInfo','fields':
     {'playerID':'uint16_t',
      'position':'Vector',
      'velocity':'Vector',
      'rocketInfos':('array','RocketInfo'),
-     'mineInfos':('array','MineInfo')},'component':True},
+     'bombInfos':('array','BombInfo')},'component':True},
   {'name':'PlayerCommands','fields':
     {'playerID':'uint16_t',
       'fire':'bool',

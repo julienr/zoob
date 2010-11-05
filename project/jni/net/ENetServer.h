@@ -8,13 +8,11 @@
 class ENetServer : public Server {
   public:
     void start ();
-
-    void update(NetworkedGame& game);
-    void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
-
+ 
   protected:
     void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg);
     void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg);
+    void sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg);
 
   private:
     pthread_t threadID;

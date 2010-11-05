@@ -125,11 +125,11 @@ class Game {
       return colManager;
     }
 
-    const list<Rocket*>::const_iterator getRockets () const {
+    list<Rocket*>::const_iterator getRockets () const {
       return rockets.begin();
     }
     
-    const list<Bomb*>::const_iterator getMines () const {
+    list<Bomb*>::const_iterator getMines () const {
       return bombs.begin();
     }
 

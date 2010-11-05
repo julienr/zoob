@@ -95,13 +95,6 @@ void ENetServer::start () {
   pthread_create(&threadID, NULL, serverThread, NULL);
 }
 
-void ENetServer::update(NetworkedGame& game) {
-  //TODO
-}
-
-void ENetServer::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
-  //TODO
-}
 
 //To send a message, we first calculate its size. We add one because the first
 //byte will store the message id.
@@ -120,4 +113,8 @@ void ENetServer::sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome&
 
 void ENetServer::sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) {
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Version, 0);
+}
+
+void ENetServer::sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg) {
+  SEND_MESSAGE(0, zoobmsg::GameState, 1);
 }
