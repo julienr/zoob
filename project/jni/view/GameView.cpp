@@ -10,32 +10,45 @@
 #include "app.h"
 #include "NumberView.h"
 #include "view/GameManager.h"
+#include "logic/NetTank.h"
 
 
 GameView::GameView ()
-  : playerTankView(Game::getInstance()->getPlayerTank()),
-    //cursorView(g.getCursor()),
+  : //cursorView(g.getCursor()),
     levelView(Game::getInstance()->getLevel()),
     rocket("assets/sprites/rocket.png", TEX_GROUP_GAME),
     bomb("assets/sprites/bomb.png", TEX_GROUP_GAME),
     hearthEmpty("assets/sprites/hearth_empty.png", TEX_GROUP_GAME),
     hearthFull("assets/sprites/hearth_full.png", TEX_GROUP_GAME),
     circle("assets/sprites/circle.png", TEX_GROUP_GAME),
-    enemiesView(5),
+    tankViews(5),
     shadow("assets/sprites/shadow.png", TEX_GROUP_GAME),
     light("assets/sprites/light.png", TEX_GROUP_GAME),
     levelTxt("assets/sprites/level.png", TEX_GROUP_GAME),
     wtf("assets/sprites/wtf.png", TEX_GROUP_GAME),
     lastLightToggle(BOSS_INTRO_TIME),
     lightOn(true) {
-  const list<EnemyTank*>* enemies = Game::getInstance()->getEnemies();
-  for (list<EnemyTank*>::const_iterator i = enemies->begin(); i.hasNext(); i++)
-    enemiesView.append(new EnemyTankView(*i));
+  const list<Tank*>* tanks = Game::getInstance()->getTanks();
+  for (list<Tank*>::const_iterator i = tanks->begin(); i.hasNext(); i++) {
+    const Tank* t = *i;
+    switch (t->getTankCategory()) {
+      case CAT_AI:
+        tankViews.append(new EnemyTankView(static_cast<const EnemyTank*>(t)));
+        break;
+      case CAT_PLAYER:
+        tankViews.append(new PlayerTankView(static_cast<const PlayerTank*>(t)));
+        break;
+      case CAT_NET:
+        //TODO
+        //tankViews.append(new PlayerTankView(static_cast<const NetTank*>(t)));
+        break;
+    }
+  }
 }
 
 GameView::~GameView () {
-  for (size_t i=0; i<enemiesView.length(); i++)
-    delete enemiesView[i];
+  for (size_t i=0; i<tankViews.length(); i++)
+    delete tankViews[i];
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
 }
@@ -91,7 +104,6 @@ void GameView::_drawBossIntro (double elapsedS) {
 
   _drawLighting();
   levelView.drawWalls();
-  playerTankView.draw(elapsedS);
   wtf.draw(Game::getInstance()->getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
 
   GLW::colorWhite();
@@ -167,9 +179,8 @@ void GameView::_drawGame (double elapsedS) {
     NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
   
-  playerTankView.draw(elapsedS);
-  for (size_t i=0; i<enemiesView.length(); i++)
-    enemiesView[i]->draw();
+  for (size_t i=0; i<tankViews.length(); i++)
+    tankViews[i]->draw();
   //FIXME: colManager.debugDraw()
 
 

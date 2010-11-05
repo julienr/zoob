@@ -469,7 +469,7 @@ void nativeRender () {
       while (accumulator >= dt) { //empty accumulator as much as possible
         PlayerCommand localPlayerCmd;
         InputManager::getInstance()->think(elapsedS, localPlayerCmd);
-        Game::getInstance()->applyLocalCommands(localPlayerCmd);
+        Game::getInstance()->applyCommands(Game::getInstance()->getPlayerTank(), localPlayerCmd);
         Game::getInstance()->update(dt);
         accumulator -= dt;
 #ifdef ZOOB_DBG_FPS

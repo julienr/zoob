@@ -68,6 +68,10 @@ class Rocket : public ExplosiveEntity {
       return numBounces;
     }
 
+    void setSpeed (float speed) {
+      this->speed = speed;
+    }
+
     float getSpeed () const {
       return speed;
     }

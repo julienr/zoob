@@ -9,9 +9,18 @@
 #include "FireRatePolicy.h"
 #include "logic/physics/CollisionResult.h"
 #include "lib/Timer.h"
+#include "ai/TankAI.h" 
+#include "Difficulty.h"
+
 
 class Rocket;
 class Bomb;
+
+enum eTankCategory {
+  CAT_PLAYER,
+  CAT_NET,
+  CAT_AI
+};
 
 enum eTankType {
     TANK_PLAYER=0,
@@ -25,7 +34,7 @@ enum eTankType {
     TANK_BURST,
     BOSS_BURST,
     TANK_SPLIT,
-    BOSS_SPLIT
+    BOSS_SPLIT,
 };
 
 
@@ -49,6 +58,7 @@ class Tank: public Entity {
         path(NULL),
         numMines(0),
         forceDirTimer(0.3),
+        shieldTimer(Difficulty::getInstance()->getPlayerShieldTime()),
         speed(speed) {
       ASSERT(pol != NULL);
     }
@@ -67,6 +77,8 @@ class Tank: public Entity {
     }
 
     virtual eTankType getTankType () const = 0;
+
+    virtual eTankCategory getTankCategory () const = 0;
 
     virtual bool explode (Entity* e, const Vector2& colPoint);
 
@@ -99,6 +111,11 @@ class Tank: public Entity {
       return path;
     }
 
+    //returns NULL if no AI
+    virtual TankAI* getAI () const { return NULL; }
+
+    virtual void think (double elapsedS) {}
+
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return firePolicy->canFire(); }
     bool canMine () { return (numMines < MAX_BOMBS_PER_TANK) && bombPolicy->canFire(); }
@@ -118,6 +135,26 @@ class Tank: public Entity {
       if (forceDirTimer.isActive())
         return;
       Entity::setRotationFromDir(dir);
+    }
+
+    void startShield () {
+      shieldTimer.start();
+    }
+
+    double getShieldTimeLeft () const {
+      return shieldTimer.getTimeLeft();
+    }
+
+    bool shieldActive () const {
+      return shieldTimer.isActive();
+    }
+
+    void setMoveDir (const Vector2& v) {
+      moveDir.set(v);
+    }
+
+    const Vector2& getMoveDir () {
+      return moveDir;
     }
 
     unsigned getLivesLeft () const { return numLives; }
@@ -141,6 +178,7 @@ class Tank: public Entity {
 
     void setLives (unsigned num) { maxLives = numLives = num; }
   private:
+    Vector2 moveDir;
     unsigned maxLives;
     unsigned numLives;
     float tankRadius;
@@ -161,6 +199,8 @@ class Tank: public Entity {
     //This is a timer just used to force the direction in which the tank is viewing after it has fired (to have a visual feedback
     //of the direction in which the tank just fired)
     Timer forceDirTimer;
+
+    Timer shieldTimer;
 
     const float speed; //movement speed
 };

@@ -28,7 +28,7 @@ class list {
         iterator (_Element* head)
           : current(head){}
 
-        T operator * () {
+        T operator * () const {
           return current->data;
         }
 
@@ -49,7 +49,7 @@ class list {
         const_iterator (_Element* head)
           : current(head) {}
 
-        const T& operator * () {
+        const T& operator * () const {
           return current->data;
         }
 
@@ -127,7 +127,7 @@ class list {
      * Invalidates i
      * Returns an iterator to i's next element
      */
-    iterator remove (iterator& i) {
+    iterator remove (const iterator& i) {
       _Element* del = i.current;
       ASSERT(del != NULL);
       _Element* next = del->next;

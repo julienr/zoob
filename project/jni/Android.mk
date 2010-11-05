@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
+		logic/NetworkedGame.cpp \
     logic/Tank.cpp \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \

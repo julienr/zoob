@@ -17,10 +17,6 @@ class GameView {
     GameView ();
     ~GameView ();
 
-    const PlayerTankView& getTankView () const {
-      return playerTankView;
-    }
-
     //Only draw the hearts representing the life
     void drawHearts () const;
 
@@ -43,7 +39,6 @@ class GameView {
     //Draw the shadows projected by the walls
     void _drawShadows() const;
 
-    PlayerTankView playerTankView;
     //CursorView cursorView;
     LevelView levelView;
     Sprite rocket;
@@ -51,7 +46,7 @@ class GameView {
     Sprite hearthEmpty;
     Sprite hearthFull;
     Sprite circle;
-    vector<TankView*> enemiesView;
+    vector<TankView*> tankViews;
     list<Explosion*> explosions;
 
     Sprite shadow;

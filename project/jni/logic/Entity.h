@@ -20,15 +20,23 @@ class Entity: public Moveable {
   friend class Grid;
   public:
     Entity(const BoundingVolume* v) :
-      Moveable(), collided(false), bvolume(v) {
+      Moveable(), collided(false), bvolume(v), id(0) {
     }
 
     Entity(const BoundingVolume* v, const Vector2& pos) :
-      Moveable(pos), collided(false), bvolume(v) {
+      Moveable(pos), collided(false), bvolume(v), id(0) {
     }
 
     virtual ~Entity () {
       delete bvolume;
+    }
+
+    void setID (uint16_t id) {
+      this->id = id;
+    }
+
+    uint16_t getID() const {
+      return id;
     }
 
     virtual eEntityType getType () const = 0;
@@ -76,6 +84,9 @@ class Entity: public Moveable {
     //Used by Grid for performance reason.
     list<GridCell*> touchedCells;
     const BoundingVolume* bvolume;
+
+    //this entity's id. Used for networking
+    uint16_t id; 
 };
 
 #endif /* ENTITY_H_ */

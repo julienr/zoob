@@ -20,6 +20,10 @@ class EnemyTank: public Tank {
       delete ai;
     }
 
+    eTankCategory getTankCategory () const {
+      return CAT_AI;
+    }
+
     void prepareFire () {
       prepareFiring = true;
       firingDelay = initialFiringDelay;
@@ -70,7 +74,7 @@ class EnemyTank: public Tank {
     }
 
     //Returns NULL for the player's tank
-    TankAI* getAI () { return ai; }
+    TankAI* getAI () const { return ai; }
 
     virtual Rocket* createRocket(Tank* owner, const Vector2& pos, const Vector2& dir) {
       return new Rocket(owner, pos, dir, Difficulty::getInstance()->getEnemiesRocketSpeed(), BOUNCE);

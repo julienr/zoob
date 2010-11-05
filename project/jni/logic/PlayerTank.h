@@ -16,12 +16,15 @@ class PlayerTank : public Tank {
   public:
     PlayerTank ()
       : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(ProgressionManager::getInstance()->getPlayerFireInterval())),
-        currentForm (FORM_SIMPLE),
-        shieldTimer(Difficulty::getInstance()->getPlayerShieldTime()) {
+        currentForm (FORM_SIMPLE) {
       setLives(3);
     }
 
     eTankType getTankType () const { return TANK_PLAYER; }
+
+    eTankCategory getTankCategory () const {
+      return CAT_PLAYER;
+    }
 
     /* The player tank might switch between multiple "forms" (like simple, burst, shield).
      * These forms are all the same as some enemies tank. This method returns the current form
@@ -31,7 +34,7 @@ class PlayerTank : public Tank {
     }
 
     bool explode (Entity* e, const Vector2& colPoint) {
-      if (shieldTimer.isActive()) {
+      if (shieldActive()) {
         if (e->getType() == ENTITY_ROCKET) {
           Rocket* r = static_cast<Rocket*>(e);
           if (r->getNumBounces() < Difficulty::getInstance()->getPlayerShieldResistance())
@@ -49,14 +52,6 @@ class PlayerTank : public Tank {
       return Tank::explode(e, colPoint);
     }
 
-    void startShield () {
-      shieldTimer.start();
-    }
-
-    double getShieldTimeLeft () const {
-      return shieldTimer.getTimeLeft();
-    }
-
     void changePlayerForm (ePlayerForm newForm);
 
     bool bounce (Entity* e, const Vector2& colPoint) {
@@ -71,9 +66,6 @@ class PlayerTank : public Tank {
     }
   private:
     ePlayerForm currentForm;
-
-    Timer shieldTimer;
-
 };
 
 #endif /* PLAYERTANK_H_ */

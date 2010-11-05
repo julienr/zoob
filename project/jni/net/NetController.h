@@ -2,6 +2,8 @@
 #define	_NETCONTROLLER_H
 
 #include "def.h"
+#include "logic/PlayerCommand.h"
+#include "logic/NetworkedGame.h"
 
 #define NUM_CHANNELS 2
 #define SERVER_PORT 1234
@@ -14,7 +16,14 @@
 //It expose an API to query game status and send local player commands
 class NetController {
   public:
+    //Update game with the latest state available from the network. Might do nothing
+    //if we haven't received any state update.
+    //MUST be called from the game thread
+    virtual void update(NetworkedGame& game) = 0;
 
+    //Enqueue a PlayerCommand to be send to the server. 
+    //MUST be called from the game thread
+    virtual void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) = 0;
 };
 
 #endif	/* _NETCONTROLLER_H */

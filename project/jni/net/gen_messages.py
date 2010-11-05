@@ -9,8 +9,8 @@ messagesDef=[
   {'name':'BytesArray','fields':{'bytes':('array','char')},'component':True},
   {'name':'Vector','fields':{'x':'float','y':'float'},'component':True},
   {'name':'Damage','fields':{'entityID':'uint16_t','damages':'uint16_t'},'component':True},
-  {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector'},'component':True},
-  {'name':'MineInfo','fields':{'mineID':'uint16_t','position':'Vector'},'component':True},
+  {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector', 'speed':'float'},'component':True},
+  {'name':'MineInfo','fields':{'mineID':'uint16_t','position':'Vector','timeleft':'float'},'component':True},
   {'name':'PlayerInfo','fields':
     {'playerID':'uint16_t',
      'position':'Vector',
@@ -19,8 +19,11 @@ messagesDef=[
      'mineInfos':('array','MineInfo')},'component':True},
   {'name':'PlayerCommands','fields':
     {'playerID':'uint16_t',
-     'moveDir':'Vector',
-     'aimDir':'Vector'}},
+      'fire':'bool',
+      'mine':'bool',
+      'shield':'bool',
+      'fireDir':'Vector',
+     'moveDir':'Vector'}},
   {'name':'Hello','fields':
     {'nickname':'BytesArray'}},
   {'name':'Version','fields':

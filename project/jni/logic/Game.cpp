@@ -37,6 +37,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
   Vector2 playerStartPosition = Vector2(1,1);
   bool foundPlayer = false;
 
+  addTank(playerTank);
+
   const TankDescription* tanks = level->getTanks();
   for (size_t i=0; i<level->getNumTanks(); i++) {
     const TankDescription& desc = tanks[i];
@@ -60,7 +62,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     }
     if (t != NULL) { //t will be NULL when we found player, to be handled below
       t->setPosition(Vector2(desc.x, desc.y));
-      enemies.append(t);
+      addTank(t);
       colManager.addEntity(t);
       calculateShadows |= t->getAI()->requirePlayerVisibility();
     }
@@ -75,8 +77,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
 }
 
 Game::~Game () {
-  delete playerTank;
-  LIST_FOREACH(EnemyTank*, enemies, i) {
+  LIST_FOREACH(Tank*, tanks, i) {
     delete *i;
   }
   LIST_FOREACH(Rocket*, rockets, r) {
@@ -86,14 +87,14 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
-void Game::applyLocalCommands (const PlayerCommand& cmd) {
+void Game::applyCommands (Tank* tank, const PlayerCommand& cmd) {
   if (cmd.fire)
-    playerFire(cmd.fireDir);
+    _tankFire(tank, cmd.fireDir);
   if (cmd.mine)
-    playerDropBomb();
+    _tankDropBomb(tank);
   if (cmd.shield)
-    playerActivateShield();
-  setTankMoveDir(cmd.moveDir);
+    _tankActivateShield(tank);
+  tank->setMoveDir(cmd.moveDir);
 }
 
 void Game::update (const double elapsedS) {
@@ -111,12 +112,12 @@ void Game::update (const double elapsedS) {
       introDone = true;
   }
 
-  //rockets and enemies
+  //rockets and tanks
   colManager.unmarkCollided();
   if (introDone) {
     _updateRockets(elapsedS);
     _updateBombs(elapsedS);
-    const int numAlives = _updateEnemies(elapsedS);
+    const int numAlives = _updateTanks(elapsedS);
     if (numAlives == 0)
       gameWonCallback();
   }
@@ -128,8 +129,6 @@ void Game::update (const double elapsedS) {
     playerTank->unmarkExploded();
     gameOverCallback();
   }
-
-  _updatePlayer(elapsedS);
 
   //triggers
   _handleTriggers(); 
@@ -166,8 +165,8 @@ void Game::_updateRockets (double elapsedS) {
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
       colManager.removeEntity(r);
+      i = deleteRocket(i);
       delete r;
-      i = rockets.remove(i);
     } else {
       bounceMove(r, r->getDir()*r->getSpeed()*elapsedS);
       i++;
@@ -194,76 +193,85 @@ void Game::_updateBombs (double elapsedS) {
       explosions.append(ExplosionLocation(m->getPosition(), ExplosionLocation::EXPLOSION_BOOM));
       //notify the owner
       m->getOwner()->bombExploded();
+      i = deleteBomb(i);
       delete m;
-      i = bombs.remove(i);
     } else
       i++;
   }
 }
 
-int Game::_updateEnemies (double elapsedS) {
-  //Enemies
-  int numAlive = 0;
-  LIST_FOREACH(EnemyTank*, enemies, i) {
-    EnemyTank* t = *i;
+int Game::_updateTanks (double elapsedS) {
+  int numEnemiesAlive = 0;
+  LIST_FOREACH(Tank*, tanks, i) {
+    Tank* t = *i;
     if (!t->isAlive())
       continue;
 
-    numAlive++;
+    if (t->getTankCategory() != CAT_PLAYER)
+      numEnemiesAlive++;
 
     if (t->hasExploded()) {
       colManager.removeEntity(t);
       t->die();
     } else {
       t->think(elapsedS);
-      TankAI* ai = t->getAI();
-      if (ai) {
-        Vector2 moveDir;
-        if (ai->decideDir(elapsedS, &moveDir, this, t))
-          doTankMove(t, moveDir, elapsedS);
 
-        Vector2 rocketDir;
-        //AI fire decision is done in two time :
-        //- first, AI can decide to prepare to fire
-        //- after a delay, decideFire is called again and if the ai decide to actually fire, the rocket is
-        // created
-        //- for some firing policy, the tank will then stay in "inFiring" mode (burst mode) for some time
-        if (t->isFiring()) { //burst mode, let it fire without delay
-          if (t->canFire()) {
-            if (ai->confirmFire(elapsedS, &rocketDir, this, t))
-              doFireRocket(t, rocketDir);
-            else { //ai decided to stop firing, stop the burst
-              LOGE("cancelFiring");
-              t->cancelFiring();
-            }
-          }
-        } else { //normal mode or between burst mode
-          if (!t->isPreparingFire() && t->canFire() && ai->decideFire(elapsedS,
-              &rocketDir, this, t))
-            t->prepareFire();
-
-          //the enemy is ready to fire
-          if (t->fireReady() && ai->confirmFire(elapsedS, &rocketDir, this, t)) {
-            doFireRocket(t, rocketDir);
-          }
-        }
-
-        Vector2 aim;
-        if (ai->aim(elapsedS, this, t, &aim))
-          t->setRotationFromDir(aim.getNormalized());
+      //Run AI
+      if (t->getTankCategory() == CAT_AI) {
+        EnemyTank* et = static_cast<EnemyTank*>(t);
+        _doAI(et, elapsedS);
       }
+
+      //Move
+      if (!t->getMoveDir().isZero())
+        doTankMove(t, elapsedS);
     }
   }
-  return numAlive;
+  return numEnemiesAlive;
 }
 
-void Game::_updatePlayer (double elapsedS) {
-  //Player Tank movement
-  if (!tankMoveDir.isZero()) {
-    Vector2 dir = tankMoveDir;
-    doTankMove(playerTank, dir, elapsedS);
+void Game::_doAI (EnemyTank* tank, double elapsedS) {
+  TankAI* ai = tank->getAI();
+  if (!ai)
+    return;
+
+  Vector2 moveDir;
+  if (ai->decideDir(elapsedS, &moveDir, this, tank))
+    tank->setMoveDir(moveDir);
+  else
+    tank->setMoveDir(Vector2::ZERO);
+
+  Vector2 rocketDir;
+  //AI fire decision is done in two time :
+  //- first, AI can decide to prepare to fire
+  //- after a delay, decideFire is called again and if the ai decide to actually fire, the rocket is
+  // created
+  //- for some firing policy, the tank will then stay in "inFiring" mode (burst mode) for some time
+  if (tank->isFiring()) { //burst mode, let it fire without delay
+    if (tank->canFire()) {
+      if (ai->confirmFire(elapsedS, &rocketDir, this, tank))
+        doFireRocket(tank, rocketDir);
+      else { //ai decided to stop firing, stop the burst
+        LOGE("cancelFiring");
+        tank->cancelFiring();
+      }
+    }
+  } else { //normal mode or between burst mode
+    if (!tank->isPreparingFire() && tank->canFire() && ai->decideFire(elapsedS,
+          &rocketDir, this, tank))
+      tank->prepareFire();
+
+    //the enemy is ready to fire
+    if (tank->fireReady() && ai->confirmFire(elapsedS, &rocketDir, this, tank)) {
+      doFireRocket(tank, rocketDir);
+    }
   }
+
+  Vector2 aim;
+  if (ai->aim(elapsedS, this, tank, &aim))
+    tank->setRotationFromDir(aim.getNormalized());
 }
+
 
 void Game::doFireRocket (Tank* t, const Vector2& dir) {
   Rocket* r = t->fireRocket(dir);
@@ -274,9 +282,33 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
     explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
     delete r;
   } else {
-    rockets.append(r);
+    addRocket(r);
     colManager.addEntity(r);
   }
+}
+
+void Game::addRocket (Rocket* r) {
+  rockets.append(r);
+}
+
+list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
+  return rockets.remove(i);
+}
+
+void Game::addTank (Tank* t) {
+  tanks.append(t);
+}
+
+list<Tank*>::iterator Game::deleteTank (const list<Tank*>::iterator& i) {
+  return tanks.remove(i);
+}
+
+void Game::addBomb (Bomb* b) {
+  bombs.append(b);
+}
+
+list<Bomb*>::iterator Game::deleteBomb (const list<Bomb*>::iterator& i) {
+  return bombs.remove(i);
 }
 
 #include "containers/pair.h"
@@ -367,27 +399,28 @@ void Game::_calculatePlayerShadows () {
   //LOGE("shadow casting : %i occluders, %i discarded because already covered", occluders.size(), numCovered);
 }
 
-void Game::playerFire (const Vector2& cursorPosition) {
+void Game::_tankFire (Tank* tank, const Vector2& cursorPosition) {
   //Fire up rocket
-  Vector2 dir = cursorPosition-playerTank->getPosition();
+  Vector2 dir = cursorPosition-tank->getPosition();
   dir.normalize();
-  if (playerTank->canFire()) {
-    doFireRocket(playerTank, dir);
+  if (tank->canFire()) {
+    doFireRocket(tank, dir);
   }
 }
 
-void Game::playerDropBomb()
+void Game::_tankDropBomb(Tank* tank)
 {
   //Fire mine
-  if (playerTank->canMine()) {
+  if (tank->canMine()) {
     //FIXME: check that there isn't already a mine here ?
     LOGE("drop bomb");
-    Bomb* m = playerTank->dropBomb();
-    bombs.append(m);
+    Bomb* m = tank->dropBomb();
+    addBomb(m);
   }
 }
 
-void Game::doTankMove (Tank* t, Vector2 dir, double elapsedS) {
+void Game::doTankMove (Tank* t, double elapsedS) {
+  Vector2 dir = t->getMoveDir();
   if (dir.isZero())
     return;
 
@@ -442,7 +475,7 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
       } else { //SPLIT
         rocket->addBounce();
         Rocket* newRocket = new Rocket(rocket);
-        rockets.append(newRocket);
+        addRocket(newRocket);
         colManager.addEntity(newRocket);
         //Now, the idea is to have the two rockets going in opposite directions each
         //30 degrees away from the normal bounce direction

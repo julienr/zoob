@@ -16,6 +16,12 @@ class FireRatePolicy {
     virtual void cancelFiring () {}
 };
 
+class DummyFirePolicy : public FireRatePolicy {
+  public:
+    void fire () {}
+    bool canFire () const { return false; }
+};
+
 class IntervalFirePolicy : public FireRatePolicy {
   public:
     IntervalFirePolicy (uint64_t interval)

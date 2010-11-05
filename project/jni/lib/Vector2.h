@@ -22,16 +22,24 @@ struct Vector2 {
 
   void normalize () {
     const float l = length();
-    x /= l;
-    y /= l;
+    if (l == 0) {
+      x = 0;
+      y = 0;
+    } else {
+      x /= l;
+      y /= l;
+    }
   }
 
   Vector2 getNormalized () const {
     const float l = length();
-    return Vector2(x/l, y/l);
+    if (l == 0)
+      return Vector2::ZERO;
+    else
+      return Vector2(x/l, y/l);
   }
 
-  bool isZero () {
+  bool isZero () const {
     return x == 0 && y == 0;
   }
 

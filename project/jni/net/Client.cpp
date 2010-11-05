@@ -29,3 +29,33 @@ void Client::handleMsgKicked (size_t dataLen, const uint8_t* data, size_t offset
   //TODO: should disconnect and notify user
   LOGI("[handleMsgKicked] reason=%s", (char*)kicked.reason.bytes);
 }
+
+void Client::handleGameState (size_t dataLen, const uint8_t* data, size_t offset) {
+  zoobmsg::GameState* gameState = new zoobmsg::GameState();
+  zoobmsg::GameState::unpack(dataLen, data, offset, *gameState);
+  gameStates.append(gameState);
+}
+
+void Client::update(NetworkedGame& game) {
+  zoobmsg::GameState* gameState;
+  while (gameStates.pop(&gameState)) {
+    game.applyGameState(gameState);
+    delete gameState;
+  }
+}
+ 
+void Client::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
+  zoobmsg::PlayerCommands msg;
+  msg.playerID = localPlayerID;
+  msg.moveDir.x = cmd.moveDir.x;
+  msg.moveDir.y = cmd.moveDir.y;
+  msg.fire = cmd.fire;
+  msg.fireDir.x = cmd.fireDir.x;
+  msg.fireDir.y = cmd.fireDir.y;
+  msg.mine = cmd.mine;
+  msg.shield = cmd.shield;
+
+  sendMsgPlayerCommands(msg);
+}
+
+

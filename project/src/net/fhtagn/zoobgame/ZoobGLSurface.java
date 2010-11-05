@@ -138,6 +138,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		this.app = app;
 	}
 	
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		Log.i(TAG, "onSurfaceCreated");
 		//Call ALL nativeInit methods here, because we want the JNIEnv of the rendering thread

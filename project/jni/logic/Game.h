@@ -107,14 +107,14 @@ class Game {
       return gameState == GAME_PAUSED;
     }
 
-    void applyLocalCommands (const PlayerCommand& cmd);
+    void applyCommands (Tank* tank, const PlayerCommand& cmd);
 
     PlayerTank* getPlayerTank () const {
       return playerTank;
     }
 
-    const list<EnemyTank*>* getEnemies () const {
-      return &enemies;
+    const list<Tank*>* getTanks () const {
+      return &tanks;
     }
 
     const Level* getLevel () const {
@@ -204,28 +204,42 @@ class Game {
     }
 #endif
 
+  protected:
+    //These are functions that are called when a rocket/mine/tank is
+    //added/removed (destroyed) from the game. This allow subclasses
+    //to keep track of them.
+    //The subclass MUST call the superclass method before proceeding
+    virtual void addRocket (Rocket* r);
+    virtual list<Rocket*>::iterator deleteRocket (const list<Rocket*>::iterator& i);
+    virtual void addTank (Tank* t);
+    virtual list<Tank*>::iterator deleteTank (const list<Tank*>::iterator& i);
+    virtual void addBomb (Bomb* b);
+    virtual list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
+
   private:
     void _handleTriggers ();
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
-    int _updateEnemies (double elapsedS);
+    int _updateTanks (double elapsedS);
     void _updatePlayer (double elapsedS);
 
-    void playerFire (const Vector2& cursorPosition);
+    void _doAI (EnemyTank* tank, double elapsedS);
+
+    void _tankFire (Tank* tank, const Vector2& aimPosition);
+    void _tankDropBomb (Tank* tank);
+    void _tankActivateShield (Tank* tank) {
+      tank->startShield();
+    }
+
+    /*void playerFire (const Vector2& cursorPosition);
     void playerDropBomb ();
 
     void playerActivateShield () {
       playerTank->startShield();
-    }
+    }*/
 
-    //Set tank movement direction. Set to (0,0) for no move
-    void setTankMoveDir (const Vector2& dir) {
-      tankMoveDir.set(dir.x,dir.y);
-    }
-
-
-    //Move and rotate the tank according to dir and calls slideMove
-    void doTankMove (Tank* t, Vector2 dir, double elapsedS);
+    //Move and rotate the tank according to t->getMoveDir and calls slideMove
+    void doTankMove (Tank* t, double elapsedS);
 
     void doFireRocket (Tank* t, const Vector2& dir);
 
@@ -239,7 +253,7 @@ class Game {
 
     CollisionManager colManager;
     PlayerTank* playerTank;
-    list<EnemyTank*> enemies;
+    list<Tank*> tanks;
     list<Rocket*> rockets;
     list<Bomb*> bombs;
     list<ExplosionLocation> explosions;

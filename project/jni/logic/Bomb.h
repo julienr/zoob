@@ -26,6 +26,10 @@ class Bomb : public ExplosiveEntity {
       timeLeft -= elapsedS;
     }
 
+    void setTimeLeft (double t) {
+      timeLeft = t;
+    }
+
     double getTimeLeft () const {
       return timeLeft;
     }

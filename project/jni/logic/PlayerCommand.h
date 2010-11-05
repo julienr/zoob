@@ -2,6 +2,7 @@
 #define _PLAYERCOMMAND_H
 
 #include "def.h"
+#include "lib/Vector2.h"
 
 struct PlayerCommand {
   void setFire (const Vector2& dir) {

@@ -50,6 +50,7 @@ static bool collideOnAxis (const Vector2& axis, float min0, float max0, float mi
   return true;
 }
 
+#if 0 //unused
 //static overlap test with backoff calculation
 static bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1, Vector2* backoff) {
   //The two objects are separated on this axis
@@ -72,6 +73,8 @@ static bool overlapOnAxis (const Vector2& axis, float min0, float max0, float mi
 static bool overlapOnAxis (const Vector2& axis, float min0, float max0, float min1, float max1) {
   return !(max1 < min0 || min1 > max0);
 }
+
+#endif
 
 bool CollisionManager::MovingAgainstStill (const Vector2& stillPos,
                                                 const BoundingVolume* still,

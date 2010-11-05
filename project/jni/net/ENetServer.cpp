@@ -38,6 +38,7 @@ static void* serverThread (void* args) {
   while (true) {
     while (enet_host_service(server, &event, 1000) > 0) {
       switch (event.type) {
+        case ENET_EVENT_TYPE_NONE: break;
         case ENET_EVENT_TYPE_CONNECT: {
           LOGE("New client connected from %x:%u", event.peer->address.host,
                   event.peer->address.port);
@@ -92,6 +93,14 @@ static void* serverThread (void* args) {
 
 void ENetServer::start () {
   pthread_create(&threadID, NULL, serverThread, NULL);
+}
+
+void ENetServer::update(NetworkedGame& game) {
+  //TODO
+}
+
+void ENetServer::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
+  //TODO
 }
 
 //To send a message, we first calculate its size. We add one because the first
