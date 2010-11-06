@@ -2,6 +2,7 @@
 #include "logic/NetTank.h"
 #include "logic/Rocket.h"
 #include "logic/Bomb.h"
+#include "net/NetController.h"
 
 void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   //FIXME: should also REMOVE all rockets, tanks and bombs that are not in the update
@@ -50,6 +51,17 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
     }
   }
 }
+
+void NetworkedGame::applyCommands (Tank* tank, const PlayerCommand& cmd) {
+  NetController::getInstance()->sendPlayerCommand(tank->getID(), cmd);
+  Game::applyCommands(tank, cmd);
+}
+
+void NetworkedGame::update(const double elapsedS) {
+  NetController::getInstance()->update(this);
+  Game::update(elapsedS);
+}
+
 
 void NetworkedGame::addRocket (Rocket* r) {
   Game::addRocket(r);

@@ -145,14 +145,14 @@ void toPauseState () {
 
 void nativeStartServer () {
   LOGI("Starting server...");
-  Server::registerInstance(new ENetServer());
-  Server::getInstance()->start();
+  NetController::registerInstance(new ENetServer());
+  NetController::getInstance()->start();
 }
 
 void nativeStartClient () {
   LOGI("Starting client...");
-  Client::registerInstance(new ENetClient());
-  Client::getInstance()->start();
+  NetController::registerInstance(new ENetClient());
+  NetController::getInstance()->start();
 }
 
 void nativeInit (const char* apkPath, const char* serie) {

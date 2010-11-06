@@ -21,17 +21,6 @@
  */
 class Server : public NetController {
   public:
-    static Server* getInstance() {
-      if (!instance)
-        LOGE("Server::getInstance() before registerInstance()");
-      return instance;
-    }
-
-    static void registerInstance (Server* i) {
-      instance = i;
-    }
-
-
     Server () : playerIDGen(0), state(zoobmsg::WARM_UP) {}
 
     /**
@@ -41,7 +30,7 @@ class Server : public NetController {
      */
     virtual void start () = 0;
  
-    void update(NetworkedGame& game);
+    void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
 
   
@@ -63,10 +52,13 @@ class Server : public NetController {
     virtual void sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg) = 0;
 
   private:
-    static Server* instance;
 
     uint16_t playerIDGen;
     zoobmsg::ServerState state;
+
+    set<uint16_t> connectedClients;
+
+    uint64_t lastGameStateBroadcast;
 };
 
 #endif	/* _SERVER_H */

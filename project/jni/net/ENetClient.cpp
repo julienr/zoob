@@ -59,7 +59,7 @@ static void* clientThread (void* args) {
   hello.nickname.numBytes = 5;
   hello.nickname.bytes = new char[5];
   strncpy(hello.nickname.bytes, "test", 5);
-  Client::getInstance()->sendMsgHello(hello);
+  static_cast<ENetClient*>(NetController::getInstance())->sendMsgHello(hello);
 
   ENetEvent event;
   while (true) {
@@ -79,7 +79,7 @@ static void* clientThread (void* args) {
           uint8_t msgType = event.packet->data[0];
 #define MSG_CALLBACK(type, cbName) \
           case zoobmsg::type::messageID: \
-            Client::getInstance()->cbName(event.packet->dataLength, event.packet->data, 1); \
+            static_cast<ENetClient*>(NetController::getInstance())->cbName(event.packet->dataLength, event.packet->data, 1); \
             break;
 
           switch (msgType) {

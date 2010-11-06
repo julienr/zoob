@@ -66,7 +66,7 @@ static void* serverThread (void* args) {
           uint8_t msgType = event.packet->data[0];
 #define MSG_CALLBACK(type, cbName) \
           case zoobmsg::type::messageID: \
-            Server::getInstance()->cbName(toUID(event.peer), event.packet->dataLength, event.packet->data, 1); \
+            static_cast<ENetServer*>(NetController::getInstance())->cbName(toUID(event.peer), event.packet->dataLength, event.packet->data, 1); \
             break;
 
 

@@ -8,6 +8,11 @@
 class NetworkedGame : public Game {
   public:
     void applyGameState (const zoobmsg::GameState* state);
+
+    void applyCommands (Tank* tank, const PlayerCommand& cmd);
+
+    void update(const double elapsedS);
+
   protected:
     virtual void addRocket (Rocket* r);
     virtual list<Rocket*>::iterator deleteRocket (const list<Rocket*>::iterator& i);

@@ -1,8 +1,6 @@
 #include "Client.h"
 #include "enet/enet.h"
 
-Client* Client::instance = NULL;
-
 
 void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::Welcome welcome;
@@ -36,10 +34,10 @@ void Client::handleGameState (size_t dataLen, const uint8_t* data, size_t offset
   gameStates.append(gameState);
 }
 
-void Client::update(NetworkedGame& game) {
+void Client::update(NetworkedGame* game) {
   zoobmsg::GameState* gameState;
   while (gameStates.pop(&gameState)) {
-    game.applyGameState(gameState);
+    game->applyGameState(gameState);
     delete gameState;
   }
 }

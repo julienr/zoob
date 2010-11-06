@@ -8,20 +8,9 @@
 
 class Client : public NetController {
   public:
-    static Client* getInstance() {
-      if (!instance)
-        LOGE("Client::getInstance() before registerInstance()");
-      return instance;
-    }
-
-    static void registerInstance (Client* c) {
-      instance = c;
-    }
-
-
     virtual void start () = 0;
 
-    void update(NetworkedGame& game);
+    void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
 
     void handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset);
@@ -34,7 +23,6 @@ class Client : public NetController {
 
 
   private:
-    static Client* instance;
     pthread_t threadID;
     blockingqueue<zoobmsg::GameState*> gameStates;
 };

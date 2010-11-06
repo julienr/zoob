@@ -4,10 +4,8 @@
 #include "logic/Bomb.h"
 #include "logic/Rocket.h"
 
-Server* Server::instance = NULL;
-
 void Server::handleConnect (const uint64_t& peerID) {
-
+  connectedClients.insert(peerID);
 }
 
 void Server::handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset) {
@@ -44,14 +42,21 @@ void Server::handleMsgPlayerCommand (const uint64_t& peerID, size_t dataLen, con
 }
 
 void Server::handleDisconnect (const uint64_t& peerID) {
-  
+  connectedClients.remove(peerID); 
 }
 
-void Server::update(NetworkedGame& game) {
+#define BROADCAST_INTERVAL 500
+void Server::update(NetworkedGame* game) {
+  const uint64_t now = Utils::getCurrentTimeMillis();
+  if ((now - lastGameStateBroadcast) < BROADCAST_INTERVAL) {
+    lastGameStateBroadcast = now;
+    return;
+  }
+  lastGameStateBroadcast = now;
+
   //We want to read the GameState and broadcast it to clients
-  //TODO
   zoobmsg::GameState state;
-  const list<Tank*>* tanks = game.getTanks();
+  const list<Tank*>* tanks = game->getTanks();
 
   state.numPlayerInfos = tanks->size();
   state.playerInfos = new zoobmsg::PlayerInfo[state.numPlayerInfos];
@@ -96,11 +101,16 @@ void Server::update(NetworkedGame& game) {
     }
   }
 
-  //TODO:BROADCAST
+  //Broadcast to connected clients
+  for (set<uint16_t>::iterator i=connectedClients.begin(); i.hasNext(); i++) {
+    const uint16_t peerID = *i;
+    sendMsgGameState(peerID, state);
+  }
 }
 
 void Server::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
-  //TODO
+  //We don't have to do anything here, local commands are already handled by Game
+  //and local Game simulation is authoritative
 }
 
 

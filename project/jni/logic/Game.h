@@ -107,7 +107,7 @@ class Game {
       return gameState == GAME_PAUSED;
     }
 
-    void applyCommands (Tank* tank, const PlayerCommand& cmd);
+    virtual void applyCommands (Tank* tank, const PlayerCommand& cmd);
 
     PlayerTank* getPlayerTank () const {
       return playerTank;
@@ -145,7 +145,7 @@ class Game {
 
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
 
-    void update(const double elapsedS);
+    virtual void update(const double elapsedS);
 
     void toggleGodMode () {
       godMode = !godMode;
