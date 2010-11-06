@@ -37,14 +37,14 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
       }
     }
 
-    for (uint16_t j=0; j<pinfo.numMineInfos; j++) {
-      const zoobmsg::MineInfo& binfo = pinfo.mineInfos[j];
+    for (uint16_t j=0; j<pinfo.numBombInfos; j++) {
+      const zoobmsg::BombInfo& binfo = pinfo.bombInfos[j];
       const Vector2 pos(binfo.position.x, binfo.position.y);
-      if (!bombsByID.contains(binfo.mineID)) {
+      if (!bombsByID.contains(binfo.bombID)) {
         Bomb* bomb = new Bomb(tank, pos);
         bomb->setTimeLeft((double)binfo.timeleft);
       } else {
-        Bomb* bomb = bombsByID.get(binfo.mineID);
+        Bomb* bomb = bombsByID.get(binfo.bombID);
         bomb->setPosition(pos);
       }
     }

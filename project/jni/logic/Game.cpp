@@ -182,6 +182,7 @@ void Game::_updateBombs (double elapsedS) {
     list<Entity*>* touchedEntities = colManager.getGrid().entitiesIn(m->getPosition(), BOMB_EXPLOSION_RADIUS, m->getOwner(), ENTITY_ROCKET | ENTITY_WALL | ENTITY_BOMB);
     //A bomb will always have at least a one second lifetime. This is to avoid direct explosions after drop
     const double minBombTime = BOMB_LIFETIME - 1;
+    LOGE("touched entities : %i", touchedEntities->size());
     //A mine explodes when an enemy pass on it OR after its delay
     if (m->getTimeLeft() <= 0 || ((m->getTimeLeft() <= minBombTime) && !touchedEntities->empty())) {
       //touch all the entities in the explosion area
