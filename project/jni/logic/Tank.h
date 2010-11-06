@@ -91,7 +91,8 @@ class Tank: public Entity {
     }
 
     virtual bool acceptsTouch (Entity* other) {
-      return other->getType() == ENTITY_ROCKET; 
+      return other->getType() == ENTITY_ROCKET ||
+             other->getType() == ENTITY_BOMB; 
     }
 
     //returns NULL if none
