@@ -75,6 +75,7 @@ void gameUnPauseCallback () {
 }
 
 void toPlayingState () {
+  LOGI("[toPlayingState]");
   if (Game::getInstance() && Game::getInstance()->isPaused()) {
     LOGE("unpause");
     Game::getInstance()->unpause();
@@ -85,19 +86,25 @@ void toPlayingState () {
 
     lvl = LevelManager::getInstance()->loadLevel(GameManager::getInstance()->getCurrentLevel());
     if (lvl == NULL) {
+      LOGE("[toPlayingState] lvl = NULL");
       showMenu(MENU_ERROR, -1);
       GameManager::getInstance()->setState(STATE_NONE);
       return;
     }
 
     ProgressionManager::getInstance()->changedLevel(lvl);
-    Game::create(gameOverCallback, gameWonCallback, lvl);
+    if (NetController::getInstance()) //networked game
+      NetworkedGame::create(gameOverCallback, gameWonCallback, lvl);
+    else //single player game
+      Game::create(gameOverCallback, gameWonCallback, lvl);
+    
     gameView = new GameView();
 
     InputManager::getInstance()->reset();
 
     centerGameInViewport();
   }
+  LOGI("[toPlayingState] finished");
 }
 
 void startGame (int level) {
@@ -147,6 +154,7 @@ void nativeStartServer () {
   LOGI("Starting server...");
   NetController::registerInstance(new ENetServer());
   NetController::getInstance()->start();
+  startGame(0);
 }
 
 void nativeStartClient () {
@@ -408,25 +416,26 @@ static uint64_t lastFPS = Utils::getCurrentTimeMillis();
 #define FPS_REPORT_INTERVAL 1000 //ms
 #endif
 
+//We run physics simulation by chuncks of dt. So the physics framerate is independent
+//from the rendering framerate. See Gaffer's "Fix your timestep" article :
+// http://gafferongames.com/game-physics/fix-your-timestep/
+//We could improve on the current implementation by integration "The final touch" (from the article),
+//but this doesn't seem really needed as temporal aliasing is not visible
+static const double dt = 1/30.0f; //Physics frequency is 60hz
+
 void nativeRender () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
-  //We run physics simulation by chuncks of dt. So the physics framerate is independent
-  //from the rendering framerate. See Gaffer's "Fix your timestep" article :
-  // http://gafferongames.com/game-physics/fix-your-timestep/
-  //We could improve on the current implementation by integration "The final touch" (from the article),
-  //but this doesn't seem really needed as temporal aliasing is not visible
-  static const double dt = 1/30.0f; //Physics frequency is 60hz
-  static double accumulator = 0;
 
   //Let game manager apply all the transition it has. It normally will have only one, but if during
   //the transition callback, a transition to another state was requested, it might have two or more
   GameManager* gm = GameManager::getInstance();
   do {
+    LOGI("[nativeRender] applyTransition");
     gm->applyTransition();
   } while (gm->inTransition() && gm->getTransitionDelay() <= 0);
+  LOGI("[nativeRender] transitions applied");
 
   //BEGIN time management
-  //FIXME: should move this whole timing stuff to timer or similar
   uint64_t now = Utils::getCurrentTimeMillis();
 
   double elapsedS = (now-lastTime)/1000.0;
@@ -454,31 +463,46 @@ void nativeRender () {
 
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
+
+  //If we're playing in a networked game, check if we should change the level
+  if (NetController::getInstance()) {
+    uint16_t playerID;
+    ServerState serverState;
+    char* json = NetController::getInstance()->hasNewLevel(&playerID, &serverState);
+    if (json) {
+      LevelManager::registerInstance(new SingleLevelManager(json));
+      free(json);
+      startGame(0);
+    }
+  }
  
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
   if (GameManager::getInstance()->getState() == STATE_NONE) {
-    accumulator = 0;
     return;
   }
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
+    LOGI("[nativeRender] inGame or paused");
     if (!GameManager::getInstance()->paused()) {
-      accumulator += elapsedS;
-      while (accumulator >= dt) { //empty accumulator as much as possible
+      Game* game = Game::getInstance();
+      game->accumulate(elapsedS);
+      LOGI("[nativeRender] accumulator : %lf", game->getAccumulator());
+      while (game->getAccumulator() >= dt) { //empty accumulator as much as possible
         PlayerCommand localPlayerCmd;
         InputManager::getInstance()->think(elapsedS, localPlayerCmd);
         Game::getInstance()->applyCommands(Game::getInstance()->getPlayerTank(), localPlayerCmd);
         Game::getInstance()->update(dt);
-        accumulator -= dt;
+        game->useAccumulatedTime(dt);
 #ifdef ZOOB_DBG_FPS
         numPhysicFrames++;
 #endif
       }
     } else {
-      accumulator = 0;
+      Game::getInstance()->resetAccumulator();
     }
+    LOGI("[nativeRender] rendering");
 
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);

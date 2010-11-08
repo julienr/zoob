@@ -72,10 +72,16 @@ struct DebugPolygon {
 class Game {
   private:
     static Game* instance;
+  protected:
     Game (game_callback_t overCallback,
           game_callback_t wonCallback,
           Level* level);
-    ~Game ();
+    virtual ~Game ();
+    
+    static void registerInstance(Game* game) {
+      ASSERT(!instance);
+      instance = game;
+    }
   public:
     static Game* getInstance() {
       return instance;
@@ -86,8 +92,7 @@ class Game {
     static void create (game_callback_t overCallback,
                         game_callback_t wonCallback,
                         Level* level) {
-      ASSERT(!instance);
-      instance = new Game(overCallback, wonCallback, level);
+      registerInstance(new Game(overCallback, wonCallback, level));
     }
 
     static void destroy () {
@@ -135,6 +140,24 @@ class Game {
 
     const vector<ShadowPolygon*>& getPlayerShadows () const {
       return playerShadows;
+    }
+
+    //Accumulator is used for physic simulation
+    //See nativeRender's physic simulation loop
+    void accumulate (double elapsedS) {
+      accumulator += elapsedS;
+    }
+
+    void useAccumulatedTime (double dt) {
+      accumulator -= dt;
+    }
+
+    void resetAccumulator () {
+      accumulator = 0;
+    }
+
+    double getAccumulator () {
+      return accumulator;
     }
 
     //Returns the explosions that have to be displayed. The caller should delete the explosions
@@ -250,6 +273,8 @@ class Game {
     void bounceMove (Rocket* r, Vector2 move);
 
     void _calculatePlayerShadows ();
+
+    double accumulator;
 
     CollisionManager colManager;
     PlayerTank* playerTank;

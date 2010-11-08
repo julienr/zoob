@@ -18,7 +18,8 @@
 Game* Game::instance = NULL;
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
-    : colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
+    : accumulator(0),
+      colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
       playerTank(new PlayerTank()),
       level(level),
       elapsedS(0),
@@ -418,7 +419,7 @@ void Game::_tankDropBomb(Tank* tank)
 {
   //Fire mine
   if (tank->canMine()) {
-    //FIXME: check that there isn't already a mine here ?
+    //FIXME: check that there isn't already a bomb here ?
     LOGE("drop bomb");
     Bomb* m = tank->dropBomb();
     addBomb(m);
