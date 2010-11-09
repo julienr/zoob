@@ -64,7 +64,6 @@ void GameScreen::startMultiplayerGame (int level, bool server) {
     nativeStartServer();
   else
     nativeStartClient();
-  ::startGame(level);
 }
 
 void GameScreen::resizeGL (int width, int height) {

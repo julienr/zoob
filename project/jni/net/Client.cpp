@@ -3,12 +3,32 @@
 
 
 void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offset) {
-  zoobmsg::Welcome welcome;
-  zoobmsg::Welcome::unpack(dataLen, data, offset, welcome);
+  pthread_mutex_lock(&welcomeMutex);
+  delete lastWelcome;
+  
+  lastWelcome = new zoobmsg::Welcome();
+  zoobmsg::Welcome::unpack(dataLen, data, offset, *lastWelcome);
 
-  LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", welcome.playerID, welcome.serverState);
-  LOGI("[handleMsgWelcome] level=%s", welcome.level.bytes);
+  LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", lastWelcome->playerID, lastWelcome->serverState);
+  LOGI("[handleMsgWelcome] level=%s", lastWelcome->level.bytes);
+  pthread_mutex_unlock(&welcomeMutex);
 }
+
+char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
+  char* json = NULL;
+  pthread_mutex_lock(&welcomeMutex);
+  if (lastWelcome) {
+    json = strndup(lastWelcome->level.bytes, lastWelcome->level.numBytes);
+    *playerID = lastWelcome->playerID;
+    *serverState = (ServerState)lastWelcome->serverState;
+    delete lastWelcome;
+    lastWelcome = NULL;
+  }
+  pthread_mutex_unlock(&welcomeMutex);
+  LOGE("[hasNewLevel] %p", json);
+  return json;
+}
+
 
 void Client::handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::Version version;

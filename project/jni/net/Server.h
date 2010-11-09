@@ -21,7 +21,7 @@
  */
 class Server : public NetController {
   public:
-    Server () : playerIDGen(0), state(zoobmsg::WARM_UP) {}
+    Server () : playerIDGen(0), state(WARM_UP) {}
 
     /**
      * This method should be implemented by the transport-specific subclass
@@ -32,6 +32,7 @@ class Server : public NetController {
  
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
+    char* hasNewLevel (uint16_t* playerID, ServerState* serverState) { return NULL; }
 
   
     //These are callbacks for the various events that can happen on server-side.
@@ -54,7 +55,7 @@ class Server : public NetController {
   private:
 
     uint16_t playerIDGen;
-    zoobmsg::ServerState state;
+    ServerState state;
 
     set<uint16_t> connectedClients;
 

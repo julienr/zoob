@@ -5,6 +5,7 @@
 #include "lib/Vector2.h"
 
 struct PlayerCommand {
+  PlayerCommand () :moveDir(0,0),fire(false),fireDir(0,0),mine(false),shield(false) {}
   void setFire (const Vector2& dir) {
     fireDir = dir;
     fire = true;

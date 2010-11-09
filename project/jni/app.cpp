@@ -491,9 +491,12 @@ void nativeRender () {
       LOGI("[nativeRender] accumulator : %lf", game->getAccumulator());
       while (game->getAccumulator() >= dt) { //empty accumulator as much as possible
         PlayerCommand localPlayerCmd;
+        LOGI("[nativeRender] applying commands");
         InputManager::getInstance()->think(elapsedS, localPlayerCmd);
         Game::getInstance()->applyCommands(Game::getInstance()->getPlayerTank(), localPlayerCmd);
+        LOGI("[nativeRender] performing simulation step on game : 0x%x", Game::getInstance());
         Game::getInstance()->update(dt);
+        LOGI("[nativeRender] simulation finished");
         game->useAccumulatedTime(dt);
 #ifdef ZOOB_DBG_FPS
         numPhysicFrames++;

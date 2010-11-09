@@ -79,7 +79,7 @@ class Game {
     virtual ~Game ();
     
     static void registerInstance(Game* game) {
-      ASSERT(!instance);
+      LOGI("[Game::registerInstace] instance=0x%p", game);
       instance = game;
     }
   public:

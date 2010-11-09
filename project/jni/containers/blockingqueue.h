@@ -28,12 +28,27 @@ class blockingqueue {
       pthread_mutex_unlock(&mutex);
     }
 
-    //Gets and remove the top value from the queue.
+    //Gets and remove the top value from the queue. NON-BLOCKING
+    //Returns false if the queue is empty, true otherwise
+    bool pop (T* val) {
+      pthread_mutex_lock(&mutex);
+      bool canPop = !content.empty();
+      if (canPop) {
+        *val = content.removeFirst();
+        //special termination case
+        if (content.empty() && writeFinished)
+          pthread_cond_broadcast(&cond);
+      }
+      pthread_mutex_unlock(&mutex);
+      return canPop;
+    }
+
+    //Gets and remove the top value from the queue. BLOCKING
     //The value will be stored in the given pointer
     //true is returned if an actual value could be read
     //false is returned if the blockingqueue is destroyed
     //while the current thread is waiting on it
-    bool pop (T* val) {
+    bool blockingPop (T* val) {
       pthread_mutex_lock(&mutex);
 
       //We have to wait if the queue is empty.

@@ -5,6 +5,7 @@
 #include "logic/PlayerCommand.h"
 #include "logic/NetworkedGame.h"
 
+
 #define NUM_CHANNELS 2
 #define SERVER_PORT 1234
 
@@ -28,6 +29,8 @@ class NetController {
       instance = i;
     }
 
+    virtual ~NetController () {}
+
     //Update game with the latest state available from the network. Might do nothing
     //if we haven't received any state update.
     //MUST be called from the game thread
@@ -38,6 +41,12 @@ class NetController {
     virtual void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) = 0;
 
     virtual void start () = 0;
+
+    //Check if this netcontroller has received a command to load a new level.
+    //Returns NULL if no such command was received, otherwise returns a NEWLY allocated string containing the 
+    //JSON level which should be freed with free
+    //playerID and serverState are set only if the function doesn't return NULL
+    virtual char* hasNewLevel (uint16_t* playerID, ServerState* serverState) = 0;
   private:
     static NetController* instance;
 };

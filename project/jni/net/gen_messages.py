@@ -261,14 +261,6 @@ class Message:
 
 declStaticCode = """
 
-//TYPES DEF
-enum ServerState {
-  WARM_UP=0,
-  ROUND_WARM_UP=1,
-  IN_ROUND=2,
-  GAME_FINISHED=3
-};
-
 """
 
 implStaticCode = """

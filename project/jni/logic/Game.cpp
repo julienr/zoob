@@ -112,7 +112,6 @@ void Game::update (const double elapsedS) {
     if (introTimeLeft <= 0)
       introDone = true;
   }
-
   //rockets and tanks
   colManager.unmarkCollided();
   if (introDone) {

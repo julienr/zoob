@@ -5,7 +5,7 @@
 static ENetPeer* serverPeer = NULL;
 
 static ENetPeer* connectToServer (ENetHost* client) {
-  ENetAddress address;
+  ENetAddress address = {0,0};
   enet_address_set_host(&address, "localhost");
   address.port = SERVER_PORT;
 
@@ -95,10 +95,11 @@ static void* clientThread (void* args) {
           event.peer->data = NULL;
           break;
         }
-        case ENET_EVENT_TYPE_NONE: break; //shouldn't happen
+        case ENET_EVENT_TYPE_NONE: break;
       }
     }
   }
+  LOGI("[ENetClient] client finished");
   enet_host_destroy(client);
   enet_deinitialize();
   return NULL;

@@ -89,4 +89,12 @@ enum {
     TEX_GROUP_REWARD
 };
 
+//network server state
+enum ServerState {
+  WARM_UP=0,
+  ROUND_WARM_UP=1,
+  IN_ROUND=2,
+  GAME_FINISHED=3
+};
+
 #endif /* DEF_H_ */
