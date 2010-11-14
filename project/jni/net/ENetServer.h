@@ -10,9 +10,9 @@ class ENetServer : public Server {
     void start ();
  
   protected:
-    void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg);
-    void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg);
-    void sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg);
+    void sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg);
+    void sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg);
+    void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg);
 
   private:
     pthread_t threadID;

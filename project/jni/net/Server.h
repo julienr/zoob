@@ -21,7 +21,7 @@
  */
 class Server : public NetController {
   public:
-    Server () : playerIDGen(0), state(WARM_UP) {}
+    Server () : playerIDGen(0), state(WARM_UP), lastGameStateBroadcast(Utils::getCurrentTimeMillis()) {}
 
     /**
      * This method should be implemented by the transport-specific subclass
@@ -37,23 +37,22 @@ class Server : public NetController {
   
     //These are callbacks for the various events that can happen on server-side.
     //These are called in the server thread
-    void handleConnect (const uint64_t& peerID);
+    void handleConnect (const uint16_t peerID);
 
     //Handles for various messages
-    void handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
-    void handleMsgJoin (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
-    void handleMsgPlayerCommand (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgJoin (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
     
-    void handleDisconnect (const uint64_t& peerID);
+    void handleDisconnect (const uint16_t peerID);
 
 
     //Implemented by subclass for efficiency (avoid buffer copies)
-    virtual void sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) = 0;
-    virtual void sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) = 0;
-    virtual void sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg) = 0;
+    virtual void sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg) = 0;
+    virtual void sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg) = 0;
+    virtual void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg) = 0;
 
   private:
-
     uint16_t playerIDGen;
     ServerState state;
 

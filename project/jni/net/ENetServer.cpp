@@ -2,14 +2,18 @@
 #include <pthread.h>
 #include <unistd.h>
 
-map<uint64_t, ENetPeer*> peers;
+//This is a "bimap". Keep them synchronized manually
+map<uint16_t, ENetPeer*> uidToPeers;
+map<ENetPeer*, uint16_t> peerToUids;
 
-static uint64_t toUID (ENetPeer* peer) {
-  return ((uint64_t)peer->address.host << 32) | (uint64_t)peer->address.port;
+static uint16_t peerIDGen = 0;
+
+static uint16_t toUID (ENetPeer* peer) {
+  return peerToUids.get(peer);
 }
 
-static ENetPeer* toPeer (uint64_t uid) {
-  return peers.get(uid);
+static ENetPeer* toPeer (uint16_t uid) {
+  return uidToPeers.get(uid);
 }
 
 static void* serverThread (void* args) {
@@ -40,17 +44,13 @@ static void* serverThread (void* args) {
       switch (event.type) {
         case ENET_EVENT_TYPE_NONE: break;
         case ENET_EVENT_TYPE_CONNECT: {
-          LOGE("New client connected from %x:%u", event.peer->address.host,
-                  event.peer->address.port);
-          event.peer->data = (void*)"Client information";
+          const uint16_t peerID = peerIDGen++;
+          uidToPeers.insert(peerID, event.peer);
+          peerToUids.insert(event.peer, peerID);
+          LOGE("New client connected from %x:%u, assigned uid=%i", event.peer->address.host,
+                  event.peer->address.port, peerID); 
 
-            //Send a single packet
-            ENetPacket * packet = enet_packet_create ("hi from server",
-                                                      strlen ("hi from server") + 1,
-                                                      ENET_PACKET_FLAG_RELIABLE);
-            enet_peer_send(event.peer, 0, packet);
-            enet_host_flush(server);
-            peers.insert(toUID(event.peer), event.peer);
+          static_cast<ENetServer*>(NetController::getInstance())->handleConnect(toUID(event.peer));
           break;
         }
         case ENET_EVENT_TYPE_RECEIVE: {
@@ -79,9 +79,10 @@ static void* serverThread (void* args) {
           break;
         }
         case ENET_EVENT_TYPE_DISCONNECT: {
-          LOGE("%s disconnected", (char*)event.peer->data);
           event.peer->data = NULL;
-          peers.remove(toUID(event.peer));
+          const uint16_t peerID = peerToUids.get(event.peer);
+          uidToPeers.remove(peerID);
+          peerToUids.remove(event.peer);
         }
       }
     }
@@ -104,17 +105,18 @@ void ENetServer::start () {
   packet->data[0] = msgType::messageID; \
   size_t offset = 1; \
   msgType::pack(size, packet->data, offset, msg); \
-  enet_peer_send (toPeer(peerID), 0, packet)
+  enet_peer_send (toPeer(peerID), channel, packet)
 
 
-void ENetServer::sendMsgWelcome (const uint64_t& peerID, const zoobmsg::Welcome& msg) {
+void ENetServer::sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg) {
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Welcome, 0);
 }
 
-void ENetServer::sendMsgVersion (const uint64_t& peerID, const zoobmsg::Version& msg) {
+void ENetServer::sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg) {
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Version, 0);
 }
 
-void ENetServer::sendMsgGameState (const uint64_t& peerID, const zoobmsg::GameState& msg) {
+void ENetServer::sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg) {
+  //LOGI("[sendMgsGameState] msg size : %lu", zoobmsg::GameState::packedSize(msg));
   SEND_MESSAGE(0, zoobmsg::GameState, 1);
 }

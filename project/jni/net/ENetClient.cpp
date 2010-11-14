@@ -86,6 +86,7 @@ static void* clientThread (void* args) {
             MSG_CALLBACK(Version, handleMsgVersion)
             MSG_CALLBACK(Kicked, handleMsgKicked)
             MSG_CALLBACK(Welcome, handleMsgWelcome)
+            MSG_CALLBACK(GameState, handleMsgGameState)
           }
           enet_packet_destroy(event.packet);
           break;
@@ -115,14 +116,14 @@ void ENetClient::start () {
   packet->data[0] = msgType::messageID; \
   size_t offset = 1; \
   msgType::pack(size, packet->data, offset, msg); \
-  enet_peer_send (serverPeer, 0, packet)
+  enet_peer_send (serverPeer, channel, packet)
 
 void ENetClient::sendMsgHello(const zoobmsg::Hello& msg) {
-  LOGI("[sendMsgHello] msg size : %lu", zoobmsg::Hello::packedSize(msg));
+  //LOGI("[sendMsgHello] msg size : %lu", zoobmsg::Hello::packedSize(msg));
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Hello, 0);
 }
 
 void ENetClient::sendMsgPlayerCommands (const zoobmsg::PlayerCommands& msg) {
-  LOGI("[sendMsgPlayerCommands] msg size : %lu", zoobmsg::PlayerCommands::packedSize(msg));
+  //LOGI("[sendMsgPlayerCommands] msg size : %lu", zoobmsg::PlayerCommands::packedSize(msg));
   SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::PlayerCommands, 0);
 }

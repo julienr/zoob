@@ -25,7 +25,7 @@ char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
     lastWelcome = NULL;
   }
   pthread_mutex_unlock(&welcomeMutex);
-  LOGE("[hasNewLevel] %p", json);
+  //LOGE("[hasNewLevel] %p", json);
   return json;
 }
 
@@ -48,7 +48,7 @@ void Client::handleMsgKicked (size_t dataLen, const uint8_t* data, size_t offset
   LOGI("[handleMsgKicked] reason=%s", (char*)kicked.reason.bytes);
 }
 
-void Client::handleGameState (size_t dataLen, const uint8_t* data, size_t offset) {
+void Client::handleMsgGameState (size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::GameState* gameState = new zoobmsg::GameState();
   zoobmsg::GameState::unpack(dataLen, data, offset, *gameState);
   gameStates.append(gameState);

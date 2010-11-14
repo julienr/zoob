@@ -11,17 +11,21 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   //The basic idea is that for each type (rocket, tank, bomb), we update
   //the entity with the same ID as in the message. If we have no entity with
   //this ID, we create a new one.
+  LOGI("[applyGameState] %i players", state->numPlayerInfos);
   for (uint16_t i=0; i<state->numPlayerInfos; i++) {
     const zoobmsg::PlayerInfo& pinfo = state->playerInfos[i];
     Tank* tank;
     if (!tanksByID.contains(pinfo.playerID)) {
+      LOGI("[applyGameState] creating new NetTank");
       tank = new NetTank();
       tank->setID(pinfo.playerID);
       addTank(tank);
     } else {
       tank = tanksByID.get(pinfo.playerID); 
-      tank->setPosition(Vector2(pinfo.position.x, pinfo.position.y));
     }
+    tank->setPosition(Vector2(pinfo.position.x, pinfo.position.y));
+
+    LOGI("[applyGameState] tank %i, %i rockets, %i bombs", pinfo.playerID, pinfo.numRocketInfos, pinfo.numBombInfos);
 
     for (uint16_t j=0; j<pinfo.numRocketInfos; j++) {
       const zoobmsg::RocketInfo& rinfo = pinfo.rocketInfos[j];

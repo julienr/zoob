@@ -4,11 +4,12 @@
 #include "logic/Bomb.h"
 #include "logic/Rocket.h"
 
-void Server::handleConnect (const uint64_t& peerID) {
+void Server::handleConnect (const uint16_t peerID) {
+  LOGI("new client connected");
   connectedClients.insert(peerID);
 }
 
-void Server::handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset) {
+void Server::handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::Hello hello;
   zoobmsg::Hello::unpack(dataLen, data, offset, hello);
 
@@ -31,17 +32,17 @@ void Server::handleMsgHello (const uint64_t& peerID, size_t dataLen, const uint8
   sendMsgWelcome(peerID, welcome);
 }
 
-void Server::handleMsgJoin (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset) {
+void Server::handleMsgJoin (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::Join join;
   zoobmsg::Join::unpack(dataLen, data, offset, join);
 }
 
-void Server::handleMsgPlayerCommand (const uint64_t& peerID, size_t dataLen, const uint8_t* data, size_t offset) {
+void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::PlayerCommands commands;
   zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
 }
 
-void Server::handleDisconnect (const uint64_t& peerID) {
+void Server::handleDisconnect (const uint16_t peerID) {
   connectedClients.remove(peerID); 
 }
 
@@ -49,7 +50,6 @@ void Server::handleDisconnect (const uint64_t& peerID) {
 void Server::update(NetworkedGame* game) {
   const uint64_t now = Utils::getCurrentTimeMillis();
   if ((now - lastGameStateBroadcast) < BROADCAST_INTERVAL) {
-    lastGameStateBroadcast = now;
     return;
   }
   lastGameStateBroadcast = now;
@@ -67,6 +67,8 @@ void Server::update(NetworkedGame* game) {
 
     zoobmsg::PlayerInfo* pinfo = &state.playerInfos[counter++];
     pinfo->playerID = tank->getID();
+    //FIXME: something is wrong here
+    LOGI("tank id : %i", pinfo->playerID);
     pinfo->position.x = tank->getPosition().x;
     pinfo->position.y = tank->getPosition().y;
     pinfo->velocity.x = tank->getMoveDir().x;
@@ -102,6 +104,7 @@ void Server::update(NetworkedGame* game) {
   }
 
   //Broadcast to connected clients
+  LOGI("broadcasting to %i clients", connectedClients.size());
   for (set<uint16_t>::iterator i=connectedClients.begin(); i.hasNext(); i++) {
     const uint16_t peerID = *i;
     sendMsgGameState(peerID, state);

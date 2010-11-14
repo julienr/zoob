@@ -430,10 +430,10 @@ void nativeRender () {
   //the transition callback, a transition to another state was requested, it might have two or more
   GameManager* gm = GameManager::getInstance();
   do {
-    LOGI("[nativeRender] applyTransition");
+    //LOGI("[nativeRender] applyTransition");
     gm->applyTransition();
   } while (gm->inTransition() && gm->getTransitionDelay() <= 0);
-  LOGI("[nativeRender] transitions applied");
+  //LOGI("[nativeRender] transitions applied");
 
   //BEGIN time management
   uint64_t now = Utils::getCurrentTimeMillis();
@@ -484,19 +484,19 @@ void nativeRender () {
   }
 
   if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
-    LOGI("[nativeRender] inGame or paused");
+    //LOGI("[nativeRender] inGame or paused");
     if (!GameManager::getInstance()->paused()) {
       Game* game = Game::getInstance();
       game->accumulate(elapsedS);
-      LOGI("[nativeRender] accumulator : %lf", game->getAccumulator());
+      //LOGI("[nativeRender] accumulator : %lf", game->getAccumulator());
       while (game->getAccumulator() >= dt) { //empty accumulator as much as possible
         PlayerCommand localPlayerCmd;
-        LOGI("[nativeRender] applying commands");
+        //LOGI("[nativeRender] applying commands");
         InputManager::getInstance()->think(elapsedS, localPlayerCmd);
         Game::getInstance()->applyCommands(Game::getInstance()->getPlayerTank(), localPlayerCmd);
-        LOGI("[nativeRender] performing simulation step on game : 0x%x", Game::getInstance());
+        //LOGI("[nativeRender] performing simulation step on game : 0x%x", Game::getInstance());
         Game::getInstance()->update(dt);
-        LOGI("[nativeRender] simulation finished");
+        //LOGI("[nativeRender] simulation finished");
         game->useAccumulatedTime(dt);
 #ifdef ZOOB_DBG_FPS
         numPhysicFrames++;
@@ -505,7 +505,7 @@ void nativeRender () {
     } else {
       Game::getInstance()->resetAccumulator();
     }
-    LOGI("[nativeRender] rendering");
+    //LOGI("[nativeRender] rendering");
 
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);
