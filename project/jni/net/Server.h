@@ -21,7 +21,7 @@
  */
 class Server : public NetController {
   public:
-    Server () : playerIDGen(0), state(WARM_UP), lastGameStateBroadcast(Utils::getCurrentTimeMillis()) {}
+    Server () : playerIDGen(0), entityIDGen(1), state(WARM_UP), lastGameStateBroadcast(Utils::getCurrentTimeMillis()) {}
 
     /**
      * This method should be implemented by the transport-specific subclass
@@ -32,6 +32,11 @@ class Server : public NetController {
  
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
+
+    void assignID (Entity* e) {
+      e->setID(entityIDGen++);
+    }
+
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState) { return NULL; }
 
   
@@ -52,8 +57,13 @@ class Server : public NetController {
     virtual void sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg) = 0;
     virtual void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg) = 0;
 
+    bool isClient () {
+      return false;
+    }
+
   private:
     uint16_t playerIDGen;
+    uint16_t entityIDGen;
     ServerState state;
 
     set<uint16_t> connectedClients;

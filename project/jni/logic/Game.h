@@ -81,6 +81,7 @@ class Game {
     static void registerInstance(Game* game) {
       LOGI("[Game::registerInstace] instance=0x%p", game);
       instance = game;
+      game->_construct();
     }
   public:
     static Game* getInstance() {
@@ -92,6 +93,7 @@ class Game {
     static void create (game_callback_t overCallback,
                         game_callback_t wonCallback,
                         Level* level) {
+      LOGI("[Game] create");
       registerInstance(new Game(overCallback, wonCallback, level));
     }
 
@@ -239,7 +241,18 @@ class Game {
     virtual void addBomb (Bomb* b);
     virtual list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
 
+    //Spawn tanks based on the level description. Might be overloaded (for example
+    // by client NetworkedGame to spawn nothing). Might also modify playerStartPosition
+    virtual void spawnTanks (const Level* level, Vector2& playerStartPosition);
+
   private:
+    //Game is using some kind of two-phases construction. SpawnTanks is called
+    //during construction and relies on addRocket/addTank which can be overriden.
+    //But since the Game class will be created before subclass (NetworkedGame), 
+    //Game's addRocket/Tank will be called. Therefore, this _construct method is
+    //called automatically in registerInstance
+    void _construct ();
+
     void _handleTriggers ();
     void _updateRockets (double elapsedS);
     void _updateBombs (double elapsedS);
@@ -274,6 +287,7 @@ class Game {
 
     void _calculatePlayerShadows ();
 
+    bool constructed;
     double accumulator;
 
     CollisionManager colManager;

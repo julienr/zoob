@@ -18,7 +18,8 @@
 Game* Game::instance = NULL;
 
 Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* level)
-    : accumulator(0),
+    : constructed(false),
+      accumulator(0),
       colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
       playerTank(new PlayerTank()),
       level(level),
@@ -33,12 +34,29 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       pathFinder(colManager.getGrid()),
       introTimeLeft(BOSS_INTRO_TIME),
       introDone(!level->isBoss()) {
-  level->addToColManager(colManager);
+  //Put constructor stuff in _construct
+}
 
+void Game::_construct () {
+  if (constructed)
+    return;
+  
+  level->addToColManager(colManager);
   Vector2 playerStartPosition = Vector2(1,1);
-  bool foundPlayer = false;
 
   addTank(playerTank);
+
+  spawnTanks(level, playerStartPosition);
+
+  playerTank->setPosition(playerStartPosition);
+  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
+  colManager.addEntity(playerTank);
+
+  constructed = true;
+}
+
+void Game::spawnTanks (const Level* level, Vector2& playerStartPosition) {
+  bool foundPlayer = false;
 
   const TankDescription* tanks = level->getTanks();
   for (size_t i=0; i<level->getNumTanks(); i++) {
@@ -71,10 +89,6 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
 
   if (!foundPlayer)
     LOGE("No player start position defined in level, falling back on default (1,1)");
-
-  playerTank->setPosition(playerStartPosition);
-  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
-  colManager.addEntity(playerTank);
 }
 
 Game::~Game () {
@@ -299,6 +313,7 @@ list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
 }
 
 void Game::addTank (Tank* t) {
+  LOGI("[Game] addTank");
   tanks.append(t);
 }
 

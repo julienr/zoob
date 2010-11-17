@@ -21,6 +21,10 @@ class Client : public NetController {
 
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
+    void assignID (Entity* e) {
+      //do nothing, id will be assigned by server
+    }
+
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState);
 
     void handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset);
@@ -30,6 +34,10 @@ class Client : public NetController {
 
     virtual void sendMsgHello(const zoobmsg::Hello& msg) = 0;
     virtual void sendMsgPlayerCommands (const zoobmsg::PlayerCommands& msg) = 0;
+
+    bool isClient () {
+      return true;
+    }
 
 
   private:

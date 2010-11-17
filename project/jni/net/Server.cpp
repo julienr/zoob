@@ -104,7 +104,7 @@ void Server::update(NetworkedGame* game) {
   }
 
   //Broadcast to connected clients
-  LOGI("broadcasting to %i clients", connectedClients.size());
+  LOGI("broadcasting to %li clients", connectedClients.size());
   for (set<uint16_t>::iterator i=connectedClients.begin(); i.hasNext(); i++) {
     const uint16_t peerID = *i;
     sendMsgGameState(peerID, state);

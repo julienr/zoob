@@ -93,7 +93,7 @@ void toPlayingState () {
     }
 
     ProgressionManager::getInstance()->changedLevel(lvl);
-    if (NetController::getInstance()) //networked game
+    if (NetController::isNetworkedGame()) //networked game
       NetworkedGame::create(gameOverCallback, gameWonCallback, lvl);
     else //single player game
       Game::create(gameOverCallback, gameWonCallback, lvl);
@@ -465,7 +465,7 @@ void nativeRender () {
   TimerManager::getInstance()->tick(elapsedS);
 
   //If we're playing in a networked game, check if we should change the level
-  if (NetController::getInstance()) {
+  if (NetController::isNetworkedGame()) {
     uint16_t playerID;
     ServerState serverState;
     char* json = NetController::getInstance()->hasNewLevel(&playerID, &serverState);

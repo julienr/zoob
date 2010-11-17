@@ -53,12 +53,15 @@ InputManager* createInputManager (int useGamepad, int useTrackball) {
 }
 
 int main (int argc, char** argv) {
+  bool hasArgs = true;
   if (argc < 3) {
     LOGE("usage : <json file> <apk file> [lvlnum]");
-    exit(-1);
+    LOGE("falling back on default arguments");
+    hasArgs = false;
+    //exit(-1);
   }
 
-  char* json = loadJSON(argv[1]);
+  char* json = loadJSON(hasArgs?argv[1]:"../../../levels/test2.json");
 
   QApplication app(argc, argv);
 
@@ -68,7 +71,7 @@ int main (int argc, char** argv) {
   QCoreApplication::setApplicationName("Zoob");
 
   //Main window creation
-  window = new MainWindow(json, argv[2]);
+  window = new MainWindow(json, hasArgs?argv[2]:"../../bin/Zoob-debug.apk");
   free(json);
   window->resize(640, 480);
   window->show();

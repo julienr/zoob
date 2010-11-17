@@ -17,6 +17,9 @@
 //It expose an API to query game status and send local player commands
 class NetController {
   public:
+    static bool isNetworkedGame () {
+      return instance != NULL;
+    }
     static NetController* getInstance () {
       if (!instance)
         LOGE("NetController::getInstance() before registerInstance()");
@@ -41,6 +44,12 @@ class NetController {
     virtual void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) = 0;
 
     virtual void start () = 0;
+
+    //Should assign a new ID to the given entity
+    virtual void assignID (Entity* e) = 0;
+
+    //true if this netcontroller is client, false if it is server
+    virtual bool isClient () = 0;
 
     //Check if this netcontroller has received a command to load a new level.
     //Returns NULL if no such command was received, otherwise returns a NEWLY allocated string containing the 

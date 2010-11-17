@@ -66,6 +66,13 @@ void NetworkedGame::update(const double elapsedS) {
   Game::update(elapsedS);
 }
 
+void NetworkedGame::spawnTanks (const Level* level, Vector2& playerStartPosition) {
+  //Only spawn if we are server
+  if (!NetController::getInstance()->isClient()) {
+    Game::spawnTanks(level, playerStartPosition);
+  }
+}
+
 
 void NetworkedGame::addRocket (Rocket* r) {
   Game::addRocket(r);
@@ -78,6 +85,9 @@ list<Rocket*>::iterator NetworkedGame::deleteRocket (const list<Rocket*>::iterat
 }
 
 void NetworkedGame::addTank (Tank* t) {
+  LOGI("[NetworkedGame] addTank");
+  NetController::getInstance()->assignID(t);
+  LOGI("assigned id %i to tank %p", t->getID(), t);
   Game::addTank(t);
   tanksByID.insert(t->getID(), t);
 }
