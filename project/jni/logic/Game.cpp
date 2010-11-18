@@ -33,7 +33,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       playerVisibility(colManager.getGrid()),
       pathFinder(colManager.getGrid()),
       introTimeLeft(BOSS_INTRO_TIME),
-      introDone(!level->isBoss()) {
+      introDone(!level->isBoss()),
+      attachedView(NULL) {
   //Put constructor stuff in _construct
 }
 
@@ -102,6 +103,14 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
+void Game::attach(IGameView* view) {
+  attachedView = view;
+  //add all tanks to the attached view
+  for (list<Tank*>::iterator i = tanks.begin(); i.hasNext(); i++) {
+    attachedView->tankAdded(*i);
+  }
+}
+
 void Game::applyCommands (Tank* tank, const PlayerCommand& cmd) {
   if (cmd.fire)
     _tankFire(tank, cmd.fireDir);
@@ -132,15 +141,14 @@ void Game::update (const double elapsedS) {
     _updateRockets(elapsedS);
     _updateBombs(elapsedS);
     const int numAlives = _updateTanks(elapsedS);
-    if (numAlives == 0)
+    if (isGameWon(numAlives))
       gameWonCallback();
   }
 
   level->removeExplodedWalls(colManager);
 
   //player
-  if (!godMode && playerTank->hasExploded()) {
-    playerTank->unmarkExploded();
+  if (isGameOver()) {
     gameOverCallback();
   }
 
@@ -152,6 +160,18 @@ void Game::update (const double elapsedS) {
     _calculatePlayerShadows();
     playerVisibility.calculateVisibility(this);
   }
+}
+
+bool Game::isGameOver () const {
+  if (!godMode && playerTank->hasExploded()) {
+    playerTank->die();
+    return true;
+  } else
+    return false;
+}
+
+bool Game::isGameWon (int numAlives) const {
+  return numAlives == 0;
 }
 
 void Game::_handleTriggers () {
@@ -174,7 +194,7 @@ void Game::_updateRockets (double elapsedS) {
     r->think(elapsedS);
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
-      explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
+      attachedView->explosion(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
@@ -204,7 +224,7 @@ void Game::_updateBombs (double elapsedS) {
 
       m->explode(NULL, m->getPosition());
       delete touchedEntities;
-      explosions.append(ExplosionLocation(m->getPosition(), ExplosionLocation::EXPLOSION_BOOM));
+      attachedView->explosion(ExplosionLocation(m->getPosition(), ExplosionLocation::EXPLOSION_BOOM));
       //notify the owner
       m->getOwner()->bombExploded();
       i = deleteBomb(i);
@@ -293,7 +313,7 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
   CollisionResult res;
   if (!t->checkFireDir(dir, colManager, &res)) {
     touch(r, res.collidedEntity, res.colPoint);
-    explosions.append(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
+    attachedView->explosion(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
     delete r;
   } else {
     addRocket(r);
@@ -313,11 +333,14 @@ list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
 }
 
 void Game::addTank (Tank* t) {
-  LOGI("[Game] addTank");
   tanks.append(t);
+  if (attachedView)
+    attachedView->tankAdded(t);
 }
 
 list<Tank*>::iterator Game::deleteTank (const list<Tank*>::iterator& i) {
+  if (attachedView)
+    attachedView->tankRemoved(*i);
   return tanks.remove(i);
 }
 
@@ -476,7 +499,7 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   //We don't take the effect on the rocket into account (otherwise we'll obviously always have effects).
   const bool hasEffect = ((t1 != ENTITY_ROCKET) && effect1) || ((t2 != ENTITY_ROCKET) && effect2);
 
-  explosions.append(ExplosionLocation(colPoint, hasEffect?ExplosionLocation::EXPLOSION_BOOM:ExplosionLocation::EXPLOSION_POOF));
+  attachedView->explosion(ExplosionLocation(colPoint, hasEffect?ExplosionLocation::EXPLOSION_BOOM:ExplosionLocation::EXPLOSION_POOF));
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {

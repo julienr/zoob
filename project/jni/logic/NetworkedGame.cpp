@@ -25,7 +25,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
     }
     tank->setPosition(Vector2(pinfo.position.x, pinfo.position.y));
 
-    LOGI("[applyGameState] tank %i, %i rockets, %i bombs", pinfo.playerID, pinfo.numRocketInfos, pinfo.numBombInfos);
+    LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", pinfo.playerID, pinfo.position.x, pinfo.position.y, pinfo.numRocketInfos, pinfo.numBombInfos);
 
     for (uint16_t j=0; j<pinfo.numRocketInfos; j++) {
       const zoobmsg::RocketInfo& rinfo = pinfo.rocketInfos[j];
@@ -73,7 +73,6 @@ void NetworkedGame::spawnTanks (const Level* level, Vector2& playerStartPosition
   }
 }
 
-
 void NetworkedGame::addRocket (Rocket* r) {
   Game::addRocket(r);
   rocketsByID.insert(r->getID(), r);
@@ -105,4 +104,20 @@ void NetworkedGame::addBomb (Bomb* b) {
 list<Bomb*>::iterator NetworkedGame::deleteBomb (const list<Bomb*>::iterator& i) {
   bombsByID.remove((*i)->getID());
   return Game::deleteBomb(i);
+}
+
+bool NetworkedGame::isGameOver () const {
+  if (NetController::getInstance()->isClient()) {
+    return false;
+  } else {
+    return Game::isGameOver();
+  }
+}
+
+bool NetworkedGame::isGameWon (int numAlives) const {
+  if (NetController::getInstance()->isClient()) {
+    return false;
+  } else {
+    return Game::isGameWon(numAlives);
+  }
 }

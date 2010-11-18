@@ -28,6 +28,9 @@ class NetworkedGame : public Game {
     void addBomb (Bomb* b);
     list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
 
+    bool isGameOver () const;
+    bool isGameWon (int numAlives) const;
+
     void spawnTanks (const Level* level, Vector2& playerStartPosition); 
 
   private:

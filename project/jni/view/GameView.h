@@ -7,9 +7,12 @@
 #include "view/LevelView.h"
 #include "logic/Game.h"
 #include "containers/vector.h"
+#include "containers/map.h"
 #include "Explosion.h"
 
-class GameView {
+#include "iview/IGameView.h"
+
+class GameView : public IGameView {
   public:
     static void drawAABBox (const AABBox* box, const Vector2& position);
     static void drawBCircle (const BCircle* circle, const Vector2& position);
@@ -31,6 +34,12 @@ class GameView {
     void debugCollisions();
     void debugVisibility();
     void debugOverlays ();
+
+    //IGameView
+    void tankAdded (Tank* t);
+    void tankRemoved (Tank* t);
+
+    void explosion (const ExplosionLocation& expl);
   private:
     void _drawGame (double elapsedS);
     void _drawBossIntro(double elapsedS);
@@ -38,6 +47,7 @@ class GameView {
     void _drawLighting() const;
     //Draw the shadows projected by the walls
     void _drawShadows() const;
+    void _drawTanks () const;
 
     //CursorView cursorView;
     LevelView levelView;
@@ -46,7 +56,8 @@ class GameView {
     Sprite hearthEmpty;
     Sprite hearthFull;
     Sprite circle;
-    vector<TankView*> tankViews;
+    map<Tank*, TankView*> tankViews;
+    //vector<TankView*> tankViews;
     list<Explosion*> explosions;
 
     Sprite shadow;

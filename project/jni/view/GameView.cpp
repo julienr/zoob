@@ -11,6 +11,7 @@
 #include "NumberView.h"
 #include "view/GameManager.h"
 #include "logic/NetTank.h"
+#include "NetTankView.h"
 
 
 GameView::GameView ()
@@ -21,34 +22,20 @@ GameView::GameView ()
     hearthEmpty("assets/sprites/hearth_empty.png", TEX_GROUP_GAME),
     hearthFull("assets/sprites/hearth_full.png", TEX_GROUP_GAME),
     circle("assets/sprites/circle.png", TEX_GROUP_GAME),
-    tankViews(5),
     shadow("assets/sprites/shadow.png", TEX_GROUP_GAME),
     light("assets/sprites/light.png", TEX_GROUP_GAME),
     levelTxt("assets/sprites/level.png", TEX_GROUP_GAME),
     wtf("assets/sprites/wtf.png", TEX_GROUP_GAME),
     lastLightToggle(BOSS_INTRO_TIME),
     lightOn(true) {
-  const list<Tank*>* tanks = Game::getInstance()->getTanks();
-  for (list<Tank*>::const_iterator i = tanks->begin(); i.hasNext(); i++) {
-    const Tank* t = *i;
-    switch (t->getTankCategory()) {
-      case CAT_AI:
-        tankViews.append(new EnemyTankView(static_cast<const EnemyTank*>(t)));
-        break;
-      case CAT_PLAYER:
-        tankViews.append(new PlayerTankView(static_cast<const PlayerTank*>(t)));
-        break;
-      case CAT_NET:
-        //TODO
-        //tankViews.append(new PlayerTankView(static_cast<const NetTank*>(t)));
-        break;
-    }
-  }
+  Game::getInstance()->attach(this);
 }
 
 GameView::~GameView () {
-  for (size_t i=0; i<tankViews.length(); i++)
-    delete tankViews[i];
+  for (map<Tank*, TankView*>::iterator i = tankViews.begin(); i.hasNext(); i++) {
+    delete i.value();
+  }
+
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
 }
@@ -122,12 +109,6 @@ void GameView::draw(double elapsedS) {
 
 void GameView::_drawGame (double elapsedS) {
   Game* game = Game::getInstance();
-  //Create new explosions
-  list<ExplosionLocation>& gameExpls = game->getExplosions();
-  while (!gameExpls.empty()) {
-    explosions.append(new Explosion(gameExpls.firstElement()));
-    gameExpls.removeFirst();
-  }
 
   levelView.drawBackground();
 
@@ -178,9 +159,11 @@ void GameView::_drawGame (double elapsedS) {
 
     NumberView::getInstance()->drawInt(timeLeft, m->getPosition()-Vector2(0.05f,0), Vector2(0.9,0.9));
   }
-  
-  for (size_t i=0; i<tankViews.length(); i++)
-    tankViews[i]->draw();
+
+  //draw tanks
+  for (map<Tank*, TankView*>::iterator i = tankViews.begin(); i.hasNext(); i++) {
+    i.value()->draw();
+  }
   //FIXME: colManager.debugDraw()
 
 
@@ -201,6 +184,28 @@ void GameView::_drawGame (double elapsedS) {
     Explosion* e = *i;
     e->draw();
   }
+}
+
+void GameView::tankAdded (Tank* t) {
+  switch (t->getTankCategory()) {
+    case CAT_AI:
+      tankViews.insert(t, new EnemyTankView(static_cast<const EnemyTank*>(t)));
+      break;
+    case CAT_PLAYER:
+      tankViews.insert(t, new PlayerTankView(static_cast<const PlayerTank*>(t)));
+      break;
+    case CAT_NET:
+      tankViews.insert(t, new NetTankView(static_cast<const NetTank*>(t)));
+      break;
+  }
+}
+
+void GameView::tankRemoved (Tank* t) {
+  tankViews.remove(t);
+}
+
+void GameView::explosion (const ExplosionLocation& expl) {
+  explosions.append(new Explosion(expl));
 }
 
 void GameView::drawAABBox (const AABBox* box, const Vector2& position) {

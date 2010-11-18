@@ -16,6 +16,9 @@
 #include "ai/algorithms/PathFinder.h"
 #include "lib/Color.h"
 #include "logic/PlayerCommand.h"
+#include "iview/ExplosionLocation.h"
+
+#include "iview/IGameView.h"
 
 //Each boss level start with an intro. This is the duration of the intro
 #define BOSS_INTRO_TIME 3
@@ -26,17 +29,6 @@ enum eGameState {
 };
 
 typedef void (*game_callback_t) ();
-
-struct ExplosionLocation {
-    enum eType {
-        EXPLOSION_BOOM,
-        EXPLOSION_POOF
-    };
-    ExplosionLocation (const Vector2& p, eType t)
-      : position(p), type(t) {}
-    Vector2 position;
-    eType type;
-};
 
 //DEBUG only: draw an overlay of the given color over a cell
 struct CellOverlay {
@@ -101,6 +93,8 @@ class Game {
       delete instance;
       instance = NULL;
     }
+    
+    void attach (IGameView* view);
 
     void unpause () {
       gameState = GAME_RUNNING;
@@ -160,12 +154,6 @@ class Game {
 
     double getAccumulator () {
       return accumulator;
-    }
-
-    //Returns the explosions that have to be displayed. The caller should delete the explosions
-    //hes has handled
-    list<ExplosionLocation>& getExplosions () {
-      return explosions;
     }
 
     void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
@@ -241,6 +229,9 @@ class Game {
     virtual void addBomb (Bomb* b);
     virtual list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
 
+    virtual bool isGameOver () const;
+    virtual bool isGameWon (int numAlives) const;
+
     //Spawn tanks based on the level description. Might be overloaded (for example
     // by client NetworkedGame to spawn nothing). Might also modify playerStartPosition
     virtual void spawnTanks (const Level* level, Vector2& playerStartPosition);
@@ -295,7 +286,6 @@ class Game {
     list<Tank*> tanks;
     list<Rocket*> rockets;
     list<Bomb*> bombs;
-    list<ExplosionLocation> explosions;
     Level* level;
 
     //elapsed time for last calculated frame
@@ -322,6 +312,8 @@ class Game {
 
     double introTimeLeft;
     bool introDone;
+
+    IGameView* attachedView;
 
 #ifdef DEBUG
     void dbg_clear ();
