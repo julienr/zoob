@@ -103,6 +103,11 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
+Vector2 Game::spawnTank (uint16_t id) {
+  //FIXME: ask level to provide a good spawn position
+  return Vector2(1,1);
+}
+
 void Game::attach(IGameView* view) {
   attachedView = view;
   //add all tanks to the attached view

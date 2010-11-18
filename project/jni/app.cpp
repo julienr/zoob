@@ -150,17 +150,20 @@ void toPauseState () {
   Game::getInstance()->pause();
 }
 
-void nativeStartServer () {
+bool nativeStartServer () {
   LOGI("Starting server...");
   NetController::registerInstance(new ENetServer());
-  NetController::getInstance()->start();
-  startGame(0);
+  if (NetController::getInstance()->start()) {
+    startGame(0);
+    return true;
+  }
+  return false;
 }
 
-void nativeStartClient () {
+bool nativeStartClient () {
   LOGI("Starting client...");
   NetController::registerInstance(new ENetClient());
-  NetController::getInstance()->start();
+  return NetController::getInstance()->start();
 }
 
 void nativeInit (const char* apkPath, const char* serie) {
@@ -464,8 +467,11 @@ void nativeRender () {
   //END time management
   TimerManager::getInstance()->tick(elapsedS);
 
-  //If we're playing in a networked game, check if we should change the level
+  //If we are in a networked game, let the netcontroller think
   if (NetController::isNetworkedGame()) {
+    NetController::getInstance()->think(elapsedS);
+
+    //Check if we should change the level
     uint16_t playerID;
     ServerState serverState;
     char* json = NetController::getInstance()->hasNewLevel(&playerID, &serverState);

@@ -13,8 +13,8 @@ void nativeRender ();
 void nativePause ();
 void nativeStopGame ();
 
-void nativeStartServer ();
-void nativeStartClient ();
+bool nativeStartServer ();
+bool nativeStartClient ();
 
 void startGame (int level);
 

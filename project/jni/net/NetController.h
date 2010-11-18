@@ -36,14 +36,14 @@ class NetController {
 
     //Update game with the latest state available from the network. Might do nothing
     //if we haven't received any state update.
-    //MUST be called from the game thread
     virtual void update(NetworkedGame* game) = 0;
 
-    //Enqueue a PlayerCommand to be send to the server. 
-    //MUST be called from the game thread
+    //Sends a PlayerCommand to be send to the server.
     virtual void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) = 0;
 
-    virtual void start () = 0;
+    virtual void stop () = 0;
+    virtual bool start () = 0;
+    virtual void think (double elapsedS) = 0;
 
     //Should assign a new ID to the given entity
     virtual void assignID (Entity* e) = 0;
@@ -56,6 +56,13 @@ class NetController {
     //JSON level which should be freed with free
     //playerID and serverState are set only if the function doesn't return NULL
     virtual char* hasNewLevel (uint16_t* playerID, ServerState* serverState) = 0;
+
+    //Called when the local player wants to spawn in the game
+    virtual void wantSpawn () = 0;
+
+    //Check if this netcontroller has received a command to spawn the local player
+    virtual bool hasSpawned(Vector2& position) = 0;
+
   private:
     static NetController* instance;
 };

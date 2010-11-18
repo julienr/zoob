@@ -108,6 +108,10 @@ class Game {
       return gameState == GAME_PAUSED;
     }
 
+    //create a new tank with the given id.
+    //Returns the position at which the tank will spawn
+    Vector2 spawnTank (uint16_t id);
+
     virtual void applyCommands (Tank* tank, const PlayerCommand& cmd);
 
     PlayerTank* getPlayerTank () const {

@@ -7,7 +7,12 @@
 
 class ENetServer : public Server {
   public:
-    void start ();
+    ENetServer () : server(NULL), peerIDGen(0) {
+    }
+    
+    bool start ();
+    void stop ();
+    void think (double elapsedS);
  
   protected:
     void sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg);
@@ -15,7 +20,20 @@ class ENetServer : public Server {
     void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg);
 
   private:
-    pthread_t threadID;
+    ENetHost* server;
+    //This is a "bimap". Keep them synchronized manually
+    map<uint16_t, ENetPeer*> uidToPeers;
+    map<ENetPeer*, uint16_t> peerToUids;
+
+    uint16_t toUID (ENetPeer* peer) {
+      return peerToUids.get(peer);
+    }
+
+    ENetPeer* toPeer (uint16_t uid) {
+      return uidToPeers.get(uid);
+    }
+
+    uint16_t peerIDGen;
 };
 
 #endif	/* _ENETSERVER_H */

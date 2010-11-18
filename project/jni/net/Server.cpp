@@ -32,14 +32,16 @@ void Server::handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_
   sendMsgWelcome(peerID, welcome);
 }
 
-void Server::handleMsgJoin (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
-  zoobmsg::Join join;
-  zoobmsg::Join::unpack(dataLen, data, offset, join);
+void Server::handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
+  zoobmsg::WantSpawn join;
+  zoobmsg::WantSpawn::unpack(dataLen, data, offset, join);
+  //TODO: reply with a spawn position
 }
 
 void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::PlayerCommands commands;
   zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
+  //TODO: handle it..
 }
 
 void Server::handleDisconnect (const uint16_t peerID) {

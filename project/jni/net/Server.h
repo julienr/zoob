@@ -28,7 +28,9 @@ class Server : public NetController {
      * It will most likely start a new thread that will somehow listen for network events.
      * The handleXXX callbacks should be called from this thread.
      */
-    virtual void start () = 0;
+    virtual bool start () = 0;
+    virtual void stop () = 0;
+    virtual void think (double elapsedS) = 0;
  
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
@@ -37,7 +39,13 @@ class Server : public NetController {
       e->setID(entityIDGen++);
     }
 
+    //already handled by local game simulation
+    void wantSpawn () {}
+
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState) { return NULL; }
+
+    //already handled by local game simulation
+    bool hasSpawned (Vector2& position) { return false; }
 
   
     //These are callbacks for the various events that can happen on server-side.
@@ -46,7 +54,7 @@ class Server : public NetController {
 
     //Handles for various messages
     void handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
-    void handleMsgJoin (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
+    void handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
     void handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset);
     
     void handleDisconnect (const uint16_t peerID);

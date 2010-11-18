@@ -34,11 +34,7 @@ messagesDef=[
      'playerID':'uint16_t'}},
   {'name':'Kicked','fields':
     {'reason':'BytesArray'}},
-  {'name':'Join','fields':
-    {}},
-  {'name':'Joined','fields':
-    {}},
-  {'name':'NotJoined','fields':
+  {'name':'WantSpawn','fields':
     {}},
   {'name':'Spawn','fields':
     {'position':'Vector'}},

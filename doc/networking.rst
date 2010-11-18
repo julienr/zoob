@@ -68,6 +68,7 @@ Client          Server
   <- JOINED (r)
   <- NOT_JOINED (in case the round started before) (r)
 
+
 Client is PLAYING/SPECTATING
 ****************************
 #

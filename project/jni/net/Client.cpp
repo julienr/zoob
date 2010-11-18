@@ -3,7 +3,7 @@
 
 
 void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offset) {
-  pthread_mutex_lock(&welcomeMutex);
+  pthread_mutex_lock(&mutex);
   delete lastWelcome;
   
   lastWelcome = new zoobmsg::Welcome();
@@ -11,12 +11,12 @@ void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offse
 
   LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", lastWelcome->playerID, lastWelcome->serverState);
   LOGI("[handleMsgWelcome] level=%s", lastWelcome->level.bytes);
-  pthread_mutex_unlock(&welcomeMutex);
+  pthread_mutex_unlock(&mutex);
 }
 
 char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
   char* json = NULL;
-  pthread_mutex_lock(&welcomeMutex);
+  pthread_mutex_lock(&mutex);
   if (lastWelcome) {
     json = strndup(lastWelcome->level.bytes, lastWelcome->level.numBytes);
     *playerID = lastWelcome->playerID;
@@ -24,7 +24,7 @@ char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
     delete lastWelcome;
     lastWelcome = NULL;
   }
-  pthread_mutex_unlock(&welcomeMutex);
+  pthread_mutex_unlock(&mutex);
   //LOGE("[hasNewLevel] %p", json);
   return json;
 }
@@ -52,6 +52,35 @@ void Client::handleMsgGameState (size_t dataLen, const uint8_t* data, size_t off
   zoobmsg::GameState* gameState = new zoobmsg::GameState();
   zoobmsg::GameState::unpack(dataLen, data, offset, *gameState);
   gameStates.append(gameState);
+}
+
+void Client::handleMsgSpawn (size_t dataLen, const uint8_t* data, size_t offset) {
+  pthread_mutex_lock(&mutex);
+  delete lastSpawn;
+
+  lastSpawn = new zoobmsg::Spawn();
+  zoobmsg::Spawn::unpack(dataLen, data, offset, *lastSpawn);
+
+  LOGI("[handleMsgSpawn] spawn at (%f,%f)", lastSpawn->position.x, lastSpawn->position.y);
+  pthread_mutex_unlock(&mutex);
+}
+
+bool Client::hasSpawned (Vector2& position) {
+  bool result = false;
+  pthread_mutex_lock(&mutex);
+  if (lastSpawn) {
+    result = true;
+    position.set(lastSpawn->position.x, lastSpawn->position.y);
+    delete lastSpawn;
+    lastSpawn = NULL;
+  }
+  pthread_mutex_unlock(&mutex);
+  return result;
+}
+
+void Client::wantSpawn() {
+  zoobmsg::WantSpawn wantSpawn;
+  sendMsgWantSpawn(wantSpawn);
 }
 
 void Client::update(NetworkedGame* game) {
