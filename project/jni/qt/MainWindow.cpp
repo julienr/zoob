@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QMenuBar>
+#include <QStatusBar>
 #include "DebugAction.h"
 #include "jansson.h"
 
@@ -10,7 +11,10 @@ MainWindow::MainWindow(const char* serieJSON, const char* apkPath)
     menuScreen(new MenuScreen(this)),
     gameScreen(new GameScreen(this, serieJSON, apkPath)),
     menuInter(new InterMenu(this)),
-    layout(new QStackedLayout) {
+    layout(new QStackedLayout),
+    statusBar(new QStatusBar) {
+  setStatusBar(statusBar);
+
   QWidget* container = new QWidget();
   container->setLayout(layout);
   this->setCentralWidget(container);
@@ -85,12 +89,15 @@ void MainWindow::startGame () {
   eGameType type = menuScreen->getGameType();
   switch (type) {
     case LOCAL:
+      setStatusTip("local game");
       gameScreen->startGame(level);
       break;
     case SERVER:
+      setStatusTip("server");
       gameScreen->startMultiplayerGame(level, true);
       break;
     case CLIENT:
+      setStatusTip("client");
       gameScreen->startMultiplayerGame(level, false);
       break;
   }

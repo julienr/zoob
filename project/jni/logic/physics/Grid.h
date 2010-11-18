@@ -132,6 +132,9 @@ class Grid {
       if (v->y > maxY) v->y = maxY-0.1f;
     }
 
+    //Returns true if the given circle touch any entity
+    bool containsEntities (const Vector2& center, float radius, const Entity* source=NULL, int entityMask=0) const;
+    
     //Return a list of entities that are touched by a circle.
     //A newly allocated list is returned, freeing it is the caller's resposibility
     list<Entity*>* entitiesIn (const Vector2& center, float radius, const Entity* source=NULL, int entityMask=0) const;

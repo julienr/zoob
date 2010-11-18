@@ -107,17 +107,20 @@ list<Bomb*>::iterator NetworkedGame::deleteBomb (const list<Bomb*>::iterator& i)
 }
 
 bool NetworkedGame::isGameOver () const {
-  if (NetController::getInstance()->isClient()) {
+  /*if (NetController::getInstance()->isClient()) {
     return false;
   } else {
     return Game::isGameOver();
-  }
+  }*/
+  //FIXME: only for debugging. Should implement some real round management
+  return false;
 }
 
 bool NetworkedGame::isGameWon (int numAlives) const {
-  if (NetController::getInstance()->isClient()) {
+  /*if (NetController::getInstance()->isClient()) {
     return false;
   } else {
     return Game::isGameWon(numAlives);
-  }
+  }*/
+  return false;
 }

@@ -18,6 +18,7 @@ class ENetServer : public Server {
     void sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg);
     void sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg);
     void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg);
+    void sendMsgSpawn (const uint16_t peerID, const zoobmsg::Spawn& msg);
 
   private:
     ENetHost* server;

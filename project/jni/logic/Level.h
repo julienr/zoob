@@ -8,6 +8,7 @@
 #include "physics/AABBox.h"
 #include "containers/vector.h"
 #include "containers/set.h"
+#include "containers/pair.h"
 #include "logic/Tank.h"
 
 class Trigger;
@@ -161,8 +162,8 @@ class Level {
 
     //Level take ownership of the tanks array
     //board should be FREED BY CALLER
-    Level (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers, bool drawShadows, bool boss, uint8_t items, eReward reward)
-      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss), reward(reward), items(items) {
+    Level (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers, bool drawShadows, bool boss, uint8_t items, eReward reward, const list<pair<int,int> >& spawns)
+      : tanks(tanks), numTanks(numTanks), bounds(new AABBox(w, h)), drawShadows(drawShadows), boss(boss), reward(reward), items(items), spawnPositions(spawns) {
       _initBoard(w,h,board, breakable, tanks, numTanks, triggers);
     }
 
@@ -209,6 +210,10 @@ class Level {
       return tilesWithTrigger;
     }
 
+    const list<pair<int,int> >& getSpawnPositions () {
+      return spawnPositions;
+    }
+
   private:
     void _initBoard (unsigned w, unsigned h, eTileType* board, bool* breakable, TankDescription* tanks, size_t numTanks, const list<TriggerDesc>& triggers);
     unsigned width;
@@ -225,6 +230,9 @@ class Level {
     uint8_t items;
     //This is just for fast access. Contains a pointer to ALL the tiles that have a trigger attached to them
     set<Tile*> tilesWithTrigger;
+
+    //mostly for multiplayer, find a spawn position
+    list<pair<int,int> > spawnPositions;
 };
 
 #endif /* LEVEL_H_ */

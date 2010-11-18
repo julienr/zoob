@@ -65,6 +65,13 @@ class list {
     };
   public:
     list () : head(NULL), _size(0) {}
+
+    explicit list(const list<T>& other) {
+      for (list<T>::const_iterator i = other.begin(); i.hasNext(); i++) {
+        append(*i);
+      }
+    }
+
     ~list() {
       for (_Element* e=head; e; ) {
         _Element* next = e->next;
@@ -167,7 +174,6 @@ class list {
       return const_iterator(head);
     }
   private:
-    list(const list& other) { ASSERT(false); }
     _Element* head;
     size_t _size;
 };

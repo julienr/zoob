@@ -103,3 +103,7 @@ void ENetServer::sendMsgGameState (const uint16_t peerID, const zoobmsg::GameSta
   //LOGI("[sendMgsGameState] msg size : %lu", zoobmsg::GameState::packedSize(msg));
   SEND_MESSAGE(0, zoobmsg::GameState, 1);
 }
+
+void ENetServer::sendMsgSpawn (const uint16_t peerID, const zoobmsg::Spawn& msg) {
+  SEND_MESSAGE(ENET_PACKET_FLAG_RELIABLE, zoobmsg::Spawn, 0);
+}

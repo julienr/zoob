@@ -45,13 +45,11 @@ void Game::_construct () {
   level->addToColManager(colManager);
   Vector2 playerStartPosition = Vector2(1,1);
 
-  addTank(playerTank);
-
   spawnTanks(level, playerStartPosition);
 
   playerTank->setPosition(playerStartPosition);
   ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
-  colManager.addEntity(playerTank);
+  addTank(playerTank);
 
   constructed = true;
 }
@@ -83,7 +81,6 @@ void Game::spawnTanks (const Level* level, Vector2& playerStartPosition) {
     if (t != NULL) { //t will be NULL when we found player, to be handled below
       t->setPosition(Vector2(desc.x, desc.y));
       addTank(t);
-      colManager.addEntity(t);
       calculateShadows |= t->getAI()->requirePlayerVisibility();
     }
   }
@@ -103,9 +100,21 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
-Vector2 Game::spawnTank (uint16_t id) {
-  //FIXME: ask level to provide a good spawn position
-  return Vector2(1,1);
+bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
+bool Game::spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank) {
+  const list<pair<int, int> >& candidates = level->getSpawnPositions();
+  const Grid& grid = colManager.getGrid();
+  for (list<pair<int, int> >::const_iterator i = candidates.begin(); i.hasNext(); i++) {
+    const pair<int, int>& p = *i;
+    const Vector2 wPos = grid.gridToWorld(p.first, p.second);
+    if (!grid.containsEntities(wPos, entityRadius)) {
+      tank = newTank();
+      tank->setPosition(wPos);
+      addTank(tank);
+      return true;
+    }
+  }
+  return false;
 }
 
 void Game::attach(IGameView* view) {
@@ -203,7 +212,6 @@ void Game::_updateRockets (double elapsedS) {
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
-      colManager.removeEntity(r);
       i = deleteRocket(i);
       delete r;
     } else {
@@ -322,23 +330,25 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
     delete r;
   } else {
     addRocket(r);
-    colManager.addEntity(r);
   }
 }
 
 void Game::addRocket (Rocket* r) {
   rockets.append(r);
+  colManager.addEntity(r);
   r->getOwner()->addRocket(r);
 }
 
 list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
   Rocket* r = *i;
+  colManager.removeEntity(r);
   r->getOwner()->removeRocket(r);
   return rockets.remove(i);
 }
 
 void Game::addTank (Tank* t) {
   tanks.append(t);
+  colManager.addEntity(t);
   if (attachedView)
     attachedView->tankAdded(t);
 }
@@ -346,6 +356,7 @@ void Game::addTank (Tank* t) {
 list<Tank*>::iterator Game::deleteTank (const list<Tank*>::iterator& i) {
   if (attachedView)
     attachedView->tankRemoved(*i);
+  colManager.removeEntity(*i);
   return tanks.remove(i);
 }
 
@@ -525,7 +536,6 @@ void Game::bounceMove (Rocket* rocket, Vector2 move) {
         rocket->addBounce();
         Rocket* newRocket = new Rocket(rocket);
         addRocket(newRocket);
-        colManager.addEntity(newRocket);
         //Now, the idea is to have the two rockets going in opposite directions each
         //30 degrees away from the normal bounce direction
         const Vector2 bounceDir = -2.0f*(move*r.normal)*r.normal + move;

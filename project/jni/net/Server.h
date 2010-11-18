@@ -64,15 +64,21 @@ class Server : public NetController {
     virtual void sendMsgWelcome (const uint16_t peerID, const zoobmsg::Welcome& msg) = 0;
     virtual void sendMsgVersion (const uint16_t peerID, const zoobmsg::Version& msg) = 0;
     virtual void sendMsgGameState (const uint16_t peerID, const zoobmsg::GameState& msg) = 0;
+    virtual void sendMsgSpawn (const uint16_t peerID, const zoobmsg::Spawn& msg) = 0;
 
     bool isClient () {
       return false;
     }
 
   private:
+    //Try to spawn all the tanks that are waiting for it
+    void _doSpawns (NetworkedGame* game);
     uint16_t playerIDGen;
     uint16_t entityIDGen;
     ServerState state;
+
+    //contains all the playerID that requested a spawn but haven't gotten it yet
+    list<uint16_t> spawnQueue;
 
     set<uint16_t> connectedClients;
 

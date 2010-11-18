@@ -3,6 +3,7 @@
 #include "levels/LevelsData.h"
 #include "logic/Bomb.h"
 #include "logic/Rocket.h"
+#include "logic/NetTank.h"
 
 void Server::handleConnect (const uint16_t peerID) {
   LOGI("new client connected");
@@ -35,12 +36,14 @@ void Server::handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_
 void Server::handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::WantSpawn join;
   zoobmsg::WantSpawn::unpack(dataLen, data, offset, join);
-  //TODO: reply with a spawn position
+  LOGI("[handleMsgWantSpawn] peerID=%i", peerID);
+  spawnQueue.append(peerID);
 }
 
 void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::PlayerCommands commands;
   zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
+  //LOGI("[handleMsgPlayerCommand] peerID=%i", peerID);
   //TODO: handle it..
 }
 
@@ -48,8 +51,36 @@ void Server::handleDisconnect (const uint16_t peerID) {
   connectedClients.remove(peerID); 
 }
 
+Tank* createNetTank () {
+  return new NetTank();
+}
+
+void Server::_doSpawns (NetworkedGame* game) {
+  if (spawnQueue.empty())
+    return;
+  
+  LOGI("[_doSpawns] %ld requests in spawn queue", spawnQueue.size());
+  for (list<uint16_t>::iterator i = spawnQueue.begin(); i.hasNext(); ) {
+    const uint16_t peerID = *i;
+    Tank* tank;
+    if (game->spawnTank(TANK_BCIRCLE_R, &createNetTank, tank)) {
+      //spawn successful => remove tank from spawn queue and send a spawn message to the client owning this tank
+      zoobmsg::Spawn spawnMsg;
+      spawnMsg.position.x = tank->getPosition().x;
+      spawnMsg.position.y = tank->getPosition().y;
+      LOGI("[_doSpawns] spawned peerID=%d at (%f,%f)", peerID, spawnMsg.position.x, spawnMsg.position.y);
+      sendMsgSpawn(peerID, spawnMsg);
+      i = spawnQueue.remove(i);
+    } else {
+      i++;
+    }
+  }
+}
+
 #define BROADCAST_INTERVAL 500
 void Server::update(NetworkedGame* game) {
+  _doSpawns(game);
+  
   const uint64_t now = Utils::getCurrentTimeMillis();
   if ((now - lastGameStateBroadcast) < BROADCAST_INTERVAL) {
     return;

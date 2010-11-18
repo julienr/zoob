@@ -108,9 +108,11 @@ class Game {
       return gameState == GAME_PAUSED;
     }
 
-    //create a new tank with the given id.
-    //Returns the position at which the tank will spawn
-    Vector2 spawnTank (uint16_t id);
+    //Try to spawn a tank of size entityRadius. The newTank() function is called
+    //to allocate the tank
+    //returns true if a spawn position was found and the tank spawned. tank contains the newly allocated tank
+    //returns false otherwise
+    bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
 
     virtual void applyCommands (Tank* tank, const PlayerCommand& cmd);
 

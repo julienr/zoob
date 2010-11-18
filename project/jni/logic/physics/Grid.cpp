@@ -272,6 +272,29 @@ void Grid::removeEntity (Entity* e) {
   e->touchedCells.clear();
 }
 
+bool Grid::containsEntities (const Vector2& center, float radius, const Entity* source, int entityMask) const {
+  BCircle circ(radius);
+  _clearTouched();
+  touchCells(&circ, center);
+  for (unsigned i=0; i<tmpTouched->length(); i++) {
+    for (list<Entity*>::iterator iter = tmpTouched->get(i)->entities.begin(); iter.hasNext(); iter++) {
+      Entity* entity = *iter;
+      if (entity == source)
+        continue;
+      if (entity->getType() & entityMask)
+        continue;
+
+      const BoundingVolume* bv = entity->getBVolume();
+      if (bv->getType() == TYPE_AABBOX && CollisionManager::AABBIntersectCircle(entity->getPosition(), static_cast<const AABBox*>(bv),center, &circ)) {
+        return true;
+      } else if (bv->getType() == TYPE_CIRCLE && CollisionManager::CircleIntersectCircle(entity->getPosition(), static_cast<const BCircle*>(bv),center, &circ)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius, const Entity* source, int entityMask) const {
   list<Entity*>* touchedList = new list<Entity*>();
   BCircle circ(radius);
@@ -284,7 +307,7 @@ list<Entity*>* Grid::entitiesIn (const Vector2& center, float radius, const Enti
          continue;
        if (entity->getType() & entityMask)
          continue;
-       //FIXME: should use entity bounding box
+
        const BoundingVolume* bv = entity->getBVolume();
        if (bv->getType() == TYPE_AABBOX && CollisionManager::AABBIntersectCircle(entity->getPosition(), static_cast<const AABBox*>(bv),
                                                                                  center, &circ)) {

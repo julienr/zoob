@@ -170,44 +170,6 @@ static int str2ttype (const char* str) {
 
 #define CONDITION(x,err) if (!(x)) { LOGE(err); goto error; }
 
-//Loads a level from the APK (an original level)
-//Return NULL if an error occurs during loading
-/*Level* loadAPKLevel (int levelNum) {
-  ASSERT(levelSerie != NULL && levelNum < (int)getNumLevels());
-  json_t* levels = obj_get(levelSerie, "levels");
-  return levelFromJSON(json_array_get(levels, levelNum));
-}
-
-char* getLevel (int levelNum) {
-  ASSERT(levelSerie != NULL && levelNum < (int)getNumLevels());
-  json_t* levels = obj_get(levelSerie, "levels");
-  return json_dumps(json_array_get(levels, levelNum), JSON_COMPACT);
-}
-
-size_t getNumLevels () {
-  ASSERT(levelSerie != NULL);
-  json_t* levels = obj_get(levelSerie, "levels");
-  return json_array_size(levels);
-}
-
-void loadSerie (const char* serieJSON) {
-  //FIXME: if serie JSON is invalid, the program just crash
-  if (levelSerie != NULL) {
-    json_decref(levelSerie);
-    levelSerie = NULL;
-  }
-
-  json_error_t error;
-  levelSerie = json_loads(serieJSON, &error);
-  //free(buffer);
-
-  if (!levelSerie) {
-    LOGE("Error loading json at line %i: %s", error.line, error.text);
-    //FIXME: should goto error => create a global levelLoadError function that display the error menu
-    levelSerie = NULL;
-  }
-}*/
-
 #define RETONERR if (loadError) { return NULL; }
 
 #define IF_STR_EQ(str, cond) if(strcmp(str, cond)==0)
@@ -340,9 +302,20 @@ Level* levelFromJSON (json_t* json) {
       }
       tanks[i] = TankDescription(coords[0], coords[1], ttype, path);
     }
-    /*char* jsonText = json_dumps(json,0);
-    LOGE("loading level from json : %s", jsonText);
-    free(jsonText);*/
+
+    //Spawn positions
+    list<pair<int, int> > spawnPos;
+    json_t* spawn_arr = json_object_get(json, "spawns");
+    if (spawn_arr) {
+      const int numSpawns = json_array_size(spawn_arr);
+      for (int i=0; i<numSpawns; i++) {
+        json_t* spawn_pos = json_array_get(spawn_arr, i);
+        int coords[2];
+        coords[0] = json_integer_value(expect(json_array_get(spawn_pos, 0), JSON_INTEGER)); ERRCHK;
+        coords[1] = json_integer_value(expect(json_array_get(spawn_pos, 1), JSON_INTEGER)); ERRCHK;
+        spawnPos.append(pair<int,int>(coords[0], coords[1]));
+      }
+    }
 
     //Determine available items
     uint8_t items = 0;
@@ -366,7 +339,7 @@ Level* levelFromJSON (json_t* json) {
     if (opt_istrue(json, "reward_firing"))
       reward = REWARD_FIRING;
 
-    Level* l = new Level(xdim, ydim, board, breakable, tanks, numTanks, triggers, shadows, boss, items, reward);
+    Level* l = new Level(xdim, ydim, board, breakable, tanks, numTanks, triggers, shadows, boss, items, reward, spawnPos);
     delete[] board;
     delete[] breakable;
     ERRCHK;

@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {
     GameScreen* gameScreen;
     InterMenu* menuInter;
     QStackedLayout* layout;
+    QStatusBar* statusBar;
 
     QTime timer;
 

@@ -12,6 +12,10 @@ void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offse
   LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", lastWelcome->playerID, lastWelcome->serverState);
   LOGI("[handleMsgWelcome] level=%s", lastWelcome->level.bytes);
   pthread_mutex_unlock(&mutex);
+  
+  //TODO: this should be sent when the player hit the "spawn" button
+  zoobmsg::WantSpawn wantSpawn;
+  sendMsgWantSpawn(wantSpawn);
 }
 
 char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
