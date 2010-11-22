@@ -64,10 +64,11 @@ bool SmartPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, Enemy
 void SmartPolicy::planPath (Game* game, EnemyTank* me) {
   PathFinder* pathFinder = game->getPathFinder();
   delete shortestWay;
-  if (mode == AGGRESSIVE) {
+  PlayerTank* playerTank = game->getPlayerTank();
+  if (playerTank && mode == AGGRESSIVE) {
     //Aggressive : move towards player and stop at the first visible cell (this will allow us to fire)
     StopAtVisible cond(game);
-    shortestWay = pathFinder->findPath(me->getPosition(), game->getPlayerTank()->getPosition(), me, &cond);
+    shortestWay = pathFinder->findPath(me->getPosition(), playerTank->getPosition(), me, &cond);
   } else {
     //Defensive : move to the center of the biggest shadowed part of the map
     if (TankAI::rocketNear(game, me, 2 * GRID_CELL_SIZE, NULL))
@@ -89,12 +90,13 @@ bool SmartPolicy::adjustForFiring (Vector2* outDir, Game* game, EnemyTank* me) {
   const VisibilityGrid& vgrid = game->getPlayerVisibility();
   const Grid& grid = game->getColManager().getGrid();
   const Vector2& pos = me->getPosition();
-  if (vgrid.getVisibility(grid.getCellX(pos), grid.getCellY(pos)) == VISIBLE) {
+  PlayerTank* playerTank = game->getPlayerTank();
+  if (playerTank && vgrid.getVisibility(grid.getCellX(pos), grid.getCellY(pos)) == VISIBLE) {
     //If we reach this point,no approaching rockets, try to fire to player
-    const Vector2 dirToTank = game->getPlayerTank()->getPosition()-pos;
+    const Vector2 dirToTank = playerTank->getPosition()-pos;
     CollisionResult r;
     if (game->getColManager().traceCircle(me, pos, dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET)
-          && r.collidedEntity != game->getPlayerTank()) {
+          && r.collidedEntity != playerTank) {
       //collided against something => move in the direction of the col normal
       outDir->set(r.normal);
       return true;

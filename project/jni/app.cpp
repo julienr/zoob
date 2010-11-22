@@ -499,7 +499,9 @@ void nativeRender () {
         PlayerCommand localPlayerCmd;
         //LOGI("[nativeRender] applying commands");
         InputManager::getInstance()->think(elapsedS, localPlayerCmd);
-        Game::getInstance()->applyCommands(Game::getInstance()->getPlayerTank(), localPlayerCmd);
+        PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
+        if (playerTank)
+          Game::getInstance()->applyCommands(playerTank, localPlayerCmd);
         //LOGI("[nativeRender] performing simulation step on game : 0x%x", Game::getInstance());
         Game::getInstance()->update(dt);
         //LOGI("[nativeRender] simulation finished");

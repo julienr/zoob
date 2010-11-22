@@ -31,7 +31,8 @@ class NetworkedGame : public Game {
     bool isGameOver () const;
     bool isGameWon (int numAlives) const;
 
-    void spawnTanks (const Level* level, Vector2& playerStartPosition); 
+    void spawnTanks (const Level* level, Vector2& playerStartPosition);
+    void spawnPlayer ();
 
   private:
     NetworkedGame (game_callback_t overCallback,

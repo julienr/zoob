@@ -7,7 +7,7 @@
 
 class ENetServer : public Server {
   public:
-    ENetServer () : server(NULL), peerIDGen(0) {
+    ENetServer () : server(NULL), peerIDGen(1) {
     }
     
     bool start ();

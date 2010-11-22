@@ -152,9 +152,12 @@ bool inGamePad (Vector2 p) {
 
 void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
   switch(state) {
-    case MOVING_TANK:
-      playerCommand.moveDir = touchPosition-Game::getInstance()->getPlayerTank()->getPosition();
+    case MOVING_TANK: {
+      PlayerTank* pt = Game::getInstance()->getPlayerTank();
+      if (pt)
+        playerCommand.moveDir = touchPosition-pt->getPosition();
       break;
+    }
     case MOVING_TANK_PAD: {
       //the -(0.5,0.5) to gamePadPos is just because the gamepad is on the left. When touching the gamepad with a left finger,
       //we'll most likely get the touch event a bit too much to the left than what the user would. Therefore, we translate gamePadPos

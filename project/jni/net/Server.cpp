@@ -33,6 +33,10 @@ void Server::handleMsgHello (const uint16_t peerID, size_t dataLen, const uint8_
   sendMsgWelcome(peerID, welcome);
 }
 
+void Server::wantSpawn () {
+  spawnQueue.append(0);
+}
+
 void Server::handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::WantSpawn join;
   zoobmsg::WantSpawn::unpack(dataLen, data, offset, join);
@@ -62,17 +66,28 @@ void Server::_doSpawns (NetworkedGame* game) {
   LOGI("[_doSpawns] %ld requests in spawn queue", spawnQueue.size());
   for (list<uint16_t>::iterator i = spawnQueue.begin(); i.hasNext(); ) {
     const uint16_t peerID = *i;
-    Tank* tank;
-    if (game->spawnTank(TANK_BCIRCLE_R, &createNetTank, tank)) {
-      //spawn successful => remove tank from spawn queue and send a spawn message to the client owning this tank
-      zoobmsg::Spawn spawnMsg;
-      spawnMsg.position.x = tank->getPosition().x;
-      spawnMsg.position.y = tank->getPosition().y;
-      LOGI("[_doSpawns] spawned peerID=%d at (%f,%f)", peerID, spawnMsg.position.x, spawnMsg.position.y);
-      sendMsgSpawn(peerID, spawnMsg);
-      i = spawnQueue.remove(i);
+    if (peerID == 0) { //special case for server spawn
+      Vector2 spawnPos;
+      if (game->findSpawnPosition(TANK_BCIRCLE_R, spawnPos)) {
+        PlayerTank* pt = new PlayerTank();
+        pt->setPosition(spawnPos);
+        game->playerSpawned(pt);
+        i = spawnQueue.remove(i);
+      } else
+        i++;
     } else {
-      i++;
+      Tank* tank;
+      if (game->spawnTank(TANK_BCIRCLE_R, &createNetTank, tank)) {
+        //spawn successful => remove tank from spawn queue and send a spawn message to the client owning this tank
+        zoobmsg::Spawn spawnMsg;
+        spawnMsg.position.x = tank->getPosition().x;
+        spawnMsg.position.y = tank->getPosition().y;
+        LOGI("[_doSpawns] spawned peerID=%d at (%f,%f)", peerID, spawnMsg.position.x, spawnMsg.position.y);
+        sendMsgSpawn(peerID, spawnMsg);
+        i = spawnQueue.remove(i);
+      } else {
+        i++;
+      }
     }
   }
 }

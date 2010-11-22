@@ -112,6 +112,7 @@ class Game {
     //to allocate the tank
     //returns true if a spawn position was found and the tank spawned. tank contains the newly allocated tank
     //returns false otherwise
+    bool findSpawnPosition (float entityRadius, Vector2& position);
     bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
 
     virtual void applyCommands (Tank* tank, const PlayerCommand& cmd);
@@ -195,6 +196,8 @@ class Game {
       return &pathFinder;
     }
 
+    void playerSpawned (PlayerTank* tank);
+
     //DEBUG only: returns a list of grid cells to be drawn in overlay
 #ifdef DEBUG
     const list<CellOverlay>& dbg_getCellOverlays () {
@@ -241,6 +244,9 @@ class Game {
     //Spawn tanks based on the level description. Might be overloaded (for example
     // by client NetworkedGame to spawn nothing). Might also modify playerStartPosition
     virtual void spawnTanks (const Level* level, Vector2& playerStartPosition);
+
+    //Request to spawn a player tank. Should call playerSpawned when the spawn is ready
+    virtual void spawnPlayer ();
 
   private:
     //Game is using some kind of two-phases construction. SpawnTanks is called
@@ -320,6 +326,9 @@ class Game {
     bool introDone;
 
     IGameView* attachedView;
+
+    //Only used in single-player
+    Vector2 playerStartPosition;
 
 #ifdef DEBUG
     void dbg_clear ();

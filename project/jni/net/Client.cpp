@@ -12,10 +12,6 @@ void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offse
   LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", lastWelcome->playerID, lastWelcome->serverState);
   LOGI("[handleMsgWelcome] level=%s", lastWelcome->level.bytes);
   pthread_mutex_unlock(&mutex);
-  
-  //TODO: this should be sent when the player hit the "spawn" button
-  zoobmsg::WantSpawn wantSpawn;
-  sendMsgWantSpawn(wantSpawn);
 }
 
 char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
@@ -88,6 +84,14 @@ void Client::wantSpawn() {
 }
 
 void Client::update(NetworkedGame* game) {
+  //Check if we should spawn
+  Vector2 spawnPos;
+  if (hasSpawned(spawnPos)) {
+    PlayerTank* pt = new PlayerTank();
+    pt->setPosition(spawnPos);
+    game->playerSpawned(pt);
+  }
+  
   zoobmsg::GameState* gameState;
   while (gameStates.pop(&gameState)) {
     game->applyGameState(gameState);

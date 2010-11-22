@@ -73,6 +73,10 @@ void NetworkedGame::spawnTanks (const Level* level, Vector2& playerStartPosition
   }
 }
 
+void NetworkedGame::spawnPlayer() {
+  NetController::getInstance()->wantSpawn();
+}
+
 void NetworkedGame::addRocket (Rocket* r) {
   Game::addRocket(r);
   rocketsByID.insert(r->getID(), r);

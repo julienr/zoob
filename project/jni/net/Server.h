@@ -40,7 +40,7 @@ class Server : public NetController {
     }
 
     //already handled by local game simulation
-    void wantSpawn () {}
+    void wantSpawn ();
 
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState) { return NULL; }
 

@@ -22,7 +22,9 @@ bool AimPolicy::aim (double UNUSED(elapsedS), Game* game, EnemyTank* myTank, Vec
     }
   }
   //otherwise, look at player
-  *outDir = game->getPlayerTank()->getPosition() - myTank->getPosition();
+  PlayerTank* playerTank = game->getPlayerTank();
+  if (playerTank)
+    *outDir = playerTank->getPosition() - myTank->getPosition();
   return true;
 }
 
@@ -42,8 +44,12 @@ bool AimPolicy::decideFire (double UNUSED(elapsedS), Vector2* outDir, Game* game
   }
 
   //If we reach this point,no approaching rockets, try to fire to player
-  const Vector2 dirToTank = game->getPlayerTank()->getPosition()-tP;
-  if (game->getColManager().traceCircle(myTank, tP, dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET) && r.collidedEntity != game->getPlayerTank()) {
+  PlayerTank* playerTank = game->getPlayerTank();
+  if (!playerTank)
+    return false;
+  
+  const Vector2 dirToTank = playerTank->getPosition()-tP;
+  if (game->getColManager().traceCircle(myTank, tP, dirToTank, ROCKET_BCIRCLE_R, &r, ENTITY_ROCKET) && r.collidedEntity != playerTank) {
     //Cannot see, don't fire
     return false;
   } else {
@@ -66,7 +72,10 @@ bool AimPolicy::confirmFire (double UNUSED(elapsedS), Vector2* outDir, Game* gam
     }
   }
 
-  const Vector2 dirToTank = game->getPlayerTank()->getPosition()-tank->getPosition();
+  PlayerTank* playerTank = game->getPlayerTank();
+  if (!playerTank)
+    return false;
+  const Vector2 dirToTank = playerTank->getPosition()-tank->getPosition();
   outDir->set(dirToTank.getNormalized());
   return true;
 }

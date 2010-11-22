@@ -41,8 +41,11 @@ GameView::~GameView () {
 }
 
 void GameView::drawHearts () const {
-  const unsigned currentLife = Game::getInstance()->getPlayerTank()->getLivesLeft();
-  for (unsigned i=0; i<Game::getInstance()->getPlayerTank()->getMaxLives(); i++) {
+  PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
+  if (!playerTank)
+    return;
+  const unsigned currentLife = playerTank->getLivesLeft();
+  for (unsigned i=0; i<playerTank->getMaxLives(); i++) {
     if (i >= currentLife)
       hearthEmpty.draw(Vector2(i,0), Vector2(1,1));
     else
@@ -56,13 +59,16 @@ void GameView::drawLevelIndicator () const {
 }
 
 void GameView::_drawLighting() const {
-   const Vector2& center = Game::getInstance()->getPlayerTank()->getPosition();
-   light.bind();
-   glPushMatrix();
-   GLW::translate(center);
-   GLW::scale(30,30,1);
-   Circle::draw(true);
-   glPopMatrix();
+  PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
+  Vector2 center(7.5, 5);
+  if (playerTank)
+    center = playerTank->getPosition();
+  light.bind();
+  glPushMatrix();
+  GLW::translate(center);
+  GLW::scale(30,30,1);
+  Circle::draw(true);
+  glPopMatrix();
 }
 
 void GameView::_drawShadows() const {
@@ -91,7 +97,9 @@ void GameView::_drawBossIntro (double elapsedS) {
 
   _drawLighting();
   levelView.drawWalls();
-  wtf.draw(Game::getInstance()->getPlayerTank()->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
+  PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
+  if (playerTank)
+    wtf.draw(playerTank->getPosition()+Vector2(0.5,-0.5), Vector2(1,1));
 
   GLW::colorWhite();
   if (!lightOn)

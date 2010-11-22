@@ -21,7 +21,7 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
     : constructed(false),
       accumulator(0),
       colManager(level->getWidth(), level->getHeight(), GRID_CELL_SIZE),
-      playerTank(new PlayerTank()),
+      playerTank(NULL),
       level(level),
       elapsedS(0),
       gameOverCallback(overCallback),
@@ -34,7 +34,8 @@ Game::Game (game_callback_t overCallback, game_callback_t wonCallback, Level* le
       pathFinder(colManager.getGrid()),
       introTimeLeft(BOSS_INTRO_TIME),
       introDone(!level->isBoss()),
-      attachedView(NULL) {
+      attachedView(NULL),
+      playerStartPosition(1,1) {
   //Put constructor stuff in _construct
 }
 
@@ -43,14 +44,11 @@ void Game::_construct () {
     return;
   
   level->addToColManager(colManager);
-  Vector2 playerStartPosition = Vector2(1,1);
 
   spawnTanks(level, playerStartPosition);
 
-  playerTank->setPosition(playerStartPosition);
-  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
-  addTank(playerTank);
-
+  spawnPlayer();
+  
   constructed = true;
 }
 
@@ -100,19 +98,40 @@ Game::~Game () {
     delete playerShadows[i];
 }
 
-bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
-bool Game::spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank) {
+void Game::playerSpawned (PlayerTank* tank) {
+  playerTank = tank;
+  addTank(playerTank);
+}
+
+void Game::spawnPlayer () {
+  PlayerTank* p = new PlayerTank();
+  p->setPosition(playerStartPosition);
+  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
+  playerSpawned(p);
+}
+
+bool Game::findSpawnPosition (float entityRadius, Vector2& position) {
   const list<pair<int, int> >& candidates = level->getSpawnPositions();
   const Grid& grid = colManager.getGrid();
   for (list<pair<int, int> >::const_iterator i = candidates.begin(); i.hasNext(); i++) {
     const pair<int, int>& p = *i;
     const Vector2 wPos = grid.gridToWorld(p.first, p.second);
     if (!grid.containsEntities(wPos, entityRadius)) {
-      tank = newTank();
-      tank->setPosition(wPos);
-      addTank(tank);
+      position.set(wPos);
       return true;
     }
+  }
+  return false;
+}
+
+bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
+bool Game::spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank) {
+  Vector2 spawnPos;
+  if (findSpawnPosition(entityRadius, spawnPos)) {
+      tank = newTank();
+      tank->setPosition(spawnPos);
+      addTank(tank);
+      return true;
   }
   return false;
 }
@@ -177,6 +196,9 @@ void Game::update (const double elapsedS) {
 }
 
 bool Game::isGameOver () const {
+  if (!playerTank)
+    return false;
+  
   if (!godMode && playerTank->hasExploded()) {
     playerTank->die();
     return true;
@@ -393,6 +415,9 @@ void Game::_calculatePlayerShadows () {
   for (size_t i=0; i<playerShadows.length(); i++)
     delete playerShadows[i];
   playerShadows.clear();
+
+  if (!playerTank)
+    return;
 
   const Vector2& lightSource = playerTank->getPosition();
 
