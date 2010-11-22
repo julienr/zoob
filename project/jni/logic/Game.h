@@ -115,6 +115,9 @@ class Game {
     bool findSpawnPosition (float entityRadius, Vector2& position);
     bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
 
+    virtual void applyCommands (uint16_t id, const PlayerCommand& cmd) {
+      LOGE("[Game::applyCommands (uint16_t id)] By ID not implemented");
+    }
     virtual void applyCommands (Tank* tank, const PlayerCommand& cmd);
 
     PlayerTank* getPlayerTank () const {

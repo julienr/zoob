@@ -102,9 +102,9 @@ void Client::update(NetworkedGame* game) {
   }
 }
  
-void Client::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
+void Client::sendPlayerCommand (uint16_t tankID, const PlayerCommand& cmd) {
   zoobmsg::PlayerCommands msg;
-  msg.playerID = localPlayerID;
+  msg.tankID = tankID;
   msg.moveDir.x = cmd.moveDir.x;
   msg.moveDir.y = cmd.moveDir.y;
   msg.fire = cmd.fire;

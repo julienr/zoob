@@ -56,6 +56,15 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   }
 }
 
+void NetworkedGame::applyCommands (uint16_t id, const PlayerCommand& cmd) {
+  Tank* t = tanksByID.get(id);
+  if (t == NULL) {
+    LOGE("[NetworkedGame::applyCommands] id (%i) has no corresponding tank", id);
+  } else {
+    applyCommands(t, cmd);
+  }
+}
+
 void NetworkedGame::applyCommands (Tank* tank, const PlayerCommand& cmd) {
   NetController::getInstance()->sendPlayerCommand(tank->getID(), cmd);
   Game::applyCommands(tank, cmd);

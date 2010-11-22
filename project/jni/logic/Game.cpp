@@ -373,6 +373,7 @@ list<Rocket*>::iterator Game::deleteRocket (const list<Rocket*>::iterator& i) {
 void Game::addTank (Tank* t) {
   tanks.append(t);
   colManager.addEntity(t);
+  t->saveSafePosition();
   if (attachedView)
     attachedView->tankAdded(t);
 }
@@ -495,8 +496,7 @@ void Game::_tankFire (Tank* tank, const Vector2& cursorPosition) {
   }
 }
 
-void Game::_tankDropBomb(Tank* tank)
-{
+void Game::_tankDropBomb(Tank* tank) {
   //Fire mine
   if (tank->canMine()) {
     //FIXME: check that there isn't already a bomb here ?

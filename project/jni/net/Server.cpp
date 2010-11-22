@@ -4,6 +4,7 @@
 #include "logic/Bomb.h"
 #include "logic/Rocket.h"
 #include "logic/NetTank.h"
+#include "logic/PlayerCommand.h"
 
 void Server::handleConnect (const uint16_t peerID) {
   LOGI("new client connected");
@@ -47,8 +48,14 @@ void Server::handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const ui
 void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::PlayerCommands commands;
   zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
-  //LOGI("[handleMsgPlayerCommand] peerID=%i", peerID);
-  //TODO: handle it..
+  PlayerCommand cmd;
+  cmd.fire = commands.fire;
+  cmd.fireDir.set(commands.fireDir.x, commands.fireDir.y);
+  cmd.mine = commands.mine;
+  cmd.moveDir.set(commands.moveDir.x, commands.moveDir.y);
+  cmd.shield = commands.shield;
+  LOGI("[Server::handleMsgPlayerCommand] cmd.moveDir=(%f,%f)", cmd.moveDir.x, cmd.moveDir.y);
+  Game::getInstance()->applyCommands(commands.tankID, cmd);
 }
 
 void Server::handleDisconnect (const uint16_t peerID) {

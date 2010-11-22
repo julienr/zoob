@@ -18,7 +18,7 @@ messagesDef=[
      'rocketInfos':('array','RocketInfo'),
      'bombInfos':('array','BombInfo')},'component':True},
   {'name':'PlayerCommands','fields':
-    {'playerID':'uint16_t',
+    {'tankID':'uint16_t',
       'fire':'bool',
       'mine':'bool',
       'shield':'bool',

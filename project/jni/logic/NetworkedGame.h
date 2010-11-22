@@ -9,6 +9,7 @@ class NetworkedGame : public Game {
   public:
     void applyGameState (const zoobmsg::GameState* state);
 
+    void applyCommands (uint16_t id, const PlayerCommand& cmd);
     void applyCommands (Tank* tank, const PlayerCommand& cmd);
 
     void update(const double elapsedS);
