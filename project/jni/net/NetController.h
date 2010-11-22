@@ -61,7 +61,7 @@ class NetController {
     virtual void wantSpawn () = 0;
 
     //Check if this netcontroller has received a command to spawn the local player
-    virtual bool hasSpawned(Vector2& position) = 0;
+    virtual bool hasSpawned(Vector2& position, uint16_t& id) = 0;
 
   private:
     static NetController* instance;

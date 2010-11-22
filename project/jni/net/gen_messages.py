@@ -37,7 +37,8 @@ messagesDef=[
   {'name':'WantSpawn','fields':
     {}},
   {'name':'Spawn','fields':
-    {'position':'Vector'}},
+    {'position':'Vector',
+     'tankID':'uint16_t'}},
   {'name':'Explosion','fields':
     {'position':'Vector',
      'exploderID':'uint16_t',

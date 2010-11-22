@@ -101,6 +101,7 @@ Game::~Game () {
 void Game::playerSpawned (PlayerTank* tank) {
   playerTank = tank;
   addTank(playerTank);
+  LOGI("[Game::playerSpawned] new player tank @ %p (id=%i)", tank, tank->getID());
 }
 
 void Game::spawnPlayer () {
@@ -113,6 +114,7 @@ void Game::spawnPlayer () {
 bool Game::findSpawnPosition (float entityRadius, Vector2& position) {
   const list<pair<int, int> >& candidates = level->getSpawnPositions();
   const Grid& grid = colManager.getGrid();
+  LOGI("[Game::findSpawnPosition] num candidates : %ld", candidates.size());
   for (list<pair<int, int> >::const_iterator i = candidates.begin(); i.hasNext(); i++) {
     const pair<int, int>& p = *i;
     const Vector2 wPos = grid.gridToWorld(p.first, p.second);
@@ -662,6 +664,19 @@ void Game::slideMove(Entity* e, Vector2 move) {
   }
   colManager.translate(e, move);
   e->saveSafePosition();
+}
+
+void Game::setAuthoritativeTankPosition (Tank* tank, const Vector2& newPos) {
+  colManager.moveTo(tank, newPos);
+  tank->saveSafePosition();
+}
+
+void Game::setAuthoritativeRocketPosition (Rocket* rocket, const Vector2& newPos) {
+  colManager.moveTo(rocket, newPos);
+}
+
+void Game::setAuthoritativeBombPosition (Bomb* bomb, const Vector2& newPos) {
+  colManager.moveTo(bomb, newPos);
 }
 
 #ifdef DEBUG

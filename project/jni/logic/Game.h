@@ -248,6 +248,13 @@ class Game {
     //Request to spawn a player tank. Should call playerSpawned when the spawn is ready
     virtual void spawnPlayer ();
 
+    //Send the tank position. It is ASSUMED that the position has been checked
+    //for safety and no collision check is therefore performed.
+    //The new position is also directly saved as the last safe position
+    void setAuthoritativeTankPosition (Tank* tank, const Vector2& newPos);
+    void setAuthoritativeRocketPosition (Rocket* rocket, const Vector2& newPos);
+    void setAuthoritativeBombPosition (Bomb* bomb, const Vector2& newPos);
+
   private:
     //Game is using some kind of two-phases construction. SpawnTanks is called
     //during construction and relies on addRocket/addTank which can be overriden.

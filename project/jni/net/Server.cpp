@@ -63,7 +63,7 @@ void Server::_doSpawns (NetworkedGame* game) {
   if (spawnQueue.empty())
     return;
   
-  LOGI("[_doSpawns] %ld requests in spawn queue", spawnQueue.size());
+  LOGI("[Server::_doSpawns] %ld requests in spawn queue", spawnQueue.size());
   for (list<uint16_t>::iterator i = spawnQueue.begin(); i.hasNext(); ) {
     const uint16_t peerID = *i;
     if (peerID == 0) { //special case for server spawn
@@ -73,8 +73,10 @@ void Server::_doSpawns (NetworkedGame* game) {
         pt->setPosition(spawnPos);
         game->playerSpawned(pt);
         i = spawnQueue.remove(i);
-      } else
+      } else {
+        LOGI("[Server::_doSpawns] couldn't find a spawn position");
         i++;
+      }
     } else {
       Tank* tank;
       if (game->spawnTank(TANK_BCIRCLE_R, &createNetTank, tank)) {
@@ -82,10 +84,12 @@ void Server::_doSpawns (NetworkedGame* game) {
         zoobmsg::Spawn spawnMsg;
         spawnMsg.position.x = tank->getPosition().x;
         spawnMsg.position.y = tank->getPosition().y;
+        spawnMsg.tankID = tank->getID();
         LOGI("[_doSpawns] spawned peerID=%d at (%f,%f)", peerID, spawnMsg.position.x, spawnMsg.position.y);
         sendMsgSpawn(peerID, spawnMsg);
         i = spawnQueue.remove(i);
       } else {
+        LOGI("[Server::_doSpawns] couldn't find a spawn position");
         i++;
       }
     }

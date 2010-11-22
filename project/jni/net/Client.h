@@ -34,7 +34,7 @@ class Client : public NetController {
     //Returns the JSON description for the level otherwise, alongside with the
     //new playerID and the serverState
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState);
-    bool hasSpawned (Vector2& position);
+    bool hasSpawned (Vector2& position, uint16_t& id);
 
     void handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset);
     void handleMsgKicked (size_t dataLen, const uint8_t* data, size_t offset);

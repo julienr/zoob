@@ -23,7 +23,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
     } else {
       tank = tanksByID.get(pinfo.playerID); 
     }
-    tank->setPosition(Vector2(pinfo.position.x, pinfo.position.y));
+    setAuthoritativeTankPosition(tank, Vector2(pinfo.position.x, pinfo.position.y));
 
     LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", pinfo.playerID, pinfo.position.x, pinfo.position.y, pinfo.numRocketInfos, pinfo.numBombInfos);
 
@@ -36,7 +36,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
         addRocket(rocket);
       } else {
         Rocket* rocket = rocketsByID.get(rinfo.rocketID);
-        rocket->setPosition(pos);
+        setAuthoritativeRocketPosition(rocket, pos);
         rocket->setDir(vel);
         rocket->setSpeed(rinfo.speed);
       }
@@ -50,7 +50,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
         bomb->setTimeLeft((double)binfo.timeleft);
       } else {
         Bomb* bomb = bombsByID.get(binfo.bombID);
-        bomb->setPosition(pos);
+        setAuthoritativeBombPosition(bomb, pos);
       }
     }
   }

@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: app not using key straight away
+desc: For example when I bought the key, the app didn't use it immediately and I had to wait (maybe
+type: :bugfix
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-19 12:45:14.657880 Z
+references: []
+
+id: 0e44dfcb549aa808f1385142352dd51bfe0eef84
+log_events: 
+- - 2010-11-19 12:45:15.412703 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""

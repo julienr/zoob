@@ -65,12 +65,13 @@ void Client::handleMsgSpawn (size_t dataLen, const uint8_t* data, size_t offset)
   pthread_mutex_unlock(&mutex);
 }
 
-bool Client::hasSpawned (Vector2& position) {
+bool Client::hasSpawned (Vector2& position, uint16_t& id) {
   bool result = false;
   pthread_mutex_lock(&mutex);
   if (lastSpawn) {
     result = true;
     position.set(lastSpawn->position.x, lastSpawn->position.y);
+    id = lastSpawn->tankID;
     delete lastSpawn;
     lastSpawn = NULL;
   }
@@ -86,8 +87,10 @@ void Client::wantSpawn() {
 void Client::update(NetworkedGame* game) {
   //Check if we should spawn
   Vector2 spawnPos;
-  if (hasSpawned(spawnPos)) {
+  uint16_t tankID;
+  if (hasSpawned(spawnPos, tankID)) {
     PlayerTank* pt = new PlayerTank();
+    pt->setID(tankID);
     pt->setPosition(spawnPos);
     game->playerSpawned(pt);
   }

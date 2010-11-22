@@ -45,7 +45,7 @@ class Server : public NetController {
     char* hasNewLevel (uint16_t* playerID, ServerState* serverState) { return NULL; }
 
     //already handled by local game simulation
-    bool hasSpawned (Vector2& position) { return false; }
+    bool hasSpawned (Vector2& position, uint16_t& id) { return false; }
 
   
     //These are callbacks for the various events that can happen on server-side.
