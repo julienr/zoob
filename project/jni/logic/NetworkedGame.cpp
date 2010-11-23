@@ -21,25 +21,25 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   //The basic idea is that for each type (rocket, tank, bomb), we update
   //the entity with the same ID as in the message. If we have no entity with
   //this ID, we create a new one.
-  LOGI("[applyGameState] %i players", state->numPlayerInfos);
-  for (uint16_t i=0; i<state->numPlayerInfos; i++) {
-    const zoobmsg::PlayerInfo& pinfo = state->playerInfos[i];
+  LOGI("[applyGameState] %i tanks", state->numTankInfos);
+  for (uint16_t i=0; i<state->numTankInfos; i++) {
+    const zoobmsg::TankInfo& tinfo = state->tankInfos[i];
     Tank* tank;
-    orphanTanks.remove(pinfo.playerID);
-    if (!tanksByID.contains(pinfo.playerID)) {
+    orphanTanks.remove(tinfo.tankID);
+    if (!tanksByID.contains(tinfo.tankID)) {
       LOGI("[applyGameState] creating new NetTank");
       tank = new NetTank(newPlayerFirePolicy());
-      tank->setID(pinfo.playerID);
+      tank->setID(tinfo.tankID);
       addTank(tank);
     } else {
-      tank = tanksByID.get(pinfo.playerID); 
+      tank = tanksByID.get(tinfo.tankID);
     }
-    setAuthoritativeTankPosition(tank, Vector2(pinfo.position.x, pinfo.position.y));
+    setAuthoritativeTankPosition(tank, Vector2(tinfo.position.x, tinfo.position.y));
 
-    LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", pinfo.playerID, pinfo.position.x, pinfo.position.y, pinfo.numRocketInfos, pinfo.numBombInfos);
+    LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", tinfo.tankID, tinfo.position.x, tinfo.position.y, tinfo.numRocketInfos, tinfo.numBombInfos);
 
-    for (uint16_t j=0; j<pinfo.numRocketInfos; j++) {
-      const zoobmsg::RocketInfo& rinfo = pinfo.rocketInfos[j];
+    for (uint16_t j=0; j<tinfo.numRocketInfos; j++) {
+      const zoobmsg::RocketInfo& rinfo = tinfo.rocketInfos[j];
       const Vector2 pos(rinfo.position.x, rinfo.position.y);
       const Vector2 vel(rinfo.velocity.x, rinfo.velocity.y);
       orphanRockets.remove(rinfo.rocketID);
@@ -54,8 +54,8 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
       }
     }
 
-    for (uint16_t j=0; j<pinfo.numBombInfos; j++) {
-      const zoobmsg::BombInfo& binfo = pinfo.bombInfos[j];
+    for (uint16_t j=0; j<tinfo.numBombInfos; j++) {
+      const zoobmsg::BombInfo& binfo = tinfo.bombInfos[j];
       const Vector2 pos(binfo.position.x, binfo.position.y);
       orphanBombs.remove(binfo.bombID);
       if (!bombsByID.contains(binfo.bombID)) {

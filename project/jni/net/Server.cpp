@@ -117,32 +117,32 @@ void Server::update(NetworkedGame* game) {
   zoobmsg::GameState state;
   const list<Tank*>* tanks = game->getTanks();
 
-  state.numPlayerInfos = tanks->size();
-  state.playerInfos = new zoobmsg::PlayerInfo[state.numPlayerInfos];
+  state.numTankInfos = tanks->size();
+  state.tankInfos = new zoobmsg::TankInfo[state.numTankInfos];
 
   int counter = 0;
   LIST_FOREACH_CONST(Tank*, (*tanks), i) {
     const Tank* tank = *i;
 
-    zoobmsg::PlayerInfo* pinfo = &state.playerInfos[counter++];
-    pinfo->playerID = tank->getID();
+    zoobmsg::TankInfo* tinfo = &state.tankInfos[counter++];
+    tinfo->tankID = tank->getID();
     //FIXME: something is wrong here
-    LOGI("tank id : %i", pinfo->playerID);
-    pinfo->position.x = tank->getPosition().x;
-    pinfo->position.y = tank->getPosition().y;
-    pinfo->velocity.x = tank->getMoveDir().x;
-    pinfo->velocity.y = tank->getMoveDir().y;
+    LOGI("tank id : %i", tinfo->tankID);
+    tinfo->position.x = tank->getPosition().x;
+    tinfo->position.y = tank->getPosition().y;
+    tinfo->velocity.x = tank->getMoveDir().x;
+    tinfo->velocity.y = tank->getMoveDir().y;
 
-    pinfo->numRocketInfos = tank->getNumRockets();
-    pinfo->rocketInfos = new zoobmsg::RocketInfo[pinfo->numRocketInfos];
+    tinfo->numRocketInfos = tank->getNumRockets();
+    tinfo->rocketInfos = new zoobmsg::RocketInfo[tinfo->numRocketInfos];
 
-    pinfo->numBombInfos = tank->getNumBombs();
-    pinfo->bombInfos = new zoobmsg::BombInfo[pinfo->numBombInfos];
+    tinfo->numBombInfos = tank->getNumBombs();
+    tinfo->bombInfos = new zoobmsg::BombInfo[tinfo->numBombInfos];
 
     int rCnt = 0;
     for (set<Rocket*>::const_iterator ri=tank->getRockets(); ri.hasNext(); ri++) {
       const Rocket* rocket = *ri;
-      zoobmsg::RocketInfo& rInfo = pinfo->rocketInfos[rCnt++];
+      zoobmsg::RocketInfo& rInfo = tinfo->rocketInfos[rCnt++];
       rInfo.position.x = rocket->getPosition().x;
       rInfo.position.y = rocket->getPosition().y;
       rInfo.velocity.x = rocket->getDir().x;
@@ -154,7 +154,7 @@ void Server::update(NetworkedGame* game) {
     int bCnt = 0;
     for (set<Bomb*>::const_iterator bi=tank->getBombs(); bi.hasNext(); bi++) {
       const Bomb* bomb = *bi;
-      zoobmsg::BombInfo& bInfo = pinfo->bombInfos[bCnt++];
+      zoobmsg::BombInfo& bInfo = tinfo->bombInfos[bCnt++];
       bInfo.position.x = bomb->getPosition().x;
       bInfo.position.y = bomb->getPosition().y;
       bInfo.timeleft = bomb->getTimeLeft();

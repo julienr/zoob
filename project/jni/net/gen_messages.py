@@ -11,8 +11,8 @@ messagesDef=[
   {'name':'Damage','fields':{'entityID':'uint16_t','damages':'uint16_t'},'component':True},
   {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector', 'speed':'float'},'component':True},
   {'name':'BombInfo','fields':{'bombID':'uint16_t','position':'Vector','timeleft':'float'},'component':True},
-  {'name':'PlayerInfo','fields':
-    {'playerID':'uint16_t',
+  {'name':'TankInfo','fields':
+    {'tankID':'uint16_t',
      'position':'Vector',
      'velocity':'Vector',
      'rocketInfos':('array','RocketInfo'),
@@ -45,7 +45,7 @@ messagesDef=[
      'destroyExploder':'bool',
      'damages':('array','Damage')}},
   {'name':'GameState','fields':
-    {'playerInfos':('array','PlayerInfo')}},
+    {'tankInfos':('array','TankInfo')}},
   {'name':'StateChange','fields':
     {'newState':'uint8_t',
      'stateDuration':'uint8_t'}}
