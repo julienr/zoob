@@ -679,6 +679,23 @@ void Game::setAuthoritativeBombPosition (Bomb* bomb, const Vector2& newPos) {
   colManager.moveTo(bomb, newPos);
 }
 
+void Game::getRocketsID (set<uint16_t>& ids) const {
+  LIST_FOREACH_CONST(Rocket*, rockets, i) {
+    ids.insert((*i)->getID());
+  }
+}
+
+void Game::getTanksID (set<uint16_t>& ids) const {
+  LIST_FOREACH_CONST(Tank*, tanks, i) {
+    ids.insert((*i)->getID());
+  }
+}
+void Game::getBombsID (set<uint16_t>& ids) const {
+  LIST_FOREACH_CONST(Bomb*, bombs, i) {
+    ids.insert((*i)->getID());
+  }
+}
+
 #ifdef DEBUG
 void Game::dbg_clear () {
   dbg_overlays.clear();

@@ -4,6 +4,9 @@
 #include "def.h"
 #include "uthash.h"
 
+#define SET_FOREACH(type,setname,itername) for (set<type>::iterator itername=setname.begin(); itername.hasNext(); itername++)
+#define SET_FOREACH_CONST(type,setname,itername) for (set<type>::const_iterator itername=setname.begin(); itername.hasNext(); itername++)
+
 template <class T>
 class set {
   private:

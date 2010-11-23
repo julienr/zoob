@@ -266,6 +266,11 @@ class Game {
     void setAuthoritativeRocketPosition (Rocket* rocket, const Vector2& newPos);
     void setAuthoritativeBombPosition (Bomb* bomb, const Vector2& newPos);
 
+    //Returns a set containing all rockets/tanks/bombs id
+    void getRocketsID (set<uint16_t>& ids) const;
+    void getTanksID (set<uint16_t>& ids) const;
+    void getBombsID (set<uint16_t>& ids) const;
+
   private:
     //Game is using some kind of two-phases construction. SpawnTanks is called
     //during construction and relies on addRocket/addTank which can be overriden.

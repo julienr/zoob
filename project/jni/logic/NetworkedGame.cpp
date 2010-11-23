@@ -7,6 +7,16 @@
 void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   //FIXME: should also REMOVE all rockets, tanks and bombs that are not in the update
   //anymore
+  //We keep track of all the rockets, bombs and tanks that are not in the update
+  //but still in our local game. We can use this information to detect some bad
+  //network problem or disconnection
+  set<uint16_t> orphanRockets;
+  set<uint16_t> orphanBombs;
+  set<uint16_t> orphanTanks;
+
+  getRocketsID(orphanRockets);
+  getBombsID(orphanBombs);
+  getTanksID(orphanTanks);
   
   //The basic idea is that for each type (rocket, tank, bomb), we update
   //the entity with the same ID as in the message. If we have no entity with
@@ -15,6 +25,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   for (uint16_t i=0; i<state->numPlayerInfos; i++) {
     const zoobmsg::PlayerInfo& pinfo = state->playerInfos[i];
     Tank* tank;
+    orphanTanks.remove(pinfo.playerID);
     if (!tanksByID.contains(pinfo.playerID)) {
       LOGI("[applyGameState] creating new NetTank");
       tank = new NetTank(newPlayerFirePolicy());
@@ -31,6 +42,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
       const zoobmsg::RocketInfo& rinfo = pinfo.rocketInfos[j];
       const Vector2 pos(rinfo.position.x, rinfo.position.y);
       const Vector2 vel(rinfo.velocity.x, rinfo.velocity.y);
+      orphanRockets.remove(rinfo.rocketID);
       if (!rocketsByID.contains(rinfo.rocketID)) {
         Rocket* rocket = new Rocket(tank, pos, vel, rinfo.speed);
         addRocket(rocket);
@@ -45,6 +57,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
     for (uint16_t j=0; j<pinfo.numBombInfos; j++) {
       const zoobmsg::BombInfo& binfo = pinfo.bombInfos[j];
       const Vector2 pos(binfo.position.x, binfo.position.y);
+      orphanBombs.remove(binfo.bombID);
       if (!bombsByID.contains(binfo.bombID)) {
         Bomb* bomb = new Bomb(tank, pos);
         bomb->setTimeLeft((double)binfo.timeleft);
@@ -53,6 +66,18 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
         setAuthoritativeBombPosition(bomb, pos);
       }
     }
+  }
+
+  SET_FOREACH(uint16_t, orphanRockets, i) {
+    LOGI("[NetworkedGame::applyGameState] rocket %d is orphan", *i);
+  }
+
+  SET_FOREACH(uint16_t, orphanBombs, i) {
+    LOGI("[NetworkedGame::applyGameState] bomb %d is orphan", *i);
+  }
+
+  SET_FOREACH(uint16_t, orphanTanks, i) {
+    LOGI("[NetworkedGame::applyGameState] tank %d is orphan", *i);
   }
 }
 
