@@ -14,22 +14,23 @@ LOCAL_CFLAGS := -Wall -DANDROID_NDK -Wno-psabi
 LOCAL_DEFAULT_CPP_EXTENSION := cpp 
 
 LOCAL_SRC_FILES := \
-		app-android.cpp \
-		app.cpp \
+    app-android.cpp \
+    app.cpp \
     lib/Vector2.cpp \
     lib/Polygon.cpp \
     lib/Line.cpp \
     lib/TimerManager.cpp \
-		net/Server.cpp \
-		net/ENetServer.cpp \
-		net/Client.cpp \
+    net/Server.cpp \
+    net/ENetServer.cpp \
+    net/Client.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
-		logic/NetworkedGame.cpp \
+    logic/NetworkedGame.cpp \
     logic/Tank.cpp \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \
+    logic/NetTank.cpp \
     logic/ShadowPolygon.cpp \
     levels/LevelsData.cpp \
     view/textures/TextureManager.cpp \

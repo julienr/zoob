@@ -89,7 +89,7 @@ void Client::update(NetworkedGame* game) {
   Vector2 spawnPos;
   uint16_t tankID;
   if (hasSpawned(spawnPos, tankID)) {
-    PlayerTank* pt = new PlayerTank();
+    PlayerTank* pt = new PlayerTank(game->newPlayerFirePolicy());
     pt->setID(tankID);
     pt->setPosition(spawnPos);
     game->playerSpawned(pt);

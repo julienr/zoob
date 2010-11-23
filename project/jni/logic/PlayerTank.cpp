@@ -13,3 +13,21 @@ void PlayerTank::changePlayerForm(ePlayerForm newForm) {
       break;
   }
 }
+
+bool PlayerTank::explode (Entity* e, const Vector2& colPoint) {
+  if (shieldActive()) {
+    if (e->getType() == ENTITY_ROCKET) {
+      Rocket* r = static_cast<Rocket*> (e);
+      if (r->getNumBounces() < Difficulty::getInstance()->getPlayerShieldResistance())
+        return false;
+    }
+  } else {
+    //Avoid a tank being exploded by his own rockets
+    if (e && e->getType() == ENTITY_ROCKET) {
+      Rocket* r = static_cast<Rocket*> (e);
+      if (r->getOwner() == this)
+        return false;
+    }
+  }
+  return Tank::explode(e, colPoint);
+}

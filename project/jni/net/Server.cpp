@@ -54,7 +54,7 @@ void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, cons
   cmd.mine = commands.mine;
   cmd.moveDir.set(commands.moveDir.x, commands.moveDir.y);
   cmd.shield = commands.shield;
-  LOGI("[Server::handleMsgPlayerCommand] cmd.moveDir=(%f,%f)", cmd.moveDir.x, cmd.moveDir.y);
+  //LOGI("[Server::handleMsgPlayerCommand] cmd.moveDir=(%f,%f), cmd.fire=%i", cmd.moveDir.x, cmd.moveDir.y, cmd.fire);
   Game::getInstance()->applyCommands(commands.tankID, cmd);
 }
 
@@ -63,7 +63,7 @@ void Server::handleDisconnect (const uint16_t peerID) {
 }
 
 Tank* createNetTank () {
-  return new NetTank();
+  return new NetTank(Game::getInstance()->newPlayerFirePolicy());
 }
 
 void Server::_doSpawns (NetworkedGame* game) {
@@ -76,7 +76,7 @@ void Server::_doSpawns (NetworkedGame* game) {
     if (peerID == 0) { //special case for server spawn
       Vector2 spawnPos;
       if (game->findSpawnPosition(TANK_BCIRCLE_R, spawnPos)) {
-        PlayerTank* pt = new PlayerTank();
+        PlayerTank* pt = new PlayerTank(Game::getInstance()->newPlayerFirePolicy());
         pt->setPosition(spawnPos);
         game->playerSpawned(pt);
         i = spawnQueue.remove(i);

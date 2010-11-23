@@ -201,6 +201,14 @@ class Game {
 
     void playerSpawned (PlayerTank* tank);
 
+    FireRatePolicy* newPlayerFirePolicy () {
+      return new IntervalFirePolicy(ProgressionManager::getInstance()->getPlayerFireInterval());
+    }
+
+    float getPlayerRocketSpeed () {
+      return ProgressionManager::getInstance()->getPlayerRocketsSpeed();
+    }
+
     //DEBUG only: returns a list of grid cells to be drawn in overlay
 #ifdef DEBUG
     const list<CellOverlay>& dbg_getCellOverlays () {

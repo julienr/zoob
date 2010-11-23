@@ -17,7 +17,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
     Tank* tank;
     if (!tanksByID.contains(pinfo.playerID)) {
       LOGI("[applyGameState] creating new NetTank");
-      tank = new NetTank();
+      tank = new NetTank(newPlayerFirePolicy());
       tank->setID(pinfo.playerID);
       addTank(tank);
     } else {

@@ -14,8 +14,8 @@
 
 class PlayerTank : public Tank {
   public:
-    PlayerTank ()
-      : Tank(TANK_BCIRCLE_R, new IntervalFirePolicy(ProgressionManager::getInstance()->getPlayerFireInterval())),
+    PlayerTank (FireRatePolicy* pol)
+      : Tank(TANK_BCIRCLE_R, pol),
         currentForm (FORM_SIMPLE) {
       setLives(3);
     }
@@ -33,24 +33,7 @@ class PlayerTank : public Tank {
       return currentForm;
     }
 
-    bool explode (Entity* e, const Vector2& colPoint) {
-      if (shieldActive()) {
-        if (e->getType() == ENTITY_ROCKET) {
-          Rocket* r = static_cast<Rocket*>(e);
-          if (r->getNumBounces() < Difficulty::getInstance()->getPlayerShieldResistance())
-            return false;
-        }
-      } else {
-        //Avoid a tank being exploded by his friends rockets
-        if (e && e->getType() == ENTITY_ROCKET) {
-          Rocket* r = static_cast<Rocket*>(e);
-          //Player can only die of enemies rockets
-          if (r->getOwner()->getTankType() == TANK_PLAYER)
-            return false;
-        }
-      }
-      return Tank::explode(e, colPoint);
-    }
+    bool explode (Entity* e, const Vector2& colPoint);
 
     void changePlayerForm (ePlayerForm newForm);
 

@@ -2,10 +2,11 @@
 #define NETTANK_H_
 
 #include "Tank.h"
+#include "Game.h"
 
 class NetTank: public Tank {
   public:
-    NetTank () : Tank(TANK_BCIRCLE_R, new DummyFirePolicy()) {}
+    NetTank (FireRatePolicy* pol) : Tank(TANK_BCIRCLE_R, pol) {}
       
     eTankType getTankType () const {
       return TANK_PLAYER;
@@ -16,11 +17,7 @@ class NetTank: public Tank {
     }
 
   protected:
-    Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) {
-      //Shouldn't be called
-      LOGE("[NetTank::createRocket] shouldn't be called");
-      return NULL;
-    }
+    Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir);
 };
 
 #endif

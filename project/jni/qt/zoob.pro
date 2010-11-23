@@ -41,6 +41,7 @@ LOCAL_SRC_FILES = \
     logic/Game.cpp \
     logic/NetworkedGame.cpp \
     logic/Tank.cpp \
+    logic/NetTank.cpp \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \

@@ -27,6 +27,7 @@ Bomb* Tank::dropBomb () {
 
 bool Tank::explode (Entity* UNUSED(e), const Vector2& UNUSED(dir)) {
   numLives--;
+  LOGI("[Tank::explode] tank has %i lives left", numLives);
   if (numLives > 0)
     return true;
 

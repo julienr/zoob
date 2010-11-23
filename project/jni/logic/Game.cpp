@@ -105,7 +105,7 @@ void Game::playerSpawned (PlayerTank* tank) {
 }
 
 void Game::spawnPlayer () {
-  PlayerTank* p = new PlayerTank();
+  PlayerTank* p = new PlayerTank(newPlayerFirePolicy());
   p->setPosition(playerStartPosition);
   ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
   playerSpawned(p);
@@ -397,6 +397,7 @@ list<Bomb*>::iterator Game::deleteBomb (const list<Bomb*>::iterator& i) {
 }
 
 #include "containers/pair.h"
+#include "net/NetController.h"
 
 typedef pair<Vector2, const AABBox* > Occluder;
 struct DistToPlayerCmp : public Compare<Occluder> {
@@ -491,6 +492,7 @@ void Game::_tankFire (Tank* tank, const Vector2& cursorPosition) {
   //Fire up rocket
   Vector2 dir = cursorPosition-tank->getPosition();
   dir.normalize();
+  LOGI("[Game::_tankFire] tank->canFire : %i", tank->canFire());
   if (tank->canFire()) {
     doFireRocket(tank, dir);
   }
@@ -519,26 +521,24 @@ void Game::doTankMove (Tank* t, double elapsedS) {
 }
 
 void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
+  //If we are the client, we dont't perform ANY touch, just wait for the
+  //server to send the damage/explosion/... events
+  if (NetController::getInstance()->isClient())
+    return;
+
   const eEntityType t1 = e1->getType();
   const eEntityType t2 = e2->getType();
-  //tank-wall and tank-tank
-  /*if ((t1 == ENTITY_TANK || t1 == ENTITY_WALL) &&
-      (t2 == ENTITY_TANK || t2 == ENTITY_WALL))
-    return;*/
 
   if (!e1->acceptsTouch(e2) || !e2->acceptsTouch(e1))
     return;
 
-  //rocket-wall
-  /*if ((t1 == ENTITY_ROCKET && t2 == ENTITY_WALL) ||
-      (t2 == ENTITY_ROCKET && t1 == ENTITY_WALL))
-    return;*/
-
-  //Notify entities about the explosion
+  //Notify entities about the explosion, le them accept or discard
   const bool effect1 = e1->explode(e2, colPoint);
   const bool effect2 = e2->explode(e1, colPoint);
+  LOGI("[Game::touch] effect1=%i, effect2=%i", effect1, effect2);
 
-  //hasEffect is used to determine if the explosion had any effect.
+  //We have two type of visuals for explosion : poof (when the explosion is rocket-wall) and
+  // boom (for all the rest). Here, we determine which type we should use based on effects
   //We don't take the effect on the rocket into account (otherwise we'll obviously always have effects).
   const bool hasEffect = ((t1 != ENTITY_ROCKET) && effect1) || ((t2 != ENTITY_ROCKET) && effect2);
 
