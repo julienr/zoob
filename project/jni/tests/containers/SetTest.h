@@ -50,7 +50,7 @@ class SetTests : public CxxTest::TestSuite
       s.insert(1);
       s.insert(2);
 
-      for (set<int>::iterator i = s.begin(); i.hasNext(); i++) {
+      for (iterator<int> i = s.begin(); i.hasNext(); i++) {
         const int v = *i;
         TS_ASSERT(!visited[v]);
         visited[v] = true;

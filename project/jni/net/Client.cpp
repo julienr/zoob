@@ -1,34 +1,20 @@
 #include "Client.h"
 #include "enet/enet.h"
-
+#include "logic/Game.h"
 
 void Client::handleMsgWelcome (size_t dataLen, const uint8_t* data, size_t offset) {
-  pthread_mutex_lock(&mutex);
-  delete lastWelcome;
-  
-  lastWelcome = new zoobmsg::Welcome();
-  zoobmsg::Welcome::unpack(dataLen, data, offset, *lastWelcome);
+  zoobmsg::Welcome welcome;
+  zoobmsg::Welcome::unpack(dataLen, data, offset, welcome);
 
-  LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", lastWelcome->playerID, lastWelcome->serverState);
-  LOGI("[handleMsgWelcome] level=%s", lastWelcome->level.bytes);
-  pthread_mutex_unlock(&mutex);
+  LOGI("[handleMsgWelcome] playerID=%i, serverState=%i", welcome.playerID, welcome.serverState);
+  LOGI("[handleMsgWelcome] level=%s", welcome.level.bytes);
+
+  const char* json = welcome.level.bytes;
+  ASSERT(json[welcome.level.numBytes-1] == '\0');
+  /*const uint16_t playerID = welcome.playerID;
+  const ServerState serverState = welcome.serverState;*/
+  levelChangedCb(json);
 }
-
-char* Client::hasNewLevel (uint16_t* playerID, ServerState* serverState) {
-  char* json = NULL;
-  pthread_mutex_lock(&mutex);
-  if (lastWelcome) {
-    json = strndup(lastWelcome->level.bytes, lastWelcome->level.numBytes);
-    *playerID = lastWelcome->playerID;
-    *serverState = (ServerState)lastWelcome->serverState;
-    delete lastWelcome;
-    lastWelcome = NULL;
-  }
-  pthread_mutex_unlock(&mutex);
-  //LOGE("[hasNewLevel] %p", json);
-  return json;
-}
-
 
 void Client::handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::Version version;
@@ -49,34 +35,25 @@ void Client::handleMsgKicked (size_t dataLen, const uint8_t* data, size_t offset
 }
 
 void Client::handleMsgGameState (size_t dataLen, const uint8_t* data, size_t offset) {
-  zoobmsg::GameState* gameState = new zoobmsg::GameState();
-  zoobmsg::GameState::unpack(dataLen, data, offset, *gameState);
-  gameStates.append(gameState);
+  zoobmsg::GameState gameState;
+  zoobmsg::GameState::unpack(dataLen, data, offset, gameState);
+  NetworkedGame* ng = static_cast<NetworkedGame*>(Game::getInstance());
+  ng->applyGameState(gameState);
 }
 
 void Client::handleMsgSpawn (size_t dataLen, const uint8_t* data, size_t offset) {
-  pthread_mutex_lock(&mutex);
-  delete lastSpawn;
+  zoobmsg::Spawn spawn;
+  zoobmsg::Spawn::unpack(dataLen, data, offset, spawn);
 
-  lastSpawn = new zoobmsg::Spawn();
-  zoobmsg::Spawn::unpack(dataLen, data, offset, *lastSpawn);
+  LOGI("[handleMsgSpawn] spawn at (%f,%f)", spawn.position.x, spawn.position.y);
 
-  LOGI("[handleMsgSpawn] spawn at (%f,%f)", lastSpawn->position.x, lastSpawn->position.y);
-  pthread_mutex_unlock(&mutex);
-}
-
-bool Client::hasSpawned (Vector2& position, uint16_t& id) {
-  bool result = false;
-  pthread_mutex_lock(&mutex);
-  if (lastSpawn) {
-    result = true;
-    position.set(lastSpawn->position.x, lastSpawn->position.y);
-    id = lastSpawn->tankID;
-    delete lastSpawn;
-    lastSpawn = NULL;
-  }
-  pthread_mutex_unlock(&mutex);
-  return result;
+  Game* game = Game::getInstance();
+  const Vector2 spawnPos = Vector2(spawn.position.x, spawn.position.y);
+  uint16_t tankID = spawn.tankID;
+  PlayerTank* pt = new PlayerTank(game->newPlayerFirePolicy());
+  pt->setID(tankID);
+  pt->setPosition(spawnPos);
+  game->playerSpawned(pt);
 }
 
 void Client::wantSpawn() {
@@ -85,21 +62,6 @@ void Client::wantSpawn() {
 }
 
 void Client::update(NetworkedGame* game) {
-  //Check if we should spawn
-  Vector2 spawnPos;
-  uint16_t tankID;
-  if (hasSpawned(spawnPos, tankID)) {
-    PlayerTank* pt = new PlayerTank(game->newPlayerFirePolicy());
-    pt->setID(tankID);
-    pt->setPosition(spawnPos);
-    game->playerSpawned(pt);
-  }
-  
-  zoobmsg::GameState* gameState;
-  while (gameStates.pop(&gameState)) {
-    game->applyGameState(gameState);
-    delete gameState;
-  }
 }
  
 void Client::sendPlayerCommand (uint16_t tankID, const PlayerCommand& cmd) {

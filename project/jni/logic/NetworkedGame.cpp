@@ -4,7 +4,7 @@
 #include "logic/Bomb.h"
 #include "net/NetController.h"
 
-void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
+void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
   //FIXME: should also REMOVE all rockets, tanks and bombs that are not in the update
   //anymore
   //We keep track of all the rockets, bombs and tanks that are not in the update
@@ -21,9 +21,9 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState* state) {
   //The basic idea is that for each type (rocket, tank, bomb), we update
   //the entity with the same ID as in the message. If we have no entity with
   //this ID, we create a new one.
-  LOGI("[applyGameState] %i tanks", state->numTankInfos);
-  for (uint16_t i=0; i<state->numTankInfos; i++) {
-    const zoobmsg::TankInfo& tinfo = state->tankInfos[i];
+  LOGI("[applyGameState] %i tanks", state.numTankInfos);
+  for (uint16_t i=0; i<state.numTankInfos; i++) {
+    const zoobmsg::TankInfo& tinfo = state.tankInfos[i];
     Tank* tank;
     orphanTanks.remove(tinfo.tankID);
     if (!tanksByID.contains(tinfo.tankID)) {

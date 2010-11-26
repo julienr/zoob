@@ -44,12 +44,12 @@ public:
 
   void testGameState () {
     zoobmsg::GameState gamestate;
-    gamestate.numPlayerInfos = 2;
-    gamestate.playerInfos = new zoobmsg::PlayerInfo[2];
+    gamestate.numTankInfos = 2;
+    gamestate.tankInfos = new zoobmsg::TankInfo[2];
 
     //player 1 infos
-    zoobmsg::PlayerInfo& pi1 = gamestate.playerInfos[0];
-    pi1.playerID = 1;
+    zoobmsg::TankInfo& pi1 = gamestate.tankInfos[0];
+    pi1.tankID = 1;
     pi1.position.x = -4.5;
     pi1.position.y = 6.3;
     pi1.numRocketInfos = 1;
@@ -59,31 +59,31 @@ public:
     pi1.rocketInfos[0].rocketID = 1;
     pi1.rocketInfos[0].velocity.x = -78;
     pi1.rocketInfos[0].velocity.y = 100;
-    pi1.numMineInfos = 0;
+    pi1.numBombInfos = 0;
     pi1.velocity.x = -3;
     pi1.velocity.y = 10.5;
 
     //player 2 infos
-    zoobmsg::PlayerInfo& pi2 = gamestate.playerInfos[1];
-    pi2.playerID = 2;
+    zoobmsg::TankInfo& pi2 = gamestate.tankInfos[1];
+    pi2.tankID = 2;
     pi2.position.x = 3;
     pi2.position.y = 4;
     pi2.numRocketInfos = 0;
-    pi2.numMineInfos = 0;
+    pi2.numBombInfos = 0;
     pi2.velocity.x = 0;
     pi2.velocity.y = 0;
 
 
-    //gs.numPlayerInfos (2)
-    //player1info : pid(2), position(8), numRocketInfos(2), numMineInfos(2), velocity(8) = 22
-    //player1info.rocketinfo : position(8), velocity(8), rocketID(2)=18
+    //gs.numPlayerInfos = 2
+    //player1info : tankID(2), position(8), numRocketInfos(2), numMineInfos(2), velocity(8) = 22
+    //player1info.rocketinfo : position(8), velocity(8), speed(4), rocketID(2)=22
     //
     //player2info = 22
-    //total = 64
-    ENCODE_DECODE_MSG(zoobmsg::GameState, gamestate, gamestate2, 64);
+    //total = 68
+    ENCODE_DECODE_MSG(zoobmsg::GameState, gamestate, gamestate2, 68);
 
-    zoobmsg::PlayerInfo& r1 = gamestate2.playerInfos[0];
-    TS_ASSERT(r1.playerID == 1);
+    zoobmsg::TankInfo& r1 = gamestate2.tankInfos[0];
+    TS_ASSERT(r1.tankID == 1);
     TS_ASSERT(EEQ(r1.position.x,-4.5));
     TS_ASSERT(EEQ(r1.position.y,6.3));
     TS_ASSERT(r1.numRocketInfos == 1);
@@ -92,16 +92,16 @@ public:
     TS_ASSERT(r1.rocketInfos[0].rocketID == 1);
     TS_ASSERT(EEQ(r1.rocketInfos[0].velocity.x, -78));
     TS_ASSERT(EEQ(r1.rocketInfos[0].velocity.y, 100));
-    TS_ASSERT(r1.numMineInfos == 0);
+    TS_ASSERT(r1.numBombInfos == 0);
     TS_ASSERT(EEQ(r1.velocity.x, -3));
     TS_ASSERT(EEQ(r1.velocity.y,10.5));
 
-    zoobmsg::PlayerInfo& r2 = gamestate2.playerInfos[1];
-    TS_ASSERT(r2.playerID == 2);
+    zoobmsg::TankInfo& r2 = gamestate2.tankInfos[1];
+    TS_ASSERT(r2.tankID == 2);
     TS_ASSERT(EEQ(r2.position.x,3));
     TS_ASSERT(EEQ(r2.position.y,4));
     TS_ASSERT(r2.numRocketInfos == 0);
-    TS_ASSERT(r2.numMineInfos == 0);
+    TS_ASSERT(r2.numBombInfos == 0);
     TS_ASSERT(EEQ(r2.velocity.x,0));
     TS_ASSERT(EEQ(r2.velocity.y,0));
   }

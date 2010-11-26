@@ -74,6 +74,11 @@ void gameUnPauseCallback () {
   GameManager::getInstance()->setState(STATE_PLAYING);
 }
 
+void gameLevelChangedCallback (const char* levelJSON) {
+  LevelManager::registerInstance(new SingleLevelManager(levelJSON));
+  startGame(0);
+}
+
 void toPlayingState () {
   LOGI("[toPlayingState]");
   if (Game::getInstance() && Game::getInstance()->isPaused()) {
@@ -162,7 +167,7 @@ bool nativeStartServer () {
 
 bool nativeStartClient () {
   LOGI("Starting client...");
-  NetController::registerInstance(new ENetClient());
+  NetController::registerInstance(new ENetClient(gameLevelChangedCallback));
   return NetController::getInstance()->start();
 }
 
@@ -470,16 +475,6 @@ void nativeRender () {
   //If we are in a networked game, let the netcontroller think
   if (NetController::isNetworkedGame()) {
     NetController::getInstance()->think(elapsedS);
-
-    //Check if we should change the level
-    uint16_t playerID;
-    ServerState serverState;
-    char* json = NetController::getInstance()->hasNewLevel(&playerID, &serverState);
-    if (json) {
-      LevelManager::registerInstance(new SingleLevelManager(json));
-      free(json);
-      startGame(0);
-    }
   }
  
   glClear(GL_COLOR_BUFFER_BIT);

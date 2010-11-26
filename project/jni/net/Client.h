@@ -6,17 +6,14 @@
 #include "NetController.h"
 #include "containers/blockingqueue.h"
 
+typedef void (*LevelChangedCb) (const char*);
+
 class Client : public NetController {
   public:
-    Client () 
-      : lastSpawn(NULL),
-        lastWelcome(NULL) {
-      pthread_mutex_init(&mutex, NULL);
-    }
-
-    ~Client () {
-      pthread_mutex_destroy(&mutex);
-    }
+    
+    /// Construct a new network client. A callback to handle level-changed events
+    /// must be supplied
+    Client (LevelChangedCb changeCb) : levelChangedCb(changeCb) {}
 
     virtual bool start () = 0;
     virtual void stop () = 0;
@@ -29,12 +26,6 @@ class Client : public NetController {
     }
 
     void wantSpawn ();
-
-    //Returns NULL if now new level message was received since last queried.
-    //Returns the JSON description for the level otherwise, alongside with the
-    //new playerID and the serverState
-    char* hasNewLevel (uint16_t* playerID, ServerState* serverState);
-    bool hasSpawned (Vector2& position, uint16_t& id);
 
     void handleMsgVersion (size_t dataLen, const uint8_t* data, size_t offset);
     void handleMsgKicked (size_t dataLen, const uint8_t* data, size_t offset);
@@ -49,21 +40,8 @@ class Client : public NetController {
     bool isClient () {
       return true;
     }
-
-
   private:
-    pthread_t threadID;
-    blockingqueue<zoobmsg::GameState*> gameStates;
-
-    //To synchronize game and network threads
-    pthread_mutex_t mutex;
-
-    //Store the last spawn message received. It will be queried by the game thread
-    zoobmsg::Spawn* lastSpawn;
-
-    //We always store the last welcome message received. It will be queried by the game thread using
-    //hasNewLevel.
-    zoobmsg::Welcome* lastWelcome;
+    LevelChangedCb levelChangedCb;
 };
 
 #endif	/* _CLIENT_H */

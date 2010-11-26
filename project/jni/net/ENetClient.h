@@ -6,7 +6,7 @@
 
 class ENetClient : public Client {
   public:
-    ENetClient() : serverPeer(NULL), client(NULL) {}
+    ENetClient(LevelChangedCb changeCb) : Client(changeCb), serverPeer(NULL), client(NULL) {}
     bool start ();
     void think (double elapsedS);
     void stop ();

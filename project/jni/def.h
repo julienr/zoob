@@ -1,10 +1,16 @@
 #ifndef DEF_H_
 #define DEF_H_
 
+#include <stdlib.h>
 #include <zip.h>
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
+
+//FIXME: this is mostly to get nice code completion under netbeans... find another way to fix this
+#ifndef size_t
+#define size_t uint64_t
+#endif
 
 extern zip* APKArchive;
 
