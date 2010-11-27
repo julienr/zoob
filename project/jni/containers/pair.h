@@ -5,6 +5,8 @@ template <class U, class V>
 class pair {
   public:
     pair () {}
+    pair (const pair<U,V>& other)
+      : first(other.first), second(other.second) {}
     pair (const U& u, const V& v)
       : first(u), second(v) {}
     U first;

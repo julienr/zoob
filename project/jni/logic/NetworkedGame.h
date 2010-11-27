@@ -21,6 +21,9 @@ class NetworkedGame : public Game {
       registerInstance(new NetworkedGame(overCallback, wonCallback, level));
     }
 
+    virtual void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
+    virtual void multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint);
+
   protected:
     void addRocket (Rocket* r);
     list<Rocket*>::iterator deleteRocket (const list<Rocket*>::iterator& i);

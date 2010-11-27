@@ -16,7 +16,7 @@
 #include "ai/algorithms/PathFinder.h"
 #include "lib/Color.h"
 #include "logic/PlayerCommand.h"
-#include "iview/ExplosionLocation.h"
+#include "iview/ExplosionInfo.h"
 
 #include "iview/IGameView.h"
 
@@ -166,7 +166,11 @@ class Game {
       return accumulator;
     }
 
-    void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
+    //Touch occurs between e1 and e2
+    virtual void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
+
+    //Touch all the entities in the given list
+    virtual void multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint);
 
     virtual void update(const double elapsedS);
 
@@ -248,6 +252,7 @@ class Game {
     virtual list<Tank*>::iterator deleteTank (const list<Tank*>::iterator& i);
     virtual void addBomb (Bomb* b);
     virtual list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
+
 
     virtual bool isGameOver () const;
     virtual bool isGameWon (int numAlives) const;

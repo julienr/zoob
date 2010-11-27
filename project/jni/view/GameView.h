@@ -39,7 +39,7 @@ class GameView : public IGameView {
     void tankAdded (Tank* t);
     void tankRemoved (Tank* t);
 
-    void explosion (const ExplosionLocation& expl);
+    void explosion (const ExplosionInfo& expl);
   private:
     void _drawGame (double elapsedS);
     void _drawBossIntro(double elapsedS);

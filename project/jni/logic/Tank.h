@@ -81,7 +81,7 @@ class Tank: public Entity {
 
     virtual eTankCategory getTankCategory () const = 0;
 
-    virtual bool explode (Entity* e, const Vector2& colPoint);
+    virtual int explode (Entity* e, const Vector2& colPoint);
 
     bool hasExploded () const {
       return exploded;

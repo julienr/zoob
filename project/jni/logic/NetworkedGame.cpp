@@ -111,6 +111,21 @@ void NetworkedGame::spawnPlayer() {
   NetController::getInstance()->wantSpawn();
 }
 
+
+void NetworkedGame::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
+  //If we are the client, we dont't perform ANY touch, just wait for the
+  //server to send the damage/explosion/... events
+  if (NetController::getInstance()->isClient())
+    return;
+  Game::touch(e1, e2, colPoint);
+}
+
+void NetworkedGame::multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint) {
+  if (NetController::getInstance()->isClient())
+    return;
+  Game::multiTouch(source, touched, colPoint);
+}
+
 void NetworkedGame::addRocket (Rocket* r) {
   Game::addRocket(r);
   rocketsByID.insert(r->getID(), r);

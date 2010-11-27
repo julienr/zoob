@@ -33,7 +33,7 @@ class PlayerTank : public Tank {
       return currentForm;
     }
 
-    bool explode (Entity* e, const Vector2& colPoint);
+    int explode (Entity* e, const Vector2& colPoint);
 
     void changePlayerForm (ePlayerForm newForm);
 

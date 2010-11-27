@@ -41,11 +41,13 @@ messagesDef=[
      'tankID':'uint16_t'}},
   {'name':'Explosion','fields':
     {'position':'Vector',
-     'exploderID':'uint16_t',
-     'destroyExploder':'bool',
+     'e1':'uint16_t',
+     'e2':'uint16_t',
+     'boom':'bool',
      'damages':('array','Damage')}},
   {'name':'GameState','fields':
-    {'tankInfos':('array','TankInfo')}},
+    {'tankInfos':('array','TankInfo'),
+     'explosions':('array','Explosion')}},
   {'name':'StateChange','fields':
     {'newState':'uint8_t',
      'stateDuration':'uint8_t'}}

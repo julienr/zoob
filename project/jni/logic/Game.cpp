@@ -232,7 +232,7 @@ void Game::_updateRockets (double elapsedS) {
     r->think(elapsedS);
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
-      attachedView->explosion(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
+      attachedView->explosion(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
@@ -256,13 +256,11 @@ void Game::_updateBombs (double elapsedS) {
     //A mine explodes when an enemy pass on it OR after its delay
     if (m->getTimeLeft() <= 0 || ((m->getTimeLeft() <= minBombTime) && !touchedEntities->empty())) {
       //touch all the entities in the explosion area
-      for (list<Entity*>::iterator iter = touchedEntities->begin(); iter.hasNext(); iter++)
-        touch(m, *iter, m->getPosition());
+      multiTouch(m, *touchedEntities, m->getPosition());
+    }
 
-      m->explode(NULL, m->getPosition());
-      delete touchedEntities;
-      attachedView->explosion(ExplosionLocation(m->getPosition(), ExplosionLocation::EXPLOSION_BOOM));
-      //notify the owner
+    //Remove exploded mines
+    if (m->hasExploded()) {
       m->getOwner()->bombExploded();
       i = deleteBomb(i);
       delete m;
@@ -350,7 +348,7 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
   CollisionResult res;
   if (!t->checkFireDir(dir, colManager, &res)) {
     touch(r, res.collidedEntity, res.colPoint);
-    attachedView->explosion(ExplosionLocation(r->getPosition(), ExplosionLocation::EXPLOSION_POOF));
+    attachedView->explosion(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
     delete r;
   } else {
     addRocket(r);
@@ -521,28 +519,54 @@ void Game::doTankMove (Tank* t, double elapsedS) {
 }
 
 void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
-  //If we are the client, we dont't perform ANY touch, just wait for the
-  //server to send the damage/explosion/... events
-  if (NetController::getInstance()->isClient())
-    return;
-
   const eEntityType t1 = e1->getType();
   const eEntityType t2 = e2->getType();
 
   if (!e1->acceptsTouch(e2) || !e2->acceptsTouch(e1))
     return;
 
-  //Notify entities about the explosion, le them accept or discard
-  const bool effect1 = e1->explode(e2, colPoint);
-  const bool effect2 = e2->explode(e1, colPoint);
-  LOGI("[Game::touch] effect1=%i, effect2=%i", effect1, effect2);
+  //Notify entities about the explosion
+  const int damages1 = e1->explode(e2, colPoint);
+  const int damages2 = e2->explode(e1, colPoint);
+  LOGI("[Game::touch] damages1=%i, damages2=%i", damages1, damages2);
 
   //We have two type of visuals for explosion : poof (when the explosion is rocket-wall) and
   // boom (for all the rest). Here, we determine which type we should use based on effects
   //We don't take the effect on the rocket into account (otherwise we'll obviously always have effects).
-  const bool hasEffect = ((t1 != ENTITY_ROCKET) && effect1) || ((t2 != ENTITY_ROCKET) && effect2);
+  const bool hasEffect = ((t1 != ENTITY_ROCKET) && damages1 > 0) || ((t2 != ENTITY_ROCKET) && damages2 > 0);
 
-  attachedView->explosion(ExplosionLocation(colPoint, hasEffect?ExplosionLocation::EXPLOSION_BOOM:ExplosionLocation::EXPLOSION_POOF));
+  ExplosionInfo explosionInfo(colPoint, hasEffect?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF);
+  if (damages1 > 0)
+    explosionInfo.damagedEntities.append(pair<Entity*, int>(e1, damages1));
+  if (damages2 > 0)
+    explosionInfo.damagedEntities.append(pair<Entity*, int>(e2, damages2));
+  attachedView->explosion(explosionInfo);
+}
+
+void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint) {
+  if (NetController::getInstance()->isClient())
+    return;
+
+  ExplosionInfo explosionInfo(colPoint, ExplosionInfo::EXPLOSION_POOF);
+
+  for (list<Entity*>::const_iterator iter = touched.begin(); iter.hasNext(); iter++) {
+    Entity* other = *iter;
+    if (!source->acceptsTouch(other) || !other->acceptsTouch(source))
+      continue;
+    const int damages = other->explode(source, colPoint);
+    if (damages > 0) {
+      explosionInfo.damagedEntities.append(pair<Entity*, int>(other, damages));
+      explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
+    }
+  }
+
+  
+  const int sourceDamages = source->explode(NULL, colPoint);
+  if (sourceDamages > 0) {
+    explosionInfo.damagedEntities.append(pair<Entity*, int>(source, sourceDamages));
+    explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
+  }
+  attachedView->explosion(explosionInfo);
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {

@@ -3,7 +3,7 @@
 
 #include "def.h"
 #include "logic/Tank.h"
-#include "iview/ExplosionLocation.h"
+#include "iview/ExplosionInfo.h"
 
 class IGameView {
   public:
@@ -11,7 +11,7 @@ class IGameView {
     virtual void tankAdded (Tank* t) = 0;
     virtual void tankRemoved (Tank* t) = 0;
 
-    virtual void explosion (const ExplosionLocation& expl) = 0;
+    virtual void explosion (const ExplosionInfo& expl) = 0;
 };
 
 

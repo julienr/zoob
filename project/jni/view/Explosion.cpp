@@ -12,20 +12,20 @@
 #define POOF_LIFE 0.5f
 #define BOOM_LIFE 0.8f
 
-Explosion::Explosion (const ExplosionLocation& loc) 
+Explosion::Explosion (const ExplosionInfo& loc)
   : /*boomSprite("assets/sprites/boom.png", TEX_GROUP_GAME),*/
     poofSprite("assets/sprites/rocket.png", TEX_GROUP_GAME),
     explLight("assets/sprites/expl_light.png", TEX_GROUP_GAME),
     fireExpl("assets/sprites/expl2.png", TEX_GROUP_GAME, 16, new Animation::LinearInterpolator(), BOOM_LIFE, false),
     location(loc) {
-  if (location.type == ExplosionLocation::EXPLOSION_POOF)
+  if (location.type == ExplosionInfo::EXPLOSION_POOF)
     timeLeft = POOF_LIFE;
   else
     timeLeft = BOOM_LIFE;
 }
 
 void Explosion::drawLighting () {
-  if (location.type == ExplosionLocation::EXPLOSION_BOOM) {
+  if (location.type == ExplosionInfo::EXPLOSION_BOOM) {
     const float arg = (BOOM_LIFE-timeLeft)/BOOM_LIFE;
     const float size = Math::sin(arg*M_PI);
 
@@ -39,7 +39,7 @@ void Explosion::drawLighting () {
 }
 
 void Explosion::draw () {
-  if (location.type == ExplosionLocation::EXPLOSION_BOOM) {
+  if (location.type == ExplosionInfo::EXPLOSION_BOOM) {
     const float arg = (BOOM_LIFE-timeLeft)/BOOM_LIFE;
     const float size = BOOM_START_SIZE + (BOOM_END_SIZE-BOOM_START_SIZE)*arg;
 

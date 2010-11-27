@@ -18,9 +18,9 @@ class WallEntity : public Entity {
     WallEntity (float w, float h, const Vector2& pos) : Entity(new AABBox(w-EPSILON, h-EPSILON), pos), width(w),height(h), breakable(false), exploded(false) {}
     eEntityType getType () const { return ENTITY_WALL; }
 
-    bool explode (Entity* UNUSED(e), const Vector2& UNUSED(colPoint)) {
+    int explode (Entity* UNUSED(e), const Vector2& UNUSED(colPoint)) {
       exploded = true;
-      return true;
+      return 1;
     }
 
     float getWidth() const {

@@ -17,11 +17,11 @@ class ShieldTank : public EnemyTank {
 
     virtual eTankType getTankType () const { return TANK_SHIELD; }
 
-    bool explode (Entity* e, const Vector2& colPoint) {
+    int explode (Entity* e, const Vector2& colPoint) {
       if (e->getType() == ENTITY_ROCKET) {
         Rocket* r = static_cast<Rocket*>(e);
         if (r->getNumBounces() < Difficulty::getInstance()->getShieldResistance())
-          return false;
+          return 0;
       }
       return EnemyTank::explode(e, colPoint);
     }

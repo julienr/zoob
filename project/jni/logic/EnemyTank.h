@@ -62,13 +62,13 @@ class EnemyTank: public Tank {
       return r;
     }
 
-    bool explode (Entity* e, const Vector2& colPoint) {
+    int explode (Entity* e, const Vector2& colPoint) {
       //Avoid a tank being exploded by his friends rockets
       if (e && e->getType() == ENTITY_ROCKET) {
         Rocket* r = static_cast<Rocket*>(e);
         //Enemy tanks can only die because of player rockets
         if (r->getOwner()->getTankType() != TANK_PLAYER)
-          return false;
+          return 0;
       }
       return Tank::explode(e, colPoint);
     }

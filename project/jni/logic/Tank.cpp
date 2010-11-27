@@ -25,15 +25,15 @@ Bomb* Tank::dropBomb () {
   return new Bomb(this, getPosition());
 }
 
-bool Tank::explode (Entity* UNUSED(e), const Vector2& UNUSED(dir)) {
+int Tank::explode (Entity* UNUSED(e), const Vector2& UNUSED(dir)) {
   numLives--;
   LOGI("[Tank::explode] tank has %i lives left", numLives);
   if (numLives > 0)
-    return true;
+    return 1;
 
   exploded = true;
   LOGE("OMG, got an explosion");
-  return true;
+  return 1;
 }
 
 bool Tank::shieldBounce (Entity* e, const Vector2& colPoint) {

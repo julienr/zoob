@@ -174,6 +174,7 @@ class list {
       return const_iterator(head);
     }
   private:
+    operator = () {}
     _Element* head;
     size_t _size;
 };

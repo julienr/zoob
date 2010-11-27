@@ -160,6 +160,8 @@ bool nativeStartServer () {
   NetController::registerInstance(new ENetServer());
   if (NetController::getInstance()->start()) {
     startGame(0);
+    //TODO: only for debug : server has a different background
+    glClearColor(0.4f, 0, 0, 1);
     return true;
   }
   return false;

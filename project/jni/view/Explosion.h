@@ -9,7 +9,7 @@
 
 class Explosion {
   public:
-    Explosion (const ExplosionLocation& loc);
+    Explosion (const ExplosionInfo& loc);
 
     void drawLighting ();
     void draw ();
@@ -31,7 +31,7 @@ class Explosion {
     Sprite poofSprite;
     Sprite explLight;
     Animation fireExpl;
-    const ExplosionLocation location;
+    const ExplosionInfo location;
 };
 
 #endif /* EXPLOSION_H_ */
