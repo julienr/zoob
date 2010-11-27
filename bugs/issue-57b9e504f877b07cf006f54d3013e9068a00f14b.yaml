@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Purple boss tank (lvl 35) cannot be killed
+desc: Rockets are bouncing against him instead of exploding
+type: :bugfix
+component: zoob
+release: post-market
+reporter: Julien Rebetez <julien@fhtagn.net>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-27 16:39:57.827045 Z
+references: []
+
+id: 57b9e504f877b07cf006f54d3013e9068a00f14b
+log_events: 
+- - 2010-11-27 16:39:59.002975 Z
+  - Julien Rebetez <julien@fhtagn.net>
+  - created
+  - ""
