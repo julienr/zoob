@@ -20,11 +20,11 @@ class Entity: public Moveable {
   friend class Grid;
   public:
     Entity(const BoundingVolume* v) :
-      Moveable(), collided(false), bvolume(v), id(0) {
+      Moveable(), collided(false), bvolume(v), id(0), exploded(false) {
     }
 
     Entity(const BoundingVolume* v, const Vector2& pos) :
-      Moveable(pos), collided(false), bvolume(v), id(0) {
+      Moveable(pos), collided(false), bvolume(v), id(0), exploded(false) {
     }
 
     virtual ~Entity () {
@@ -45,7 +45,18 @@ class Entity: public Moveable {
     //other is the entity responsible for the explosion, MIGHT be NULL
     //Returns how much damage this entity has taken due to the explosion. If returned damage is 0, a "poof"
     //explosion will be displayed to the player
-    virtual int explode (Entity* other, const Vector2& colPoint) = 0;
+    virtual int explode (Entity* other, const Vector2& colPoint) {
+      setExploded(true);
+      return 1;
+    }
+
+    bool hasExploded () const {
+      return exploded;
+    }
+    
+    void setExploded (bool v) {
+      exploded = v;
+    }
 
     //Called when an other entity should touch this. If this function returns false, the touch is simply ignored
     virtual bool acceptsTouch (Entity* UNUSED(other)) {
@@ -75,7 +86,7 @@ class Entity: public Moveable {
 
     //If an entity is not solid, it won't be considered in collision detection
     virtual bool isSolid () const {
-      return true;
+      return !hasExploded();
     }
 
     //FIXME: only for debug
@@ -86,7 +97,8 @@ class Entity: public Moveable {
     const BoundingVolume* bvolume;
 
     //this entity's id. Used for networking
-    uint16_t id; 
+    uint16_t id;
+    bool exploded;
 };
 
 #endif /* ENTITY_H_ */

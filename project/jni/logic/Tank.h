@@ -51,7 +51,6 @@ class Tank: public Entity {
         maxLives(1),
         numLives(1),
         tankRadius(radius),
-        exploded(false),
         alive(true),
         firePolicy(pol),
         //FIXME: move the whole bomb stuff to PlayerTank
@@ -83,16 +82,8 @@ class Tank: public Entity {
 
     virtual int explode (Entity* e, const Vector2& colPoint);
 
-    bool hasExploded () const {
-      return exploded;
-    }
-
     void die () {
       alive = false;
-    }
-
-    void unmarkExploded () {
-      exploded = false;
     }
 
     bool isAlive () const {
@@ -216,11 +207,7 @@ class Tank: public Entity {
     unsigned maxLives;
     unsigned numLives;
     float tankRadius;
-
-    /* Exploded is just set for the frame after the tank has exploded (for one-time stuff to be handled by game)
-     * The tank should be marked as dead once this is done
-     */
-    bool exploded;
+    
     bool alive;
 
     FireRatePolicy* firePolicy;

@@ -8,13 +8,13 @@ import sys
 messagesDef=[
   {'name':'BytesArray','fields':{'bytes':('array','char')},'component':True},
   {'name':'Vector','fields':{'x':'float','y':'float'},'component':True},
-  {'name':'Damage','fields':{'entityID':'uint16_t','damages':'uint16_t'},'component':True},
   {'name':'RocketInfo','fields':{'rocketID':'uint16_t','position':'Vector','velocity':'Vector', 'speed':'float'},'component':True},
   {'name':'BombInfo','fields':{'bombID':'uint16_t','position':'Vector','timeleft':'float'},'component':True},
   {'name':'TankInfo','fields':
     {'tankID':'uint16_t',
      'position':'Vector',
      'velocity':'Vector',
+     'livesLeft':'uint16_t',
      'rocketInfos':('array','RocketInfo'),
      'bombInfos':('array','BombInfo')},'component':True},
   {'name':'PlayerCommands','fields':
@@ -42,7 +42,7 @@ messagesDef=[
   {'name':'Explosion','fields':
     {'position':'Vector',
      'boom':'bool',
-     'damages':('array','Damage')},
+     'destroyedEntities':('array','uint16_t')},
      'component':True},
   {'name':'GameState','fields':
     {'tankInfos':('array','TankInfo'),

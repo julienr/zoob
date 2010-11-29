@@ -1,14 +1,14 @@
 #ifndef BOMB_H_
 #define BOMB_H_
 
-#include "ExplosiveEntity.h"
+#include "Entity.h"
 #include "Tank.h"
 
 //A mine explodes when an enemy pass on it OR after its delay
-class Bomb : public ExplosiveEntity {
+class Bomb : public Entity {
   public:
     Bomb (Tank* owner, const Vector2& pos)
-      : ExplosiveEntity(new BCircle(BOMB_BCIRCLE_R)),
+      : Entity(new BCircle(BOMB_BCIRCLE_R)),
         owner(owner),
         timeLeft(BOMB_LIFETIME) {
       setPosition(pos);

@@ -81,29 +81,22 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
   }
 
   //Explosions
-  LOGI("[applyGameState] %i explosions", state.numExplosions);
+  LOGI("[NetworkedGame::applyGameState] %i explosions", state.numExplosions);
   for (uint16_t i=0; i<state.numExplosions; i++) {
     const zoobmsg::Explosion& expl = state.explosions[i];
     ExplosionInfo::eType type = expl.boom?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF;
     Vector2 explPos(expl.position.x, expl.position.y);
 
     ExplosionInfo explInfo (explPos, type);
-    for (uint16_t j=0; j<expl.numDamages; j++) {
-      const zoobmsg::Damage& damage = expl.damages[j];
-      //FIXME: would require getEntityByID ()
-      explInfo.damagedEntities.append(pair<Entity*, int>(getEntityByID(damage.entityID), damage.damages));
-
-      applyDamages(damage.entityID, damage.damages);
+    for (uint16_t j=0; j<expl.numDestroyedEntities; j++) {
+      const uint16_t entityID = expl.destroyedEntities[j];
+      LOGI("[NetworkedGame::applyGameState] exploded entity %i", entityID);
+      explInfo.explodedEntities.insert(getEntityByID(entityID));
+      getEntityByID(entityID)->setExploded(true);
     }
     //Apply it immediatly
     Game::explode(explInfo);
   }
-}
-
-void NetworkedGame::applyDamages (uint16_t entityID, int damages) {
-  //TODO
-  Entity* entity = getEntityByID(entityID);
-  LOGI("[NetworkedGame::applyDamages] %i damages for entity (%p) with id %i", damages, entity, entityID);
 }
 
 Entity* NetworkedGame::getEntityByID (uint16_t id) {

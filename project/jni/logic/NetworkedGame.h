@@ -46,8 +46,6 @@ class NetworkedGame : public Game {
                    Level* level) 
       : Game(overCallback, wonCallback, level) {}
 
-    void applyDamages (uint16_t entityID, int damages);
-
     Entity* getEntityByID (uint16_t id);
 
     map<uint16_t, Tank*> tanksByID;

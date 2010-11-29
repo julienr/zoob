@@ -217,7 +217,7 @@ bool Game::isGameWon (int numAlives) const {
 }
 
 void Game::_handleTriggers () {
-  const set<Tile*> tiles = level->getTilesWithTrigger();
+  const set<Tile*>& tiles = level->getTilesWithTrigger();
   for (set<Tile*>::const_iterator i=tiles.begin(); i.hasNext(); i++) {
     Tile* tile = *i;
     const list<const Trigger*>& triggers = tile->getTriggers();
@@ -540,10 +540,11 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   const bool hasEffect = ((t1 != ENTITY_ROCKET) && damages1 > 0) || ((t2 != ENTITY_ROCKET) && damages2 > 0);
 
   ExplosionInfo explosionInfo(colPoint, hasEffect?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF);
-  if (damages1 > 0)
-    explosionInfo.damagedEntities.append(pair<Entity*, int>(e1, damages1));
-  if (damages2 > 0)
-    explosionInfo.damagedEntities.append(pair<Entity*, int>(e2, damages2));
+  if (e1->hasExploded())
+    explosionInfo.explodedEntities.insert(e1);
+  if (e2->hasExploded())
+    explosionInfo.explodedEntities.insert(e2);
+  
   explode(explosionInfo);
 }
 
@@ -558,18 +559,18 @@ void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vecto
     if (!source->acceptsTouch(other) || !other->acceptsTouch(source))
       continue;
     const int damages = other->explode(source, colPoint);
-    if (damages > 0) {
-      explosionInfo.damagedEntities.append(pair<Entity*, int>(other, damages));
+    if (damages > 0)
       explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
-    }
+    if (other->hasExploded())
+      explosionInfo.explodedEntities.insert(other);
   }
 
   
   const int sourceDamages = source->explode(NULL, colPoint);
-  if (sourceDamages > 0) {
-    explosionInfo.damagedEntities.append(pair<Entity*, int>(source, sourceDamages));
+  if (sourceDamages > 0)
     explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
-  }
+  if (source->hasExploded()) 
+    explosionInfo.explodedEntities.insert(source);
   explode(explosionInfo);
 }
 

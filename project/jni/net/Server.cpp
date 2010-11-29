@@ -134,6 +134,8 @@ void Server::update(NetworkedGame* game) {
     tinfo->velocity.x = tank->getMoveDir().x;
     tinfo->velocity.y = tank->getMoveDir().y;
 
+    tinfo->livesLeft = tank->getLivesLeft();
+
     tinfo->numRocketInfos = tank->getNumRockets();
     tinfo->rocketInfos = new zoobmsg::RocketInfo[tinfo->numRocketInfos];
 
@@ -176,16 +178,12 @@ void Server::update(NetworkedGame* game) {
     explosion.position.y = expl.position.y;
     
     explosion.boom = expl.type == ExplosionInfo::EXPLOSION_BOOM;
-    explosion.numDamages = expl.damagedEntities.size();
-    explosion.damages = new zoobmsg::Damage[explosion.numDamages];
-    typedef pair<Entity*, int> damagedPair;
+    LOGI("num exploded entities : %li", expl.explodedEntities.size());
+    explosion.numDestroyedEntities = expl.explodedEntities.size();
+    explosion.destroyedEntities = new uint16_t[explosion.numDestroyedEntities];
     int cnt2 = 0;
-    LIST_FOREACH_CONST (damagedPair, expl.damagedEntities, d) {
-      const Entity* entity = (*d).first;
-      const int damages = (*d).second;
-      zoobmsg::Damage& damage = explosion.damages[cnt2++];
-      damage.entityID = entity->getID();
-      damage.damages = damages;
+    SET_FOREACH_CONST (Entity*, expl.explodedEntities, d) {
+      explosion.destroyedEntities[cnt2++] = (*d)->getID();
     }
   }
   explosions.clear();

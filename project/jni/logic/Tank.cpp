@@ -31,8 +31,8 @@ int Tank::explode (Entity* UNUSED(e), const Vector2& UNUSED(dir)) {
   if (numLives > 0)
     return 1;
 
-  exploded = true;
-  LOGE("OMG, got an explosion");
+  setExploded(true);
+  LOGE("[Tank::explode] exploding !");
   return 1;
 }
 

@@ -1,7 +1,7 @@
 #ifndef ROCKET_H_
 #define ROCKET_H_
 
-#include "ExplosiveEntity.h"
+#include "Entity.h"
 #include "logic/physics/BCircle.h"
 
 class Game;
@@ -12,10 +12,10 @@ enum BouncePolicy {
     SPLIT
 };
 
-class Rocket : public ExplosiveEntity {
+class Rocket : public Entity {
   public:
     Rocket (Tank* owner, const Vector2& pos, const Vector2& dir, float speed, BouncePolicy bouncePol=BOUNCE)
-      : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
+      : Entity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(owner),
         numBounces(0),
         bouncePolicy(bouncePol),
@@ -25,7 +25,7 @@ class Rocket : public ExplosiveEntity {
     }
 
     Rocket (const Rocket* other)
-      : ExplosiveEntity (new BCircle(ROCKET_BCIRCLE_R)),
+      : Entity (new BCircle(ROCKET_BCIRCLE_R)),
         owner(other->getOwner()),
         numBounces(other->getNumBounces()),
         bouncePolicy(other->getBouncePolicy()),

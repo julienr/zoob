@@ -59,7 +59,14 @@ class set {
     };
 
 
-    set () : entries(NULL), _size(0) {} 
+    set () : entries(NULL), _size(0) {}
+
+    explicit set (const set<T>& o)
+      : entries(NULL), _size(0) {
+      for (set<T>::const_iterator i = o.begin(); i.hasNext(); i++) {
+        insert(*i);
+      }
+    }
 
     void insert (const T& what) {
       if (contains(what))

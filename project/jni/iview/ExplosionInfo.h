@@ -14,7 +14,8 @@ struct ExplosionInfo {
     eType type;
     //Contains informations (Entity* entity, int damage) for each entity
     //damaged by the explosion
-    list<pair<Entity*, int> > damagedEntities;
+    //list<pair<Entity*, int> > damagedEntities;
+    set<Entity*> explodedEntities;
 };
 
 

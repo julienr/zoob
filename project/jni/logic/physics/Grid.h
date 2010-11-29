@@ -193,6 +193,7 @@ class Grid {
     //Returns the number of touched Cells. Cells can be fetched using touchedCells array
     void findTouchedCells (const Vector2& start, const Vector2& move) const;
 
+    //FIXME: use a set instead ?
     //This array is used for temporary storage of touched cells found by touchCells & co.
     //GridCells should be added to it by using ONLY _addTouched
     vector<GridCell*>* tmpTouched;
