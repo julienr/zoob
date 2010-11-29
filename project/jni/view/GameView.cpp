@@ -212,7 +212,7 @@ void GameView::tankRemoved (Tank* t) {
   tankViews.remove(t);
 }
 
-void GameView::explosion (const ExplosionInfo& expl) {
+void GameView::addExplosion (const ExplosionInfo& expl) {
   explosions.append(new Explosion(expl));
 }
 

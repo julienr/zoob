@@ -79,6 +79,41 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
   SET_FOREACH(uint16_t, orphanTanks, i) {
     LOGI("[NetworkedGame::applyGameState] tank %d is orphan", *i);
   }
+
+  //Explosions
+  LOGI("[applyGameState] %i explosions", state.numExplosions);
+  for (uint16_t i=0; i<state.numExplosions; i++) {
+    const zoobmsg::Explosion& expl = state.explosions[i];
+    ExplosionInfo::eType type = expl.boom?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF;
+    Vector2 explPos(expl.position.x, expl.position.y);
+
+    ExplosionInfo explInfo (explPos, type);
+    for (uint16_t j=0; j<expl.numDamages; j++) {
+      const zoobmsg::Damage& damage = expl.damages[j];
+      //FIXME: would require getEntityByID ()
+      explInfo.damagedEntities.append(pair<Entity*, int>(getEntityByID(damage.entityID), damage.damages));
+
+      applyDamages(damage.entityID, damage.damages);
+    }
+    //Apply it immediatly
+    Game::explode(explInfo);
+  }
+}
+
+void NetworkedGame::applyDamages (uint16_t entityID, int damages) {
+  //TODO
+  Entity* entity = getEntityByID(entityID);
+  LOGI("[NetworkedGame::applyDamages] %i damages for entity (%p) with id %i", damages, entity, entityID);
+}
+
+Entity* NetworkedGame::getEntityByID (uint16_t id) {
+  if (tanksByID.contains(id))
+    return tanksByID.get(id);
+  if (rocketsByID.contains(id))
+    return rocketsByID.get(id);
+  if (bombsByID.contains(id))
+    return bombsByID.get(id);
+  return NULL;
 }
 
 void NetworkedGame::applyCommands (uint16_t id, const PlayerCommand& cmd) {
@@ -88,6 +123,11 @@ void NetworkedGame::applyCommands (uint16_t id, const PlayerCommand& cmd) {
   } else {
     applyCommands(t, cmd);
   }
+}
+
+void NetworkedGame::explode (const ExplosionInfo& info) {
+  NetController::getInstance()->sendExplosion(info);
+  Game::explode(info);
 }
 
 void NetworkedGame::applyCommands (Tank* tank, const PlayerCommand& cmd) {

@@ -117,6 +117,7 @@ void Server::update(NetworkedGame* game) {
   zoobmsg::GameState state;
   const list<Tank*>* tanks = game->getTanks();
 
+  //TANKS
   state.numTankInfos = tanks->size();
   state.tankInfos = new zoobmsg::TankInfo[state.numTankInfos];
 
@@ -161,6 +162,33 @@ void Server::update(NetworkedGame* game) {
       bInfo.bombID = bomb->getID();
     }
   }
+
+  //EXPLOSIONS
+  state.numExplosions = explosions.size();
+  state.explosions = new zoobmsg::Explosion[state.numExplosions];
+
+  counter = 0;
+  LIST_FOREACH (ExplosionInfo, explosions, i) {
+    const ExplosionInfo& expl = *i;
+    zoobmsg::Explosion& explosion = state.explosions[counter++];
+
+    explosion.position.x = expl.position.x;
+    explosion.position.y = expl.position.y;
+    
+    explosion.boom = expl.type == ExplosionInfo::EXPLOSION_BOOM;
+    explosion.numDamages = expl.damagedEntities.size();
+    explosion.damages = new zoobmsg::Damage[explosion.numDamages];
+    typedef pair<Entity*, int> damagedPair;
+    int cnt2 = 0;
+    LIST_FOREACH_CONST (damagedPair, expl.damagedEntities, d) {
+      const Entity* entity = (*d).first;
+      const int damages = (*d).second;
+      zoobmsg::Damage& damage = explosion.damages[cnt2++];
+      damage.entityID = entity->getID();
+      damage.damages = damages;
+    }
+  }
+  explosions.clear();
 
   //Broadcast to connected clients
   LOGI("broadcasting to %li clients", connectedClients.size());

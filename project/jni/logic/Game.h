@@ -253,6 +253,7 @@ class Game {
     virtual void addBomb (Bomb* b);
     virtual list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
 
+    virtual void explode (const ExplosionInfo& info);
 
     virtual bool isGameOver () const;
     virtual bool isGameWon (int numAlives) const;

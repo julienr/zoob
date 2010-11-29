@@ -126,6 +126,10 @@ bool Game::findSpawnPosition (float entityRadius, Vector2& position) {
   return false;
 }
 
+void Game::explode (const ExplosionInfo& info) {
+  attachedView->addExplosion(info);
+}
+
 bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
 bool Game::spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank) {
   Vector2 spawnPos;
@@ -232,7 +236,7 @@ void Game::_updateRockets (double elapsedS) {
     r->think(elapsedS);
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
-      attachedView->explosion(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
+      explode(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
@@ -348,7 +352,7 @@ void Game::doFireRocket (Tank* t, const Vector2& dir) {
   CollisionResult res;
   if (!t->checkFireDir(dir, colManager, &res)) {
     touch(r, res.collidedEntity, res.colPoint);
-    attachedView->explosion(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
+    explode(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
     delete r;
   } else {
     addRocket(r);
@@ -540,7 +544,7 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
     explosionInfo.damagedEntities.append(pair<Entity*, int>(e1, damages1));
   if (damages2 > 0)
     explosionInfo.damagedEntities.append(pair<Entity*, int>(e2, damages2));
-  attachedView->explosion(explosionInfo);
+  explode(explosionInfo);
 }
 
 void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint) {
@@ -566,7 +570,7 @@ void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vecto
     explosionInfo.damagedEntities.append(pair<Entity*, int>(source, sourceDamages));
     explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
   }
-  attachedView->explosion(explosionInfo);
+  explode(explosionInfo);
 }
 
 void Game::bounceMove (Rocket* rocket, Vector2 move) {

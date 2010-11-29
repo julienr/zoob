@@ -41,6 +41,8 @@ class NetController {
     //Sends a PlayerCommand to be send to the server.
     virtual void sendPlayerCommand (uint16_t tankID, const PlayerCommand& cmd) = 0;
 
+    virtual void sendExplosion (const ExplosionInfo& info) = 0;
+
     virtual void stop () = 0;
     virtual bool start () = 0;
     virtual void think (double elapsedS) = 0;

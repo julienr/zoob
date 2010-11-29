@@ -21,6 +21,9 @@ class Client : public NetController {
 
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
+
+    void sendExplosion (const ExplosionInfo& info) {}
+
     void assignID (Entity* e) {
       //do nothing, id will be assigned by server
     }

@@ -32,6 +32,8 @@ class NetworkedGame : public Game {
     void addBomb (Bomb* b);
     list<Bomb*>::iterator deleteBomb (const list<Bomb*>::iterator& i);
 
+    void explode (const ExplosionInfo& info);
+
     bool isGameOver () const;
     bool isGameWon (int numAlives) const;
 
@@ -43,6 +45,10 @@ class NetworkedGame : public Game {
                    game_callback_t wonCallback,
                    Level* level) 
       : Game(overCallback, wonCallback, level) {}
+
+    void applyDamages (uint16_t entityID, int damages);
+
+    Entity* getEntityByID (uint16_t id);
 
     map<uint16_t, Tank*> tanksByID;
     map<uint16_t, Rocket*> rocketsByID;

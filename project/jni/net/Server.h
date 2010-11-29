@@ -35,6 +35,10 @@ class Server : public NetController {
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
 
+    void sendExplosion (const ExplosionInfo& info) {
+      explosions.append(info);
+    }
+
     void assignID (Entity* e) {
       e->setID(entityIDGen++);
     }
@@ -76,6 +80,9 @@ class Server : public NetController {
     list<uint16_t> spawnQueue;
 
     set<uint16_t> connectedClients;
+
+    //list of explosions to be sent to clients on next gamestate
+    list<ExplosionInfo> explosions;
 
     uint64_t lastGameStateBroadcast;
 };

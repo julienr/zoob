@@ -11,7 +11,7 @@ class IGameView {
     virtual void tankAdded (Tank* t) = 0;
     virtual void tankRemoved (Tank* t) = 0;
 
-    virtual void explosion (const ExplosionInfo& expl) = 0;
+    virtual void addExplosion (const ExplosionInfo& expl) = 0;
 };
 
 
