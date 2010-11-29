@@ -66,8 +66,9 @@ class list {
   public:
     list () : head(NULL), _size(0) {}
 
-    explicit list(const list<T>& other) {
-      for (list<T>::const_iterator i = other.begin(); i.hasNext(); i++) {
+    explicit list (const list<T>& o)
+      : head(NULL), _size(0) {
+      for (list<T>::const_iterator i = o.begin(); i.hasNext(); i++) {
         append(*i);
       }
     }
@@ -173,8 +174,13 @@ class list {
     const_iterator begin () const {
       return const_iterator(head);
     }
+
+    /*void copyAll (const list<T>& other) {
+      for (list<T>::const_iterator i = other.begin(); i.hasNext(); i++) {
+        append(*i);
+      }
+    }*/
   private:
-    operator = () {}
     _Element* head;
     size_t _size;
 };
