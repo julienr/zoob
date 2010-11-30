@@ -9,7 +9,7 @@
 //We give up if we have travalled at only 1/4 of our max speed
 const float giveUpDist = TANK_MOVE_SPEED/(4*(1000.0f/GIVE_UP_INTERVAL));
 
-bool PathPolicy::decideDir (double elapsedS, Vector2* outDir, Game* game, EnemyTank* tank) {
+bool PathPolicy::decideDir (double /*elapsedS*/, Vector2* outDir, Game* game, EnemyTank* tank) {
   Path* path = tank->getPath();
   if (!path)
     return false;

@@ -87,7 +87,7 @@ void GameView::_drawShadows() const {
 }
 
 #define INTRO_LIGHT_TOGGLE_TIME 0.5f
-void GameView::_drawBossIntro (double elapsedS) {
+void GameView::_drawBossIntro (double /*elapsedS*/) {
   levelView.drawBackground();
   const double timeLeft = Game::getInstance()->getIntroTimeLeft();
   if (lastLightToggle - timeLeft> INTRO_LIGHT_TOGGLE_TIME) {

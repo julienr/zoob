@@ -61,7 +61,7 @@ void Client::wantSpawn() {
   sendMsgWantSpawn(wantSpawn);
 }
 
-void Client::update(NetworkedGame* game) {
+void Client::update(NetworkedGame* /*game*/) {
 }
  
 void Client::sendPlayerCommand (uint16_t tankID, const PlayerCommand& cmd) {

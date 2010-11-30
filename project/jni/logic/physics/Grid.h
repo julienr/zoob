@@ -9,7 +9,8 @@
 #include "containers/list.h"
 #include "containers/vector.h"
 
-struct GridCell {
+class GridCell {
+public:
   GridCell (unsigned x, unsigned y) :
     x(x),y(y),dbgTouched(false){
   }

@@ -96,7 +96,7 @@ class vector {
       ::sort(data, used, cmp);
     }
   private:
-    vector (const vector<T>& other):capacityIncr(0) { ASSERT(false); }
+    vector (const vector<T>&):capacityIncr(0) { ASSERT(false); }
     size_t used;
     size_t capacity;
     const size_t capacityIncr; //By how much a realloc will increase the capacity

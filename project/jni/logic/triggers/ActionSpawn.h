@@ -6,7 +6,7 @@ class ActionSpawn : public Action {
     ActionSpawn (int dx, int dy) 
       : dx(dx), dy(dy) {}
 
-    void execute (const Tile* tile) const {
+    void execute (const Tile* /*tile*/) const {
       LOGE("spawning enemy at (%i,%i)", dx, dy);
     }
   private:

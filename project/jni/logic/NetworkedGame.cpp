@@ -230,7 +230,7 @@ bool NetworkedGame::isGameOver () const {
   return false;
 }
 
-bool NetworkedGame::isGameWon (int numAlives) const {
+bool NetworkedGame::isGameWon (int /*numAlives*/) const {
   /*if (NetController::getInstance()->isClient()) {
     return false;
   } else {

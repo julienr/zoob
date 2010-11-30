@@ -1,7 +1,7 @@
 #include "ENetClient.h"
 #include <unistd.h>
 
-void ENetClient::think (double elapsedS) {
+void ENetClient::think (double /*elapsedS*/) {
   ENetEvent event;
   while (enet_host_service(client, &event, 0) > 0) {
     switch (event.type) {

@@ -107,7 +107,7 @@ class Tank: public Entity {
     //returns NULL if no AI
     virtual TankAI* getAI () const { return NULL; }
 
-    virtual void think (double elapsedS) {}
+    virtual void think (double) {}
 
     //true if the tank can (ie is allowed by the game rules) fire a rocket
     bool canFire () { return firePolicy->canFire(); }

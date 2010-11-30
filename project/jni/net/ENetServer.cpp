@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
-void ENetServer::think (double elapsedS) {
+void ENetServer::think (double /*elapsedS*/) {
   ENetEvent event;
   while (enet_host_service(server, &event, 0) > 0) {
     switch (event.type) {

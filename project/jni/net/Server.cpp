@@ -45,7 +45,7 @@ void Server::handleMsgWantSpawn (const uint16_t peerID, size_t dataLen, const ui
   spawnQueue.append(peerID);
 }
 
-void Server::handleMsgPlayerCommand (const uint16_t peerID, size_t dataLen, const uint8_t* data, size_t offset) {
+void Server::handleMsgPlayerCommand (const uint16_t, size_t dataLen, const uint8_t* data, size_t offset) {
   zoobmsg::PlayerCommands commands;
   zoobmsg::PlayerCommands::unpack(dataLen, data, offset, commands);
   PlayerCommand cmd;
@@ -197,7 +197,7 @@ void Server::update(NetworkedGame* game) {
   }
 }
 
-void Server::sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd) {
+void Server::sendPlayerCommand (uint16_t /*localPlayerID*/, const PlayerCommand& /*cmd*/) {
   //We don't have to do anything here, local commands are already handled by Game
   //and local Game simulation is authoritative
 }

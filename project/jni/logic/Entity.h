@@ -45,7 +45,7 @@ class Entity: public Moveable {
     //other is the entity responsible for the explosion, MIGHT be NULL
     //Returns how much damage this entity has taken due to the explosion. If returned damage is 0, a "poof"
     //explosion will be displayed to the player
-    virtual int explode (Entity* other, const Vector2& colPoint) {
+    virtual int explode (Entity*, const Vector2&) {
       setExploded(true);
       return 1;
     }

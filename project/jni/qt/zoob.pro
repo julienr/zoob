@@ -6,18 +6,19 @@ QT += opengl
 LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet 
 DEFINES += PLATFORM_SDL #ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
-QMAKE_CXXFLAGS += -fno-rtti -fno-exceptions -Wno-unused-parameter -Wno-unused-label 
+QMAKE_CXXFLAGS += -Wall -fno-rtti -fno-exceptions -Wno-unused-label -Wno-unused-parameter
 #PROFILING
-QMAKE_CXXFLAGS_DEBUG += -g -pg -DDEBUG
-QMAKE_LFLAGS_DEBUG += -g -pg
+QMAKE_CXXFLAGS_DEBUG += -g -DDEBUG
+QMAKE_LFLAGS_DEBUG += -g
 
 #FPS debug
 #debug {
 #  DEFINES += ZOOB_DBG_FPS
 #}
 
+#use -spec linux-clang or linux-g++ to switch
 #QMAKE_CXX = colorgcc
-QMAKE_CXX = gcc
+#QMAKE_CXX = clang++
 
 # Input
 #qt specific first

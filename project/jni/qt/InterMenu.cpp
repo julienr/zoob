@@ -23,6 +23,6 @@ void InterMenu::setText(const char* text) {
   label->setText(text);
 }
 
-void InterMenu::mousePressEvent (QMouseEvent* event) {
+void InterMenu::mousePressEvent (QMouseEvent* /*event*/) {
   window->showMenu(MENU_MAIN);
 }

@@ -56,7 +56,7 @@ void Texture::unload () {
  */
 zip_file* file;
 
-void png_zip_read(png_structp png_ptr, png_bytep data, png_size_t length) {
+void png_zip_read(png_structp /*png_ptr*/, png_bytep data, png_size_t length) {
   zip_fread(file, data, length);
 }
 

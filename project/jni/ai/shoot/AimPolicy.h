@@ -4,7 +4,7 @@
 #include "ShootPolicy.h"
 
 class Entity;
-class CollisionResult;
+struct CollisionResult;
 
 class AimPolicy : public ShootPolicy {
   public:

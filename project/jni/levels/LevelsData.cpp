@@ -44,7 +44,7 @@ Level* SingleLevelManager::loadLevel (int levelNum) const {
   return levelFromJSON(level);
 }
 
-char* SingleLevelManager::getLevel (int levelNum) const {
+char* SingleLevelManager::getLevel (int /*levelNum*/) const {
   return json_dumps(level, JSON_COMPACT);
 }
 
@@ -84,6 +84,7 @@ static const char* type2str (json_type t) {
     case JSON_TRUE: return "JSON_TRUE";
     case JSON_FALSE: return "JSON_FALSE";
     case JSON_NULL: return "JSON_NULL";
+    default: return "JSON_UNKNOWN";
   }
 }
 

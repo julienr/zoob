@@ -399,7 +399,7 @@ bool CollisionManager::MovingCircleAgainstAABB (const Vector2& stillPos,
 
   const unsigned numAxis = (vertex==NULL)?2:3;
 
-  Vector2 axis[numAxis];
+  Vector2 axis[3];
   axis[0] = Vector2(1,0);
   axis[1] = Vector2(0,1);
   if (vertex != NULL) {
