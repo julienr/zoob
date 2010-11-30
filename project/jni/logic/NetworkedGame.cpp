@@ -134,7 +134,15 @@ void NetworkedGame::explode (const ExplosionInfo& info) {
 
 void NetworkedGame::applyCommands (Tank* tank, const PlayerCommand& cmd) {
   NetController::getInstance()->sendPlayerCommand(tank->getID(), cmd);
-  Game::applyCommands(tank, cmd);
+  if (NetController::getInstance()->isClient()) {
+    //If we are client, don't play rockets and bombs locally. Only apply 
+    //player commands for movements (that will be corrected by the server anyway)
+    PlayerCommand pc (cmd);
+    pc.fire = false;
+    pc.mine = false;
+    Game::applyCommands(tank, pc);
+  } else
+    Game::applyCommands(tank, cmd);
 }
 
 void NetworkedGame::update(const double elapsedS) {
