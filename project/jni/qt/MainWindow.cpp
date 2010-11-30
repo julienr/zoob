@@ -49,7 +49,9 @@ MainWindow::MainWindow(const char* serieJSON, const char* apkPath)
 MainWindow::~MainWindow () {
   delete layout;
   delete menuScreen;
+  delete menuInter;
   delete gameScreen;
+  delete statusBar;
 }
 
 void MainWindow::debugChanged (eDebug what, bool enabled) {

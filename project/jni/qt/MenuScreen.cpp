@@ -1,12 +1,10 @@
 #include "MenuScreen.h"
 #include "MainWindow.h"
 
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QLabel>
 
 MenuScreen::MenuScreen(MainWindow* window) : QWidget(window) {
-  QPushButton* playBtn = new QPushButton("play");
+  playBtn = new QPushButton("play");
   playBtn->setDefault(true);
   playBtn->setFocus();
   connect(playBtn, SIGNAL(clicked()), window, SLOT(startGame()));
@@ -17,11 +15,18 @@ MenuScreen::MenuScreen(MainWindow* window) : QWidget(window) {
   gameType->addItem("server", SERVER);
   gameType->addItem("client", CLIENT);
 
-  QVBoxLayout* layout = new QVBoxLayout;
+  layout = new QVBoxLayout;
   layout->addWidget(gameType);
   layout->addWidget(levelsSpin);
   layout->addWidget(playBtn);
   setLayout(layout);
+}
+
+MenuScreen::~MenuScreen () {
+  delete playBtn;
+  delete layout;
+  delete levelsSpin;
+  delete gameType;
 }
 
 void MenuScreen::setLevelsRange (int min, int max) {

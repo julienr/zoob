@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 class MainWindow;
 
@@ -16,6 +18,8 @@ enum eGameType {
 class MenuScreen : public QWidget {
   public:
     MenuScreen (MainWindow* parent);
+
+    virtual ~MenuScreen ();
 
     void setLevelsRange (int min, int max);
 
@@ -31,6 +35,8 @@ class MenuScreen : public QWidget {
   private:
     QSpinBox* levelsSpin;
     QComboBox* gameType;
+    QPushButton* playBtn;
+    QVBoxLayout* layout;
 };
 
 #endif
