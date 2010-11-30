@@ -43,8 +43,10 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
       const Vector2 pos(rinfo.position.x, rinfo.position.y);
       const Vector2 vel(rinfo.velocity.x, rinfo.velocity.y);
       orphanRockets.remove(rinfo.rocketID);
+      LOGI("[applyGameState] rocket id = %i", rinfo.rocketID);
       if (!rocketsByID.contains(rinfo.rocketID)) {
         Rocket* rocket = new Rocket(tank, pos, vel, rinfo.speed);
+        rocket->setID(rinfo.rocketID);
         addRocket(rocket);
       } else {
         Rocket* rocket = rocketsByID.get(rinfo.rocketID);
@@ -58,26 +60,17 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
       const zoobmsg::BombInfo& binfo = tinfo.bombInfos[j];
       const Vector2 pos(binfo.position.x, binfo.position.y);
       orphanBombs.remove(binfo.bombID);
+      LOGI("[applyGameState] bomb id = %i", binfo.bombID);
       if (!bombsByID.contains(binfo.bombID)) {
         Bomb* bomb = new Bomb(tank, pos);
+        bomb->setID(binfo.bombID);
         bomb->setTimeLeft((double)binfo.timeleft);
+        addBomb(bomb);
       } else {
         Bomb* bomb = bombsByID.get(binfo.bombID);
         setAuthoritativeBombPosition(bomb, pos);
       }
     }
-  }
-
-  SET_FOREACH(uint16_t, orphanRockets, i) {
-    LOGI("[NetworkedGame::applyGameState] rocket %d is orphan", *i);
-  }
-
-  SET_FOREACH(uint16_t, orphanBombs, i) {
-    LOGI("[NetworkedGame::applyGameState] bomb %d is orphan", *i);
-  }
-
-  SET_FOREACH(uint16_t, orphanTanks, i) {
-    LOGI("[NetworkedGame::applyGameState] tank %d is orphan", *i);
   }
 
   //Explosions
@@ -96,6 +89,22 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
     }
     //Apply it immediatly
     Game::explode(explInfo);
+  }
+
+  //Orphan removal
+  SET_FOREACH(uint16_t, orphanRockets, i) {
+    LOGI("[NetworkedGame::applyGameState] rocket %d is orphan", *i);
+    //TODO
+  }
+
+  SET_FOREACH(uint16_t, orphanBombs, i) {
+    LOGI("[NetworkedGame::applyGameState] bomb %d is orphan", *i);
+    //TODO
+  }
+
+  SET_FOREACH(uint16_t, orphanTanks, i) {
+    LOGI("[NetworkedGame::applyGameState] tank %d is orphan", *i);
+    //TODO
   }
 }
 
@@ -160,6 +169,7 @@ void NetworkedGame::multiTouch (Entity* source, const list<Entity*>& touched, co
 }
 
 void NetworkedGame::addRocket (Rocket* r) {
+  NetController::getInstance()->assignID(r);
   Game::addRocket(r);
   rocketsByID.insert(r->getID(), r);
 }
@@ -183,6 +193,7 @@ list<Tank*>::iterator NetworkedGame::deleteTank (const list<Tank*>::iterator& i)
 }
 
 void NetworkedGame::addBomb (Bomb* b) {
+  NetController::getInstance()->assignID(b);
   Game::addBomb(b);
   bombsByID.insert(b->getID(), b);
 }

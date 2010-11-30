@@ -21,7 +21,7 @@
  */
 class Server : public NetController {
   public:
-    Server () : playerIDGen(0), entityIDGen(1), state(WARM_UP), lastGameStateBroadcast(Utils::getCurrentTimeMillis()) {}
+    Server () : playerIDGen(1), entityIDGen(1), state(WARM_UP), lastGameStateBroadcast(Utils::getCurrentTimeMillis()) {}
 
     /**
      * This method should be implemented by the transport-specific subclass

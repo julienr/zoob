@@ -183,6 +183,7 @@ void Server::update(NetworkedGame* game) {
     explosion.destroyedEntities = new uint16_t[explosion.numDestroyedEntities];
     int cnt2 = 0;
     SET_FOREACH_CONST (Entity*, expl.explodedEntities, d) {
+      LOGI("exploded entity id : %i (entityIDGen=%i)", (*d)->getID(), entityIDGen);
       explosion.destroyedEntities[cnt2++] = (*d)->getID();
     }
   }

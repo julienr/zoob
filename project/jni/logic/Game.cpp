@@ -532,7 +532,7 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
   //Notify entities about the explosion
   const int damages1 = e1->explode(e2, colPoint);
   const int damages2 = e2->explode(e1, colPoint);
-  LOGI("[Game::touch] damages1=%i, damages2=%i", damages1, damages2);
+  LOGI("[Game::touch] damages1(id=%i)=%i, damages2(id=%i)=%i", e1->getID(), damages1, e2->getID(), damages2);
 
   //We have two type of visuals for explosion : poof (when the explosion is rocket-wall) and
   // boom (for all the rest). Here, we determine which type we should use based on effects
