@@ -15,7 +15,7 @@ struct ExplosionInfo {
     //Contains informations (Entity* entity, int damage) for each entity
     //damaged by the explosion
     //list<pair<Entity*, int> > damagedEntities;
-    set<Entity*> explodedEntities;
+    set<uint16_t> explodedEntities;
 };
 
 

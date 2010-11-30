@@ -236,7 +236,9 @@ void Game::_updateRockets (double elapsedS) {
     r->think(elapsedS);
     if (!r->hasExploded() && (r->getNumBounces() >= ROCKET_MAX_BOUNCES)) {
       r->explode(NULL, r->getPosition());
-      explode(ExplosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF));
+      ExplosionInfo explosionInfo(r->getPosition(), ExplosionInfo::EXPLOSION_POOF);
+      explosionInfo.explodedEntities.insert(r->getID());
+      explode(explosionInfo);
     }
     //Might have exploded because of num bounces OR because of collision
     if (r->hasExploded()) {
@@ -541,9 +543,9 @@ void Game::touch (Entity* e1, Entity* e2, const Vector2& colPoint) {
 
   ExplosionInfo explosionInfo(colPoint, hasEffect?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF);
   if (e1->hasExploded())
-    explosionInfo.explodedEntities.insert(e1);
+    explosionInfo.explodedEntities.insert(e1->getID());
   if (e2->hasExploded())
-    explosionInfo.explodedEntities.insert(e2);
+    explosionInfo.explodedEntities.insert(e2->getID());
   
   explode(explosionInfo);
 }
@@ -562,7 +564,7 @@ void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vecto
     if (damages > 0)
       explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
     if (other->hasExploded())
-      explosionInfo.explodedEntities.insert(other);
+      explosionInfo.explodedEntities.insert(other->getID());
   }
 
   
@@ -570,7 +572,7 @@ void Game::multiTouch (Entity* source, const list<Entity*>& touched, const Vecto
   if (sourceDamages > 0)
     explosionInfo.type = ExplosionInfo::EXPLOSION_BOOM;
   if (source->hasExploded()) 
-    explosionInfo.explodedEntities.insert(source);
+    explosionInfo.explodedEntities.insert(source->getID());
   explode(explosionInfo);
 }
 

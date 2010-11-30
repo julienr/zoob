@@ -84,8 +84,12 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
     for (uint16_t j=0; j<expl.numDestroyedEntities; j++) {
       const uint16_t entityID = expl.destroyedEntities[j];
       LOGI("[NetworkedGame::applyGameState] exploded entity %i", entityID);
-      explInfo.explodedEntities.insert(getEntityByID(entityID));
-      getEntityByID(entityID)->setExploded(true);
+      explInfo.explodedEntities.insert(entityID);
+      Entity* e = getEntityByID(entityID);
+      if (!e) {
+        LOGE("[NetworkedGame::applyGameState] Exploded entity with id %i not found", entityID);
+      } else
+        e->setExploded(true);
     }
     //Apply it immediatly
     Game::explode(explInfo);
@@ -146,8 +150,13 @@ void NetworkedGame::applyCommands (Tank* tank, const PlayerCommand& cmd) {
 }
 
 void NetworkedGame::update(const double elapsedS) {
-  NetController::getInstance()->update(this);
-  Game::update(elapsedS);
+  if (NetController::getInstance()->isClient()) {
+    NetController::getInstance()->update(this);
+    Game::update(elapsedS);
+  } else {
+    Game::update(elapsedS);
+    NetController::getInstance()->update(this);
+  }
 }
 
 void NetworkedGame::spawnTanks (const Level* level, Vector2& playerStartPosition) {
