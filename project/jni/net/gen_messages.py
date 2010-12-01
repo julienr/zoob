@@ -421,14 +421,15 @@ def main():
   #CPP
   out = open("Messages.cpp",'w')
   out.write('#include "Messages.h"\n')
-  out.write('#pragma GCC diagnostic push\n')
+#  out.write('#pragma GCC diagnostic push\n')
   out.write('#pragma GCC diagnostic ignored "-Wunused-parameter"\n')
+  out.write('#pragma GCC diagnostic ignored "-Wunused-label"\n')
   out.write('namespace zoobmsg {\n')
   out.write(implStaticCode)
   for message in messages:
     message.writeImpl(out)
   out.write('} //zoobmsg\n')
-  out.write('#pragma GCC diagnostic pop\n')
+#  out.write('#pragma GCC diagnostic pop\n')
   out.close()
 
 #  print '-- checking msg.h syntax'

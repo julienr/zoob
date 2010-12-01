@@ -3,7 +3,6 @@
 #include "levels/LevelsData.h"
 #include "logic/Bomb.h"
 #include "logic/Rocket.h"
-#include "logic/NetTank.h"
 #include "logic/PlayerCommand.h"
 
 void Server::handleConnect (const uint16_t peerID) {

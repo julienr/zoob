@@ -1,3 +1,4 @@
+#include "def.h"
 #include "GameView.h"
 #include "view/GLW.h"
 #include "view/primitives/Square.h"
@@ -10,8 +11,6 @@
 #include "app.h"
 #include "NumberView.h"
 #include "view/GameManager.h"
-#include "logic/NetTank.h"
-#include "NetTankView.h"
 
 
 GameView::GameView ()
@@ -203,7 +202,7 @@ void GameView::tankAdded (Tank* t) {
       tankViews.insert(t, new PlayerTankView(static_cast<const PlayerTank*>(t)));
       break;
     case CAT_NET:
-      tankViews.insert(t, new NetTankView(static_cast<const NetTank*>(t)));
+      tankViews.insert(t, new PlayerTankView(static_cast<const PlayerTank*>(t)));
       break;
   }
 }
@@ -238,7 +237,7 @@ void GameView::drawBCircle (const BCircle* circle, const Vector2& position) {
 
   for (unsigned i=0; i<numVerts; i++) {
     const float angle = i*2*M_PI/(float)numVerts;
-    const Vector2 v(circle->getRadius()*cosf(angle), circle->getRadius()*sinf(angle));
+    const Vector2 v(circle->getRadius()*Math::cos(angle), circle->getRadius()*Math::sin(angle));
     verts[3*i] = fX(v.x);
     verts[3*i+1] = fX(v.y);
     verts[3*i+2] = 0;

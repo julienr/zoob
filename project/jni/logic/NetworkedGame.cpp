@@ -1,5 +1,4 @@
 #include "logic/NetworkedGame.h"
-#include "logic/NetTank.h"
 #include "logic/Rocket.h"
 #include "logic/Bomb.h"
 #include "net/NetController.h"
@@ -28,12 +27,13 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
     orphanTanks.remove(tinfo.tankID);
     if (!tanksByID.contains(tinfo.tankID)) {
       LOGI("[applyGameState] creating new NetTank");
-      tank = new NetTank(newPlayerFirePolicy());
+      tank = new PlayerTank(newPlayerFirePolicy(), CAT_NET);
       tank->setID(tinfo.tankID);
       addTank(tank);
     } else {
       tank = tanksByID.get(tinfo.tankID);
     }
+    tank->setLivesLeft(tinfo.livesLeft);
     setAuthoritativeTankPosition(tank, Vector2(tinfo.position.x, tinfo.position.y));
 
     LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", tinfo.tankID, tinfo.position.x, tinfo.position.y, tinfo.numRocketInfos, tinfo.numBombInfos);

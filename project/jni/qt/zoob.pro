@@ -6,9 +6,9 @@ QT += opengl
 LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet 
 DEFINES += PLATFORM_SDL #ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
-QMAKE_CXXFLAGS += -Wall -fno-rtti -fno-exceptions -Wno-unused-label -Wno-unused-parameter
+QMAKE_CXXFLAGS += -Wall -Werror -fno-rtti -fno-exceptions
 #PROFILING
-QMAKE_CXXFLAGS_DEBUG += -g -DDEBUG
+QMAKE_CXXFLAGS_DEBUG += -g -DDEBUG 
 QMAKE_LFLAGS_DEBUG += -g
 
 #FPS debug
@@ -42,7 +42,6 @@ LOCAL_SRC_FILES = \
     logic/Game.cpp \
     logic/NetworkedGame.cpp \
     logic/Tank.cpp \
-    logic/NetTank.cpp \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \

@@ -187,6 +187,8 @@ class Tank: public Entity {
       return bombs.begin();
     }
 
+    void setLivesLeft (unsigned num) { numLives = num; }
+
   protected:
     virtual Rocket* createRocket (Tank* owner, const Vector2& pos, const Vector2& dir) = 0;
 

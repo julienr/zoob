@@ -17,14 +17,15 @@ class PlayerTank : public Tank {
   public:
     PlayerTank (FireRatePolicy* pol, eTankCategory cat=CAT_PLAYER)
       : Tank(TANK_BCIRCLE_R, pol),
-        currentForm (FORM_SIMPLE) {
+        currentForm (FORM_SIMPLE),
+        category(cat) {
       setLives(PLAYER_NUM_LIVES);
     }
 
     eTankType getTankType () const { return TANK_PLAYER; }
 
     eTankCategory getTankCategory () const {
-      return CAT_PLAYER;
+      return category;
     }
 
     /* The player tank might switch between multiple "forms" (like simple, burst, shield).
@@ -50,6 +51,7 @@ class PlayerTank : public Tank {
     }
   private:
     ePlayerForm currentForm;
+    const eTankCategory category;
 };
 
 #endif /* PLAYERTANK_H_ */
