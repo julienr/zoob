@@ -63,7 +63,7 @@ void Server::handleDisconnect (const uint16_t peerID) {
 }
 
 Tank* createNetTank () {
-  return new NetTank(Game::getInstance()->newPlayerFirePolicy());
+  return new PlayerTank(Game::getInstance()->newPlayerFirePolicy(), CAT_NET);
 }
 
 void Server::_doSpawns (NetworkedGame* game) {

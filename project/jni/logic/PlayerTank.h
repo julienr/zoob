@@ -11,13 +11,14 @@
 #define PLAYER_BURST_INTERVAL 1500
 #define PLAYER_IN_BURST_INTERVAL 200
 #define PLAYER_NUM_BURSTS 3
+#define PLAYER_NUM_LIVES 3
 
 class PlayerTank : public Tank {
   public:
-    PlayerTank (FireRatePolicy* pol)
+    PlayerTank (FireRatePolicy* pol, eTankCategory cat=CAT_PLAYER)
       : Tank(TANK_BCIRCLE_R, pol),
         currentForm (FORM_SIMPLE) {
-      setLives(3);
+      setLives(PLAYER_NUM_LIVES);
     }
 
     eTankType getTankType () const { return TANK_PLAYER; }
