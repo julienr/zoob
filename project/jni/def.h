@@ -12,8 +12,6 @@
 #define size_t uint64_t
 #endif
 
-extern zip* APKArchive;
-
 #define ASSERT(x) assert(x)
 
 

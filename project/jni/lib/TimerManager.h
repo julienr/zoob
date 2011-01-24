@@ -20,6 +20,7 @@ class TimerManager {
 
     static void destroy () {
       delete instance;
+      instance = NULL;
     }
 
   /** Instance method */

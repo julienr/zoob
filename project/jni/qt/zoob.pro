@@ -31,6 +31,7 @@ LOCAL_SRC_FILES = \
     lib/TimerManager.cpp \
     lib/Polygon.cpp \
     lib/Line.cpp \
+    lib/FileManager.cpp \
     net/Server.cpp \
     net/Client.cpp \
     net/ENetServer.cpp \
