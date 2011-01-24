@@ -5,7 +5,8 @@ import android.view.MotionEvent;
 class SingleTouchMotionHandler implements MotionEventHandler {
 	public Command processEvent (MotionEvent e) {
 		Command c = null;
-		final float x = e.getX();
+		//FIXME: + e.getSize()/2.0f ??
+		final float x = e.getX(); 
 		final float y = e.getY();
 		switch (e.getAction()) {
 			case MotionEvent.ACTION_DOWN:
