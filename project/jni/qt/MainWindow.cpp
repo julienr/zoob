@@ -6,10 +6,10 @@
 #include "DebugAction.h"
 #include "jansson.h"
 
-MainWindow::MainWindow(const char* serieJSON, const char* apkPath) 
+MainWindow::MainWindow(const char* serieJSON) 
   : QMainWindow(),
     menuScreen(new MenuScreen(this)),
-    gameScreen(new GameScreen(this, serieJSON, apkPath)),
+    gameScreen(new GameScreen(this, serieJSON)),
     menuInter(new InterMenu(this)),
     layout(new QStackedLayout),
     statusBar(new QStatusBar) {

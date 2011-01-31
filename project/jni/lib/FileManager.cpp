@@ -9,6 +9,7 @@ APKFileManager::APKFileManager (const char* apkPath) {
     LOGE("Error loading APK : %s", apkPath);
     abort();
   }
+  LOGI("Loaded APK : %s", apkPath);
 }
 
 File* APKFileManager::openFile (const char* filename) {
@@ -28,6 +29,7 @@ void APKFile::read (void* buf, int nbytes) {
 FSFileManager::FSFileManager (const char* rootDir) 
  : rootDir(rootDir) {
    //TODO: check for rootDir validity ?
+   LOGI("Rootdir : %s", rootDir);
 }
 
 File* FSFileManager::openFile (const char* filename) {

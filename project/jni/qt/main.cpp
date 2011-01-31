@@ -9,6 +9,7 @@
 #include "def.h"
 #include "app.h"
 #include "input/AndroidInputManager.h"
+#include "lib/FileManager.h"
 
 void saveProgress (int level) {
   LOGE("saveProgress : %i", level);
@@ -52,6 +53,12 @@ InputManager* createInputManager (int useGamepad, int useTrackball) {
   return window->createInputManager(useGamepad, useTrackball);
 }
 
+const char* resourcesDir = NULL;
+
+FileManager* createFileManager () {
+  return new FSFileManager(resourcesDir); 
+}
+
 int main (int argc, char** argv) {
   bool hasArgs = true;
   if (argc < 3) {
@@ -70,8 +77,10 @@ int main (int argc, char** argv) {
   QCoreApplication::setOrganizationDomain("zoob.fhtagn.net");
   QCoreApplication::setApplicationName("Zoob");
 
+  resourcesDir = hasArgs?argv[2]:"../../";
+
   //Main window creation
-  window = new MainWindow(json, hasArgs?argv[2]:"../../bin/Zoob-debug.apk");
+  window = new MainWindow(json);
   free(json);
   window->resize(640, 480);
   window->show();

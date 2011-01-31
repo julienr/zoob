@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "app.h"
 
-GameScreen::GameScreen (MainWindow* parent, const char* json, const char* apkPath) :
+GameScreen::GameScreen (MainWindow* parent, const char* json) :
   QGLWidget(QGLFormat(QGL::DoubleBuffer |
                       QGL::DepthBuffer |
                       QGL::Rgba |
@@ -12,7 +12,7 @@ GameScreen::GameScreen (MainWindow* parent, const char* json, const char* apkPat
                       QGL::DirectRendering |
                       QGL::NoSampleBuffers)),
   mainWindow(parent) {
-  nativeInit(apkPath, json);
+  nativeInit(json);
   nativeLoadSerie(json);
 }
 

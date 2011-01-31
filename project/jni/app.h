@@ -3,7 +3,7 @@
 
 //downcall (Java to C++) functions
 //performs all non-gl initialisation
-void nativeInit (const char* apkPath, const char* serieJSON);
+void nativeInit (const char* serieJSON);
 void nativeLoadSerie (const char* serieJSON);
 
 void nativeInitGL (int level, int difficulty, int useGamepad, int useTrackball);
@@ -58,6 +58,9 @@ extern float transY;
 //so the input manager can allocate openGL resources
 class InputManager;
 extern InputManager* createInputManager (int useGamepad, int useTrackball);
+
+class FileManager;
+extern FileManager* createFileManager ();
 
 //DEBUG functions
 enum eDebug {

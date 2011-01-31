@@ -152,10 +152,9 @@ bool nativeStartClient () {
   return NetController::getInstance()->start();
 }
 
-void nativeInit (const char* apkPath, const char* serie) {
+void nativeInit (const char* serie) {
   srand(Utils::getCurrentTimeMillis());
-  //TODO: depends on platform
-  FileManager::registerInstance(new APKFileManager(apkPath));
+  FileManager::registerInstance(createFileManager());
   nativeLoadSerie(serie);
 }
 

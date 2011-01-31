@@ -22,7 +22,7 @@
 class MainWindow : public QMainWindow {
   Q_OBJECT
   public:
-    MainWindow (const char* serieJSON, const char* apkPath);
+    MainWindow (const char* serieJSON);
     virtual ~MainWindow ();
 
     InputManager* createInputManager (int gamepad, int trackball) { return gameScreen->createInputManager(gamepad, trackball); }
