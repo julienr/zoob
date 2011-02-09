@@ -89,34 +89,36 @@ int main (int argc, char** argv) {
   //-l1 specify the level
   //-s specify start as network server
   //-c specify start as network client
+  bool immediateStart;
   int opt;
   while ((opt = getopt(argc, argv, "l:sc")) != -1) {
     switch (opt) {
       case 'l': {
         int level = atoi(optarg);
         window->selectLevel(level);
-        window->startGame();
+        immediateStart = true;
         break;
       }
       case 's': {
         window->setServer();
-        window->startGame();
+        immediateStart = true;
         break;
       }
       case 'c': {
         window->setClient();
-        window->startGame();
+        immediateStart = true;
         break;
       }
     }
   }
 
   //Fire main loop with a one time timer just after QApplication start
-  QTimer _t;
-  _t.setSingleShot(true);
-  _t.start(0);
-  QObject::connect(&_t, SIGNAL(timeout()), window, SLOT(mainLoop()));
+  QTimer::singleShot(0, window, SLOT(mainLoop()));
   QObject::connect(&app, SIGNAL(lastWindowClosed()), window, SLOT(quit()));
+
+  if (immediateStart) {
+    QTimer::singleShot(100, window, SLOT(startGame()));
+  }
   app.exec();
 
   //cleanup
