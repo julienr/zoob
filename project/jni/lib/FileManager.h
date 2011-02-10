@@ -11,6 +11,13 @@ class File {
     virtual ~File () {}
 
     virtual void read (void* buf, int nbytes) = 0;
+
+    /**
+     * Fully read the file to a newly allocated buffer of corresponding
+     * size. The returned buffer MUST be freed by the caller using delete []
+     * @param size OUT parameter, will contain the size of the buffer
+     */
+    virtual char* readToBuffer (size_t* size) = 0;
   private:
 };
 
@@ -58,10 +65,13 @@ class APKFile : public File {
 
     void read (void* buf, int nbytes);
 
+    char* readToBuffer (size_t* size);
+
   private:
-    APKFile(zip_file* file)
-      : file(file) {} 
+    APKFile(zip_file* file, struct zip_stat stats)
+      : file(file), stats(stats) {} 
     zip_file* file;
+    struct zip_stat stats;
 };
 
 /** === Filesystem === */
@@ -84,9 +94,14 @@ class FSFile : public File {
 
     void read (void* buf, int nbytes);
 
+    char* readToBuffer(size_t* size);
+
   private:
     FSFile(FILE* file)
       : file(file) {} 
+
+    size_t getSize ();
+
     FILE* file;
 };
 

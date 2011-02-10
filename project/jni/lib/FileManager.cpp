@@ -18,11 +18,23 @@ File* APKFileManager::openFile (const char* filename) {
     LOGE("Error opening %s from APK", filename);
     return NULL;
   }
-  return new APKFile(f);
+  struct zip_stat s;
+  zip_stat(APKArchive, filename, 0, &s);
+  return new APKFile(f, s);
 }
 
 void APKFile::read (void* buf, int nbytes) {
   zip_fread(file, buf, nbytes);
+}
+
+char* APKFile::readToBuffer (size_t* size) {
+  *size = stats.size;
+  char* buffer = new char[*size];
+  if (!(zip_fread(file, buffer, *size) == (int)*size)) {
+    LOGE("Error fully reading file to buffer");
+    return NULL;
+  }
+  return buffer;
 }
 
 /** === Filesystem === */
@@ -46,4 +58,26 @@ File* FSFileManager::openFile (const char* filename) {
 
 void FSFile::read (void* buf, int nbytes) {
   fread(buf, sizeof(char), nbytes, file);
+}
+
+char* FSFile::readToBuffer (size_t* size) {
+  *size = getSize();
+  char* buffer = new char[*size];
+  if (!(fread(buffer, 1, *size, file) == *size)) {
+    LOGE("Error fully reading file to buffer");
+    return NULL;
+  }
+  return buffer;
+}
+
+size_t FSFile::getSize () {
+  size_t size = 0;
+  char buf[256];
+  size_t numRead;
+  fseek(file, 0, SEEK_SET);
+  while ((numRead = fread(buf, 1, 256, file)) > 0) {
+    size += numRead;
+  }
+  fseek(file, 0, SEEK_SET);
+  return size;
 }
