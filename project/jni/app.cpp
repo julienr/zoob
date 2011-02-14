@@ -29,7 +29,7 @@
 }*/
 
 void centerGameInViewport ();
-#include "levels/LevelsData.h"
+#include "levels/LevelManager.h"
 #include "net/Server.h"
 Level* lvl = NULL;
 GameView* gameView = NULL;

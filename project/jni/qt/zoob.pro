@@ -6,7 +6,7 @@ QT += opengl
 LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet  -L/home/julien/android/libfont/jni -lfont -lfreetype
 DEFINES += PLATFORM_SDL #ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
-QMAKE_CXXFLAGS += -Wall -fno-rtti -fno-exceptions
+QMAKE_CXXFLAGS += -Wall -Wno-unused-parameter -fno-rtti -fno-exceptions
 #PROFILING
 QMAKE_CXXFLAGS_DEBUG += -g -DDEBUG 
 QMAKE_LFLAGS_DEBUG += -g
@@ -45,7 +45,7 @@ LOCAL_SRC_FILES = \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \
     logic/ShadowPolygon.cpp \
-    levels/LevelsData.cpp \
+    levels/LevelManager.cpp \
     view/textures/TextureManager.cpp \
     view/textures/TextureGroup.cpp \
     view/textures/Texture.cpp \

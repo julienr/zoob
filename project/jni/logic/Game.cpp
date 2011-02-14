@@ -112,6 +112,7 @@ void Game::spawnPlayer () {
 }
 
 bool Game::findSpawnPosition (float entityRadius, Vector2& position) {
+  //Try to use a predefined spawn position
   const list<pair<int, int> >& candidates = level->getSpawnPositions();
   const Grid& grid = colManager.getGrid();
   LOGI("[Game::findSpawnPosition] num candidates : %ld", candidates.size());
@@ -123,6 +124,22 @@ bool Game::findSpawnPosition (float entityRadius, Vector2& position) {
       return true;
     }
   }
+
+  //Couldn't find a suitable spawn position in the predefined ones ? 
+  //Just pick a random empty cell
+  for (int x=0; x<level->getWidth(); x++) {
+    for (int y=0; y<level->getHeight(); y++) {
+      const Tile* t = level->getTile(x,y);
+      if (t->getType() == E) {
+        const Vector2 wPos = grid.gridToWorld(x, y);
+        if (!grid.containsEntities(wPos, entityRadius)) {
+          position.set(wPos);
+          return true;
+        }
+      }
+    }
+  }
+
   return false;
 }
 
@@ -130,7 +147,6 @@ void Game::explode (const ExplosionInfo& info) {
   attachedView->addExplosion(info);
 }
 
-bool spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank);
 bool Game::spawnTank (float entityRadius, Tank* (*newTank) (void), Tank*& tank) {
   Vector2 spawnPos;
   if (findSpawnPosition(entityRadius, spawnPos)) {

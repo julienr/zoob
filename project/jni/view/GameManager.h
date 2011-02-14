@@ -9,7 +9,7 @@
 #include "containers/vector.h"
 #include "menu/Menu.h"
 #include "menu/PausedMenu.h"
-#include "levels/LevelsData.h"
+#include "levels/LevelManager.h"
 #include "logic/Game.h"
 
 enum eAppState {
