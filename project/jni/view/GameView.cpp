@@ -188,14 +188,15 @@ void GameView::_drawGame (double elapsedS) {
     const Tank* t = i.key();
     TankView* tv = i.value();
     const Vector2& tp = t->getPosition();
+    if (t->isAlive()) {
+      tv->draw();
 
-    tv->draw();
-
-    const char* playerName = game->getPlayerName(t->getID());
-    if (playerName) {
-      GLW::color(BLACK);
-      fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
-      GLW::color(WHITE);
+      const char* playerName = game->getPlayerName(t->getID());
+      if (playerName) {
+        GLW::color(BLACK);
+        fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
+        GLW::color(WHITE);
+      }
     }
   }
 
