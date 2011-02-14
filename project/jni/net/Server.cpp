@@ -129,8 +129,7 @@ void Server::update(NetworkedGame* game) {
 
     zoobmsg::TankInfo* tinfo = &state.tankInfos[counter++];
     tinfo->tankID = tank->getID();
-    //FIXME: something is wrong here
-    LOGI("tank id : %i", tinfo->tankID);
+    //LOGI("tank id : %i", tinfo->tankID);
     tinfo->position.x = tank->getPosition().x;
     tinfo->position.y = tank->getPosition().y;
     tinfo->velocity.x = tank->getMoveDir().x;
@@ -180,19 +179,19 @@ void Server::update(NetworkedGame* game) {
     explosion.position.y = expl.position.y;
     
     explosion.boom = expl.type == ExplosionInfo::EXPLOSION_BOOM;
-    LOGI("num exploded entities : %li", expl.explodedEntities.size());
+    //LOGI("num exploded entities : %li", expl.explodedEntities.size());
     explosion.numDestroyedEntities = expl.explodedEntities.size();
     explosion.destroyedEntities = new uint16_t[explosion.numDestroyedEntities];
     int cnt2 = 0;
     SET_FOREACH_CONST (uint16_t, expl.explodedEntities, d) {
-      LOGI("exploded entity id : %i (entityIDGen=%i)", *d, entityIDGen);
+      //LOGI("exploded entity id : %i (entityIDGen=%i)", *d, entityIDGen);
       explosion.destroyedEntities[cnt2++] = *d;
     }
   }
   explosions.clear();
 
   //Broadcast to connected clients
-  LOGI("broadcasting to %li clients", connectedClients.size());
+  //LOGI("broadcasting to %li clients", connectedClients.size());
   for (set<uint16_t>::iterator i=connectedClients.begin(); i.hasNext(); i++) {
     const uint16_t peerID = *i;
     sendMsgGameState(peerID, state);

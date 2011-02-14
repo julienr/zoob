@@ -20,7 +20,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
   //The basic idea is that for each type (rocket, tank, bomb), we update
   //the entity with the same ID as in the message. If we have no entity with
   //this ID, we create a new one.
-  LOGI("[applyGameState] %i tanks", state.numTankInfos);
+  //LOGI("[applyGameState] %i tanks", state.numTankInfos);
   for (uint16_t i=0; i<state.numTankInfos; i++) {
     const zoobmsg::TankInfo& tinfo = state.tankInfos[i];
     Tank* tank;
@@ -36,14 +36,14 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
     tank->setLivesLeft(tinfo.livesLeft);
     setAuthoritativeTankPosition(tank, Vector2(tinfo.position.x, tinfo.position.y));
 
-    LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", tinfo.tankID, tinfo.position.x, tinfo.position.y, tinfo.numRocketInfos, tinfo.numBombInfos);
+    //LOGI("[applyGameState] tank %i pos=(%f,%f), %i rockets, %i bombs", tinfo.tankID, tinfo.position.x, tinfo.position.y, tinfo.numRocketInfos, tinfo.numBombInfos);
 
     for (uint16_t j=0; j<tinfo.numRocketInfos; j++) {
       const zoobmsg::RocketInfo& rinfo = tinfo.rocketInfos[j];
       const Vector2 pos(rinfo.position.x, rinfo.position.y);
       const Vector2 vel(rinfo.velocity.x, rinfo.velocity.y);
       orphanRockets.remove(rinfo.rocketID);
-      LOGI("[applyGameState] rocket id = %i", rinfo.rocketID);
+      //LOGI("[applyGameState] rocket id = %i", rinfo.rocketID);
       if (!rocketsByID.contains(rinfo.rocketID)) {
         Rocket* rocket = new Rocket(tank, pos, vel, rinfo.speed);
         rocket->setID(rinfo.rocketID);
@@ -60,7 +60,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
       const zoobmsg::BombInfo& binfo = tinfo.bombInfos[j];
       const Vector2 pos(binfo.position.x, binfo.position.y);
       orphanBombs.remove(binfo.bombID);
-      LOGI("[applyGameState] bomb id = %i", binfo.bombID);
+      //LOGI("[applyGameState] bomb id = %i", binfo.bombID);
       if (!bombsByID.contains(binfo.bombID)) {
         Bomb* bomb = new Bomb(tank, pos);
         bomb->setID(binfo.bombID);
@@ -74,7 +74,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
   }
 
   //Explosions
-  LOGI("[NetworkedGame::applyGameState] %i explosions", state.numExplosions);
+  //LOGI("[NetworkedGame::applyGameState] %i explosions", state.numExplosions);
   for (uint16_t i=0; i<state.numExplosions; i++) {
     const zoobmsg::Explosion& expl = state.explosions[i];
     ExplosionInfo::eType type = expl.boom?ExplosionInfo::EXPLOSION_BOOM:ExplosionInfo::EXPLOSION_POOF;
@@ -83,7 +83,7 @@ void NetworkedGame::applyGameState (const zoobmsg::GameState& state) {
     ExplosionInfo explInfo (explPos, type);
     for (uint16_t j=0; j<expl.numDestroyedEntities; j++) {
       const uint16_t entityID = expl.destroyedEntities[j];
-      LOGI("[NetworkedGame::applyGameState] exploded entity %i", entityID);
+      //LOGI("[NetworkedGame::applyGameState] exploded entity %i", entityID);
       explInfo.explodedEntities.insert(entityID);
       Entity* e = getEntityByID(entityID);
       if (!e) {
