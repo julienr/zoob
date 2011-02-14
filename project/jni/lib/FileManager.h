@@ -43,6 +43,10 @@ class FileManager {
       instance = NULL;
     }
 
+    /**
+     * Open a given file. The caller is responsible for deleting
+     * the File object.
+     */
     virtual File* openFile (const char* filename) = 0;
 };
 

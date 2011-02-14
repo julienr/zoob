@@ -14,7 +14,7 @@ void ENetServer::think (double /*elapsedS*/) {
         LOGE("New client connected from %x:%u, assigned uid=%i", event.peer->address.host,
                 event.peer->address.port, peerID);
 
-        static_cast<ENetServer*>(NetController::getInstance())->handleConnect(toUID(event.peer));
+        handleConnect(toUID(event.peer));
         break;
       }
       case ENET_EVENT_TYPE_RECEIVE: {

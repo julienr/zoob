@@ -5,10 +5,6 @@
 #include "Math.h"
 
 struct Vector2 {
-  static const Vector2 X_AXIS;
-  static const Vector2 Y_AXIS;
-  static const Vector2 ZERO;
-
   float x, y;
 
   Vector2 () :
@@ -34,7 +30,7 @@ struct Vector2 {
   Vector2 getNormalized () const {
     const float l = length();
     if (l == 0)
-      return Vector2::ZERO;
+      return Vector2(0,0);
     else
       return Vector2(x/l, y/l);
   }

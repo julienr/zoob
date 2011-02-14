@@ -45,11 +45,10 @@ messagesDef=[
      'destroyedEntities':('array','uint16_t')},
      'component':True},
   {'name':'GameState','fields':
-    {'tankInfos':('array','TankInfo'),
+    {'state':'uint8_t',
+     'stateSecLeft':'float',
+     'tankInfos':('array','TankInfo'),
      'explosions':('array','Explosion')}},
-  {'name':'StateChange','fields':
-    {'newState':'uint8_t',
-     'stateDuration':'uint8_t'}}
 ]
 
 #messagesDef = [

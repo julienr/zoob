@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 
-//FIXME: this is mostly to get nice code completion under netbeans... find another way to fix this
+//FIXME: this is to get nice code completion under netbeans... find another way to fix this
 #ifndef size_t
 #define size_t uint64_t
 #endif

@@ -36,7 +36,7 @@ class Client : public NetController {
     void handleMsgGameState (size_t dataLen, const uint8_t* data, size_t offset);
     void handleMsgSpawn (size_t dataLen, const uint8_t* data, size_t offset);
 
-    virtual void sendMsgHello(const zoobmsg::Hello& msg) = 0;
+    virtual void sendMsgHello (const zoobmsg::Hello& msg) = 0;
     virtual void sendMsgWantSpawn (const zoobmsg::WantSpawn& msg) = 0;
     virtual void sendMsgPlayerCommands (const zoobmsg::PlayerCommands& msg) = 0;
 

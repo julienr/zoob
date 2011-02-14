@@ -14,10 +14,6 @@
  * as a unique identifier for a peer. This id is created and interpreted by the
  * underlying transport implementation.
  *
- * Remark on threading :
- * When we refer to a server thread, this is the thread that is used when doing
- * blocking networking i/o. This is as opposed to the game thread that handles
- * the logic and rendering
  */
 class Server : public NetController {
   public:
@@ -45,6 +41,14 @@ class Server : public NetController {
 
     //already handled by local game simulation
     void wantSpawn ();
+
+    ServerState getState () {
+      return state;
+    }
+
+    void setState (ServerState newState) {
+      state = newState;
+    }
 
   
     //These are callbacks for the various events that can happen on server-side.

@@ -116,6 +116,9 @@ void Server::update(NetworkedGame* game) {
   zoobmsg::GameState state;
   const list<Tank*>* tanks = game->getTanks();
 
+  state.state = this->state;
+  state.stateSecLeft = 0.0; 
+
   //TANKS
   state.numTankInfos = tanks->size();
   state.tankInfos = new zoobmsg::TankInfo[state.numTankInfos];

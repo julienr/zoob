@@ -41,7 +41,8 @@ bool Tank::shieldBounce (Entity* e, const Vector2& colPoint) {
   if (e && e->getType() == ENTITY_ROCKET) {
     Vector2 t = colPoint - this->getPosition();
     t.normalize();
-    const float colAngle = acos(t*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(t);
+    Vector2 yAxis = Vector2(0,1);
+    const float colAngle = acos(t*yAxis) * yAxis.relativeOrientation(t);
     const float shieldMinAngle = this->getRotation() - M_PI/4;
     const float shieldMaxAngle = this->getRotation() + M_PI/4;
     if (Math::angleInInterval(colAngle, shieldMinAngle, shieldMaxAngle)) {

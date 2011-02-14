@@ -23,7 +23,8 @@ class Moveable : public Viewable {
 
     //dir MUST be normalized
     virtual void setRotationFromDir (const Vector2& dir) {
-      const float angle = acos(dir*Vector2::Y_AXIS) * Vector2::Y_AXIS.relativeOrientation(dir);
+      const Vector2 yAxis = Vector2(0,1);
+      const float angle = acos(dir*yAxis) * yAxis.relativeOrientation(dir);
       setRotation(angle);
     }
 

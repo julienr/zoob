@@ -116,6 +116,7 @@ int main (int argc, char** argv) {
   QTimer::singleShot(0, window, SLOT(mainLoop()));
   QObject::connect(&app, SIGNAL(lastWindowClosed()), window, SLOT(quit()));
 
+  //If we should start immediatly, just let QT initialize and then startGame
   if (immediateStart) {
     QTimer::singleShot(100, window, SLOT(startGame()));
   }

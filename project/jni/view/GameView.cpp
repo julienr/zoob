@@ -191,9 +191,12 @@ void GameView::_drawGame (double elapsedS) {
 
     tv->draw();
 
-    GLW::color(BLACK);
-    fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
-    GLW::color(WHITE);
+    const char* playerName = game->getPlayerName(t->getID());
+    if (playerName) {
+      GLW::color(BLACK);
+      fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
+      GLW::color(WHITE);
+    }
   }
 
   //rockets

@@ -1,12 +1,12 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
-INCLUDEPATH += . ../ /usr/include/GL/ /home/julien/android/libenet/jni/ 
+INCLUDEPATH += . ../ /usr/include/GL/ /home/julien/android/libenet/jni/ /home/julien/android/libfont/jni/ /usr/include/freetype2/
 QT += opengl
-LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet 
+LIBS +=  -L/usr/local/lib -lm -lpng -lzip -ljansson -L/home/julien/android/libenet/bin/linux -lenet  -L/home/julien/android/libfont/jni -lfont -lfreetype
 DEFINES += PLATFORM_SDL #ZOOB_DBG_FPS
 #Android doesn't support exceptions, so zoob isn't using them
-QMAKE_CXXFLAGS += -Wall -Werror -fno-rtti -fno-exceptions
+QMAKE_CXXFLAGS += -Wall -fno-rtti -fno-exceptions
 #PROFILING
 QMAKE_CXXFLAGS_DEBUG += -g -DDEBUG 
 QMAKE_LFLAGS_DEBUG += -g
@@ -27,7 +27,6 @@ SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp InterMenu.cpp D
 #zoob (copied from Android.mk, but changed assignation to = instead of :=)
 LOCAL_SRC_FILES = \
 		app.cpp \
-    lib/Vector2.cpp \
     lib/TimerManager.cpp \
     lib/Polygon.cpp \
     lib/Line.cpp \
