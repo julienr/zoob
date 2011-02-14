@@ -202,10 +202,16 @@ void NetworkedGame::addTank (Tank* t) {
   LOGI("assigned id %i to tank %p", t->getID(), t);
   Game::addTank(t);
   tanksByID.insert(t->getID(), t);
+  char* buffer = new char[64];
+  sprintf(buffer, "id:%i", t->getID());
+  tanksToName.insert(t->getID(), buffer);
 }
 
 list<Tank*>::iterator NetworkedGame::deleteTank (const list<Tank*>::iterator& i) {
   tanksByID.remove((*i)->getID());
+  char* b = tanksToName.get((*i)->getID());
+  delete [] b;
+  tanksToName.remove((*i)->getID());
   return Game::deleteTank(i);
 }
 

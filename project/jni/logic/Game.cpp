@@ -314,7 +314,7 @@ void Game::_doAI (EnemyTank* tank, double elapsedS) {
   if (ai->decideDir(elapsedS, &moveDir, this, tank))
     tank->setMoveDir(moveDir);
   else
-    tank->setMoveDir(Vector2::ZERO);
+    tank->setMoveDir(Vector2(0,0));
 
   Vector2 rocketDir;
   //AI fire decision is done in two time :

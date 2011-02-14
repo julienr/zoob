@@ -11,6 +11,9 @@
 #include "app.h"
 #include "NumberView.h"
 #include "view/GameManager.h"
+#include "lib/FileManager.h"
+
+#include "FontHelper.h"
 
 
 GameView::GameView ()
@@ -28,12 +31,25 @@ GameView::GameView ()
     lastLightToggle(BOSS_INTRO_TIME),
     lightOn(true) {
   Game::getInstance()->attach(this);
+
+  //Load font
+  File* fontFile = FileManager::getInstance()->openFile("assets/fonts/OogieBoogie.ttf");
+  size_t size;
+  const char* buffer = fontFile->readToBuffer(&size);
+
+  font = fontlib::FTLib::getInstance()->loadMemoryFont(buffer, size, 30);
+
+  delete [] buffer;
+  delete fontFile;
+
 }
 
 GameView::~GameView () {
   for (map<Tank*, TankView*>::iterator i = tankViews.begin(); i.hasNext(); i++) {
     delete i.value();
   }
+
+  delete font;
 
   for (list<Explosion*>::iterator i = explosions.begin(); i.hasNext(); i++)
     delete *i;
@@ -169,10 +185,16 @@ void GameView::_drawGame (double elapsedS) {
 
   //draw tanks
   for (map<Tank*, TankView*>::iterator i = tankViews.begin(); i.hasNext(); i++) {
-    i.value()->draw();
-  }
-  //FIXME: colManager.debugDraw()
+    const Tank* t = i.key();
+    TankView* tv = i.value();
+    const Vector2& tp = t->getPosition();
 
+    tv->draw();
+
+    GLW::color(BLACK);
+    fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
+    GLW::color(WHITE);
+  }
 
   //rockets
   for (list<Rocket*>::const_iterator i = game->getRockets(); i.hasNext(); i++) {

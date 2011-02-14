@@ -10,6 +10,8 @@
 #include "containers/map.h"
 #include "Explosion.h"
 
+#include "FTLib.h"
+
 #include "iview/IGameView.h"
 
 class GameView : public IGameView {
@@ -69,6 +71,9 @@ class GameView : public IGameView {
     //Used for boss intro
     double lastLightToggle;
     bool lightOn;
+
+    //Font for dynamic texts
+    fontlib::Font* font;
 
 };
 

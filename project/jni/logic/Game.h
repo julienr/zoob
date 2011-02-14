@@ -213,6 +213,12 @@ class Game {
       return ProgressionManager::getInstance()->getPlayerRocketsSpeed();
     }
 
+    //Return player's name for a given tank. Might return NULL if name is not available
+    //(like for local player or AI tanks)
+    virtual const char* getPlayerName (uint16_t tankID) {
+      return NULL;
+    }
+
     //DEBUG only: returns a list of grid cells to be drawn in overlay
 #ifdef DEBUG
     const list<CellOverlay>& dbg_getCellOverlays () {

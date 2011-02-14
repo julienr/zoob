@@ -24,6 +24,13 @@ class NetworkedGame : public Game {
     virtual void touch (Entity* e1, Entity* e2, const Vector2& colPoint);
     virtual void multiTouch (Entity* source, const list<Entity*>& touched, const Vector2& colPoint);
 
+    virtual const char* getPlayerName (uint16_t tankID) {
+      if(tanksToName.contains(tankID))
+        return tanksToName.get(tankID);
+      else
+        return NULL;
+    }
+
   protected:
     void addRocket (Rocket* r);
     list<Rocket*>::iterator deleteRocket (const list<Rocket*>::iterator& i);
@@ -47,6 +54,8 @@ class NetworkedGame : public Game {
       : Game(overCallback, wonCallback, level) {}
 
     Entity* getEntityByID (uint16_t id);
+
+    map<uint16_t, char*> tanksToName;
 
     map<uint16_t, Tank*> tanksByID;
     map<uint16_t, Rocket*> rocketsByID;
