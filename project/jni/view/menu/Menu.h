@@ -1,7 +1,7 @@
 #ifndef MENU_H_
 #define MENU_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Vector2.h"
 #include "MenuItem.h"
 #include "containers/vector.h"

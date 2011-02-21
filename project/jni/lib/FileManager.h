@@ -1,7 +1,7 @@
 #ifndef FILEMANAGER_H_
 #define FILEMANAGER_H_
 
-#include "def.h"
+#include "zoobdef.h"
 
 class FileManager;
 

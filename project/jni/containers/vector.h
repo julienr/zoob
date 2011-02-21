@@ -1,10 +1,7 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-#include "def.h"
+#include "zoobdef.h"
 #include "sort.h"
 
 template <class T>

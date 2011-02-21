@@ -6,7 +6,7 @@
 
 #include "MainWindow.h"
 
-#include "def.h"
+#include "zoobdef.h"
 #include "app.h"
 #include "input/AndroidInputManager.h"
 #include "lib/FileManager.h"

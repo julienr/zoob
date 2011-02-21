@@ -2,7 +2,7 @@
 #define LEVEL_H_
 
 #include "app.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "Entity.h"
 #include "physics/CollisionManager.h"
 #include "physics/AABBox.h"

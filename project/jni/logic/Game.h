@@ -1,7 +1,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "logic/Tank.h"
 #include "logic/EnemyTank.h"
 #include "logic/PlayerTank.h"

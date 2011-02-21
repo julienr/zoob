@@ -39,7 +39,7 @@ void Texture::unload () {
 }
 
 #include <stdio.h>
-#include "def.h"
+#include "zoobdef.h"
 #include <zip.h>
 #include <png.h>
 

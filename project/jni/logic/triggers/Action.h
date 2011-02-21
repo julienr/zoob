@@ -1,7 +1,7 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "logic/Level.h"
 
 class Action {

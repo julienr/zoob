@@ -1,7 +1,7 @@
 #ifndef _IGAMEVIEW_H
 #define	_IGAMEVIEW_H
 
-#include "def.h"
+#include "zoobdef.h"
 #include "logic/Tank.h"
 #include "iview/ExplosionInfo.h"
 

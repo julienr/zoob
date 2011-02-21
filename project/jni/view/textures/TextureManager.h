@@ -1,7 +1,7 @@
 #ifndef TEXTUREMANAGER_H_
 #define TEXTUREMANAGER_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "containers/uthash.h"
 #include "view/GLW.h"
 #include "TextureGroup.h"

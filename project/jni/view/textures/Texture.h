@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "view/GLW.h"
 
 class Texture {

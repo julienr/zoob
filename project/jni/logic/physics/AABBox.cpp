@@ -1,6 +1,6 @@
 #include "AABBox.h"
 #include "logic/Entity.h"
-#include "def.h"
+#include "zoobdef.h"
 
 /**
  *  0 --- 1

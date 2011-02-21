@@ -1,7 +1,7 @@
 #ifndef LINE_H_
 #define LINE_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Math.h"
 #include "lib/Vector2.h"
 

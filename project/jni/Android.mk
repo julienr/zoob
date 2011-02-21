@@ -4,7 +4,16 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := zoob
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../libzip/jni/ $(LOCAL_PATH)/../../../libpng/jni/ $(LOCAL_PATH)/../../../jansson/jni/
+TARGET_PLATFORM := 'android-3'
+
+ANDROID_LIBS := $(LOCAL_PATH)/../../../
+
+LOCAL_C_INCLUDES := $(ANDROID_LIBS)/libzip/jni/ \
+									  $(ANDROID_LIBS)/libpng/jni/ \
+										$(ANDROID_LIBS)/jansson/jni/ \
+										$(ANDROID_LIBS)/libfont/jni/ \
+										$(ANDROID_LIBS)/libenet/jni/ \
+										$(ANDROID_LIBS)/libfreetype/jni/include/
 
 #LOCAL_STATIC_LIBRARIES := libzip libpng
 
@@ -16,7 +25,6 @@ LOCAL_DEFAULT_CPP_EXTENSION := .cpp
 LOCAL_SRC_FILES := \
     app-android.cpp \
     app.cpp \
-    lib/Vector2.cpp \
     lib/Polygon.cpp \
     lib/Line.cpp \
     lib/TimerManager.cpp \
@@ -70,7 +78,9 @@ LOCAL_SRC_FILES := \
 LIBPNG_PATH := /home/julien/android/libpng/bin/ndk/local/armeabi/
 LIBZIP_PATH := /home/julien/android/libzip/bin/ndk/local/armeabi/
 LIBJANSSON_PATH := /home/julien/android/jansson/bin/ndk/local/armeabi/
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip -L$(LIBJANSSON_PATH) -ljansson
+LIBFREETYPE_PATH := /home/julien/android/libfreetype/bin/ndk/local/armeabi/
+
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip -L$(LIBJANSSON_PATH) -ljansson -L$(LIBFREETYPE_PATH) -lfreetype
 
 #To generate a map file in case of segfault
 #see : http://stackoverflow.com/questions/2314273/get-function-names-from-call-stack

@@ -1,4 +1,4 @@
-#include "def.h"
+#include "zoobdef.h"
 #include "GameView.h"
 #include "view/GLW.h"
 #include "view/primitives/Square.h"

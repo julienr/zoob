@@ -1,7 +1,7 @@
 #ifndef TANK_H_
 #define TANK_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "Entity.h"
 #include "physics/BCircle.h"
 #include "lib/Utils.h"

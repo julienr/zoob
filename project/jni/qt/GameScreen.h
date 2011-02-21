@@ -1,7 +1,7 @@
 #ifndef ZOOB_GAME_SCREEN_H
 #define ZOOB_GAME_SCREEN_H
 
-#include "def.h"
+#include "zoobdef.h"
 
 #include <QGLWidget>
 #include <QKeyEvent>

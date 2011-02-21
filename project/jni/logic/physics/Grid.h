@@ -1,7 +1,7 @@
 #ifndef GRID_H_
 #define GRID_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "BCircle.h"
 #include "CollisionResult.h"
 #include "logic/Entity.h"

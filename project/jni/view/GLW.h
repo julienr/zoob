@@ -3,7 +3,7 @@
 
 #include "lib/Vector2.h"
 #include "lib/Color.h"
-#include "def.h"
+#include "zoobdef.h"
 
 struct GLW {
     static void translate (float x, float y, float z) {

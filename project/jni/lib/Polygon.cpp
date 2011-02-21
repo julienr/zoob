@@ -1,5 +1,4 @@
 #include "Polygon.h"
-#include "containers/vector.h"
 
 Polygon::Polygon (const vector<Vector2>& verts)
   : numVerts(verts.length()) {

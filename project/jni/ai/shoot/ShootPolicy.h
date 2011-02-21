@@ -1,7 +1,7 @@
 #ifndef SHOOT_POLICY_H_
 #define SHOOT_POLICY_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Vector2.h"
 
 class Game;

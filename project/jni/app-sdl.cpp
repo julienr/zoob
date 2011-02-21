@@ -1,5 +1,5 @@
 #include <SDL/SDL.h>
-#include "def.h"
+#include "zoobdef.h"
 #include "app.h"
 #include "input/SDLInputManager.h"
 #include "input/AndroidInputManager.h"

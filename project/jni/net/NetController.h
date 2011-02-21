@@ -1,7 +1,7 @@
 #ifndef _NETCONTROLLER_H
 #define	_NETCONTROLLER_H
 
-#include "def.h"
+#include "zoobdef.h"
 #include "logic/PlayerCommand.h"
 #include "logic/NetworkedGame.h"
 

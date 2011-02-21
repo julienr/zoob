@@ -1,6 +1,6 @@
 #include "app-android.h"
 #include "app.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "input/AndroidInputManager.h"
 
 /** JNI UPCALL STUFF **/
@@ -52,21 +52,21 @@ InputManager* createInputManager (int useGamepad, int useTrackball) {
   return inputManager;
 }
 
+static const char* apkPath = NULL;
+
 /**
  * VERY IMPORTANT: the JNIEnv obtained here is thread specific (render-thread specific in our case).
  * We SHOULDN'T use it to make upcall to stuff outside the rendering thread
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
-  (JNIEnv * env, jclass cls, jstring apkPath, jobject zoob, jstring levelSerie) {
+  (JNIEnv * env, jclass cls, jstring apk, jobject zoob, jstring levelSerie) {
   ASSERT(jniEnv == NULL);
   init_for_upcall(env, zoob);
-  const char* str;
+  apkPath = env->GetStringUTFChars(apk, NULL);
   const char* serie;
-  str = env->GetStringUTFChars(apkPath, NULL);
   serie = env->GetStringUTFChars(levelSerie, NULL);
-  nativeInit(str, serie);
-  env->ReleaseStringUTFChars(apkPath, str);
-  env->ReleaseStringUTFChars(levelSerie, serie);
+  nativeInit(serie);
+//  env->ReleaseStringUTFChars(apkPath, str);
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartGame

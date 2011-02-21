@@ -1,7 +1,7 @@
 #ifndef PATHPOLICY_H_
 #define PATHPOLICY_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Vector2.h"
 #include "containers/vector.h"
 #include "MovementPolicy.h"

@@ -2,7 +2,7 @@
 #define ANIMATION_H_
 
 #include "lib/Utils.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "view/textures/Texture.h"
 
 class Animation {

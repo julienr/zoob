@@ -1,4 +1,4 @@
-#include "def.h"
+#include "zoobdef.h"
 #include "app.h"
 #include "view/textures/TextureManager.h"
 #include "logic/Entity.h"

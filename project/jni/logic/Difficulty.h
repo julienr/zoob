@@ -1,7 +1,7 @@
 #ifndef DIFFICULTY_H_
 #define DIFFICULTY_H_
 
-#include "def.h"
+#include "zoobdef.h"
 
 #define MAX_DIFFICULTY 2
 

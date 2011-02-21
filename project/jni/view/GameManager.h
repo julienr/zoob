@@ -5,7 +5,7 @@
 #ifndef GAMEMANAGER_H_
 #define GAMEMANAGER_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "containers/vector.h"
 #include "menu/Menu.h"
 #include "menu/PausedMenu.h"

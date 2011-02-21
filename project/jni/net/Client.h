@@ -2,7 +2,7 @@
 #define	_CLIENT_H
 
 #include "Messages.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "NetController.h"
 #include "containers/blockingqueue.h"
 

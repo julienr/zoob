@@ -1,7 +1,7 @@
 #ifndef SHADOWPOLYGON_H_
 #define SHADOWPOLYGON_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "logic/physics/AABBox.h"
 #include "lib/Line.h"
 #include "lib/Polygon.h"

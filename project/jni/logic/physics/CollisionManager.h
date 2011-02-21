@@ -5,7 +5,7 @@
 #include "lib/Polygon.h"
 #include "logic/Entity.h"
 #include "containers/list.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "BCircle.h"
 #include "AABBox.h"
 #include "Grid.h"

@@ -1,7 +1,7 @@
 #ifndef SQUARE_H_
 #define SQUARE_H_
 
-#include "def.h"
+#include "zoobdef.h"
 
 class Square {
   public:

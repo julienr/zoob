@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include "utlist.h"
-#include "def.h"
+#include "zoobdef.h"
 
 #define LIST_FOREACH(type,listname,itername) for (list<type>::iterator itername = listname.begin(); itername.hasNext(); itername++)
 #define LIST_FOREACH_CONST(type,listname,itername) for (list<type>::const_iterator itername = listname.begin(); itername.hasNext(); itername++)

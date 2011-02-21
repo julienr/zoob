@@ -1,7 +1,7 @@
 #ifndef _SERVER_H
 #define	_SERVER_H
 
-#include "def.h"
+#include "zoobdef.h"
 #include "Messages.h"
 #include "NetController.h"
 

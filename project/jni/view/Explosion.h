@@ -1,7 +1,7 @@
 #ifndef EXPLOSION_H_
 #define EXPLOSION_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Vector2.h"
 #include "Sprite.h"
 #include "logic/Game.h"

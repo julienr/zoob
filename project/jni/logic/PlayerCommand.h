@@ -1,7 +1,7 @@
 #ifndef _PLAYERCOMMAND_H
 #define _PLAYERCOMMAND_H
 
-#include "def.h"
+#include "zoobdef.h"
 #include "lib/Vector2.h"
 
 struct PlayerCommand {

@@ -1,7 +1,7 @@
 #ifndef _SET_H
 #define _SET_H
 
-#include "def.h"
+#include "zoobdef.h"
 #include "uthash.h"
 
 #define SET_FOREACH(type,setname,itername) for (set<type>::iterator itername=setname.begin(); itername.hasNext(); itername++)

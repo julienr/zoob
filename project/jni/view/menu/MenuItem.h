@@ -2,7 +2,7 @@
 #define MENUITEM_H_
 
 #include "lib/Utils.h"
-#include "def.h"
+#include "zoobdef.h"
 #include "view/Sprite.h"
 #include "lib/Color.h"
 

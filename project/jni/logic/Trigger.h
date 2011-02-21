@@ -1,7 +1,7 @@
 #ifndef TRIGGER_H_
 #define TRIGGER_H_
 
-#include "def.h"
+#include "zoobdef.h"
 #include "triggers/Action.h"
 #include "triggers/Condition.h"
 

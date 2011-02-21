@@ -1,7 +1,7 @@
 #ifndef CIRCLE_H_
 #define CIRCLE_H_
 
-#include "def.h"
+#include "zoobdef.h"
 
 //A circle with a radius of 0.5 (unit size diameter)
 class Circle {
