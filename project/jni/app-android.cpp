@@ -2,6 +2,7 @@
 #include "app.h"
 #include "zoobdef.h"
 #include "input/AndroidInputManager.h"
+#include "lib/FileManager.h"
 
 /** JNI UPCALL STUFF **/
 static JNIEnv* jniEnv = NULL;
@@ -44,6 +45,15 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
   JNI_GET_METHOD(java_showMenu, "showMenu", "(II)V");
 }
 
+static const char* apkPath = NULL;
+
+FileManager* createFileManager () {
+  if (!apkPath) {
+    LOGE("createFileManager called before jni init");
+    abort();
+  }
+  return new APKFileManager(apkPath); 
+}
 
 /** Input Manager **/
 static AndroidInputManager* inputManager = NULL;
@@ -51,8 +61,6 @@ InputManager* createInputManager (int useGamepad, int useTrackball) {
   inputManager = new AndroidInputManager(useGamepad!=0, useTrackball!=0);
   return inputManager;
 }
-
-static const char* apkPath = NULL;
 
 /**
  * VERY IMPORTANT: the JNIEnv obtained here is thread specific (render-thread specific in our case).

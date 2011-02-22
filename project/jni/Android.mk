@@ -4,8 +4,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := zoob
 
-TARGET_PLATFORM := 'android-3'
-
 ANDROID_LIBS := $(LOCAL_PATH)/../../../
 
 LOCAL_C_INCLUDES := $(ANDROID_LIBS)/libzip/jni/ \
@@ -18,7 +16,7 @@ LOCAL_C_INCLUDES := $(ANDROID_LIBS)/libzip/jni/ \
 #LOCAL_STATIC_LIBRARIES := libzip libpng
 
 #-Wno-psabi to remove warning about GCC 4.4 va_list warning
-LOCAL_CFLAGS := -Wall -DANDROID_NDK -Wno-psabi
+LOCAL_CFLAGS := -Wall -DANDROID_NDK -Wno-psabi -Wno-unused
 
 LOCAL_DEFAULT_CPP_EXTENSION := .cpp 
 
@@ -28,9 +26,13 @@ LOCAL_SRC_FILES := \
     lib/Polygon.cpp \
     lib/Line.cpp \
     lib/TimerManager.cpp \
+		lib/FileManager.cpp \
     net/Server.cpp \
     net/ENetServer.cpp \
     net/Client.cpp \
+		net/ENetClient.cpp \
+		net/NetController.cpp \
+		net/Messages.cpp \
     logic/Viewable.cpp \
     logic/Level.cpp \
     logic/Game.cpp \
@@ -38,9 +40,8 @@ LOCAL_SRC_FILES := \
     logic/Tank.cpp \
     logic/ProgressionManager.cpp \
     logic/PlayerTank.cpp \
-    logic/NetTank.cpp \
     logic/ShadowPolygon.cpp \
-    levels/LevelsData.cpp \
+    levels/LevelManager.cpp \
     view/textures/TextureManager.cpp \
     view/textures/TextureGroup.cpp \
     view/textures/Texture.cpp \
@@ -75,12 +76,14 @@ LOCAL_SRC_FILES := \
     input/PlayerFormControl.cpp \
     input/InputManager.cpp
 
-LIBPNG_PATH := /home/julien/android/libpng/bin/ndk/local/armeabi/
-LIBZIP_PATH := /home/julien/android/libzip/bin/ndk/local/armeabi/
-LIBJANSSON_PATH := /home/julien/android/jansson/bin/ndk/local/armeabi/
-LIBFREETYPE_PATH := /home/julien/android/libfreetype/bin/ndk/local/armeabi/
+LIBPNG_PATH := /home/julien/android/libpng/obj/local/armeabi/
+LIBZIP_PATH := /home/julien/android/libzip/obj/local/armeabi/
+LIBJANSSON_PATH := /home/julien/android/jansson/obj/local/armeabi/
+LIBENET_PATH := /home/julien/android/libenet/obj/local/armeabi/
+LIBFREETYPE_PATH := /home/julien/android/libfreetype/obj/local/armeabi/
+LIBFONT_PATH := /home/julien/android/libfont/obj/local/armeabi/
 
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip -L$(LIBJANSSON_PATH) -ljansson -L$(LIBFREETYPE_PATH) -lfreetype
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -L$(LIBPNG_PATH) -lpng -L$(LIBZIP_PATH) -lzip -L$(LIBJANSSON_PATH) -ljansson  -L$(LIBENET_PATH) -lenet -L$(LIBFONT_PATH) -lfont -L$(LIBFREETYPE_PATH) -lfreetype
 
 #To generate a map file in case of segfault
 #see : http://stackoverflow.com/questions/2314273/get-function-names-from-call-stack

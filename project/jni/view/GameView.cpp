@@ -37,7 +37,9 @@ GameView::GameView ()
   size_t size;
   const char* buffer = fontFile->readToBuffer(&size);
 
-  font = fontlib::FTLib::getInstance()->loadMemoryFont(buffer, size, 30);
+
+  fontlib::FTLib* lib = fontlib::FTLib::getInstance();
+  font = lib->loadMemoryFont(buffer, size, 30);
 
   delete [] buffer;
   delete fontFile;
