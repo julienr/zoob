@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QMap>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include "MainWindow.h"
 
@@ -11,11 +12,42 @@
 #include "input/AndroidInputManager.h"
 #include "lib/FileManager.h"
 
-void saveProgress (int level) {
+
+static MainWindow* window = NULL;
+
+class AppQT : public AppInterface {
+  public:
+    AppQT (const char* resourcesDir)
+      : resourcesDir(resourcesDir) {}
+
+    virtual InputManager* createInputManager (bool useGamepad, bool useTrackball);
+
+    virtual FileManager* createFileManager ();
+
+    virtual void saveProgress (int level);
+
+    virtual void showMenu (eMenu id, int currentLevel);
+  private:
+    const char* resourcesDir;
+};
+
+void AppQT::saveProgress (int level) {
   LOGE("saveProgress : %i", level);
 }
 
-#include <sys/stat.h>
+void AppQT::showMenu (eMenu id, int currentLevel) {
+  LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
+  window->showMenu((eMenu)id, currentLevel);
+}
+
+InputManager* AppQT::createInputManager (bool useGamepad, bool useTrackball) {
+  return window->createInputManager(useGamepad, useTrackball);
+}
+
+FileManager* AppQT::createFileManager () {
+  return new FSFileManager(resourcesDir); 
+}
+
 char* loadJSON (const char* serieFile) {
   FILE* file = fopen(serieFile, "r");
 
@@ -42,22 +74,13 @@ char* loadJSON (const char* serieFile) {
   return buffer;
 }
 
-MainWindow* window;
 
-void showMenu (int id, int currentLevel) {
-  LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
-  window->showMenu((eMenu)id, currentLevel);
+static AppQT* appInterface = NULL;
+
+AppInterface* getApp () {
+  return appInterface;
 }
 
-InputManager* createInputManager (int useGamepad, int useTrackball) {
-  return window->createInputManager(useGamepad, useTrackball);
-}
-
-const char* resourcesDir = NULL;
-
-FileManager* createFileManager () {
-  return new FSFileManager(resourcesDir); 
-}
 
 int main (int argc, char** argv) {
   bool hasArgs = true;
@@ -77,8 +100,10 @@ int main (int argc, char** argv) {
   QCoreApplication::setOrganizationDomain("zoob.fhtagn.net");
   QCoreApplication::setApplicationName("Zoob");
 
-  resourcesDir = hasArgs?argv[2]:"../../";
+  const char* resourcesDir = hasArgs?argv[2]:"../../";
 
+
+  appInterface = new AppQT(resourcesDir);
   //Main window creation
   window = new MainWindow(json);
   free(json);

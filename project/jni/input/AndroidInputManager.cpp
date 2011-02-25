@@ -162,7 +162,7 @@ void AndroidInputManager::updateTankDir(const Vector2& touchPosition) {
       //the -(0.5,0.5) to gamePadPos is just because the gamepad is on the left. When touching the gamepad with a left finger,
       //we'll most likely get the touch event a bit too much to the left than what the user would. Therefore, we translate gamePadPos
       //Basically, this is just a usability hack
-      playerCommand.moveDir = touchPosition+Vector2(transX, transY) - (gamePadPos-Vector2(0.5,0.5));
+      playerCommand.moveDir = touchPosition+Vector2(getApp()->getTransX(), getApp()->getTransY()) - (gamePadPos-Vector2(0.5,0.5));
       break;
     }
     default:
@@ -236,12 +236,12 @@ void AndroidInputManager::updatePressedItem (const Vector2& p, const Vector2& pN
 void AndroidInputManager::touchEventDown (float x, float y) {
   if (!GameManager::getInstance()->inGame() || GameManager::getInstance()->inTransition()) {
     //LOGE("touchEventDown(menu) (%f,%f) => (%f,%f)", x, y, XSG_NOTRANSX(x), YSG_NOTRANSY(y));
-    GameManager::getInstance()->handleTouchDown(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+    GameManager::getInstance()->handleTouchDown(Vector2(getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y)));
     return;
   }
 
-  const Vector2 p(XSG(x), YSG(y));
-  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+  const Vector2 p(getApp()->XSG(x), getApp()->YSG(y));
+  const Vector2 pNoTrans (getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y));
   //Check that the double-tap was quick and not too far away (which would indicate a fast direction
   //change)
   const uint64_t now = Utils::getCurrentTimeMillis();
@@ -271,16 +271,16 @@ void AndroidInputManager::touchEventMove (float x, float y) {
   if (state == FIRING_MODE)
     return;
 
-  const Vector2 p(XSG(x), YSG(y));
-  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+  const Vector2 p(getApp()->XSG(x), getApp()->YSG(y));
+  const Vector2 pNoTrans (getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y));
   //updatePressedItem(p, pNoTrans);
 
   setMoveTouchPoint(p);
 }
 
 void AndroidInputManager::touchEventSecondaryDown (float x, float y) {
-  const Vector2 p(XSG(x), YSG(y));
-  const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+  const Vector2 p(getApp()->XSG(x), getApp()->YSG(y));
+  const Vector2 pNoTrans (getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y));
 
   if (bombButton.inside(pNoTrans) && !bombButtonTimer.isActive() && _progMan()->hasBombs()) {
     _setPressedItem(BOMB_BUTTON_ID);
@@ -303,9 +303,9 @@ void AndroidInputManager::touchEventSecondaryMove (float UNUSED(x), float UNUSED
 
 void AndroidInputManager::touchEventUp (float x, float y) {
   if (GameManager::getInstance()->inGame()) {
-    const Vector2 pNoTrans (XSG_NOTRANSX(x), YSG_NOTRANSY(y));
+    const Vector2 pNoTrans (getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y));
     if (state == FIRING_MODE) {
-      playerCommand.setFire(Vector2(XSG(x),YSG(y)));
+      playerCommand.setFire(Vector2(getApp()->XSG(x),getApp()->YSG(y)));
       rocketButton.setPressed(false);
       state = STATE_DEFAULT;
     } else {
@@ -328,7 +328,7 @@ void AndroidInputManager::touchEventUp (float x, float y) {
       }
     }
   } else
-    GameManager::getInstance()->handleTouchUp(Vector2(XSG_NOTRANSX(x), YSG_NOTRANSY(y)));
+    GameManager::getInstance()->handleTouchUp(Vector2(getApp()->XSG_NOTRANSX(x), getApp()->YSG_NOTRANSY(y)));
 }
 
 void AndroidInputManager::touchEventOther (float x, float y) {
@@ -344,6 +344,6 @@ void AndroidInputManager::trackballMove (float rx, float ry) {
 void AndroidInputManager::trackballClick (float rx, float ry) {
   if (GameManager::getInstance()->inGame() && useTrackball) {
     cursorPosition += Vector2(rx,ry);
-    playerCommand.setFire(cursorPosition-Vector2(transX, transY));
+    playerCommand.setFire(cursorPosition-Vector2(getApp()->getTransX(), getApp()->getTransY()));
   }
 }

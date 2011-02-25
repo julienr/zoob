@@ -35,11 +35,11 @@ MainWindow::MainWindow(const char* serieJSON)
     json_decref(json);
   }
 
-  debugOptions["Visibility"] = DEBUG_VISIBILITY;
-  debugOptions["AI"] = DEBUG_AI;
-  debugOptions["Shadows"] = DEBUG_SHADOWS;
-  debugOptions["Collisions"] = DEBUG_COLLISIONS;
-  debugOptions["Overlays"] = DEBUG_OVERLAYS;
+  debugOptions["Visibility"] = AppInterface::DEBUG_VISIBILITY;
+  debugOptions["AI"] = AppInterface::DEBUG_AI;
+  debugOptions["Shadows"] = AppInterface::DEBUG_SHADOWS;
+  debugOptions["Collisions"] = AppInterface::DEBUG_COLLISIONS;
+  debugOptions["Overlays"] = AppInterface::DEBUG_OVERLAYS;
   createActions();
   createMenus();
 
@@ -54,25 +54,25 @@ MainWindow::~MainWindow () {
   delete statusBar;
 }
 
-void MainWindow::debugChanged (eDebug what, bool enabled) {
+void MainWindow::debugChanged (AppInterface::eDebug what, bool enabled) {
   LOGE("debugChanged : what=%i, enabled=%i", what, enabled);
   if (enabled)
-    enableDebug(what);
+    getApp()->enableDebug(what);
   else
-    disableDebug(what);
+    getApp()->disableDebug(what);
   settings.setValue(debugOptions.key(what), enabled);
 }
 
 void MainWindow::restoreSettings () {
   LOGE("Restoring settings from : %s", settings.fileName().toStdString().data());
-  for (QHash<QString,eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
+  for (QHash<QString,AppInterface::eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
     bool val = settings.value(i.key(), false).toBool();
     debugActions[i.key()]->setChecked(val);
   }
 }
 
 void MainWindow::createActions () {
-  for (QHash<QString,eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
+  for (QHash<QString,AppInterface::eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
     DebugAction* a = new DebugAction(i.key(), this, i.value());
     debugActions[i.key()] = a;
     connect(a, SIGNAL(debugChanged(eDebug, bool)), this, SLOT(debugChanged(eDebug, bool)));
@@ -105,30 +105,30 @@ void MainWindow::startGame () {
   }
 }
 
-void MainWindow::showMenu (eMenu menu, int currentLevel) {
+void MainWindow::showMenu (AppInterface::eMenu menu, int currentLevel) {
   switch (menu) {
-    case MENU_MAIN:  
+    case AppInterface::MENU_MAIN:  
       layout->setCurrentWidget(menuScreen);
       break;
-    case MENU_WON:
+    case AppInterface::MENU_WON:
       menuInter->setText("You won");
       layout->setCurrentWidget(menuInter);
       if (currentLevel != -1)
         menuScreen->nextLevel();
       break;
-    case MENU_LOST:
+    case AppInterface::MENU_LOST:
       menuInter->setText("You lost");
       layout->setCurrentWidget(menuInter);
       break;
-    case MENU_END:
+    case AppInterface::MENU_END:
       menuInter->setText("End");
       layout->setCurrentWidget(menuInter);
       break;
-    case MENU_ERROR:
+    case AppInterface::MENU_ERROR:
       menuInter->setText("Loading error");
       layout->setCurrentWidget(menuInter);
       break;
-    case MENU_LAST:
+    case AppInterface::MENU_LAST:
       LOGE("Error, request to show MENU_LAST");
       break;
   }

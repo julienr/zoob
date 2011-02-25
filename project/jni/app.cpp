@@ -4,13 +4,10 @@
 #include "logic/Entity.h"
 #include "view/TankView.h"
 #include "logic/Tank.h"
-#include "logic/Level.h"
-#include "view/LevelView.h"
 #include "view/GameView.h"
 #include "logic/Game.h"
 #include "view/GLW.h"
 #include "view/GameManager.h"
-#include "input/AndroidInputManager.h"
 #include "logic/Difficulty.h"
 #include "view/NumberView.h"
 #include "view/primitives/Square.h"
@@ -20,7 +17,11 @@
 #include "net/ENetServer.h"
 #include "net/ENetClient.h"
 #include "logic/PlayerCommand.h"
+#include "logic/Level.h"
+#include "view/LevelView.h"
+#include "input/AndroidInputManager.h"
 #include "lib/FileManager.h"
+
 
 
 /*static void printGLString(const char *name, GLenum s) {
@@ -28,158 +29,95 @@
     LOGI("GL %s = %s\n", name, v);
 }*/
 
-void centerGameInViewport ();
 #include "levels/LevelManager.h"
 #include "net/Server.h"
-Level* lvl = NULL;
-GameView* gameView = NULL;
-
 
 #define WON_LOST_DELAY 1000
 
-void startGameCallback (GameManager* manager) {
-  manager->setState(STATE_PLAYING);
+//Callback proxies. Redirect calls to getApp()-><callback>
+void startGameCallback () {
+  getApp()->onStartGame();
 }
 
 void gameOverCallback () {
-  GameManager::getInstance()->setState(STATE_LOST, WON_LOST_DELAY);
+  getApp()->onGameOver();
 }
 
 void gameWonCallback () {
-  GameManager::getInstance()->setState(STATE_WON, WON_LOST_DELAY);
+  getApp()->onGameWon();
 }
 
 void gameUnPauseCallback () {
-  GameManager::getInstance()->setState(STATE_PLAYING);
+  getApp()->onGameUnPaused();
 }
 
-void gameLevelChangedCallback (const char* levelJSON) {
-  LevelManager::registerInstance(new SingleLevelManager(levelJSON));
-  startGame(0);
+void startLevelCallback (const char* lvl) {
+  getApp()->startLevel(lvl);
 }
 
-void toPlayingState () {
-  LOGI("[toPlayingState]");
-  if (Game::getInstance() && Game::getInstance()->isPaused()) {
-    LOGE("unpause");
-    Game::getInstance()->unpause();
-  } else {
-    delete lvl;
-    Game::destroy();
-    delete gameView;
-
-    lvl = LevelManager::getInstance()->loadLevel(GameManager::getInstance()->getCurrentLevel());
-    if (lvl == NULL) {
-      LOGE("[toPlayingState] lvl = NULL");
-      showMenu(MENU_ERROR, -1);
-      GameManager::getInstance()->setState(STATE_NONE);
-      return;
-    }
-
-    ProgressionManager::getInstance()->changedLevel(lvl);
-    if (NetController::isNetworkedGame()) //networked game
-      NetworkedGame::create(gameOverCallback, gameWonCallback, lvl);
-    else //single player game
-      Game::create(gameOverCallback, gameWonCallback, lvl);
-    
-    gameView = new GameView();
-
-    InputManager::getInstance()->reset();
-
-    centerGameInViewport();
-  }
-  LOGI("[toPlayingState] finished");
+void toWonCallback () {
+  getApp()->toWonState();
 }
 
-void startGame (int level) {
-  LOGE("startGame(%i)", level);
-  GameManager::getInstance()->setCurrentLevel((size_t)level);
-  GameManager::getInstance()->setState(STATE_PLAYING);
+void toLostCallback () {
+  getApp()->toLostState();
 }
 
-static void cleanupGame () {
-  GameManager::getInstance()->setState(STATE_NONE);
+void toEndCallback () {
+  getApp()->toEndState();
+}
+
+void toPauseCallback () {
+  getApp()->toPauseState();
+}
+
+void toPlayingCallback () {
+  getApp()->toPlayingState();
+}
+
+AppInterface::AppInterface ()
+  : initialized(false),
+    transX(0),
+    transY(0),
+    windowWidth(0),
+    windowHeight(0),
+    debugFlags(0),
+    lvl(NULL),
+    gameView(NULL) {
+}
+
+AppInterface::~AppInterface () {
+  FileManager::destroy();
+  TextureManager::destroy();
   delete lvl;
-  lvl = NULL;
   Game::destroy();
+  GameManager::destroy();
+  Difficulty::destroy();
+  TimerManager::destroy();
+  NumberView::destroy();
+  ProgressionManager::destroy();
   delete gameView;
-  gameView = NULL;
 }
 
-
-void toWonState () {
-  LOGE("toWonState");
-  int currentLevel = GameManager::getInstance()->getCurrentLevel();
-  saveProgress(currentLevel+1);
-  const eReward reward = ProgressionManager::getInstance()->getLastReward();
-  cleanupGame();
-  if (reward != REWARD_NONE) {
-    showMenu(reward, currentLevel);
-  } else {
-    showMenu(MENU_WON, currentLevel);
-  }
-}
-
-void toLostState () {
-  cleanupGame();
-  showMenu(MENU_LOST, GameManager::getInstance()->getCurrentLevel());
-}
-
-void toEndState () {
-  cleanupGame();
-  showMenu(MENU_END, GameManager::getInstance()->getCurrentLevel());
-}
-
-void toPauseState () {
-  Game::getInstance()->pause();
-}
-
-bool nativeStartServer () {
-  LOGI("Starting server...");
-  NetController::registerInstance(new ENetServer());
-  if (NetController::getInstance()->start()) {
-    startGame(0);
-    //TODO: only for debug : server has a different background
-    glClearColor(0.4f, 0, 0, 1);
-    return true;
-  }
-  return false;
-}
-
-bool nativeStartClient () {
-  LOGI("Starting client...");
-  NetController::registerInstance(new ENetClient(gameLevelChangedCallback));
-  return NetController::getInstance()->start();
-}
-
-void nativeInit (const char* serie) {
+void AppInterface::init (const char* serie) {
   srand(Utils::getCurrentTimeMillis());
   FileManager::registerInstance(createFileManager());
-  nativeLoadSerie(serie);
-}
-
-void nativeLoadSerie (const char* serie) {
   LevelManager::registerInstance(new LevelSerieManager(serie));
 }
 
-/** Since nativeInitGL will be called on app creation AND each time the opengl 
- * context is recreated, this indicate if we're at app creation (false) or
- * just in context recreation (true) */
-bool initialised = false;
-
-void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
-  if (!initialised) {
-    initialised = true;
+void AppInterface::initGL(int levelLimit, int difficulty, bool useGamepad, bool useTrackball) {
+  if (!initialized) {
+    initialized = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGameCallback, gameUnPauseCallback, level);
+    GameManager::create(startGameCallback, gameUnPauseCallback, levelLimit);
     GameManager* gm = GameManager::getInstance();
-    gm->setStateCallback(STATE_WON, toWonState);
-    gm->setStateCallback(STATE_LOST, toLostState);
-    gm->setStateCallback(STATE_END, toEndState);
-    gm->setStateCallback(STATE_PLAYING, toPlayingState);
-    gm->setStateCallback(STATE_PAUSED, toPauseState);
+    gm->setStateCallback(STATE_WON, toWonCallback);
+    gm->setStateCallback(STATE_LOST, toLostCallback);
+    gm->setStateCallback(STATE_END, toEndCallback);
+    gm->setStateCallback(STATE_PLAYING, toPlayingCallback);
+    gm->setStateCallback(STATE_PAUSED, toPauseCallback);
 
     InputManager::registerInstance(createInputManager(useGamepad, useTrackball));
 
@@ -206,8 +144,9 @@ void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
     //need to reload textures (GL context might have been destroyed)
     TextureManager::getInstance()->reloadAll();
 
+    GameManager::getInstance()->setLevelLimit(levelLimit);
     if (GameManager::getInstance()->inGame())
-      centerGameInViewport();
+      _centerGameInViewport();
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -223,90 +162,37 @@ void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball) {
   glDisable(GL_DITHER);
 }
 
-void nativeQuit () {
-  FileManager::destroy();
-  TextureManager::destroy();
-  delete lvl;
-  Game::destroy();
-  GameManager::destroy();
-  Difficulty::destroy();
-  TimerManager::destroy();
-  NumberView::destroy();
-  ProgressionManager::destroy();
-  delete gameView;
-}
-
-void toggleGodMode () {
+void AppInterface::toggleGodMode () {
   if (Game::getInstance())
     Game::getInstance()->toggleGodMode();
 }
 
-/** OpenGL ES doesn't necessarily support retrieving current projection/viewport matrix
- * => We do it by hand cause we now we're in 2d, so that's pretty easy
- * To convert x (screen coords) to game coords, simply do x*xScreenToGame
- */
-float xScreenToGame;
-float yScreenToGame;
-
-//The margin on (x,y) on each side of the game area, for rendering
-float transX = 0;
-float transY = 0;
-
-//We work with a forced 1.5 aspect ratio => [15,10] viewport
-#define VIEWPORT_WIDTH 15
-#define VIEWPORT_HEIGHT 10
-
-/**
- * The screen is divided as follow :
- * - the biggest area is the window
- * - then comes the viewport that contains EVERYTHING that we ever render. it is
- *   COMPLETELY FORBIDDEN to render outside the viewport since it won't be visible on some devices
- *   depending on the screen ratio
- * - then comes the game area where the actual game (level, tanks) are rendered
- * |----------------------------------|
- * |      |-----------------|         |
- * |      |    |-----| life |         |
- * |      |    | game| pad  |         |
- * |      |    |-----|      |         |
- * |      |-----------------|         |
- * |                                  |
- * |----------------------------------|
- */
-//viewport margin relative to the screen (in screen coords). This should be used only for input
-//since viewport placement is handled by opengl glViewport
-Vector2 viewportMargin;
-
-//0.5 is because sprites are square centered on their position
-float XSG (const float x) {
+float AppInterface::XSG (const float x) const {
+  //0.5 is because sprites are square centered on their position
   return (x-viewportMargin.x)*xScreenToGame-(transX+0.5);
 }
 
-float YSG (const float y) {
+float AppInterface::YSG (const float y) const {
   return (y-viewportMargin.y)*yScreenToGame-(transY+0.5);
 }
 
-float XSG_NOTRANSX (const float x) {
+float AppInterface::XSG_NOTRANSX (const float x) const {
   return (x-viewportMargin.x)*xScreenToGame-0.5;
 }
 
-float YSG_NOTRANSY (const float y) {
+float AppInterface::YSG_NOTRANSY (const float y) const {
   return (y-viewportMargin.y)*yScreenToGame-0.5;
 }
 
-float XGS (const float x) {
+float AppInterface::XGS (const float x) const {
   return (x+transX-0.5)/xScreenToGame + viewportMargin.x;
 }
 
-float YGS (const float y) {
+float AppInterface::YGS (const float y) const {
   return (y+transY-0.5)/yScreenToGame + viewportMargin.y;
 }
 
-int windowWidth = 0, windowHeight = 0;
-
-//viewport dimensions in screen size
-Vector2 viewportScreenDim;
-
-void centerGameInViewport () {
+void AppInterface::_centerGameInViewport () {
   //Center game area on screen
   const int levelH = Game::getInstance()->getLevel()->getHeight();
   //const int levelW = game->getLevel()->getWidth();
@@ -316,7 +202,7 @@ void centerGameInViewport () {
   transY = 0.5f + (VIEWPORT_HEIGHT-levelH)/2.0f;
 }
 
-void forceRatio (float sW, float sH) {
+void AppInterface::_forceRatio (float sW, float sH) {
 /**
   * We base all our calculations on a 480/320 = 1.5 aspect ratio (that's the most
   * common resolution for android and iphone)
@@ -352,13 +238,13 @@ void forceRatio (float sW, float sH) {
   viewportScreenDim.y = areaHeight;
 }
 
-void nativeResize (int w, int h) {
+void AppInterface::resize (int w, int h) {
   LOGI("nativeResize (%i,%i)", w, h);
   if(h == 0)
     h = 1;
   windowWidth = w;
   windowHeight = h;
-  forceRatio(w, h);
+  _forceRatio(w, h);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -369,12 +255,12 @@ void nativeResize (int w, int h) {
   yScreenToGame = VIEWPORT_HEIGHT/viewportScreenDim.y;
 
   if (GameManager::getInstance()->inGame())
-    centerGameInViewport();
+    _centerGameInViewport();
 
   glMatrixMode(GL_MODELVIEW);
 }
 
-void nativePause () {
+void AppInterface::pause () {
   if(!GameManager::created())
     return;
 
@@ -384,18 +270,16 @@ void nativePause () {
 }
 
 //Call to switch to STATE_NONE and wait for a new game to be started
-void nativeStopGame () {
-  cleanupGame();
+void AppInterface::stopGame () {
+  _cleanupGame();
 }
 
-static int debugFlags;
-
-void enableDebug (eDebug what) {
+void AppInterface::enableDebug (eDebug what) {
   LOGE("Enable debug for %i", what);
   debugFlags |= (int)what;
 }
 
-void disableDebug (eDebug what) {
+void AppInterface::disableDebug (eDebug what) {
   debugFlags &= ~(int)what;
 }
 
@@ -413,8 +297,7 @@ static uint64_t lastFPS = Utils::getCurrentTimeMillis();
 //but this doesn't seem really needed as temporal aliasing is not visible
 static const double dt = 1/30.0f; //Physics frequency is 60hz
 
-//FIXME: this should be called nativeLoop, NOT nativeRender
-void nativeRender () {
+void AppInterface::simulate () {
   static uint64_t lastTime = Utils::getCurrentTimeMillis();
 
   //Let game manager apply all the transition it has. It normally will have only one, but if during
@@ -462,31 +345,47 @@ void nativeRender () {
   glClear(GL_COLOR_BUFFER_BIT);
   glLoadIdentity();
 
-  if (GameManager::getInstance()->getState() == STATE_NONE) {
+  if (gm->getState() == STATE_NONE)
     return;
-  }
 
-  if (GameManager::getInstance()->inGame() || GameManager::getInstance()->paused()) {
-    if (!GameManager::getInstance()->paused()) {
-      //Physic simulation
-      Game* game = Game::getInstance();
-      game->accumulate(elapsedS);
-      while (game->getAccumulator() >= dt) { //empty accumulator as much as possible
-        PlayerCommand localPlayerCmd;
-        InputManager::getInstance()->think(elapsedS, localPlayerCmd);
-        PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
-        if (playerTank)
-          Game::getInstance()->applyCommands(playerTank, localPlayerCmd);
-        Game::getInstance()->update(dt);
-        game->useAccumulatedTime(dt);
+  if (!gm->inGame())
+    return;
+
+  if (!gm->paused()) {
+    //Physic simulation
+    Game* game = Game::getInstance();
+    game->accumulate(elapsedS);
+    while (game->getAccumulator() >= dt) { //empty accumulator as much as possible
+      PlayerCommand localPlayerCmd;
+      InputManager::getInstance()->think(elapsedS, localPlayerCmd);
+      PlayerTank* playerTank = Game::getInstance()->getPlayerTank();
+      if (playerTank)
+        Game::getInstance()->applyCommands(playerTank, localPlayerCmd);
+      Game::getInstance()->update(dt);
+      game->useAccumulatedTime(dt);
 #ifdef ZOOB_DBG_FPS
-        numPhysicFrames++;
+      numPhysicFrames++;
 #endif
-      }
-    } else {
-      Game::getInstance()->resetAccumulator();
     }
+  } else {
+    Game::getInstance()->resetAccumulator();
+  }
+}
 
+void AppInterface::render () {
+  static uint64_t lastTime = Utils::getCurrentTimeMillis();
+  uint64_t now = Utils::getCurrentTimeMillis();
+  double elapsedS = (now-lastTime)/1000.0;
+
+  GameManager* gm = GameManager::getInstance();
+
+  glClear(GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+  if (gm->getState() == STATE_NONE)
+    return;
+
+  if (gm->inGame() || gm->paused()) {
     glPushMatrix();
     GLW::translate(0.5f, 0.55f, 0);
     gameView->drawLevelIndicator();
@@ -516,20 +415,137 @@ void nativeRender () {
     
     InputManager::getInstance()->draw();
 
-    if (GameManager::getInstance()->inTransition()) {
-      const float timeleft = GameManager::getInstance()->getTransitionDelay();
+    if (gm->inTransition()) {
+      const float timeleft = gm->getTransitionDelay();
       glPushMatrix();
       GLW::translate(7.5f, 5.0f, 0.0f);
       GLW::scale(15.0f, 10.0f, 0.0f);
-      GLW::color(DARK_GREY, 1-timeleft/GameManager::getInstance()->getInitialDelay());
+      GLW::color(DARK_GREY, 1-timeleft/gm->getInitialDelay());
       GLW::disableTextures();
       Square::draw(false);
       GLW::enableTextures();
       GLW::colorWhite();
       glPopMatrix();
     }
-    if (GameManager::getInstance()->paused())
-      GameManager::getInstance()->drawMenu(); //draw the pause menu
+    if (gm->paused())
+      gm->drawMenu(); //draw the pause menu
   }
 }
+
+void AppInterface::onStartGame () {
+  GameManager::getInstance()->setState(STATE_PLAYING);
+}
+
+void AppInterface::onGameOver () {
+  GameManager::getInstance()->setState(STATE_LOST, WON_LOST_DELAY);
+}
+
+void AppInterface::onGameWon () {
+  GameManager::getInstance()->setState(STATE_WON, WON_LOST_DELAY);
+}
+
+void AppInterface::onGameUnPaused () {
+  GameManager::getInstance()->setState(STATE_PLAYING);
+}
+
+void AppInterface::startLevel (const char* levelJSON) {
+  LevelManager::registerInstance(new SingleLevelManager(levelJSON));
+  startGame(0);
+}
+
+void AppInterface::toPlayingState () {
+  LOGI("[toPlayingState]");
+  if (Game::getInstance() && Game::getInstance()->isPaused()) {
+    LOGE("unpause");
+    Game::getInstance()->unpause();
+  } else {
+    delete lvl;
+    Game::destroy();
+    delete gameView;
+
+    lvl = LevelManager::getInstance()->loadLevel(GameManager::getInstance()->getCurrentLevel());
+    if (lvl == NULL) {
+      LOGE("[toPlayingState] lvl = NULL");
+      getApp()->showMenu(AppInterface::MENU_ERROR, -1);
+      GameManager::getInstance()->setState(STATE_NONE);
+      return;
+    }
+
+    ProgressionManager::getInstance()->changedLevel(lvl);
+    if (NetController::isNetworkedGame()) //networked game
+      NetworkedGame::create(gameOverCallback, gameWonCallback, lvl);
+    else //single player game
+      Game::create(gameOverCallback, gameWonCallback, lvl);
+    
+    gameView = new GameView();
+
+    InputManager::getInstance()->reset();
+
+    _centerGameInViewport();
+  }
+  LOGI("[toPlayingState] finished");
+}
+
+void AppInterface::startGame (int level) {
+  LOGE("startGame(%i)", level);
+  GameManager::getInstance()->setCurrentLevel((size_t)level);
+  GameManager::getInstance()->setState(STATE_PLAYING);
+}
+
+void AppInterface::_cleanupGame () {
+  GameManager::getInstance()->setState(STATE_NONE);
+  delete lvl;
+  lvl = NULL;
+  Game::destroy();
+  delete gameView;
+  gameView = NULL;
+}
+
+
+void AppInterface::toWonState () {
+  LOGE("toWonState");
+  int currentLevel = GameManager::getInstance()->getCurrentLevel();
+  saveProgress(currentLevel+1);
+  const eReward reward = ProgressionManager::getInstance()->getLastReward();
+  _cleanupGame();
+  if (reward != REWARD_NONE) {
+    showMenu((eMenu)reward, currentLevel);
+  } else {
+    showMenu(MENU_WON, currentLevel);
+  }
+}
+
+void AppInterface::toLostState () {
+  _cleanupGame();
+  showMenu(MENU_LOST, GameManager::getInstance()->getCurrentLevel());
+}
+
+void AppInterface::toEndState () {
+  _cleanupGame();
+  showMenu(MENU_END, GameManager::getInstance()->getCurrentLevel());
+}
+
+void AppInterface::toPauseState () {
+  Game::getInstance()->pause();
+}
+
+bool AppInterface::startServer () {
+  LOGI("Starting server...");
+  NetController::registerInstance(new ENetServer());
+  if (NetController::getInstance()->start()) {
+    startGame(0);
+    //TODO: only for debug : server has a different background
+    glClearColor(0.4f, 0, 0, 1);
+    return true;
+  }
+  return false;
+}
+
+bool AppInterface::startClient (const char* serverAddr) {
+  //FIXME: do something with serverAddr
+  LOGI("Starting client...");
+  NetController::registerInstance(new ENetClient(startLevelCallback));
+  return NetController::getInstance()->start();
+}
+
 

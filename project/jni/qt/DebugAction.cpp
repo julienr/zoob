@@ -1,6 +1,6 @@
 #include "DebugAction.h"
 
-DebugAction::DebugAction(const QString& text, QObject* parent, eDebug what)
+DebugAction::DebugAction(const QString& text, QObject* parent, AppInterface::eDebug what)
   : QAction(text, parent),
   what(what) {
   setCheckable(true);

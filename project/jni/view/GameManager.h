@@ -23,17 +23,14 @@ enum eAppState {
   MAX_STATE
 };
 
-class GameManager;
-//Type for a function that will be called when a new game has to be started
-typedef void (*startGameCallback_t) (GameManager* menu);
-//state callback for when switching state
+//callback for state switch
 typedef void (*callback_t) ();
 
 class GameManager {
   public:
-    static void create (startGameCallback_t gameCb,
-                          callback_t continueCb,
-                          int levelLimit) {
+    static void create (callback_t gameCb, //called when new game is started
+                        callback_t continueCb, //called when unpausing game
+                        int levelLimit) {
       instance = new GameManager(gameCb, continueCb, levelLimit);
     }
 
@@ -53,7 +50,7 @@ class GameManager {
   private:
     static GameManager* instance;
 
-    GameManager (startGameCallback_t gameCb, 
+    GameManager (callback_t gameCb, 
                  callback_t continueCb,
                  int levelLimit);
 
@@ -116,7 +113,7 @@ class GameManager {
     }
 
     void newGame () {
-      newGameCB(this);
+      newGameCB();
     }
 
     void nextGame () {
@@ -124,7 +121,7 @@ class GameManager {
       currentLevel++;
       if (currentLevel >= levelLimit)
         levelLimit++;
-      newGameCB(this);
+      newGameCB();
     }
 
     void unpause () {
@@ -173,7 +170,7 @@ class GameManager {
     //apply texture locks required by state s
     void applyLocks ();
 
-    const startGameCallback_t newGameCB;
+    const callback_t newGameCB;
     const callback_t continueCB;
     eAppState state;
     size_t currentLevel;

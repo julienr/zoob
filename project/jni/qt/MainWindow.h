@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow {
 
     InputManager* createInputManager (int gamepad, int trackball) { return gameScreen->createInputManager(gamepad, trackball); }
 
-    void showMenu (eMenu menu, int currentLevel=-1);
+    void showMenu (AppInterface::eMenu menu, int currentLevel=-1);
 
     void selectLevel (int lvl) { menuScreen->selectLevel(lvl); }
     void setServer () { menuScreen->setGameType(SERVER); }
@@ -39,7 +39,7 @@ class MainWindow : public QMainWindow {
 
     void quit ();
 
-    void debugChanged (eDebug what, bool enabled);
+    void debugChanged (AppInterface::eDebug what, bool enabled);
 
   private:
     void createActions ();
@@ -60,7 +60,7 @@ class MainWindow : public QMainWindow {
 
     //Maps a debug option settings name to the debug flag
     //Used for settings
-    QHash<QString, eDebug> debugOptions;
+    QHash<QString, AppInterface::eDebug> debugOptions;
 
     //menu actions
     QMap<QString, DebugAction*> debugActions;

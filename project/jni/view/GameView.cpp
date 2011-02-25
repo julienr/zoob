@@ -93,8 +93,8 @@ void GameView::_drawShadows() const {
   if (shadows.length() != 0) {
     //Use scissor so shadows are clipped to the level area
     glEnable(GL_SCISSOR_TEST);
-    glScissor(XGS(0), YGS(0), Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
-                              Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
+    glScissor(getApp()->XGS(0), getApp()->YGS(0), Game::getInstance()->getLevel()->getWidth() / getApp()->getXScreenToGame(),
+                              Game::getInstance()->getLevel()->getHeight() / getApp()->getYScreenToGame());
     //Shadows
     shadow.bind();
     for (unsigned i = 0; i < shadows.length(); i++)
@@ -139,9 +139,9 @@ void GameView::_drawGame (double elapsedS) {
 
   //Enable scissor for lighting rendering
   glEnable(GL_SCISSOR_TEST);
-  glScissor(XGS(0), YGS(0), 
-            Game::getInstance()->getLevel()->getWidth() / xScreenToGame,
-            Game::getInstance()->getLevel()->getHeight() / yScreenToGame);
+  glScissor(getApp()->XGS(0), getApp()->YGS(0), 
+            Game::getInstance()->getLevel()->getWidth() / getApp()->getXScreenToGame(),
+            Game::getInstance()->getLevel()->getHeight() / getApp()->getYScreenToGame());
 
   _drawLighting();
 

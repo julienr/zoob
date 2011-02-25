@@ -8,16 +8,16 @@
 class DebugAction : public QAction {
   Q_OBJECT
   public:
-    DebugAction(const QString& text, QObject* parent, eDebug what);
+    DebugAction(const QString& text, QObject* parent, AppInterface::eDebug what);
 
   signals:
-    void debugChanged (eDebug what, bool enabled);
+    void debugChanged (AppInterface::eDebug what, bool enabled);
 
   public slots:
     void onChanged (bool checked);
 
   private:
-    const eDebug what; //the debug flag toggled by this action
+    const AppInterface::eDebug what; //the debug flag toggled by this action
 };
 
 #endif

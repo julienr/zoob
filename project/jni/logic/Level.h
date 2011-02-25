@@ -149,7 +149,7 @@ enum eItems {
 //reward screen shown at the end of the level
 enum eReward {
     REWARD_NONE=0,
-    REWARD_BOMB=MENU_LAST,
+    REWARD_BOMB=AppInterface::MENU_LAST,
     REWARD_BOUNCE,
     REWARD_SHIELD,
     REWARD_FIRING

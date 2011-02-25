@@ -12,18 +12,17 @@ GameScreen::GameScreen (MainWindow* parent, const char* json) :
                       QGL::DirectRendering |
                       QGL::NoSampleBuffers)),
   mainWindow(parent) {
-  nativeInit(json);
-  nativeLoadSerie(json);
+  getApp()->init(json);
 }
 
 void GameScreen::keyPressEvent (QKeyEvent* event) {
   LOGE("keyPress");
   switch (event->key()) {
     case Qt::Key_Escape:
-      mainWindow->showMenu(MENU_MAIN);
+      mainWindow->showMenu(AppInterface::MENU_MAIN);
       break;
     case Qt::Key_G:
-      toggleGodMode();
+      getApp()->toggleGodMode();
       break;
   }
 }
@@ -48,28 +47,29 @@ void GameScreen::mouseReleaseEvent (QMouseEvent* event) {
 }
 
 void GameScreen::initializeGL () {
-  nativeInitGL(0, 0, 0, 0);
+  getApp()->initGL(0, 0, 0, 0);
 }
 
 void GameScreen::startGame (int level) {
   makeCurrent(); //this kind of restore the openGL context
-  nativeInitGL(level, 0, 0, 0);
-  ::startGame(level);
+  getApp()->initGL(level, 0, 0, 0);
+  getApp()->startGame(level);
 }
 
 void GameScreen::startMultiplayerGame (int level, bool server) {
   makeCurrent();
-  nativeInitGL(level, 0, 0, 0);
+  getApp()->initGL(level, 0, 0, 0);
   if (server)
-    nativeStartServer();
+    getApp()->startServer();
   else
-    nativeStartClient();
+    getApp()->startClient("localhost"); //FIXME: no hardcoding :)
 }
 
 void GameScreen::resizeGL (int width, int height) {
-  nativeResize(width, height);
+  getApp()->resize(width, height);
 }
 
 void GameScreen::paintGL () {
-  nativeRender();
+  getApp()->simulate();
+  getApp()->render();
 }

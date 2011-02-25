@@ -4,9 +4,9 @@
 
 GameManager* GameManager::instance = NULL;
 
-GameManager::GameManager (startGameCallback_t gameCb,
-             callback_t continueCb,
-             int levelLimit)
+GameManager::GameManager (callback_t gameCb,
+                          callback_t continueCb,
+                          int levelLimit)
   : newGameCB(gameCb),
     continueCB(continueCb),
     currentLevel(levelLimit),

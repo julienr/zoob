@@ -24,5 +24,5 @@ void InterMenu::setText(const char* text) {
 }
 
 void InterMenu::mousePressEvent (QMouseEvent* /*event*/) {
-  window->showMenu(MENU_MAIN);
+  window->showMenu(AppInterface::MENU_MAIN);
 }
