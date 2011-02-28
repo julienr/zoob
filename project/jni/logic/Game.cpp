@@ -107,7 +107,7 @@ void Game::playerSpawned (PlayerTank* tank) {
 void Game::spawnPlayer () {
   PlayerTank* p = new PlayerTank(newPlayerFirePolicy());
   p->setPosition(playerStartPosition);
-  ProgressionManager::getInstance()->setPlayerForm(level, playerTank);
+  ProgressionManager::getInstance()->setPlayerForm(level, p);
   playerSpawned(p);
 }
 
