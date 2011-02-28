@@ -56,14 +56,18 @@ void GameScreen::startGame (int level) {
   getApp()->startGame(level);
 }
 
-void GameScreen::startMultiplayerGame (int level, bool server) {
+void GameScreen::startServer (int level) {
   makeCurrent();
   getApp()->initGL(level, 0, 0, 0);
-  if (server)
-    getApp()->startServer();
-  else
-    getApp()->startClient("localhost"); //FIXME: no hardcoding :)
+  getApp()->startServer();
 }
+
+void GameScreen::startClient (const char* serverAddr) {
+  makeCurrent();
+  getApp()->initGL(1, 0, 0, 0);
+  getApp()->startClient(serverAddr);
+}
+
 
 void GameScreen::resizeGL (int width, int height) {
   getApp()->resize(width, height);

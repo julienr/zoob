@@ -31,6 +31,9 @@ class MenuScreen : public QWidget {
     void setLevelsRange (int min, int max);
 
     int getSelectedLevel ();
+    const char* getServerAddress () const {
+      return serverIP->text().toAscii();
+    }
     eGameType getGameType();
 
     void setGameType (eGameType t) {

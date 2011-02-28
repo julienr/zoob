@@ -96,11 +96,11 @@ void MainWindow::startGame () {
       break;
     case SERVER:
       setStatusTip("server");
-      gameScreen->startMultiplayerGame(level, true);
+      gameScreen->startServer(level);
       break;
     case CLIENT:
       setStatusTip("client");
-      gameScreen->startMultiplayerGame(level, false);
+      gameScreen->startClient(menuScreen->getServerAddress());
       break;
   }
 }
