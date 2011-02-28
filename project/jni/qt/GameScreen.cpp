@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "app.h"
 
-GameScreen::GameScreen (MainWindow* parent, const char* json) :
+GameScreen::GameScreen (MainWindow* parent) :
   QGLWidget(QGLFormat(QGL::DoubleBuffer |
                       QGL::DepthBuffer |
                       QGL::Rgba |
@@ -12,7 +12,6 @@ GameScreen::GameScreen (MainWindow* parent, const char* json) :
                       QGL::DirectRendering |
                       QGL::NoSampleBuffers)),
   mainWindow(parent) {
-  getApp()->init(json);
 }
 
 void GameScreen::keyPressEvent (QKeyEvent* event) {

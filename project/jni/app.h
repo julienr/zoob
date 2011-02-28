@@ -40,17 +40,15 @@ class GameView;
 // It exposes both downcalls (GUI -> Game) and upcalls (Game -> GUI)
 class AppInterface {
   public:
-    AppInterface ();
+    //Create a new instance for the given serie
+    //You MUST call initGL after this constructor as soon as OpenGL context is available
+    AppInterface (FileManager* fm, const char* serieJSON);
     virtual ~AppInterface (); 
 
     //BEGIN downcalls 
 
-    //Initialize the game by loading the given level serie
-    void init (const char* serieJSON);
-
     //Performs all OpenGL-related initialisation. Can also be used to register state 
     //(levelLimit, difficulty) changes
-    //  init() MUST have been called before
     //Not that this method might be called multiple times and it should handle it fine.
     //
     //For example, on Android, after the application resume from a pause, all the OpenGL context
@@ -131,9 +129,6 @@ class AppInterface {
     //so the input manager can allocate openGL resources
     virtual InputManager* createInputManager (bool useGamepad, bool useTrackball) = 0;
 
-    virtual FileManager* createFileManager () = 0;
-
-
     //Utility functions to transform window coordinates to our internal coordinate system
     //transforms x/y screen coordinate to game coordinate
     float XSG (const float x) const;
@@ -168,7 +163,6 @@ class AppInterface {
     void toLostState ();
     void toEndState ();
     void toPauseState ();
-
 
   private:
     //Center game area in viewport. Updates transX, transY
@@ -211,7 +205,6 @@ class AppInterface {
 
     Level* lvl;
     GameView* gameView;
-
 };
 
 #endif

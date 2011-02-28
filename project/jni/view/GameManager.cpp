@@ -5,12 +5,11 @@
 GameManager* GameManager::instance = NULL;
 
 GameManager::GameManager (callback_t gameCb,
-                          callback_t continueCb,
-                          int levelLimit)
+                          callback_t continueCb)
   : newGameCB(gameCb),
     continueCB(continueCb),
-    currentLevel(levelLimit),
-    levelLimit(levelLimit),
+    currentLevel(0),
+    levelLimit(0),
     stateTransition(-1),
     transitionDelay(0) {
   menus[STATE_PLAYING] = NULL;

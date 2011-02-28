@@ -13,7 +13,7 @@ class MainWindow;
 
 class GameScreen : public QGLWidget {
   public:
-    GameScreen (MainWindow* parent, const char* json);
+    GameScreen (MainWindow* parent);
 
     void keyPressEvent (QKeyEvent *event);
     void mouseMoveEvent (QMouseEvent *event);

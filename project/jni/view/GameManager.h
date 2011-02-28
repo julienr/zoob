@@ -29,9 +29,8 @@ typedef void (*callback_t) ();
 class GameManager {
   public:
     static void create (callback_t gameCb, //called when new game is started
-                        callback_t continueCb, //called when unpausing game
-                        int levelLimit) {
-      instance = new GameManager(gameCb, continueCb, levelLimit);
+                        callback_t continueCb) { //called when unpausing game
+      instance = new GameManager(gameCb, continueCb);
     }
 
     inline
@@ -51,8 +50,7 @@ class GameManager {
     static GameManager* instance;
 
     GameManager (callback_t gameCb, 
-                 callback_t continueCb,
-                 int levelLimit);
+                 callback_t continueCb);
 
     ~GameManager () {
       for (int i=0; i<MAX_STATE; i++)

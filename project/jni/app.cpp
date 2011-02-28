@@ -75,7 +75,7 @@ void toPlayingCallback () {
   getApp()->toPlayingState();
 }
 
-AppInterface::AppInterface ()
+AppInterface::AppInterface (FileManager* fm, const char* serie)
   : initialized(false),
     transX(0),
     transY(0),
@@ -84,6 +84,9 @@ AppInterface::AppInterface ()
     debugFlags(0),
     lvl(NULL),
     gameView(NULL) {
+  srand(Utils::getCurrentTimeMillis());
+  FileManager::registerInstance(fm);
+  LevelManager::registerInstance(new LevelSerieManager(serie));
 }
 
 AppInterface::~AppInterface () {
@@ -99,19 +102,13 @@ AppInterface::~AppInterface () {
   delete gameView;
 }
 
-void AppInterface::init (const char* serie) {
-  srand(Utils::getCurrentTimeMillis());
-  FileManager::registerInstance(createFileManager());
-  LevelManager::registerInstance(new LevelSerieManager(serie));
-}
-
 void AppInterface::initGL(int levelLimit, int difficulty, bool useGamepad, bool useTrackball) {
   if (!initialized) {
     initialized = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGameCallback, gameUnPauseCallback, levelLimit);
+    GameManager::create(startGameCallback, gameUnPauseCallback);
     GameManager* gm = GameManager::getInstance();
     gm->setStateCallback(STATE_WON, toWonCallback);
     gm->setStateCallback(STATE_LOST, toLostCallback);
@@ -123,7 +120,6 @@ void AppInterface::initGL(int levelLimit, int difficulty, bool useGamepad, bool 
 
     Square::create();
     Circle::create();
-
 
     //To avoid noticeable disk access on first explosion, preload them here
     TextureManager::getInstance()->getGroup(TEX_GROUP_GAME)->get("assets/sprites/expl_light.png");

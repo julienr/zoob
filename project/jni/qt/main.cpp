@@ -17,18 +17,14 @@ static MainWindow* window = NULL;
 
 class AppQT : public AppInterface {
   public:
-    AppQT (const char* resourcesDir)
-      : resourcesDir(resourcesDir) {}
+    AppQT (const char* resourcesDir, const char* serie)
+      : AppInterface(new FSFileManager(resourcesDir), serie) {}
 
     virtual InputManager* createInputManager (bool useGamepad, bool useTrackball);
-
-    virtual FileManager* createFileManager ();
 
     virtual void saveProgress (int level);
 
     virtual void showMenu (eMenu id, int currentLevel);
-  private:
-    const char* resourcesDir;
 };
 
 void AppQT::saveProgress (int level) {
@@ -42,10 +38,6 @@ void AppQT::showMenu (eMenu id, int currentLevel) {
 
 InputManager* AppQT::createInputManager (bool useGamepad, bool useTrackball) {
   return window->createInputManager(useGamepad, useTrackball);
-}
-
-FileManager* AppQT::createFileManager () {
-  return new FSFileManager(resourcesDir); 
 }
 
 char* loadJSON (const char* serieFile) {
@@ -103,9 +95,9 @@ int main (int argc, char** argv) {
   const char* resourcesDir = hasArgs?argv[2]:"../../";
 
 
-  appInterface = new AppQT(resourcesDir);
+  appInterface = new AppQT(resourcesDir, json);
   //Main window creation
-  window = new MainWindow(json);
+  window = new MainWindow();
   free(json);
   window->resize(640, 480);
   window->show();

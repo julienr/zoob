@@ -5,11 +5,12 @@
 #include <QStatusBar>
 #include "DebugAction.h"
 #include "jansson.h"
+#include "levels/LevelManager.h"
 
-MainWindow::MainWindow(const char* serieJSON) 
+MainWindow::MainWindow() 
   : QMainWindow(),
     menuScreen(new MenuScreen(this)),
-    gameScreen(new GameScreen(this, serieJSON)),
+    gameScreen(new GameScreen(this)),
     menuInter(new InterMenu(this)),
     layout(new QStackedLayout),
     statusBar(new QStatusBar) {
@@ -24,16 +25,7 @@ MainWindow::MainWindow(const char* serieJSON)
   layout->addWidget(menuInter);
   layout->setCurrentWidget(menuScreen);
 
-  json_error_t error;
-  json_t* json = json_loads(serieJSON, &error);
-  if (!json) {
-    LOGE("Error loading serie : %s (at line %i)", error.text, error.line);
-  } else {
-    json_t* levelsArr = json_object_get(json, "levels");
-    menuScreen->setLevelsRange(0, json_array_size(levelsArr)-1);
-    json_decref(levelsArr);
-    json_decref(json);
-  }
+  menuScreen->setLevelsRange(0, LevelManager::getInstance()->getNumLevels()-1);
 
   debugOptions["Visibility"] = AppInterface::DEBUG_VISIBILITY;
   debugOptions["AI"] = AppInterface::DEBUG_AI;
