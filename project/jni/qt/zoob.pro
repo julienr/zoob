@@ -22,8 +22,9 @@ QMAKE_LFLAGS_DEBUG += -g
 
 # Input
 #qt specific first
-HEADERS += GameScreen.h MainWindow.h MenuScreen.h InterMenu.h DebugAction.h
-SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp InterMenu.cpp DebugAction.cpp
+HEADERS += GameScreen.h MainWindow.h MenuScreen.h InterMenu.h DebugAction.h 
+SOURCES += main.cpp MainWindow.cpp MenuScreen.cpp GameScreen.cpp InterMenu.cpp DebugAction.cpp 
+
 #zoob (copied from Android.mk, but changed assignation to = instead of :=)
 LOCAL_SRC_FILES = \
 		app.cpp \

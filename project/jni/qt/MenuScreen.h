@@ -6,6 +6,12 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QSettings>
+#include <QLineEdit>
 
 class MainWindow;
 
@@ -16,6 +22,7 @@ enum eGameType {
 };
 
 class MenuScreen : public QWidget {
+  Q_OBJECT
   public:
     MenuScreen (MainWindow* parent);
 
@@ -27,16 +34,23 @@ class MenuScreen : public QWidget {
     eGameType getGameType();
 
     void setGameType (eGameType t) {
-      gameType->setCurrentIndex(gameType->findData(t));
+      gameType->button(t)->setChecked(true);
     }
 
     void selectLevel (int level);
     void nextLevel ();
+  public slots:
+    void gameTypeChanged (int id);
+
   private:
+    QSettings settings;
     QSpinBox* levelsSpin;
-    QComboBox* gameType;
+    QWidget* levelOption;
+    QLineEdit* serverIP;
+    QWidget* ipOption;
     QPushButton* playBtn;
     QVBoxLayout* layout;
+    QButtonGroup* gameType;
 };
 
 #endif

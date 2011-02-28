@@ -75,7 +75,7 @@ void MainWindow::createActions () {
   for (QHash<QString,AppInterface::eDebug>::iterator i=debugOptions.begin(); i!=debugOptions.end(); i++) {
     DebugAction* a = new DebugAction(i.key(), this, i.value());
     debugActions[i.key()] = a;
-    connect(a, SIGNAL(debugChanged(eDebug, bool)), this, SLOT(debugChanged(eDebug, bool)));
+    connect(a, SIGNAL(debugChanged(AppInterface::eDebug, bool)), this, SLOT(debugChanged(AppInterface::eDebug, bool)));
   }
 }
 

@@ -114,7 +114,7 @@ int main (int argc, char** argv) {
   //-l1 specify the level
   //-s specify start as network server
   //-c specify start as network client
-  bool immediateStart;
+  bool immediateStart = false;
   int opt;
   while ((opt = getopt(argc, argv, "l:sc")) != -1) {
     switch (opt) {
