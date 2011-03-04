@@ -46,24 +46,24 @@ void GameScreen::mouseReleaseEvent (QMouseEvent* event) {
 }
 
 void GameScreen::initializeGL () {
-  getApp()->initGL(0, 0, 0, 0);
+  getApp()->initGL(0, 0, 0);
 }
 
 void GameScreen::startGame (int level) {
   makeCurrent(); //this kind of restore the openGL context
-  getApp()->initGL(level, 0, 0, 0);
+  getApp()->initGL(0, 0, 0);
   getApp()->startGame(level);
 }
 
 void GameScreen::startServer (int level) {
   makeCurrent();
-  getApp()->initGL(level, 0, 0, 0);
-  getApp()->startServer();
+  getApp()->initGL(0, 0, 0);
+  getApp()->startServer(level);
 }
 
 void GameScreen::startClient (const char* serverAddr) {
   makeCurrent();
-  getApp()->initGL(1, 0, 0, 0);
+  getApp()->initGL(0, 0, 0);
   getApp()->startClient(serverAddr);
 }
 

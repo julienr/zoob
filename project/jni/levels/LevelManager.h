@@ -15,6 +15,11 @@ class LevelManager {
       return instance;
     }
 
+    static void destroy () {
+      delete instance;
+      instance = NULL;
+    }
+
     virtual ~LevelManager () {}
 
     virtual Level* loadLevel (int levelNum) const = 0;

@@ -53,15 +53,13 @@ class AppInterface {
     //
     //For example, on Android, after the application resume from a pause, all the OpenGL context
     //should be reinitialised. Therefore, this function is called again
-    //  - 'levelLimit' specify the level limit (the player can choose levels in the range [0, level limit])
     //  - 'difficulty' specify the difficulty
     //  - 'useGamepad' if true, a virtual gamePad will be displayed
     //  - 'useTrackball' if true, a cursor controlled by the trackball will be displayed
-    void initGL (int levelLimit, int difficulty, bool useGamepad, bool useTrackball);
+    void initGL (int difficulty, bool useGamepad, bool useTrackball);
 
     //Resizes the game viewport
     void resize (int newW, int newH);
-
 
     //Perform logic simulation
     void simulate ();
@@ -76,7 +74,7 @@ class AppInterface {
     void stopGame ();
 
     //Starts a multiplayer server. Returns false on error
-    bool startServer ();
+    bool startServer (int level);
 
     //Starts a multiplayer client that will connect to the given server. Returns false on error
     bool startClient (const char* serverAddr);
@@ -174,6 +172,8 @@ class AppInterface {
 
     //Stop the current game and goes to STATE_NONE
     void _cleanupGame ();
+
+    void _createGameManager ();
 
     //Since initGL will be called on app creation AND each time the opengl 
     //context is recreated, this indicate if we're at app creation (false) or

@@ -196,8 +196,9 @@ void GameView::_drawGame (double elapsedS) {
       const char* playerName = game->getPlayerName(t->getID());
       if (playerName) {
         GLW::color(BLACK);
-        fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y);
+        fontlib::FontHelper::drawCenteredAt(font, game->getPlayerName(t->getID()), 0.5, tp.x, tp.y, false);
         GLW::color(WHITE);
+        GLW::enableTextures();
       }
     }
   }

@@ -83,7 +83,7 @@ int main (int argc, char** argv) {
     //exit(-1);
   }
 
-  char* json = loadJSON(hasArgs?argv[1]:"../../../levels/test2.json");
+  char* json = loadJSON(hasArgs?argv[1]:"../../../levels/original.json");
 
   QApplication app(argc, argv);
 

@@ -5,13 +5,17 @@
 GameManager* GameManager::instance = NULL;
 
 GameManager::GameManager (callback_t gameCb,
-                          callback_t continueCb)
+                          callback_t continueCb,
+                          const LevelManager* lvlManager)
   : newGameCB(gameCb),
     continueCB(continueCb),
     currentLevel(0),
-    levelLimit(0),
+    lvlManager(lvlManager),
     stateTransition(-1),
     transitionDelay(0) {
+  for (int i=0; i<MAX_STATE; i++)
+    menus[i] = NULL;
+
   menus[STATE_PLAYING] = NULL;
   menus[STATE_PAUSED] = new PausedMenu(this);
 

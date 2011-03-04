@@ -29,8 +29,9 @@ typedef void (*callback_t) ();
 class GameManager {
   public:
     static void create (callback_t gameCb, //called when new game is started
-                        callback_t continueCb) { //called when unpausing game
-      instance = new GameManager(gameCb, continueCb);
+                        callback_t continueCb,
+                        const LevelManager* lvlManager) { //called when unpausing game
+      instance = new GameManager(gameCb, continueCb, lvlManager);
     }
 
     inline
@@ -50,10 +51,12 @@ class GameManager {
     static GameManager* instance;
 
     GameManager (callback_t gameCb, 
-                 callback_t continueCb);
+                 callback_t continueCb,
+                 const LevelManager* lvlManager);
 
     ~GameManager () {
       for (int i=0; i<MAX_STATE; i++)
+        if (menus[i])
           delete menus[i];
     }
   public:
@@ -117,18 +120,11 @@ class GameManager {
     void nextGame () {
       ASSERT(hasMoreLevels());
       currentLevel++;
-      if (currentLevel >= levelLimit)
-        levelLimit++;
       newGameCB();
     }
 
     void unpause () {
       continueCB();
-    }
-
-    //Based on this player's progress, the biggest completed level to date
-    void setLevelLimit (size_t level) {
-      levelLimit = level;
     }
 
     void setCurrentLevel (size_t level) {
@@ -137,7 +133,7 @@ class GameManager {
 
     inline
     bool isAtLevelLimit () {
-      return currentLevel >= levelLimit;
+      return currentLevel >= lvlManager->getNumLevels();
     }
 
     inline
@@ -178,7 +174,7 @@ class GameManager {
     eAppState stateAtTouchDown;
 
     Menu* menus[MAX_STATE];
-    size_t levelLimit;
+    const LevelManager* lvlManager;
 
     //When input is threaded (as it is on Android), it shouldn't try to change states directly, because
     //they might involve openGL related calls (loading/unloading texture groups).

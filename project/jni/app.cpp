@@ -102,19 +102,23 @@ AppInterface::~AppInterface () {
   delete gameView;
 }
 
-void AppInterface::initGL(int levelLimit, int difficulty, bool useGamepad, bool useTrackball) {
+void AppInterface::_createGameManager () {
+  GameManager::create(startGameCallback, gameUnPauseCallback, LevelManager::getInstance());
+  GameManager* gm = GameManager::getInstance();
+  gm->setStateCallback(STATE_WON, toWonCallback);
+  gm->setStateCallback(STATE_LOST, toLostCallback);
+  gm->setStateCallback(STATE_END, toEndCallback);
+  gm->setStateCallback(STATE_PLAYING, toPlayingCallback);
+  gm->setStateCallback(STATE_PAUSED, toPauseCallback);
+}
+
+void AppInterface::initGL(int difficulty, bool useGamepad, bool useTrackball) {
   if (!initialized) {
     initialized = true;
     Difficulty::setDifficulty(difficulty);
     //This is the first time initialisation, we HAVE to instantiate 
     //game manager here because it requires textures
-    GameManager::create(startGameCallback, gameUnPauseCallback);
-    GameManager* gm = GameManager::getInstance();
-    gm->setStateCallback(STATE_WON, toWonCallback);
-    gm->setStateCallback(STATE_LOST, toLostCallback);
-    gm->setStateCallback(STATE_END, toEndCallback);
-    gm->setStateCallback(STATE_PLAYING, toPlayingCallback);
-    gm->setStateCallback(STATE_PAUSED, toPauseCallback);
+    _createGameManager();
 
     InputManager::registerInstance(createInputManager(useGamepad, useTrackball));
 
@@ -140,7 +144,6 @@ void AppInterface::initGL(int levelLimit, int difficulty, bool useGamepad, bool 
     //need to reload textures (GL context might have been destroyed)
     TextureManager::getInstance()->reloadAll();
 
-    GameManager::getInstance()->setLevelLimit(levelLimit);
     if (GameManager::getInstance()->inGame())
       _centerGameInViewport();
   }
@@ -445,7 +448,10 @@ void AppInterface::onGameUnPaused () {
 }
 
 void AppInterface::startLevel (const char* levelJSON) {
+  LevelManager::destroy();
+  GameManager::destroy();
   LevelManager::registerInstance(new SingleLevelManager(levelJSON));
+  _createGameManager();
   startGame(0);
 }
 
@@ -525,11 +531,11 @@ void AppInterface::toPauseState () {
   Game::getInstance()->pause();
 }
 
-bool AppInterface::startServer () {
+bool AppInterface::startServer (int level) {
   LOGI("Starting server...");
   NetController::registerInstance(new ENetServer());
   if (NetController::getInstance()->start()) {
-    startGame(0);
+    startGame(level);
     //TODO: only for debug : server has a different background
     glClearColor(0.4f, 0, 0, 1);
     return true;
