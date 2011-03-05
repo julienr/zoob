@@ -118,6 +118,13 @@ class AppInterface {
     //Asks the GUI to display the given Menu. Also pass the current level along
     virtual void showMenu (eMenu id, int currentLevel) = 0;
 
+    //WARNING: this has to be kept in sync with java code
+    //Possible error messages
+    enum eError {
+      ERR_NETWORK_TIMEOUT=0
+    };
+    virtual void showError (eError err) = 0;
+
     //END upcalls
     
     //This function should allocate a new InputManager and return it. It shouldn't 

@@ -338,7 +338,13 @@ void AppInterface::simulate () {
 
   //If we are in a networked game, let the netcontroller think
   if (NetController::isNetworkedGame()) {
-    NetController::getInstance()->think(elapsedS);
+    if (NetController::getInstance()->hasTimedOut()) {
+      //Controlled has timed out. Most likely, the client cannot connect to the server
+      //or a network error occured.. Display error message to player
+      getApp()->showError(ERR_NETWORK_TIMEOUT);
+    } else {
+      NetController::getInstance()->think(elapsedS);
+    }
   }
  
   glClear(GL_COLOR_BUFFER_BIT);
@@ -544,9 +550,8 @@ bool AppInterface::startServer (int level) {
 }
 
 bool AppInterface::startClient (const char* serverAddr) {
-  //FIXME: do something with serverAddr
   LOGI("Starting client...");
-  NetController::registerInstance(new ENetClient(startLevelCallback));
+  NetController::registerInstance(new ENetClient(startLevelCallback, serverAddr));
   return NetController::getInstance()->start();
 }
 

@@ -6,6 +6,8 @@ void ENetClient::think (double /*elapsedS*/) {
   while (enet_host_service(client, &event, 0) > 0) {
     switch (event.type) {
       case ENET_EVENT_TYPE_CONNECT: {
+        LOGI("ENET connected... sending HELLO");
+        connected = true;
         zoobmsg::Hello hello;
         hello.nickname.numBytes = 5;
         hello.nickname.bytes = new char[5];
@@ -49,6 +51,17 @@ void ENetClient::think (double /*elapsedS*/) {
   }
 }
 
+bool ENetClient::hasTimedOut () const {
+  if (connected)
+    return false;
+
+  const double now = Utils::getCurrentTimeMillis();
+  if ((now-connectionAttemptStarted) > timeout)
+    return true;
+  else
+    return false;
+}
+
 void ENetClient::stop () {
   LOGI("[ENetClient] client finished");
   enet_host_destroy(client);
@@ -61,6 +74,7 @@ bool ENetClient::start () {
     //TODO: call error method
     return false;
   }
+  LOGI("ENET initialized");
 
   //Create client
   client = enet_host_create(NULL, 1, NUM_CHANNELS, 0, 0);
@@ -69,16 +83,21 @@ bool ENetClient::start () {
     //TODO: call error method
     return false;
   }
+  LOGI("ENET client created");
 
   //Connect to server
   ENetAddress address = {0,0};
-  enet_address_set_host(&address, "localhost");
+  enet_address_set_host(&address, serverAddr);
   address.port = SERVER_PORT;
+
+  LOGI("Connecting to %s", serverAddr);
+  connectionAttemptStarted = Utils::getCurrentTimeMillis();
 
   serverPeer = enet_host_connect(client, &address, NUM_CHANNELS, 0);
   if (serverPeer == NULL) {
     return false;
   }
+  LOGI("Connected, server peer created, waiting for EVENT_TYPE_CONNECT");
   return true;
 }
 

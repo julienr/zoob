@@ -57,6 +57,14 @@ class ZoobGLSurface extends GLSurfaceView {
 		mRenderer.setLevel(level);
 	}
 	
+	public void startServer (int level) {
+		mRenderer.startServer(level);
+	}
+	
+	public void startClient (String serverAddress) {
+		mRenderer.startClient(serverAddress);
+	}
+	
 	@Override
 	public void onResume () {
 		super.onResume();
@@ -119,6 +127,8 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	private boolean restoreGL = false; //notify this renderer that it should restore opengl context (the app was resumed from sleep)
 	
 	private int nextLevel = -1; //if set to something different than -1, indicate the next lvl to start (in the next onDrawFrame)
+	private boolean startServer = false; //if nextLevel != -1, indicate wether we should start a local game (false) or a server (true)
+	private String servAddr = null; //if not null, will trigger the next drawFrame to start a client that will connect to this address
 
 	//This constructor is not ran in the rendering thread (but in the surface thread)
 	public ZoobRenderer (Zoob context, ZoobApplication app, String levelsSerie, ZoobGLSurface surface) {
@@ -172,7 +182,19 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	
 	public void setLevel (int level) {
 		nextLevel = level;
+		startServer = false;
 		triggerRestoreGL(); //some stuff (such as preferences) might have changed
+	}
+	
+	public void startServer (int level) {
+		nextLevel = level;
+		startServer = true;
+		triggerRestoreGL();
+	}
+	
+	public void startClient (String serverAddress) {
+		servAddr = serverAddress;
+		triggerRestoreGL();
 	}
 
 	public void onDrawFrame(GL10 gl) {
@@ -183,9 +205,18 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		}
 		
 		if (nextLevel != -1) {
-			Log.i(TAG, "nextLevel = " + nextLevel);
-			nativeStartGame(nextLevel);
+			if (startServer) {
+				nativeStartServer(nextLevel);
+			} else {
+				nativeStartGame(nextLevel);				
+			}
 			nextLevel = -1;
+			startServer = false;
+		}
+		
+		if (servAddr != null) {
+			nativeStartClient(servAddr);
+			servAddr = null;
 		}
 		
 		//process commands
@@ -244,6 +275,8 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	private static native void nativeInit(String apkPath, ZoobRenderer app, String serieJSON);
 	
 	private static native void nativeStartGame(int level);
+	private static native void nativeStartServer(int level);
+	private static native void nativeStartClient(String serverAddr);
 	
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
@@ -275,5 +308,9 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 
 	public void showMenu (int id, int currentLevel) {
 		context.showMenu(id, currentLevel);
+	}
+	
+	public void showError (int err) {
+		context.showError(err);
 	}
 }

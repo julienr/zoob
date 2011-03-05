@@ -32,6 +32,11 @@ class AppQT : public AppInterface {
       LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
       window->showMenu((eMenu)id, currentLevel);
     }
+
+    virtual void showError (eError err) {
+      LOGE("showError : %i", err);
+      //TODO: show in QT
+    }
 };
 
 char* loadJSON (const char* serieFile) {

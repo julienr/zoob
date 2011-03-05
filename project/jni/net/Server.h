@@ -42,6 +42,10 @@ class Server : public NetController {
     //already handled by local game simulation
     void wantSpawn ();
 
+    bool hasTimedOut () const {
+      return false; //Server can't time out
+    }
+
     ServerState getState () {
       return state;
     }

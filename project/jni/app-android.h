@@ -18,10 +18,16 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
 /*
  * Class:     net_fhtagn_zoob_zoobRenderer
  * Method:    nativeStartGame
- * Signature: (S)V
+ * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartGame
   (JNIEnv *, jclass, int);
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartServer
+  (JNIEnv *, jclass, int);
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartClient
+  (JNIEnv *, jclass, jstring);
 
 
 /*

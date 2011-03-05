@@ -19,6 +19,8 @@ class Client : public NetController {
     virtual void stop () = 0;
     virtual void think (double elapsedS) = 0;
 
+    virtual bool hasTimedOut () const = 0;
+
     void update(NetworkedGame* game);
     void sendPlayerCommand (uint16_t localPlayerID, const PlayerCommand& cmd);
 

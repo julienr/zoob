@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+    <EditText android:id="@+id/server_ip"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:inputType="text|textNoSuggestions"
+      android:hint="@string/server_ip" />
+    <Button android:id="@+id/btn_connect"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/btn_connect" />
+</LinearLayout>

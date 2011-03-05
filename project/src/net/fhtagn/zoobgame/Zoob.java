@@ -84,6 +84,11 @@ public class Zoob extends Activity {
 	static final int MENU_MULTI = 11;
 	static final int MENU_LAST = 12;
 	
+	//Error
+	//BEGIN:Java equivalent of app.h eError
+	static final int ERROR_NETWORK_TIMEOUT = 0;
+	static final int ERROR_LAST = 1;
+	
 	private MainMenuView mainMenu;
 	private WonView wonView;
 	private LostView lostView;
@@ -237,9 +242,22 @@ public class Zoob extends Activity {
 		}
 	}
 	
+	//Start a new local game
 	public void play (int level) {
 		showView(MENU_PLAY);
 		mGLView.setLevel(level);
+	}
+	
+	//Start a game as server
+	public void playServer (int level) {
+		showView(MENU_PLAY);
+		mGLView.startServer(level);
+	}
+	
+	//Start a game as client
+	public void playClient (String address) {
+		showView(MENU_PLAY);
+		mGLView.startClient(address);
 	}
 	
 	@Override
@@ -387,6 +405,22 @@ public class Zoob extends Activity {
 					iv.setCurrentLevel(currentLevel);
 				}
 				showView(id);
+			}
+		});
+	}
+	
+	public void showError (final int err) {
+		runOnUiThread(new Runnable() {
+			public void run () {
+				switch (err) {
+					case ERROR_NETWORK_TIMEOUT:
+						Toast.makeText(Zoob.this, R.string.error_network_timeout, Toast.LENGTH_LONG);
+						showView(MENU_MAIN);
+						break;
+					default:
+						Log.e(TAG, "showError("+err+"), err > ERROR_LAST");
+						break;
+				}
 			}
 		});
 	}

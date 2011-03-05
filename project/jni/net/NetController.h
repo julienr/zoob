@@ -56,6 +56,10 @@ class NetController {
     //Called when the local player wants to spawn in the game
     virtual void wantSpawn () = 0;
 
+    //If this returns true, this means this netcontroller's connection has timed out 
+    //and it should be destroyed. The app should display an error message to the user
+    virtual bool hasTimedOut () const = 0;
+
   private:
     static NetController* instance;
 };

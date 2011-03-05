@@ -54,6 +54,9 @@
     <string name="server_ip">Enter server IP address</string>
     <string name="btn_connect">Connect</string>
     
+    <!--  Error string -->
+    <string name="error_network_timeout">Error : network timeout</string>
+    
     <!--  help  -->
     <string name="help_title">welcome to zoob !</string>
     <string name="help_content">

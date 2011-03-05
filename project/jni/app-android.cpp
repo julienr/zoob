@@ -11,18 +11,19 @@ static jclass zoobRendererClass;
 static jobject zoobRenderer;
 static jmethodID java_saveProgress;
 static jmethodID java_showMenu;
+static jmethodID java_showError;
 
 class AppAndroid : public AppInterface {
   public:
     AppAndroid (const char* apkPath, const char* serie)
       : AppInterface(new APKFileManager(apkPath), serie) {}
 
-    virtual InputManager* createInputManager (bool useGamepad, bool useTrackball) {
+    InputManager* createInputManager (bool useGamepad, bool useTrackball) {
       inputManager = new AndroidInputManager(useGamepad, useTrackball);
       return inputManager;
     }
 
-    virtual void saveProgress (int level) {
+    void saveProgress (int level) {
       LOGE("saveProgress : %i", level);
       jniEnv->CallVoidMethod(zoobRenderer, java_saveProgress, level);
     }
@@ -30,6 +31,11 @@ class AppAndroid : public AppInterface {
     void showMenu (eMenu id, int currentLevel) {
       LOGE("showMenu : %i, currentLevel : %i", id, currentLevel);
       jniEnv->CallVoidMethod(zoobRenderer, java_showMenu, (int)id, currentLevel);
+    }
+
+    void showError (eError err) {
+      LOGE("showError : %i", err);
+      jniEnv->CallVoidMethod(zoobRenderer, java_showError, (int)err);
     }
 
     AndroidInputManager* getInputManager () const {
@@ -67,6 +73,7 @@ static void init_for_upcall (JNIEnv* env, jobject zoob) {
 
   JNI_GET_METHOD(java_saveProgress, "saveProgress", "(I)V");
   JNI_GET_METHOD(java_showMenu, "showMenu", "(II)V");
+  JNI_GET_METHOD(java_showError, "showError", "(I)V");
 }
 
 /**
@@ -85,9 +92,21 @@ JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInit
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartGame
-  (JNIEnv *, jclass, int lvl) {
-  
+  (JNIEnv *, jclass, int lvl) {  
   appInterface->startGame(lvl);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartServer
+  (JNIEnv *, jclass, int lvl) {
+  appInterface->startServer(lvl);
+}
+
+JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeStartClient
+  (JNIEnv * env, jclass, jstring serverAddress) {
+  const char* address = env->GetStringUTFChars(serverAddress, NULL);
+  appInterface->startClient(address);
+  env->ReleaseStringUTFChars(serverAddress, address);
+
 }
 
 JNIEXPORT void JNICALL Java_net_fhtagn_zoobgame_ZoobRenderer_nativeInitGL
