@@ -20,25 +20,19 @@ class AppQT : public AppInterface {
     AppQT (const char* resourcesDir, const char* serie)
       : AppInterface(new FSFileManager(resourcesDir), serie) {}
 
-    virtual InputManager* createInputManager (bool useGamepad, bool useTrackball);
+    virtual InputManager* createInputManager (bool useGamepad, bool useTrackball) {
+      return window->createInputManager(useGamepad, useTrackball);
+    }
 
-    virtual void saveProgress (int level);
+    virtual void saveProgress (int level) {
+      LOGE("saveProgress : %i", level);
+    }
 
-    virtual void showMenu (eMenu id, int currentLevel);
+    virtual void showMenu (eMenu id, int currentLevel) {
+      LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
+      window->showMenu((eMenu)id, currentLevel);
+    }
 };
-
-void AppQT::saveProgress (int level) {
-  LOGE("saveProgress : %i", level);
-}
-
-void AppQT::showMenu (eMenu id, int currentLevel) {
-  LOGE("showMenu (%i) with currentLevel=%i", id, currentLevel);
-  window->showMenu((eMenu)id, currentLevel);
-}
-
-InputManager* AppQT::createInputManager (bool useGamepad, bool useTrackball) {
-  return window->createInputManager(useGamepad, useTrackball);
-}
 
 char* loadJSON (const char* serieFile) {
   FILE* file = fopen(serieFile, "r");

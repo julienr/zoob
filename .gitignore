@@ -1,12 +1,11 @@
 add_rewards.py
-bugs_html
-demo
+bugs_html/
+demo/
 doc/_build
-help
-html
-levels
-market
-orig_images
+help/
+html/
+market/
+orig_images/
 project/.settings
 project/bin
 project/build.xml
@@ -37,5 +36,5 @@ project/kill_zoob.sh
 project/libs/armeabi
 project/local.properties
 project/run.sh
-project/update_project.sh
+project/update_./project.sh
 zoob-linux*

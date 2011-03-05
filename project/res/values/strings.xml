@@ -46,8 +46,13 @@
     <string name="editor">Level editor</string>
     
     <string name="menu_buy_full">Buy full</string>
+    <string name="multiplayer">Multiplayer</string>
     
     <string name="ok">Ok</string>
+    
+    <!--  Multiplayer menu -->
+    <string name="server_ip">Enter server IP address</string>
+    <string name="btn_connect">Connect</string>
     
     <!--  help  -->
     <string name="help_title">welcome to zoob !</string>

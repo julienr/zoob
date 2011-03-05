@@ -136,7 +136,7 @@ public class ZoobApplication extends Application {
 		        final int progress = b.getProgress();
 		        Log.i(TAG, "old progress : " + progress);
 		        //just take care of not removing progress
-		        if (progress > getLevel()) {
+		        if (progress > getProgress()) {
 		        	saveProgress(progress);
 		        
 			  			SharedPreferences.Editor editor = settings.edit();
@@ -173,7 +173,8 @@ public class ZoobApplication extends Application {
 		progressPersistent = persistent;
 	}
 	
-	public synchronized int getLevel () {
+	//Returns the max playable level (depends on player's progress) in this serie
+	public synchronized int getProgress () {
 		if (progressPersistent) {
 			Cursor cur = getContentResolver().query(currentSerie, new String[]{Series.PROGRESS, Series.NUM_LEVELS}, null, null, null);
 			if (!cur.moveToFirst()) {
@@ -196,7 +197,7 @@ public class ZoobApplication extends Application {
 	public synchronized void saveProgress (int level) {
 		if (progressPersistent) {
 			ContentValues values = new ContentValues();
-			int currentProgress = getLevel();
+			int currentProgress = getProgress();
 			if (level > currentProgress) {
 				Log.i(TAG, "saveProgress : current="+currentProgress+", new=" + level);
 				values.put(Series.PROGRESS, level);

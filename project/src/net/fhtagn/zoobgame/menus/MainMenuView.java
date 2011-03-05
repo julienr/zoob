@@ -37,13 +37,13 @@ import com.mobclix.android.sdk.MobclixIABRectangleMAdView;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 
 
-public class MainMenuView extends FrameLayout {
+public class MainMenuView extends MenuView {
 	static final String TAG = "MainMenu";
 	
 	private final Zoob activity;
 	
 	public MainMenuView(Zoob activity) {
-	  super(activity);
+	  super(activity, R.id.container);
 	  this.activity = activity;
 	  LayoutInflater inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	  this.addView(inflater.inflate(R.layout.mainmenu, null), 
@@ -78,7 +78,7 @@ public class MainMenuView extends FrameLayout {
 		JSONObject serieJSON = app.getSerieJSON();
 		try {
 			JSONArray lvlArray = serieJSON.getJSONArray("levels");
-			int lastLevel = Math.min(app.getLevel(), lvlArray.length() - 1);
+			int lastLevel = Math.min(app.getProgress(), lvlArray.length() - 1);
 			String[] levels = new String[lastLevel + 1];
 			for (int i = 0; i <= lastLevel; i++)
 				levels[i] = "" + i;
@@ -96,12 +96,7 @@ public class MainMenuView extends FrameLayout {
 	}
 	
   private void setupButtons () {
- 	 //FIXME: for a strange reason, this doesn't work from the XML, so do it programmatically  
-   LinearLayout container = (LinearLayout)findViewById(R.id.container);
-   BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.backrepeat);
-   bg.setTileModeX(TileMode.REPEAT);
-   bg.setTileModeY(TileMode.REPEAT);
-   container.setBackgroundDrawable(bg);
+  	setBackground();
    
    ImageButton helpBtn = (ImageButton)findViewById(R.id.btn_help);
    helpBtn.setOnClickListener(new OnClickListener() {

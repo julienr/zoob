@@ -11,6 +11,7 @@ import net.fhtagn.zoob_demo.R;
 import net.fhtagn.zoobgame.menus.Common;
 import net.fhtagn.zoobgame.menus.EndView;
 import net.fhtagn.zoobgame.menus.ErrorView;
+import net.fhtagn.zoobgame.menus.MultiplayerMenuView;
 import net.fhtagn.zoobgame.menus.StartupAdView;
 import net.fhtagn.zoobgame.menus.InterLevelView;
 import net.fhtagn.zoobgame.menus.LostView;
@@ -80,7 +81,8 @@ public class Zoob extends Activity {
 	static final int MENU_REWARD_FIRING = 8;
 	static final int MENU_GET_FULL = 9;
 	static final int MENU_PLAY = 10;
-	static final int MENU_LAST = 11;
+	static final int MENU_MULTI = 11;
+	static final int MENU_LAST = 12;
 	
 	private MainMenuView mainMenu;
 	private WonView wonView;
@@ -88,7 +90,7 @@ public class Zoob extends Activity {
 	private EndView endView;
 	private ErrorView errorView;
 	private RewardView[] rewardViews = new RewardView[4]; 
-	
+	private MultiplayerMenuView multiView;
 	private StartupAdView startupAdView;
 	
 	static {
@@ -104,21 +106,21 @@ public class Zoob extends Activity {
 		flipper = new ViewAnimator(this);
 		setContentView(flipper);
 		
-    //Force landscape
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
+		// Force landscape
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-    //Create GL view
+		// Create GL view
 		final ZoobApplication app = (ZoobApplication)getApplication();
 		app.registerZoob(this);
 		mGLView = new ZoobGLSurface(this, app, app.getSerieJSONString());
 		
 		OnClickListener interViewListener = new OnClickListener() {
 			@Override
-      public void onClick(View view) {
-				InterLevelView iv = (InterLevelView)view;
+			public void onClick(View view) {
+				InterLevelView iv = (InterLevelView) view;
 				mGLView.setLevel(iv.getNextLevel());
 				flipper.setDisplayedChild(MENU_PLAY);
-      }
+			}
 		};
 		
 		mainMenu = new MainMenuView(this);
@@ -157,18 +159,21 @@ public class Zoob extends Activity {
 		startupAdView = new StartupAdView(this);
 		startupAdView.setOnTouchListener(new OnTouchListener() {
 			@Override
-      public boolean onTouch(View view, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_CANCEL ||
-						event.getAction() == MotionEvent.ACTION_UP) {
+			public boolean onTouch(View view, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_CANCEL
+				    || event.getAction() == MotionEvent.ACTION_UP) {
 					showView(MENU_MAIN);
 					return true;
 				}
-	      return false;
-      }
+				return false;
+			}
 		});
 		flipper.addView(startupAdView, MENU_GET_FULL);
 		
 		flipper.addView(mGLView, MENU_PLAY);
+		
+		multiView = new MultiplayerMenuView(this);
+		flipper.addView(multiView, MENU_MULTI);
 		
 		//Needed to avoid getting a black screen when switching to glview
 		mGLView.setBackgroundColor(Color.parseColor("#FF656565"));
@@ -259,9 +264,15 @@ public class Zoob extends Activity {
 		return true;
 	}
 	
+	//Return true if the view flipper currently displays a menu view (such as the main menu)
+	private boolean isInMenu () {
+		int c = flipper.getDisplayedChild();
+		return c == MENU_MAIN || c == MENU_MULTI;
+	}
+	
 	@Override
 	public boolean onPrepareOptionsMenu (Menu menu) {
-		if (flipper.getDisplayedChild() == MENU_MAIN) {
+		if (isInMenu()) {
 			return true;
 		} else {
 			mGLView.onMenu();
@@ -328,17 +339,33 @@ public class Zoob extends Activity {
 				showDialog(DIALOG_ABOUT);
 				break;
 			}
+			case R.id.multi: {
+				showView(MENU_MULTI);
+				break;
+			}
 		}
 		return true;
 	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && flipper.getDisplayedChild() != MENU_MAIN) {
-    	mGLView.onMenu();
-      return true;
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+    	//back pressed
+    	if(!isInMenu()) { //if we are in game, go to the menu
+    		mGLView.onMenu();
+    		return true;
+    	} else { //if we are in menu, depends on the currently displayed menu
+    		int c = flipper.getDisplayedChild();
+      	if (c == MENU_MAIN) //if on main menu
+      		return super.onKeyDown(keyCode, event);
+      	else { //if on another menu (multiplayer), go back to main
+      		showView(MENU_MAIN);
+      		return true;
+      	}
+    	}
+    } else {
+    	return super.onKeyDown(keyCode, event);
     }
-    return super.onKeyDown(keyCode, event);
 	}
 	
 	@Override

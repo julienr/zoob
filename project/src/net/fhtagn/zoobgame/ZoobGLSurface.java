@@ -158,8 +158,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 			});
 		}
 		Log.i(TAG, "calling nativeInitGL");
-    nativeInitGL(app.getLevel(), app.getDifficulty(), app.usesGamepad()?1:0, app.usesTrackball()?1:0);
-    nativeStartGame(0);
+    nativeInitGL(app.getDifficulty(), app.usesGamepad()?1:0, app.usesTrackball()?1:0);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -179,7 +178,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 gl) {
 		if (restoreGL) {
 			Log.i(TAG, "restoreGL");
-			nativeInitGL(app.getLevel(), app.getDifficulty(), app.usesGamepad()?1:0, app.usesTrackball()?1:0);
+			nativeInitGL(app.getDifficulty(), app.usesGamepad()?1:0, app.usesTrackball()?1:0);
 			restoreGL = false;
 		}
 		
@@ -241,7 +240,7 @@ class ZoobRenderer implements GLSurfaceView.Renderer {
 		}
 	}
 
-  private static native void nativeInitGL(int level, int difficulty, int useGamepad, int useTrackball);
+  private static native void nativeInitGL(int difficulty, int useGamepad, int useTrackball);
 	private static native void nativeInit(String apkPath, ZoobRenderer app, String serieJSON);
 	
 	private static native void nativeStartGame(int level);

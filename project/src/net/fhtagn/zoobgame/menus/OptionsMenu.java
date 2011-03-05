@@ -11,7 +11,7 @@ import android.view.Window;
 public class OptionsMenu extends PreferenceActivity {
 	public void onCreate (Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.optionsmenu);
 	}
