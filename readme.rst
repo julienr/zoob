@@ -11,6 +11,11 @@ on the Market.
 The net branch contains code for a multiplayer version that I never really
 finished but is somehow working (it lacks a UI though :-) ).
 
+Qt
+--
+Zoob can also run on the desktop thanks to its QT interface !
+It is located in project/jni/qt/
+
 License
 =======
 This program is free software: you can redistribute it and/or modify
